@@ -16,6 +16,7 @@ export const Sidebar = () => {
       </Button>
       {sessions?.map((session) => (
         <div
+          key={session.id}
           className="p-2"
           onClick={() => {
             push(`/chat/${session.id}`);
