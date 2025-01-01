@@ -44,24 +44,22 @@ export const ChatMessages = () => {
   const isLastStreamBelongsToCurrentSession =
     streamingMessage?.sessionId === currentSession?.id;
 
-  const renderMessage = (porps: TRenderMessageProps) => {
-    const { key, humanMessage, aiMessage, loading, model } = porps;
+  const renderMessage = (
+    props: TRenderMessageProps
+  ) => {
+    const { key, humanMessage, aiMessage, loading, model } = props;
     return (
-      <div className="flex flex-col gap-1 items-start w-full" key={key}>
-        <div className="flex flex-row justify-end w-full">
-          <motion.div
-            className="bg-black/30 rounded-2xl p-2 text-sm flex flex-row gap-2 pl-4 border border-white/5"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: 1,
-
-              transition: { duration: 1, ease: "easeInOut" },
-            }}
-          >
-            <span className="pt-1.5 leading-5 text-right">{humanMessage}</span>
-            <Avatar name="Vineeth" />
-          </motion.div>
-        </div>
+      <div className="flex w-full flex-col items-start gap-1" key={key}>
+        <motion.div
+          className="bg-black/30 rounded-2xl p-2 text-sm flex flex-row gap-2 pr-4 border border-white/5"
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: 1,
+            transition: { duration: 1, ease: "easeInOut" },
+          }}>
+          <Avatar name="Vineeth" />
+          <span className="pt-1.5 leading-5">{humanMessage}</span>
+        </motion.div>
         <motion.div
           className="bg-white/5 rounded-2xl p-4 w-full border border-white/5 flex flex-col items-start"
           initial={{ opacity: 0, y: 10 }}
