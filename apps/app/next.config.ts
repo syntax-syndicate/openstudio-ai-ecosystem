@@ -8,8 +8,9 @@ let nextConfig: NextConfig = {
   ...config,
   webpack: (config, { isServer }) => {
     // Existing webpack config from config object
-    const existingWebpack = (config as any).webpack || ((config: any) => config);
-    
+    const existingWebpack =
+      (config as any).webpack || ((config: any) => config);
+
     // Apply existing webpack config
     config = existingWebpack(config, { isServer });
 
