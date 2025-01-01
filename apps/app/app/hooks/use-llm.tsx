@@ -105,7 +105,14 @@ export const useLLM = ({
         props,
         currentSession?.messages || []
       );
-      const stream = await model.stream(formattedChatPrompt);
+      const stream = await model.stream(formattedChatPrompt, {
+        options: {
+          stream: true,
+        },
+      });
+      if (!stream) {
+        return;
+      }
       let streamedMessage = '';
       onStreamStart();
       for await (const chunk of stream) {
@@ -125,9 +132,10 @@ export const useLLM = ({
       addMessageToSession(sessionId, chatMessage).then(() => {
         onStreamEnd();
       });
-    } catch (e) {
-      onError(e);
-      console.log(e);
+    } catch (e: any) {
+      console.log(typeof e, e?.error?.message);
+      console.log(typeof e, e?.error);
+      onError(e?.error?.message || e?.error?.error?.message);
     }
   };
   return {
