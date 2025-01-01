@@ -11,9 +11,9 @@ import {
   CommandItem,
   CommandList,
 } from '@repo/design-system/components/ui/command';
+import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import moment from 'moment';
 
 export type TFiltersProvider = {
   children: React.ReactNode;
@@ -90,7 +90,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                   className="flex-shrink-0 text-zinc-500"
                 />{' '}
                 <span className="w-full truncate">{session.title}</span>
-                <span className="pl-4 text-xs dark:text-zinc-700 flex-shrink-0">
+                <span className="flex-shrink-0 pl-4 text-xs dark:text-zinc-700">
                   {moment(session.createdAt).fromNow(true)}
                 </span>
               </CommandItem>

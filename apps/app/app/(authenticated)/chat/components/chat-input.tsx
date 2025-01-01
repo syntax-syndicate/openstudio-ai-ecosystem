@@ -1,13 +1,23 @@
 import { useChatContext } from '@/app/context/chat/context';
 import { PromptType, RoleType } from '@/app/lib/prompts';
-import { ArrowElbowDownLeft, Plus, StarFour } from '@phosphor-icons/react';
+import {
+  ArrowElbowDownLeft,
+  Microphone,
+  Plus,
+  StarFour,
+  StopCircle,
+  X,
+} from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
 import { cn } from '@repo/design-system/lib/utils';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+import { useRecordVoice } from '@/app/hooks/use-record-voice';
+import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import { motion } from 'framer-motion';
+import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 
 const slideUpVariant = {
   initial: { y: 50, opacity: 0 },
@@ -29,6 +39,8 @@ const zoomVariant = {
 export const ChatInput = () => {
   const { sessionId } = useParams();
   const router = useRouter();
+  const { startRecording, stopRecording, recording, text, transcribing } =
+    useRecordVoice();
   const [inputValue, setInputValue] = useState('');
   const { runModel, createSession, currentSession, streamingMessage } =
     useChatContext();
@@ -64,6 +76,21 @@ export const ChatInput = () => {
     'What is the GDP of China?',
   ];
 
+  useEffect(() => {
+    if (text) {
+      setInputValue(text);
+      runModel(
+        {
+          role: RoleType.assistant,
+          type: PromptType.ask,
+          query: text,
+        },
+        sessionId!.toString()
+      );
+      setInputValue('');
+    }
+  }, [text]);
+
   return (
     <div
       className={cn(
@@ -93,7 +120,7 @@ export const ChatInput = () => {
         variants={slideUpVariant}
         initial={'initial'}
         animate={'animate'}
-         className="flex flex-row items-center px-3 h-14 bg-white/10 w-[700px] rounded-2xl gap-0"
+        className="flex h-14 w-[700px] flex-row items-center gap-0 rounded-2xl bg-white/10 px-3"
       >
         {isNewSession ? (
           <div className="flex h-8 min-w-8 items-center justify-center">
@@ -101,7 +128,7 @@ export const ChatInput = () => {
           </div>
         ) : (
           <Button
-            size="icon"
+            variant="ghost"
             className="h-8 min-w-8"
             onClick={() => {
               createSession().then((session) => {
@@ -109,7 +136,7 @@ export const ChatInput = () => {
               });
             }}
           >
-            <Plus size={16} weight="bold" />
+            <Plus size={20} weight="bold" />
           </Button>
         )}
         <Input
@@ -124,6 +151,49 @@ export const ChatInput = () => {
           }}
           onKeyDown={handleKeyDown}
         />
+        {recording ? (
+          <div className="flex h-10 flex-row items-center rounded-xl bg-black/50 px-2 py-1">
+            <AudioWaveSpinner />
+            <Button
+              variant="ghost"
+              size="iconSm"
+              onClick={() => {
+                stopRecording();
+              }}
+              onTouchStart={startRecording}
+              onTouchEnd={stopRecording}
+            >
+              <StopCircle size={20} weight="fill" className="text-red-300" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="iconXS"
+              rounded="default"
+              onClick={() => {
+                stopRecording();
+              }}
+              onTouchStart={startRecording}
+              onTouchEnd={stopRecording}
+            >
+              <X size={12} weight="bold" />
+            </Button>
+          </div>
+        ) : transcribing ? (
+          <Spinner />
+        ) : (
+          <Button
+            size="icon"
+            variant="ghost"
+            className="h-8 min-w-8"
+            onClick={() => {
+              startRecording();
+            }}
+            onTouchStart={startRecording}
+            onTouchEnd={stopRecording}
+          >
+            <Microphone size={20} weight="bold" />
+          </Button>
+        )}
         <div className="flex h-8 min-w-8 items-center justify-center">
           <ArrowElbowDownLeft size={16} weight="bold" />
         </div>
@@ -136,7 +206,7 @@ export const ChatInput = () => {
               transition={{ delay: 1 }}
               initial={'initial'}
               animate={'animate'}
-              className="flex flex-row items-center text-sm py-3 px-4 border border-white/5 text-zinc-400 w-full rounded-2xl hover:bg-black/20 hover:scale-[101%] cursor-pointer"
+              className="flex w-full cursor-pointer flex-row items-center rounded-2xl border border-white/5 px-4 py-3 text-sm text-zinc-400 hover:scale-[101%] hover:bg-black/20"
               key={index}
               onClick={() => {
                 runModel(
