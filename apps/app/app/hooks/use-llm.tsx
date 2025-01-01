@@ -4,16 +4,16 @@ import {
   type TChatMessage,
   useChatSession,
 } from '@/app/hooks/use-chat-session';
+import { getInstruction, getRole } from '@/app/lib/prompts';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from '@langchain/core/prompts';
-import { ChatOpenAI } from '@langchain/openai';
 import { v4 } from 'uuid';
-import { getInstruction, getRole } from '../lib/prompts';
 
-import { usePreferences } from './use-preferences';
+import { useModelList } from '@/app/hooks/use-model-list';
+import { usePreferences } from '@/app/hooks/use-preferences';
 
 export type TStreamProps = {
   props: PromptProps;
@@ -34,7 +34,8 @@ export const useLLM = ({
   onError,
 }: TUseLLM) => {
   const { getSessionById, addMessageToSession } = useChatSession();
-  const { getApiKey } = usePreferences();
+  const { getApiKey, getPreferences } = usePreferences();
+  const { createInstance, getModelByKey } = useModelList();
 
   const preparePrompt = async (props: PromptProps, history: TChatMessage[]) => {
     const messageHistory = history;
@@ -86,13 +87,20 @@ export const useLLM = ({
     if (!props?.query) {
       return;
     }
-    const apiKey = await getApiKey('openai');
+    const preferences = await getPreferences();
+    const modelKey = preferences.defaultModel;
+    const selectedModel = getModelByKey(modelKey);
+    if (!selectedModel) {
+      throw new Error('Model not found');
+    }
+    const apiKey = await getApiKey(selectedModel.baseModel);
+    if (!apiKey) {
+      onError('API Key not found');
+      return;
+    }
     try {
-      const model = new ChatOpenAI({
-        modelName: 'gpt-3.5-turbo',
-        openAIApiKey: apiKey,
-      });
       const newMessageId = v4();
+      const model = await createInstance(selectedModel, apiKey);
       const formattedChatPrompt = await preparePrompt(
         props,
         currentSession?.messages || []

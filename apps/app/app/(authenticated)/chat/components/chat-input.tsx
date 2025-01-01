@@ -1,13 +1,12 @@
+import { useChatContext } from '@/app/context/chat/context';
+import { PromptType, RoleType } from '@/app/lib/prompts';
 import { Command, Plus, Sparkle } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
+import { cn } from '@repo/design-system/lib/utils';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useChatContext } from '@/app/context/chat/context';
-import { PromptType, RoleType } from '@/app/lib/prompts';
-import { cn } from '@repo/design-system/lib/utils';
-
 
 export const ChatInput = () => {
   const { sessionId } = useParams();
@@ -44,26 +43,26 @@ export const ChatInput = () => {
   ];
 
   return (
-     <div
+    <div
       className={cn(
-        "w-full flex flex-col items-center justify-center absolute bottom-0 px-4 pb-4 pt-16 bg-gradient-to-t transition-all ease-in-out duration-1000 from-white dark:from-zinc-800 dark:to-transparent from-70% to-white/10 left-0 right-0 gap-4",
-        isNewSession && "top-0"
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-4 bg-gradient-to-t from-70% from-white to-white/10 px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800 dark:to-transparent',
+        isNewSession && 'top-0'
       )}
     >
       {isNewSession && (
-        <div className="flex flex-col items-center justify-center h-[200px] gap-2">
-          <div className="text-xl w-16 h-16 border bg-black/10 border-white/10 rounded-full flex items-center justify-center">
+        <div className="flex h-[200px] flex-col items-center justify-center gap-2">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-black/10 text-xl">
             <Sparkle weight="bold" size={24} className="text-green-400" />
           </div>
-          <h1 className="text-lg tracking-tight text-zinc-500">
+          <h1 className="text-lg text-zinc-500 tracking-tight">
             How can i help you today?
           </h1>
         </div>
       )}
-      <div className="flex flex-row items-center px-3 bg-white/10 w-[700px] rounded-2xl">
+      <div className="flex w-[700px] flex-row items-center rounded-2xl bg-white/10 px-3">
         <Button
           size="icon"
-          className="min-w-8 h-8"
+          className="h-8 min-w-8"
           onClick={() => {
             createSession().then((session) => {
               router.push(`/chat/${session.id}`);
@@ -87,10 +86,10 @@ export const ChatInput = () => {
         </Badge>
       </div>
       {isNewSession && (
-        <div className="grid grid-cols-2 gap-2 w-[700px]">
+        <div className="grid w-[700px] grid-cols-2 gap-2">
           {examples?.map((example, index) => (
             <div
-              className="flex flex-row items-center text-sm py-3 px-4 bg-black/10 border border-white/5 text-zinc-400 w-full rounded-2xl hover:bg-black/20 hover:scale-[101%] cursor-pointer"
+              className="flex w-full cursor-pointer flex-row items-center rounded-2xl border border-white/5 bg-black/10 px-4 py-3 text-sm text-zinc-400 hover:scale-[101%] hover:bg-black/20"
               key={index}
               onClick={() => {
                 runModel(
