@@ -9,6 +9,7 @@ import { keys as observability } from '@repo/observability/keys';
 import { keys as security } from '@repo/security/keys';
 import { keys as webhooks } from '@repo/webhooks/keys';
 import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
 export const env = createEnv({
   extends: [
@@ -24,6 +25,10 @@ export const env = createEnv({
     webhooks(),
   ],
   server: {},
-  client: {},
-  runtimeEnv: {},
+  client: {
+    NEXT_PUBLIC_OPENAI_API_KEY: z.string().min(1).startsWith('sk-').optional(),
+  },
+  runtimeEnv: {
+    NEXT_PUBLIC_OPENAI_API_KEY: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  },
 });

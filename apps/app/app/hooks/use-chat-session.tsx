@@ -1,5 +1,7 @@
+import type { PromptType, RoleType } from '@/app/lib/prompts';
 import type { AIMessage, HumanMessage } from '@langchain/core/messages';
 import { get, set } from 'idb-keyval';
+import { v4 } from 'uuid';
 
 export const ModelType = {
   GPT3: 'gpt-3',
@@ -9,27 +11,6 @@ export const ModelType = {
 } as const;
 
 export type ModelType = (typeof ModelType)[keyof typeof ModelType];
-
-export const PromptType = {
-  ask: 'ask',
-  answer: 'answer',
-  explain: 'explain',
-  summarize: 'summarize',
-  improve: 'improve',
-  fix_grammar: 'fix_grammar',
-  reply: 'reply',
-  short_reply: 'short_reply',
-} as const;
-
-export type PromptType = (typeof PromptType)[keyof typeof PromptType];
-
-export const RoleType = {
-  assistant: 'assistant',
-  writing_expert: 'writing_expert',
-  social_media_expert: 'social_media_expert',
-} as const;
-
-export type RoleType = (typeof RoleType)[keyof typeof RoleType];
 
 export type PromptProps = {
   type: PromptType;
@@ -103,6 +84,24 @@ export const useChatSession = () => {
     );
     await set('chat-sessions', newSessions);
   };
+
+  const createNewSession = async () => {
+    const sessions = await getSessions();
+    const latestSession = sessions?.[0];
+    if (latestSession?.messages?.length === 0) {
+      return latestSession;
+    }
+    const newSession: TChatSession = {
+      id: v4(),
+      messages: [],
+      title: 'Untitled',
+      createdAt: new Date().toISOString(),
+    };
+    const newSessions = [...sessions, newSession];
+    await set('chat-sessions', newSessions);
+    return newSession;
+  };
+
   return {
     getSessions,
     setSession,
@@ -110,5 +109,6 @@ export const useChatSession = () => {
     removeSessionById,
     updateSession,
     addMessageToSession,
+    createNewSession,
   };
 };

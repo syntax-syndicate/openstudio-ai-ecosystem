@@ -1,3 +1,11 @@
+import {
+  ModelType,
+  type PromptProps,
+  type TChatMessage,
+  useChatSession,
+} from '@/app/hooks/use-chat-session';
+import { getInstruction, getRole } from '@/app/lib/prompts';
+import { env } from '@/env';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import {
   ChatPromptTemplate,
@@ -5,15 +13,19 @@ import {
 } from '@langchain/core/prompts';
 import { ChatOpenAI } from '@langchain/openai';
 import { v4 } from 'uuid';
-import { getInstruction, getRole } from '../lib/prompts';
-import {
-  ModelType,
-  type PromptProps,
-  type TChatMessage,
-  useChatSession,
-} from './use-chat-session';
 
-export const useLLM = () => {
+export type TStreamProps = {
+  props: PromptProps;
+  sessionId: string;
+  message: string;
+};
+export type TUseLLM = {
+  onStreamStart: () => void;
+  onStream: (props: TStreamProps) => Promise<void>;
+  onStreamEnd: () => void;
+};
+
+export const useLLM = ({ onStreamStart, onStream, onStreamEnd }: TUseLLM) => {
   const { getSessionById, addMessageToSession } = useChatSession();
   const preparePrompt = async (props: PromptProps, history: TChatMessage[]) => {
     const messageHistory = history;
@@ -68,7 +80,7 @@ export const useLLM = () => {
     const apiKey = '';
     const model = new ChatOpenAI({
       modelName: 'gpt-3.5-turbo',
-      openAIApiKey: apiKey,
+      openAIApiKey: env.NEXT_PUBLIC_OPENAI_API_KEY || apiKey,
     });
     const newMessageId = v4();
     const formattedChatPrompt = await preparePrompt(
@@ -77,8 +89,16 @@ export const useLLM = () => {
     );
     const stream = await model.stream(formattedChatPrompt);
     let streamedMessage = '';
+
+    onStreamStart();
+
     for await (const chunk of stream) {
       streamedMessage += chunk.content;
+      onStream({
+        props,
+        sessionId,
+        message: streamedMessage,
+      });
     }
     const chatMessage = {
       id: newMessageId,
@@ -89,7 +109,9 @@ export const useLLM = () => {
       rawAI: streamedMessage,
       props,
     };
-    addMessageToSession(sessionId, chatMessage);
+    addMessageToSession(sessionId, chatMessage).then(() => {
+      onStreamEnd();
+    });
   };
   return {
     runModel,
