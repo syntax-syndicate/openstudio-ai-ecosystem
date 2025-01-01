@@ -4,7 +4,33 @@ import { config, withAnalyzer } from '@repo/next-config';
 import { withLogtail, withSentry } from '@repo/observability/next-config';
 import type { NextConfig } from 'next';
 
-let nextConfig: NextConfig = withToolbar(withLogtail({ ...config }));
+let nextConfig: NextConfig = {
+  ...config,
+  webpack: (config, { isServer }) => {
+    // Existing webpack config from config object
+    const existingWebpack = (config as any).webpack || ((config: any) => config);
+    
+    // Apply existing webpack config
+    config = existingWebpack(config, { isServer });
+
+    // Add TypeScript loader configuration
+    config.module.rules.push({
+      test: /\.ts$/,
+      use: [
+        {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+          },
+        },
+      ],
+    });
+
+    return config;
+  },
+};
+
+nextConfig = withToolbar(withLogtail(nextConfig));
 
 if (env.VERCEL) {
   nextConfig = withSentry(nextConfig);
