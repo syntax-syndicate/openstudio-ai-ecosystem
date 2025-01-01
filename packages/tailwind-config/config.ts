@@ -16,6 +16,10 @@ export const config: Config = {
     './providers/**/*.{ts,tsx}',
   ],
   theme: {
+    animation: {
+      marquee: 'marquee 160s linear infinite',
+      marquee2: 'marquee2 160s linear infinite',
+    },
     container: {
       center: true,
       padding: '2rem',
@@ -81,6 +85,11 @@ export const config: Config = {
           ring: 'hsl(var(--sidebar-ring))',
         },
       },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
       fontFamily: {
         sans: ['var(--font-geist-sans)', ...defaultTheme.fontFamily.sans],
         mono: ['var(--font-geist-mono)', ...defaultTheme.fontFamily.mono],
@@ -93,6 +102,14 @@ export const config: Config = {
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+        marquee2: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0%)' },
         },
       },
       animation: {

@@ -1,0 +1,9 @@
+@import "highlight.js/styles/github-dark.css";
+
+.hljs-wrapper {
+  @apply rounded-lg border bg-zinc-950;
+}
+
+.hljs-pre {
+  @apply overflow-x-auto p-4;
+}

@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 const chatSessionPage = () => {
   const { sessionId } = useParams();
   return (
-    <div className="flex h-screen w-full flex-row">
+    <div className="relative flex h-screen w-full flex-row overflow-hidden">
       <ChatMessages />
       <ChatInput />
     </div>
