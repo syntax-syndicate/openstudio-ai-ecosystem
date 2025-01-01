@@ -22,6 +22,7 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
 
 const slideUpVariant = {
   initial: { y: 50, opacity: 0 },
@@ -75,10 +76,21 @@ export const ChatInput = () => {
     !currentSession?.messages?.length && !streamingMessage?.loading;
 
   const examples = [
-    'What is the capital of France?',
-    'What is the weather in New York?',
-    'What is the population of India?',
-    'What is the GDP of China?',
+      {
+      title: "Implement JWT Auth for Express.js",
+      prompt:
+        "Develop a secure user authentication system in a Node.js application using JSON Web Tokens (JWT) for authorization and authentication.",
+    },
+    {
+      title: "The Nature of Reality",
+      prompt:
+        "Discuss the concept of reality from both a subjective and objective perspective, incorporating theories from famous philosophers.",
+    },
+    {
+      title: "Professional Meeting Follow-Up",
+      prompt:
+        "Write a follow-up email to a potential employer after a job interview, expressing gratitude for the opportunity and reiterating your interest in the position.",
+    },
   ];
 
   useEffect(() => {
@@ -127,7 +139,7 @@ export const ChatInput = () => {
           variants={slideUpVariant}
           initial={'initial'}
           animate={'animate'}
-          className="flex w-[700px] flex-col gap-0 rounded-2xl bg-white/10 "
+          className="flex w-[700px] flex-col gap-0 rounded-[1.25rem] bg-white/10 "
         >
           <div className="flex h-14 w-full flex-row items-center gap-0 px-3">
             {isNewSession ? (
@@ -149,7 +161,7 @@ export const ChatInput = () => {
               </Button>
             )}
             <Input
-              placeholder="Ask AI anything.."
+              placeholder="Ask AI anything ... 🤖"
               value={inputValue}
               ref={inputRef}
               autoComplete="off"
@@ -236,29 +248,37 @@ export const ChatInput = () => {
         </motion.div>
       </div>
       {isNewSession && (
-        <div className="grid w-[700px] grid-cols-2 gap-2">
-          {examples?.map((example, index) => (
-            <motion.div
-              variants={zoomVariant}
-              transition={{ delay: 1 }}
-              initial={'initial'}
-              animate={'animate'}
-              className="flex w-full cursor-pointer flex-row items-center rounded-2xl border border-white/5 px-4 py-3 text-sm text-zinc-400 hover:scale-[101%] hover:bg-black/20"
-              key={index}
-              onClick={() => {
-                runModel(
-                  {
-                    role: RoleType.assistant,
-                    type: PromptType.ask,
-                    query: example,
-                  },
-                  sessionId!.toString()
-                );
-              }}
-            >
-              {example}
-            </motion.div>
-          ))}
+        <div className="flex flex-col gap-1">
+          <LabelDivider label={"Examples"} className="pt-0" />
+          <div className="grid grid-cols-3 gap-2 w-[700px]">
+            {examples?.map((example, index) => (
+              <motion.div
+                variants={zoomVariant}
+                transition={{ delay: 1 }}
+                initial={"initial"}
+                animate={"animate"}
+                className="flex flex-col gap-2 items-start text-sm py-3 px-4 border border-white/5 text-zinc-400 w-full rounded-2xl hover:bg-black/20 hover:scale-[101%] cursor-pointer"
+                key={index}
+                onClick={() => {
+                  runModel(
+                    {
+                      role: RoleType.assistant,
+                      type: PromptType.ask,
+                      query: example.prompt,
+                    },
+                    sessionId!.toString()
+                  );
+                }}
+              >
+                <p className="text-sm text-white font-semibold w-full">
+                  {example.title}
+                </p>
+                <p className="text-xs text-zinc-500 truncate w-full">
+                  {example.prompt}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       )}
     </div>

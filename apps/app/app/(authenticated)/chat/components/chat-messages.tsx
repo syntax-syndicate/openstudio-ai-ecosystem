@@ -10,6 +10,7 @@ import {
   AlertTitle,
 } from '@repo/design-system/components/ui/alert';
 import { Avatar } from '@repo/design-system/components/ui/custom-avatar';
+import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
 import { motion } from 'framer-motion';
 import moment from 'moment';
 import { useEffect, useRef } from 'react';
@@ -106,13 +107,7 @@ export const ChatMessages = () => {
           Object.keys(messagesByDate).map((date) => {
             return (
               <div className="flex flex-col" key={date}>
-                <div className="flex w-full flex-row items-center pt-8 pb-4">
-                  <div className="h-[1px] w-full bg-white/5"></div>
-                  <p className="flex-shrink-0 px-2 text-xs text-zinc-500">
-                    {getRelativeDate(date)}
-                  </p>
-                  <div className="h-[1px] w-full bg-white/5"></div>
-                </div>
+                <LabelDivider label={getRelativeDate(date)} />
                 <div className="flex w-full flex-col items-start gap-4">
                   {messagesByDate[date].map((message) =>
                     renderMessage({
