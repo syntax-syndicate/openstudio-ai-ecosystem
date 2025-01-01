@@ -17,7 +17,7 @@ const chatSessionPage = () => {
         <div className="flex flex-row items-center gap-2">
           <ModelSelect />
           <Avatar name="Vineeth" />
-          <Button variant="secondary" size="icon" onClick={open}>
+          <Button variant="secondary" size="iconSm" onClick={open}>
             <DotsThree size={20} weight="bold" />
           </Button>
         </div>

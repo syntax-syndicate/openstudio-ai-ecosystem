@@ -22,11 +22,15 @@ export const ModelSelect = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" className="pr-4 pl-2">
+        <Button
+          variant="secondary"
+          className="gap-2 pr-3 pl-1 text-xs"
+          size="sm"
+        >
           {activeModel?.icon()} {activeModel?.name}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mt-2 mr-2 w-56">
+      <DropdownMenuContent className="mt-2 mr-2 h-56 w-56 overflow-scroll">
         {models.map((model) => (
           <DropdownMenuItem
             key={model.key}

@@ -9,11 +9,11 @@ import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
 import { useEffect, useState } from 'react';
 
-export const AnthropicSettings = () => {
+export const GeminiSettings = () => {
   const [key, setKey] = useState<string>('');
   const { getApiKey, setApiKey } = usePreferences();
   useEffect(() => {
-    getApiKey('anthropic').then((key) => {
+    getApiKey('gemini').then((key) => {
       if (key) {
         setKey(key);
       }
@@ -21,25 +21,27 @@ export const AnthropicSettings = () => {
   }, []);
   return (
     <div className="flex flex-col items-start gap-2 px-4">
-      <p className="py-4 font-medium text-md text-white">Anthropic Settings</p>
+      <p className="py-4 font-medium text-md text-white">
+        Google Gemini Settings
+      </p>
       <div className="flex flex-row items-end justify-between">
-        <p className="text-xs text-zinc-500">Anthropic API Key</p>
+        <p className="text-xs text-zinc-500">Google Gemini API Key</p>
       </div>
       <Input
-        placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
-        value={key}
+        placeholder="xxxxxxxxxxxxxxxxxxxxxxxx"
         type="password"
         autoComplete="off"
+        value={key}
         onChange={(e) => {
           setKey(e.target.value);
-          setApiKey('anthropic', e.target.value);
+          setApiKey('gemini', e.target.value);
         }}
       />
       <Button
         size="sm"
         variant="secondary"
         onClick={() => {
-          window.open('https://console.anthropic.com/settings/keys', '_blank');
+          window.open('https://aistudio.google.com/app/apikey', '_blank');
         }}
       >
         Get your API key here <ArrowRight size={16} weight="bold" />

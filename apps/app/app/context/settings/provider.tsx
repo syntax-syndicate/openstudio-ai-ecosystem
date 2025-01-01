@@ -2,6 +2,7 @@
 
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
 import { AnthropicSettings } from '@/app/(authenticated)/chat/components/settings/anthropic';
+import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/gemini';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/openai';
 import { GearSix } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -67,7 +68,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       name: 'Gemini',
       key: 'gemini',
       icon: () => <ModelIcon type="gemini" size="md" />,
-      component: <div>Gemini</div>,
+      component: <GeminiSettings />,
     },
   ];
   const allMenus = [...settingMenu, ...modelsMenu];

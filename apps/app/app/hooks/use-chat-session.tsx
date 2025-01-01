@@ -1,8 +1,8 @@
+import type { TModelKey } from '@/app/hooks/use-model-list';
 import type { PromptType, RoleType } from '@/app/lib/prompts';
 import type { AIMessage, HumanMessage } from '@langchain/core/messages';
 import { get, set } from 'idb-keyval';
 import { v4 } from 'uuid';
-
 export const ModelType = {
   GPT3: 'gpt-3',
   GPT4: 'gpt-4',
@@ -22,7 +22,7 @@ export type PromptProps = {
 
 export type TChatMessage = {
   id: string;
-  model: ModelType;
+  model: TModelKey;
   human: HumanMessage;
   ai: AIMessage;
   rawHuman: string;
