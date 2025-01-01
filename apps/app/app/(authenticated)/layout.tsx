@@ -1,11 +1,18 @@
+import { PostHogIdentifier } from '@/app/(authenticated)/components/posthog-identifier';
+import { GlobalSidebar } from '@/app/(authenticated)/components/sidebar';
 import { env } from '@/env';
 import { auth, currentUser } from '@repo/auth/server';
 import { SidebarProvider } from '@repo/design-system/components/ui/sidebar';
 import { showBetaFeature } from '@repo/feature-flags';
 import { secure } from '@repo/security';
 import type { ReactNode } from 'react';
-import { PostHogIdentifier } from './components/posthog-identifier';
-import { GlobalSidebar } from './components/sidebar';
+
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'OpenStudio AI',
+  description: 'All AI in One Place',
+};
 
 type AppLayoutProperties = {
   readonly children: ReactNode;

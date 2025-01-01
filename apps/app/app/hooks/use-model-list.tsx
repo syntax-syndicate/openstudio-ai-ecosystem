@@ -19,6 +19,7 @@ export type TModelKey =
 export type TModel = {
   name: string;
   key: TModelKey;
+  isNew?: boolean;
   icon: () => JSX.Element;
   tokens: number;
   baseModel: TBaseModel;
@@ -54,6 +55,7 @@ export const useModelList = () => {
     {
       name: 'GPT 4o',
       key: 'gpt-4o',
+      isNew: true,
       tokens: 128000,
       icon: () => <ModelIcon size="md" type="gpt4" />,
       baseModel: 'openai',
@@ -61,6 +63,7 @@ export const useModelList = () => {
     {
       name: 'GPT4 Turbo',
       key: 'gpt-4-turbo',
+      isNew: false,
       tokens: 128000,
       icon: () => <ModelIcon size="md" type="gpt4" />,
       baseModel: 'openai',
@@ -68,6 +71,7 @@ export const useModelList = () => {
     {
       name: 'GPT3.5 Turbo',
       key: 'gpt-3.5-turbo',
+      isNew: false,
       tokens: 16385,
       icon: () => <ModelIcon size="md" type="gpt3" />,
       baseModel: 'openai',
@@ -75,6 +79,7 @@ export const useModelList = () => {
     {
       name: 'GPT3.5 Turbo 0125',
       key: 'gpt-3.5-turbo-0125',
+      isNew: false,
       tokens: 16385,
       icon: () => <ModelIcon size="md" type="gpt3" />,
       baseModel: 'openai',
@@ -83,6 +88,7 @@ export const useModelList = () => {
       name: 'Claude 3 Opus',
       key: 'claude-3-opus-20240229',
       tokens: 200000,
+      isNew: false,
       icon: () => <ModelIcon size="md" type="anthropic" />,
       baseModel: 'anthropic',
     },
@@ -90,6 +96,7 @@ export const useModelList = () => {
       name: 'Claude 3 Sonnet',
       key: 'claude-3-sonnet-20240229',
       tokens: 200000,
+      isNew: false,
       icon: () => <ModelIcon size="md" type="anthropic" />,
       baseModel: 'anthropic',
     },
@@ -97,6 +104,7 @@ export const useModelList = () => {
       name: 'Claude 3 Haiku',
       key: 'claude-3-haiku-20240307',
       tokens: 200000,
+      isNew: false,
       icon: () => <ModelIcon size="md" type="anthropic" />,
       baseModel: 'anthropic',
     },
@@ -104,6 +112,7 @@ export const useModelList = () => {
       name: 'Gemini Pro 1.5',
       key: 'gemini-1.5-pro-latest',
       tokens: 200000,
+      isNew: true,
       icon: () => <ModelIcon size="md" type="gemini" />,
       baseModel: 'gemini',
     },
@@ -111,6 +120,7 @@ export const useModelList = () => {
       name: 'Gemini Pro',
       key: 'gemini-pro',
       tokens: 200000,
+      isNew: false,
       icon: () => <ModelIcon size="md" type="gemini" />,
       baseModel: 'gemini',
     },

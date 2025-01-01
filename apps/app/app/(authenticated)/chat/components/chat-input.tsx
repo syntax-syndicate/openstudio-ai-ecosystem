@@ -1,23 +1,27 @@
+import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
+import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 import { useChatContext } from '@/app/context/chat/context';
+import { useFilters } from '@/app/context/filters/context';
+import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import { PromptType, RoleType } from '@/app/lib/prompts';
 import {
   ArrowElbowDownLeft,
+  ClockClockwise,
+  Command,
   Microphone,
   Plus,
   StarFour,
   StopCircle,
   X,
 } from '@phosphor-icons/react';
+import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
+import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import { cn } from '@repo/design-system/lib/utils';
+import { motion } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-
-import { useRecordVoice } from '@/app/hooks/use-record-voice';
-import Spinner from '@repo/design-system/components/ui/loading-spinner';
-import { motion } from 'framer-motion';
-import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 
 const slideUpVariant = {
   initial: { y: 50, opacity: 0 },
@@ -38,6 +42,7 @@ const zoomVariant = {
 
 export const ChatInput = () => {
   const { sessionId } = useParams();
+  const { open: openFilters } = useFilters();
   const router = useRouter();
   const { startRecording, stopRecording, recording, text, transcribing } =
     useRecordVoice();
@@ -110,94 +115,126 @@ export const ChatInput = () => {
               },
             }}
           >
-            <span className="text-zinc-500">Hello! 👋 </span>
+            <span className="text-zinc-500">Good morning! 👋 </span>
             <br />
-            What can I help you with today? 😊
+            How can I help you with today? 😊
           </motion.h1>
         </div>
       )}
-      <motion.div
-        variants={slideUpVariant}
-        initial={'initial'}
-        animate={'animate'}
-        className="flex h-14 w-[700px] flex-row items-center gap-0 rounded-2xl bg-white/10 px-3"
-      >
-        {isNewSession ? (
-          <div className="flex h-8 min-w-8 items-center justify-center">
-            <StarFour size={24} weight="fill" />
-          </div>
-        ) : (
-          <Button
-            variant="ghost"
-            className="h-8 min-w-8"
-            onClick={() => {
-              createSession().then((session) => {
-                router.push(`/chat/${session.id}`);
-              });
-            }}
-          >
-            <Plus size={20} weight="bold" />
-          </Button>
-        )}
-        <Input
-          placeholder="Ask AI anything.."
-          value={inputValue}
-          ref={inputRef}
-          autoComplete="off"
-          autoCapitalize="off"
-          variant="ghost"
-          onChange={(e) => {
-            setInputValue(e.currentTarget.value);
-          }}
-          onKeyDown={handleKeyDown}
-        />
-        {recording ? (
-          <div className="flex h-10 flex-row items-center rounded-xl bg-black/50 px-2 py-1">
-            <AudioWaveSpinner />
-            <Button
+
+      <div className="flex flex-col gap-1">
+        <motion.div
+          variants={slideUpVariant}
+          initial={'initial'}
+          animate={'animate'}
+          className="flex w-[700px] flex-col gap-0 rounded-2xl bg-white/10 "
+        >
+          <div className="flex h-14 w-full flex-row items-center gap-0 px-3">
+            {isNewSession ? (
+              <div className="flex h-8 min-w-8 items-center justify-center">
+                <StarFour size={24} weight="fill" />
+              </div>
+            ) : (
+              <Button
+                size="icon"
+                variant={'ghost'}
+                className="h-8 min-w-8"
+                onClick={() => {
+                  createSession().then((session) => {
+                    router.push(`/chat/${session.id}`);
+                  });
+                }}
+              >
+                <Plus size={20} weight="bold" />
+              </Button>
+            )}
+            <Input
+              placeholder="Ask AI anything.."
+              value={inputValue}
+              ref={inputRef}
+              autoComplete="off"
+              autoCapitalize="off"
               variant="ghost"
-              size="iconSm"
-              onClick={() => {
-                stopRecording();
+              onChange={(e) => {
+                setInputValue(e.currentTarget.value);
               }}
-              onTouchStart={startRecording}
-              onTouchEnd={stopRecording}
-            >
-              <StopCircle size={20} weight="fill" className="text-red-300" />
+              onKeyDown={handleKeyDown}
+              className="px-2"
+            />
+            {recording ? (
+              <div className="flex h-10 flex-row items-center rounded-xl bg-black/50 px-2 py-1">
+                <AudioWaveSpinner />
+                <Button
+                  variant="ghost"
+                  size="iconSm"
+                  onClick={() => {
+                    stopRecording();
+                  }}
+                  onTouchStart={startRecording}
+                  onTouchEnd={stopRecording}
+                >
+                  <StopCircle
+                    size={20}
+                    weight="fill"
+                    className="text-red-300"
+                  />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="iconXS"
+                  rounded="default"
+                  onClick={() => {
+                    stopRecording();
+                  }}
+                  onTouchStart={startRecording}
+                  onTouchEnd={stopRecording}
+                >
+                  <X size={12} weight="bold" />
+                </Button>
+              </div>
+            ) : transcribing ? (
+              <Spinner />
+            ) : (
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-8 min-w-8"
+                onClick={() => {
+                  startRecording();
+                  setTimeout(() => {
+                    stopRecording();
+                  }, 20000);
+                }}
+                onTouchStart={startRecording}
+                onTouchEnd={stopRecording}
+              >
+                <Microphone size={20} weight="bold" />
+              </Button>
+            )}
+
+            <div className="flex h-8 min-w-8 items-center justify-center">
+              <ArrowElbowDownLeft size={16} weight="bold" />
+            </div>
+          </div>
+          <div className="flex w-full flex-row items-center justify-start gap-2 p-2">
+            <ModelSelect />
+            {/* <Button variant="secondary" size="sm">
+              <Book size={16} weight="bold" /> Prompts
             </Button>
-            <Button
-              variant="ghost"
-              size="iconXS"
-              rounded="default"
-              onClick={() => {
-                stopRecording();
-              }}
-              onTouchStart={startRecording}
-              onTouchEnd={stopRecording}
-            >
-              <X size={12} weight="bold" />
+            <Button variant="secondary" size="sm">
+              <GearSix size={16} weight="bold" /> Settings
+            </Button> */}
+            <div className="flex-1"></div>
+
+            <Button variant="secondary" size="sm" onClick={openFilters}>
+              <ClockClockwise size={16} weight="bold" /> History
+              <Badge>
+                <Command size={12} weight="bold" /> K
+              </Badge>
             </Button>
           </div>
-        ) : transcribing ? (
-          <Spinner />
-        ) : (
-          <Button
-            size="icon"
-            variant="ghost"
-            className="h-8 min-w-8"
-            onClick={() => {
-              startRecording();
-            }}
-            onTouchStart={startRecording}
-            onTouchEnd={stopRecording}
-          >
-            <Microphone size={20} weight="bold" />
-          </Button>
-        )}
-        <div className="flex h-8 min-w-8 items-center justify-center">
-          <ArrowElbowDownLeft size={16} weight="bold" />
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
       {isNewSession && (
         <div className="grid w-[700px] grid-cols-2 gap-2">
           {examples?.map((example, index) => (

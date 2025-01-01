@@ -1,6 +1,7 @@
 'use client';
 
 import { useChatContext } from '@/app/context/chat/context';
+import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -14,11 +15,9 @@ const App = async () => {
   }, []);
 
   return (
-    <>
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
-      </div>
-    </>
+    <main className="flex h-screen w-screen flex-row items-center justify-center">
+      <Spinner />
+    </main>
   );
 };
 
