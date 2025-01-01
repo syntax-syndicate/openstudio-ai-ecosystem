@@ -1,7 +1,6 @@
 import { useChatContext } from '@/app/context/chat/context';
 import { PromptType, RoleType } from '@/app/lib/prompts';
-import { Command, Plus, Sparkle } from '@phosphor-icons/react';
-import { Badge } from '@repo/design-system/components/ui/badge';
+import { ArrowElbowDownLeft, Plus, Sparkle } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
 import { cn } from '@repo/design-system/lib/utils';
@@ -125,9 +124,9 @@ export const ChatInput = () => {
           }}
           onKeyDown={handleKeyDown}
         />
-        <Badge>
-          <Command size={14} weight="bold" />K
-        </Badge>
+        <div className="flex h-8 min-w-8 items-center justify-center">
+          <ArrowElbowDownLeft size={16} weight="bold" />
+        </div>
       </motion.div>
       {isNewSession && (
         <div className="grid w-[700px] grid-cols-2 gap-2">

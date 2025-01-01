@@ -1,7 +1,8 @@
 'use client';
 import { useChatContext } from '@/app/context/chat/context';
 import { FiltersContext } from '@/app/context/filters/context';
-import { Chat, Plus } from '@phosphor-icons/react';
+import { useChatSession } from '@/app/hooks/use-chat-session';
+import { Chat, Eraser, Plus } from '@phosphor-icons/react';
 import {
   CommandDialog,
   CommandEmpty,
@@ -18,7 +19,8 @@ export type TFiltersProvider = {
 };
 
 export const FiltersProvider = ({ children }: TFiltersProvider) => {
-  const { sessions, createSession } = useChatContext();
+  const { sessions, createSession, clearChatSessions } = useChatContext();
+  const { sortSessions } = useChatSession();
   const router = useRouter();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const open = () => setIsFilterOpen(true);
@@ -54,9 +56,24 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
               <Plus size={14} weight="bold" />
               New session
             </CommandItem>
+            <CommandItem
+              className="gap-3"
+              value="clear history"
+              onSelect={(value) => {
+                clearChatSessions().then(() => {
+                  createSession().then((session) => {
+                    router.push(`/chat/${session?.id}`);
+                    dismiss();
+                  });
+                });
+              }}
+            >
+              <Eraser size={14} weight="bold" />
+              Clear History
+            </CommandItem>
           </CommandGroup>
           <CommandGroup heading="Sessions">
-            {sessions?.map((session) => (
+            {sortSessions(sessions, 'updatedAt')?.map((session) => (
               <CommandItem
                 key={session.id}
                 value={`${session.id}/${session.title}`}

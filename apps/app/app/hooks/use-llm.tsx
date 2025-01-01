@@ -11,6 +11,7 @@ import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from '@langchain/core/prompts';
+import moment from 'moment';
 import { v4 } from 'uuid';
 
 export type TStreamProps = {
@@ -146,7 +147,7 @@ export const useLLM = ({
           loading: true,
         });
       }
-      const chatMessage = {
+      const chatMessage: TChatMessage = {
         id: newMessageId,
         model: selectedModel.key,
         human: new HumanMessage(props.query),
@@ -154,6 +155,7 @@ export const useLLM = ({
         rawHuman: props.query,
         rawAI: streamedMessage,
         props,
+        createdAt: moment().toISOString(),
       };
       addMessageToSession(sessionId, chatMessage).then(() => {
         onStreamEnd({

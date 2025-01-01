@@ -15,7 +15,8 @@ export type TChatProvider = {
 
 export const ChatProvider = ({ children }: TChatProvider) => {
   const { sessionId } = useParams();
-  const { getSessions, createNewSession, getSessionById } = useChatSession();
+  const { getSessions, createNewSession, getSessionById, clearSessions } =
+    useChatSession();
   const [sessions, setSessions] = useState<TChatSession[]>([]);
   const [isSessionLoading, setIsSessionLoading] = useState<boolean>(true);
   const [currentSession, setCurrentSession] = useState<
@@ -81,6 +82,13 @@ export const ChatProvider = ({ children }: TChatProvider) => {
   const refetchSessions = () => {
     fetchSessions();
   };
+
+  const clearChatSessions = async () => {
+    clearSessions().then(() => {
+      setSessions([]);
+    });
+  };
+
   return (
     <ChatContext.Provider
       value={{
@@ -92,6 +100,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         runModel,
         streamingMessage,
         currentSession,
+        clearChatSessions,
       }}
     >
       {children}

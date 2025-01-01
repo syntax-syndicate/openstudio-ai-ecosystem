@@ -10,6 +10,7 @@ export type TChatContext = {
   refetchSessions: () => void;
   isSessionLoading: boolean;
   createSession: () => Promise<TChatSession>;
+  clearChatSessions: () => Promise<void>;
   currentSession: TChatSession | undefined;
   streamingMessage?: TStreamProps;
   runModel: (props: PromptProps, sessionId: string) => Promise<void>;
