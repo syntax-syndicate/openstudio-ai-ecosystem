@@ -20,7 +20,7 @@ export const AnthropicSettings = () => {
     });
   }, []);
   return (
-    <div className="flex flex-col items-start gap-2 px-4">
+    <div className="flex flex-col items-start gap-2 px-6">
       <p className="py-4 font-medium text-md text-white">Anthropic Settings</p>
       <div className="flex flex-row items-end justify-between">
         <p className="text-xs text-zinc-500">Anthropic API Key</p>

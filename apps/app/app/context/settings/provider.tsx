@@ -4,7 +4,7 @@ import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-ico
 import { AnthropicSettings } from '@/app/(authenticated)/chat/components/settings/anthropic';
 import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/gemini';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/openai';
-import { GearSix } from '@phosphor-icons/react';
+import { ChatCentered, GearSix, UserCircle } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Dialog,
@@ -33,21 +33,21 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
   const dismiss = () => setIsSettingOpen(false);
   const settingMenu: TSettingMenuItem[] = [
     {
-      name: 'Profile',
+      name: 'Common',
       icon: () => <GearSix size={16} weight="bold" />,
-      key: 'profile',
-      component: <div>Profile</div>,
+      key: 'common',
+      component: <div>Common</div>,
     },
     {
       name: 'Prompts',
       key: 'prompts',
-      icon: () => <GearSix size={16} weight="bold" />,
+      icon: () => <ChatCentered size={16} weight="bold" />,
       component: <div>Prompts</div>,
     },
     {
       name: 'Roles',
       key: 'roles',
-      icon: () => <GearSix size={16} weight="bold" />,
+      icon: () => <UserCircle size={16} weight="bold" />,
       component: <div>Roles</div>,
     },
   ];

@@ -20,7 +20,7 @@ export const GeminiSettings = () => {
     });
   }, []);
   return (
-    <div className="flex flex-col items-start gap-2 px-4">
+    <div className="flex flex-col items-start gap-2 px-6">
       <p className="py-4 font-medium text-md text-white">
         Google Gemini Settings
       </p>

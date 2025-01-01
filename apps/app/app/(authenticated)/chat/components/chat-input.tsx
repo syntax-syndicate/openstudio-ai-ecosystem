@@ -1,6 +1,6 @@
 import { useChatContext } from '@/app/context/chat/context';
 import { PromptType, RoleType } from '@/app/lib/prompts';
-import { ArrowElbowDownLeft, Plus, Sparkle } from '@phosphor-icons/react';
+import { ArrowElbowDownLeft, Plus, StarFour } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
 import { cn } from '@repo/design-system/lib/utils';
@@ -93,11 +93,11 @@ export const ChatInput = () => {
         variants={slideUpVariant}
         initial={'initial'}
         animate={'animate'}
-        className="flex w-[700px] flex-row items-center rounded-2xl bg-white/10 px-3"
+         className="flex flex-row items-center px-3 h-14 bg-white/10 w-[700px] rounded-2xl gap-0"
       >
         {isNewSession ? (
           <div className="flex h-8 min-w-8 items-center justify-center">
-            <Sparkle size={24} weight="fill" />
+            <StarFour size={24} weight="fill" />
           </div>
         ) : (
           <Button
@@ -136,7 +136,7 @@ export const ChatInput = () => {
               transition={{ delay: 1 }}
               initial={'initial'}
               animate={'animate'}
-              className="flex w-full cursor-pointer flex-row items-center rounded-2xl border border-white/5 bg-black/10 px-4 py-3 text-sm text-zinc-400 hover:scale-[101%] hover:bg-black/20"
+              className="flex flex-row items-center text-sm py-3 px-4 border border-white/5 text-zinc-400 w-full rounded-2xl hover:bg-black/20 hover:scale-[101%] cursor-pointer"
               key={index}
               onClick={() => {
                 runModel(
