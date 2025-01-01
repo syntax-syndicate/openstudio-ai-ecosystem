@@ -800,6 +800,9 @@ importers:
       '@repo/observability':
         specifier: workspace:*
         version: link:../observability
+      boring-avatars:
+        specifier: ^1.11.2
+        version: 1.11.2
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1

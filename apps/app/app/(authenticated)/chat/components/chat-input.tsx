@@ -1,12 +1,11 @@
+import { useChatContext } from '@/app/context/chat/context';
+import { PromptType, RoleType } from '@/app/lib/prompts';
+import { Command, Plus } from '@phosphor-icons/react';
+import { Badge } from '@repo/design-system/components/ui/badge';
+import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useChatContext } from '@/app/context/chat/context';
-import { PromptType, RoleType } from '@/app/lib/prompts';
-import { Button } from '@repo/design-system/components/ui/button';
-import { Command, Plus } from '@phosphor-icons/react';
-import { Badge } from '@repo/design-system/components/ui/badge';
-
 
 export const ChatInput = () => {
   const { sessionId } = useParams();
@@ -15,9 +14,8 @@ export const ChatInput = () => {
   const { runModel, createSession, currentSession } = useChatContext();
   const inputRef = useRef<HTMLInputElement>(null);
 
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       runModel(
         {
           role: RoleType.assistant,
@@ -26,31 +24,30 @@ export const ChatInput = () => {
         },
         sessionId!.toString()
       );
-      setInputValue("");
+      setInputValue('');
     }
   };
 
-   useEffect(() => {
+  useEffect(() => {
     if (sessionId) {
       inputRef.current?.focus();
     }
   }, [sessionId]);
   const isNewSession = !currentSession?.messages?.length;
   const examples = [
-    "What is the capital of France?",
-    "What is the weather in New York?",
-    "What is the population of India?",
-    "What is the GDP of China?",
+    'What is the capital of France?',
+    'What is the weather in New York?',
+    'What is the population of India?',
+    'What is the GDP of China?',
   ];
 
-
   return (
-    <div className="w-full flex flex-col items-center justify-center absolute bottom-0 px-4 pb-4 pt-16 bg-gradient-to-t from-white dark:from-zinc-800 dark:to-transparent from-70% to-white/10 left-0 right-0">
+    <div className="absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center bg-gradient-to-t from-70% from-white to-white/10 px-4 pt-16 pb-4 dark:from-zinc-800 dark:to-transparent">
       {isNewSession && (
-        <div className="grid grid-cols-2 gap-2 mb-4 w-[700px]">
+        <div className="mb-4 grid w-[700px] grid-cols-2 gap-2">
           {examples?.map((example, index) => (
             <div
-              className="flex flex-row items-center text-sm py-3 px-4 bg-black/10 border border-white/5 text-zinc-400 w-full rounded-2xl hover:bg-black/20 hover:scale-[101%] cursor-pointer"
+              className="flex w-full cursor-pointer flex-row items-center rounded-2xl border border-white/5 bg-black/10 px-4 py-3 text-sm text-zinc-400 hover:scale-[101%] hover:bg-black/20"
               key={index}
               onClick={() => {
                 runModel(
@@ -68,10 +65,10 @@ export const ChatInput = () => {
           ))}
         </div>
       )}
-      <div className="flex flex-row items-center px-3 bg-white/10 w-[700px] rounded-2xl">
+      <div className="flex w-[700px] flex-row items-center rounded-2xl bg-white/10 px-3">
         <Button
           size="icon"
-          className="min-w-8 h-8"
+          className="h-8 min-w-8"
           onClick={() => {
             createSession().then((session) => {
               router.push(`/chat/${session.id}`);

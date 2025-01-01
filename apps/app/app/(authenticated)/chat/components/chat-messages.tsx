@@ -1,11 +1,11 @@
-import { useChatContext } from "@/app/context/chat/context";
-import { useMarkdown } from "@/app/hooks/use-mdx";
-import Avatar from "boring-avatars";
-import { useEffect, useRef } from "react";
+import { useChatContext } from '@/app/context/chat/context';
+import { useMarkdown } from '@/app/hooks/use-mdx';
+import { Avatar } from '@repo/design-system/components/ui/custom-avatar';
+import { useEffect, useRef } from 'react';
 
 export const ChatMessages = () => {
   const { renderMarkdown } = useMarkdown();
-  const { lastStream, currentSession } = useChatContext();
+  const { lastStream, currentSession, error } = useChatContext();
   const chatContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,26 +29,16 @@ export const ChatMessages = () => {
 
   const renderMessage = (
     key: string,
-    humanMessgae: string,
+    humanMessage: string,
     aiMessage: string
   ) => {
     return (
-      <div className="flex flex-col gap-1 items-start w-full" key={key}>
-        <div className="bg-black/30 rounded-2xl p-2 text-sm flex flex-row gap-2 pr-4 border border-white/5">
-          <div className="w-8 h-8 rounded-full relative">
-            <Avatar
-              size={32}
-              name={humanMessgae}
-              variant="marble"
-              colors={["#FFFFFF"]}
-            />
-            <p className="text-zinc-900/70 font-bold absolute inset-0 flex items-center justify-center">
-              D
-            </p>
-          </div>
-          <span className="pt-1.5">{humanMessgae}</span>
+      <div className="flex w-full flex-col items-start gap-1" key={key}>
+        <div className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 text-sm">
+          <Avatar name="Vineeth" />
+          <span className="pt-1 leading-5">{humanMessage}</span>
         </div>
-        <div className="bg-white/5 rounded-2xl p-4 w-full border border-white/5">
+        <div className="w-full rounded-2xl border border-white/5 bg-white/5 p-4">
           {renderMarkdown(aiMessage)}
         </div>
       </div>
@@ -57,16 +47,21 @@ export const ChatMessages = () => {
 
   return (
     <div
-      className="flex flex-col w-full items-center h-screen overflow-y-auto pt-[60px] pb-[200px]"
+      className="flex h-screen w-full flex-col items-center overflow-y-auto pt-[60px] pb-[200px]"
       ref={chatContainer}
     >
-      <div className="w-[600px] flex flex-col gap-8">
+      <div className="flex w-[600px] flex-col gap-8">
         {currentSession?.messages.map((message) =>
           renderMessage(message.id, message.rawHuman, message.rawAI)
         )}
         {isLastStreamBelongsToCurrentSession &&
           lastStream?.props?.query &&
-          renderMessage("last", lastStream?.props?.query, lastStream?.message)}
+          renderMessage('last', lastStream?.props?.query, lastStream?.message)}
+        {error && (
+          <div className="text-red-500">
+            {renderMessage('error', 'Ahh!', error)}
+          </div>
+        )}
       </div>
     </div>
   );

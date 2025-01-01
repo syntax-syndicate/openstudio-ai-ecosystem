@@ -20,8 +20,8 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
     }
   }, [code, language]);
   return (
-    <div className="bg-black/20 rounded-2xl p-4">
-      <div className="pl-2 w-full flex justify-between items-center">
+    <div className="rounded-2xl bg-black/20 p-4">
+      <div className="flex w-full items-center justify-between pl-2">
         <p className="text-xs">{language}</p>
         <Button
           size="sm"
@@ -36,7 +36,7 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
       </div>
       <pre className=" ">
         <code
-          className={`hljs language-${language} whitespace-pre-wrap break-words overflow-x-auto w-full inline-block pr-[100%] text-sm`}
+          className={`hljs language-${language} inline-block w-full overflow-x-auto whitespace-pre-wrap break-words pr-[100%] text-sm`}
           ref={ref}
         ></code>
       </pre>
