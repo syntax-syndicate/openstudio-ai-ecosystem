@@ -5,6 +5,7 @@ import { useChatSession } from '@/app/hooks/use-chat-session';
 import type { TChatSession } from '@/app/hooks/use-chat-session';
 import { useLLM } from '@/app/hooks/use-llm';
 import type { TStreamProps } from '@/app/hooks/use-llm';
+import { useParams } from 'next/navigation';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 
@@ -12,9 +13,13 @@ export type TChatProvider = {
   children: React.ReactNode;
 };
 export const ChatProvider = ({ children }: TChatProvider) => {
-  const { getSessions, createNewSession } = useChatSession();
+  const { sessionId } = useParams();
+  const { getSessions, createNewSession, getSessionById } = useChatSession();
   const [sessions, setSessions] = useState<TChatSession[]>([]);
   const [isSessionLoading, setIsSessionLoading] = useState<boolean>(true);
+  const [currentSession, setCurrentSession] = useState<
+    TChatSession | undefined
+  >();
   const [lastStream, setLastStream] = useState<TStreamProps>();
   const { runModel } = useLLM({
     onStreamStart: () => {
@@ -30,14 +35,27 @@ export const ChatProvider = ({ children }: TChatProvider) => {
     },
   });
 
+  const fetchSession = async () => {
+    getSessionById(sessionId!.toString()).then((session) => {
+      setCurrentSession(session);
+    });
+  };
+  useEffect(() => {
+    if (!sessionId) {
+      return;
+    }
+    fetchSession();
+  }, [sessionId]);
+
   const fetchSessions = async () => {
     const sessions = await getSessions();
     setSessions(sessions);
     setIsSessionLoading(false);
   };
   const createSession = async () => {
-    await createNewSession();
+    const newSession = await createNewSession();
     fetchSessions();
+    return newSession;
   };
   useEffect(() => {
     setIsSessionLoading(true);
@@ -46,6 +64,13 @@ export const ChatProvider = ({ children }: TChatProvider) => {
   const refetchSessions = () => {
     fetchSessions();
   };
+
+  useEffect(() => {
+    if (!lastStream) {
+      fetchSession();
+    }
+  }, [lastStream]);
+
   return (
     <ChatContext.Provider
       value={{
@@ -56,6 +81,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         createSession,
         runModel,
         lastStream,
+        currentSession,
       }}
     >
       {children}

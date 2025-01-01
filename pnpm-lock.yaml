@@ -166,6 +166,9 @@ importers:
       '@t3-oss/env-nextjs':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.7.2)(zod@3.24.1)
+      boring-avatars:
+        specifier: ^1.11.2
+        version: 1.11.2
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
@@ -5515,6 +5518,9 @@ packages:
 
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
+
+  boring-avatars@1.11.2:
+    resolution: {integrity: sha512-3+wkwPeObwS4R37FGXMYViqc4iTrIRj5yzfX9Qy4mnpZ26sX41dGMhsAgmKks1r/uufY1pl4vpgzMWHYfJRb2A==}
 
   bottleneck@2.19.5:
     resolution: {integrity: sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==}
@@ -15179,6 +15185,8 @@ snapshots:
   bn.js@5.2.1: {}
 
   boolbase@1.0.0: {}
+
+  boring-avatars@1.11.2: {}
 
   bottleneck@2.19.5: {}
 
