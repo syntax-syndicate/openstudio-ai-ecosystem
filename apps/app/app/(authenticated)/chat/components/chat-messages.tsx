@@ -44,39 +44,42 @@ export const ChatMessages = () => {
   const isLastStreamBelongsToCurrentSession =
     streamingMessage?.sessionId === currentSession?.id;
 
-  const renderMessage = (props: TRenderMessageProps) => {
-    const { key, humanMessage, aiMessage, loading, model } = props;
+  const renderMessage = (porps: TRenderMessageProps) => {
+    const { key, humanMessage, aiMessage, loading, model } = porps;
     return (
-      <div className="flex w-full flex-col items-start gap-1" key={key}>
+      <div className="flex flex-col gap-1 items-start w-full" key={key}>
+        <div className="flex flex-row justify-end w-full">
+          <motion.div
+            className="bg-black/30 rounded-2xl p-2 text-sm flex flex-row gap-2 pl-4 border border-white/5"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+
+              transition: { duration: 1, ease: "easeInOut" },
+            }}
+          >
+            <span className="pt-1.5 leading-5 text-right">{humanMessage}</span>
+            <Avatar name="Vineeth" />
+          </motion.div>
+        </div>
         <motion.div
-          className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 text-sm"
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: 1,
-            transition: { duration: 1, ease: 'easeInOut' },
-          }}
-        >
-          <Avatar name="Vineeth" />
-          <span className="pt-1.5 leading-5">{humanMessage}</span>
-        </motion.div>
-        <motion.div
-          className="flex w-full flex-col items-start rounded-2xl border border-white/5 bg-white/5 p-4"
+          className="bg-white/5 rounded-2xl p-4 w-full border border-white/5 flex flex-col items-start"
           initial={{ opacity: 0, y: 10 }}
           animate={{
             opacity: 1,
             y: 0,
-            transition: { duration: 1, ease: 'easeInOut' },
+            transition: { duration: 1, ease: "easeInOut" },
           }}
         >
-          {aiMessage && renderMarkdown(aiMessage, key === 'streaming')}
+          {aiMessage && renderMarkdown(aiMessage, key === "streaming")}
           {loading && <Spinner />}
         </motion.div>
         <motion.p
-          className="px-2 py-1/2 text-xs text-zinc-500"
+          className="text-zinc-500 text-xs py-1/2 px-2"
           initial={{ opacity: 0 }}
           animate={{
             opacity: 1,
-            transition: { duration: 1, ease: 'easeInOut' },
+            transition: { duration: 1, ease: "easeInOut" },
           }}
         >
           {model}
@@ -91,12 +94,11 @@ export const ChatMessages = () => {
       ref={chatContainer}
     >
       <motion.div
-        className="flex w-[600px] flex-col gap-8"
+        className="w-[600px] flex flex-col gap-8"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { duration: 1, ease: 'easeInOut' } }}
-      >
+        animate={{ opacity: 1, transition: { duration: 1, ease: "easeInOut" } }}>
         {currentSession?.messages.map((message) =>
-          renderMessage({
+           renderMessage({
             key: message.id,
             humanMessage: message.rawHuman,
             model: message.model,
@@ -104,10 +106,10 @@ export const ChatMessages = () => {
           })
         )}
         {isLastStreamBelongsToCurrentSession &&
-          streamingMessage?.props?.query &&
+           streamingMessage?.props?.query &&
           !streamingMessage?.error &&
           renderMessage({
-            key: 'streaming',
+            key: "streaming",
             humanMessage: streamingMessage?.props?.query,
             aiMessage: streamingMessage?.message,
             model: streamingMessage?.model,
