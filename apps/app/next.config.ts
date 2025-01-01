@@ -6,12 +6,12 @@ import type { NextConfig } from 'next';
 
 let nextConfig: NextConfig = withToolbar(withLogtail({ ...config }));
 
-if (env.VERCEL) {
-  nextConfig = withSentry(nextConfig);
-}
+// if (env.VERCEL) {
+//   nextConfig = withSentry(nextConfig);
+// }
 
-if (env.ANALYZE === 'true') {
-  nextConfig = withAnalyzer(nextConfig);
-}
+// if (env.ANALYZE === 'true') {
+//   nextConfig = withAnalyzer(nextConfig);
+// }
 
 export default nextConfig;
