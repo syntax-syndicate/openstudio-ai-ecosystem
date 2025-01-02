@@ -1,5 +1,6 @@
 import { usePreferences } from '@/app/hooks/use-preferences';
 import { blobToBase64, createMediaStream } from '@/app/lib/record';
+import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { OpenAI, toFile } from 'openai';
 import { useEffect, useRef, useState } from 'react';
 
@@ -15,6 +16,7 @@ export const useRecordVoice = (): UseRecordVoiceResult => {
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
   );
+  const { toast } = useToast();
   const { getApiKey } = usePreferences();
   const [recording, setRecording] = useState<boolean>(false);
   const [transcribing, setIsTranscribing] = useState<boolean>(false);
@@ -55,8 +57,14 @@ export const useRecordVoice = (): UseRecordVoiceResult => {
       setIsTranscribing(false);
       setText(transcription?.text);
     } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Failed to transcribe',
+        description: 'Something went wrong. Check your openai settings.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsTranscribing(false);
-      console.log(error);
     }
   };
   const initialMediaRecorder = (stream: MediaStream): void => {

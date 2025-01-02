@@ -17,6 +17,7 @@ import {
   MessagesPlaceholder,
 } from '@langchain/core/prompts';
 import { type RunnableLike, RunnableSequence } from '@langchain/core/runnables';
+import { useToast } from '@repo/design-system/components/ui/use-toast';
 import moment from 'moment';
 import { v4 } from 'uuid';
 
@@ -47,7 +48,7 @@ export const useLLM = ({
   const { getApiKey, getPreferences } = usePreferences();
   const { createInstance, getModelByKey } = useModelList();
   const abortController = new AbortController();
-
+  const { toast } = useToast();
   const stopGeneration = () => {
     abortController?.abort();
   };
@@ -273,7 +274,11 @@ export const useLLM = ({
         onStreamEnd?.(chatMessage);
       });
     } catch (err) {
-      console.error(err);
+      toast({
+        title: 'Error',
+        description: 'Something went wrong',
+        variant: 'destructive',
+      });
       onError?.({
         props,
         id: newMessageId,
