@@ -61,7 +61,11 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                 });
               }}
             >
-              <Plus size={14} weight="bold" />
+              <Plus
+                size={14}
+                weight="bold"
+                className="flex-shrink-0 text-zinc-500"
+              />
               New session
             </CommandItem>
             <CommandItem
@@ -86,7 +90,11 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                   });
               }}
             >
-              <TrashSimple size={14} weight="bold" />
+              <TrashSimple
+                size={14}
+                weight="bold"
+                className="flex-shrink-0 text-zinc-500"
+              />
               Delete current session
             </CommandItem>
             <CommandItem
@@ -101,7 +109,11 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                 });
               }}
             >
-              <Eraser size={14} weight="bold" />
+              <Eraser
+                size={14}
+                weight="bold"
+                className="flex-shrink-0 text-zinc-500"
+              />
               Clear History
             </CommandItem>
           </CommandGroup>

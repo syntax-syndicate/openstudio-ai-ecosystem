@@ -13,11 +13,7 @@ import {
 } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@repo/design-system/components/ui/tooltip';
+import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { encodingForModel } from 'js-tiktoken';
 import { useRef } from 'react';
 
@@ -46,44 +42,22 @@ export const AIMessageBubble = (props: TRenderMessageProps) => {
   const tokenCount = getTokenCount({ model, rawAI: aiMessage });
 
   return (
-    <div
-      ref={messageRef}
-      className="flex w-full flex-col items-start rounded-2xl bg-black/5 px-4 dark:bg-white/5"
-    >
-      {aiMessage && (
-        <div className="w-full pt-4 pb-2">
-          {renderMarkdown(aiMessage, id === 'streaming')}
-        </div>
-      )}
-
-      <div className="flex w-full flex-row items-center justify-between py-3 opacity-50 transition-opacity hover:opacity-100">
-        <p className="flex flex-row items-center gap-4 py-1/2 text-xs text-zinc-500">
-          <span className="flex flex-row items-center gap-2">
-            {' '}
-            {modelForMessage?.icon()}
-            {loading ? <Spinner /> : modelForMessage?.name}{' '}
-          </span>
-          {tokenCount && (
-            <Tooltip>
-              <TooltipTrigger>
-                <span className="flex cursor-pointer flex-row items-center gap-1 p-2">
-                  {`${getTokenCount({
-                    model,
-                    rawAI: aiMessage,
-                  })} tokens`}
-                  <Info size={14} weight="bold" />
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Estimated Output Tokens</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
-        </p>
-        {!loading && (
-          <div className="flex flex-row gap-1">
-            <Tooltip>
-              <TooltipTrigger>
+    <div className="mt-6 flex w-full flex-row gap-2">
+      <div className="p-3">{modelForMessage?.icon()}</div>
+      <div
+        ref={messageRef}
+        className=" flex w-full flex-col items-start rounded-2xl"
+      >
+        {aiMessage && (
+          <div className="w-full pb-2">
+            {renderMarkdown(aiMessage, id === 'streaming')}
+          </div>
+        )}
+        <div className="flex w-full flex-row items-center justify-between py-3 opacity-50 transition-opacity hover:opacity-100">
+          {loading && <Spinner />}
+          {!loading && (
+            <div className="flex flex-row gap-1">
+              <Tooltip content="Copy">
                 <Button
                   variant="ghost"
                   size="iconSm"
@@ -91,28 +65,18 @@ export const AIMessageBubble = (props: TRenderMessageProps) => {
                   onClick={handleCopyContent}
                 >
                   {showCopied ? (
-                    <Check size={16} weight="regular" />
+                    <Check size={16} weight="bold" />
                   ) : (
-                    <Copy size={16} weight="regular" />
+                    <Copy size={16} weight="bold" />
                   )}
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Copy</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
+              </Tooltip>
+              <Tooltip content="Regenerate">
                 <Button variant="ghost" size="iconSm" rounded="lg">
-                  <ArrowClockwise size={16} weight="regular" />
+                  <ArrowClockwise size={16} weight="bold" />
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Regenerate</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
+              </Tooltip>
+              <Tooltip content="Delete">
                 <Button
                   variant="ghost"
                   size="iconSm"
@@ -121,15 +85,23 @@ export const AIMessageBubble = (props: TRenderMessageProps) => {
                     removeMessage(id);
                   }}
                 >
-                  <TrashSimple size={16} weight="regular" />
+                  <TrashSimple size={16} weight="bold" />
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Delete</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        )}
+              </Tooltip>
+            </div>
+          )}
+          {tokenCount && !loading && (
+            <div className="flex flex-row items-center gap-2 text-xs text-zinc-500">
+              {modelForMessage?.name}
+              <Tooltip content="Estimated Output Tokens">
+                <span className="flex cursor-pointer flex-row items-center gap-1 p-2 text-xs">
+                  {`${tokenCount} tokens`}
+                  <Info size={14} weight="bold" />
+                </span>
+              </Tooltip>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
