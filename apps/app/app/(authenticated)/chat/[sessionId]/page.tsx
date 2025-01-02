@@ -4,6 +4,7 @@ import { ChatMessages } from '@/app/(authenticated)/chat/components/chat-message
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
 import { useSettings } from '@/app/context/settings/context';
 import { DotsThree } from '@phosphor-icons/react';
+import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Avatar } from '@repo/design-system/components/ui/custom-avatar';
 
@@ -16,6 +17,7 @@ const ChatSessionPage = () => {
         <div className="flex flex-row items-center gap-2">
           <ModelIcon type="chathub" size="md" />
           <p className="text-sm text-zinc-500">ChatHub</p>
+          <Badge>Beta</Badge>
         </div>
         <div className="flex flex-row items-center gap-2">
           <Avatar name="Vineeth" size="md" />
