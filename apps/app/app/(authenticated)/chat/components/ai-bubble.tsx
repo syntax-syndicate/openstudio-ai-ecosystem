@@ -1,4 +1,3 @@
-import type { TRenderMessageProps } from '@/app/(authenticated)/chat/components/chat-messages';
 import { useChatContext } from '@/app/context/chat/context';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { useClipboard } from '@/app/hooks/use-clipboard';
@@ -17,15 +16,15 @@ import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content'
 import { encodingForModel } from 'js-tiktoken';
 import { useRef } from 'react';
 
-export const AIMessageBubble = (props: TRenderMessageProps) => {
-  const { id, humanMessage, aiMessage, loading, model } = props;
+export const AIMessageBubble = (props: TChatMessage) => {
+  const { id, rawAI, isLoading, model } = props;
   const messageRef = useRef<HTMLDivElement>(null);
   const { showCopied, copy } = useClipboard();
   const { getModelByKey } = useModelList();
   const { renderMarkdown } = useMarkdown();
   const modelForMessage = getModelByKey(model);
   const handleCopyContent = () => {
-    messageRef?.current && aiMessage && copy(aiMessage);
+    messageRef?.current && rawAI && copy(rawAI);
   };
   const { removeMessage } = useChatContext();
 
@@ -39,7 +38,7 @@ export const AIMessageBubble = (props: TRenderMessageProps) => {
     return undefined;
   };
 
-  const tokenCount = getTokenCount({ model, rawAI: aiMessage });
+  const tokenCount = getTokenCount({ model, rawAI });
 
   return (
     <div className="mt-6 flex w-full flex-row gap-2">
@@ -48,14 +47,12 @@ export const AIMessageBubble = (props: TRenderMessageProps) => {
         ref={messageRef}
         className=" flex w-full flex-col items-start rounded-2xl"
       >
-        {aiMessage && (
-          <div className="w-full pb-2">
-            {renderMarkdown(aiMessage, id === 'streaming')}
-          </div>
+        {rawAI && (
+          <div className="w-full pb-2">{renderMarkdown(rawAI, isLoading)}</div>
         )}
         <div className="flex w-full flex-row items-center justify-between py-3 opacity-50 transition-opacity hover:opacity-100">
-          {loading && <Spinner />}
-          {!loading && (
+          {isLoading && <Spinner />}
+          {!isLoading && (
             <div className="flex flex-row gap-1">
               <Tooltip content="Copy">
                 <Button
@@ -90,7 +87,7 @@ export const AIMessageBubble = (props: TRenderMessageProps) => {
               </Tooltip>
             </div>
           )}
-          {tokenCount && !loading && (
+          {tokenCount && !isLoading && (
             <div className="flex flex-row items-center gap-2 text-xs text-zinc-500">
               {modelForMessage?.name}
               <Tooltip content="Estimated Output Tokens">

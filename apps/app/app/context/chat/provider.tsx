@@ -2,10 +2,11 @@
 
 import { ChatContext } from '@/app/context/chat/context';
 import {
+  type TChatMessage,
   type TChatSession,
   useChatSession,
 } from '@/app/hooks/use-chat-session';
-import { type TStreamProps, useLLM } from '@/app/hooks/use-llm';
+import { useLLM } from '@/app/hooks/use-llm';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type React from 'react';
@@ -31,24 +32,52 @@ export const ChatProvider = ({ children }: TChatProvider) => {
   const [currentSession, setCurrentSession] = useState<
     TChatSession | undefined
   >();
+  const [streaming, setStreaming] = useState<boolean>(false);
 
-  const [streamingMessage, setStreamingMessage] = useState<TStreamProps>();
   const { runModel, stopGeneration } = useLLM({
     onInit: async (props) => {
-      setStreamingMessage(props);
+      appendToCurrentSession(props);
     },
-    onStreamStart: async (props) => {},
+    onStreamStart: async (props) => {
+      appendToCurrentSession(props);
+      setStreaming(true);
+    },
     onStream: async (props) => {
-      setStreamingMessage(props);
+      appendToCurrentSession(props);
     },
     onStreamEnd: async (props) => {
-      fetchAllSessions();
-      setStreamingMessage(props);
+      appendToCurrentSession(props);
+      setStreaming(false);
     },
     onError: async (error) => {
-      setStreamingMessage(error);
+      appendToCurrentSession(error);
+      setStreaming(false);
     },
   });
+
+  const appendToCurrentSession = (props: TChatMessage) => {
+    setCurrentSession((session) => {
+      if (!session) return undefined;
+      const exisingMessage = session.messages.find(
+        (message) => message.id === props.id
+      );
+      if (exisingMessage) {
+        return {
+          ...session,
+          messages: session.messages.map((message) => {
+            if (message.id === props.id) {
+              return props;
+            }
+            return message;
+          }),
+        };
+      }
+      return {
+        ...session,
+        messages: [...session.messages, props],
+      };
+    });
+  };
 
   const fetchCurrentSession = async () => {
     if (!sessionId) {
@@ -83,12 +112,6 @@ export const ChatProvider = ({ children }: TChatProvider) => {
     fetchAllSessions();
     return newSession;
   };
-
-  useEffect(() => {
-    if (!streamingMessage) {
-      fetchCurrentSession();
-    }
-  }, [streamingMessage]);
 
   useEffect(() => {
     setAllSessionLoading(true);
@@ -126,7 +149,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         runModel,
         clearChatSessions,
         removeSession,
-        streamingMessage,
+        streaming,
         currentSession,
         stopGeneration,
         removeMessage,

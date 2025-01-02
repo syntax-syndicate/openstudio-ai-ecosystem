@@ -2,18 +2,13 @@ import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble
 import { useChatContext } from '@/app/context/chat/context';
 import type { PromptProps, TChatMessage } from '@/app/hooks/use-chat-session';
 import type { TModelKey } from '@/app/hooks/use-model-list';
-import { ArrowElbowDownRight, Warning } from '@phosphor-icons/react';
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '@repo/design-system/components/ui/alert';
+import { ArrowElbowDownRight } from '@phosphor-icons/react';
 import moment from 'moment';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 export type TRenderMessageProps = {
   id: string;
-  humanMessage: string;
+  humanMessage?: string;
   props?: PromptProps;
   model: TModelKey;
   image?: string;
@@ -33,7 +28,7 @@ moment().calendar(null, {
 });
 
 export const ChatMessages = () => {
-  const { streamingMessage, currentSession } = useChatContext();
+  const { currentSession } = useChatContext();
   const chatContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,16 +41,16 @@ export const ChatMessages = () => {
     }
   };
 
-  useEffect(() => {
-    if (streamingMessage) {
-      scrollToBottom();
-    }
-  }, [streamingMessage]);
+  // useEffect(() => {
+  //   if (streamingMessage) {
+  //     scrollToBottom();
+  //   }
+  // }, [streamingMessage]);
 
-  const isLastStreamBelongsToCurrentSession =
-    streamingMessage?.sessionId === currentSession?.id;
+  // const isLastStreamBelongsToCurrentSession =
+  //   streamingMessage?.sessionId === currentSession?.id;
 
-  const renderMessage = (props: TRenderMessageProps) => {
+  const renderMessage = (props: TChatMessage) => {
     return (
       <div className="flex w-full flex-col items-end gap-1" key={props.id}>
         {props.props?.context && (
@@ -82,7 +77,7 @@ export const ChatMessages = () => {
         )}
         <div className="ml-16 flex flex-row gap-2 rounded-2xl bg-black/10 px-3 py-2 text-sm text-zinc-600 dark:bg-black/30 dark:text-zinc-100">
           <span className="pt-[0.20em] pb-[0.15em] leading-6">
-            {props.humanMessage}
+            {props.rawHuman}
           </span>
         </div>
         <AIMessageBubble {...props} />
@@ -132,18 +127,9 @@ export const ChatMessages = () => {
             );
           })} */}
         <div className="flex w-full flex-col items-start gap-8">
-          {currentSession?.messages?.map((message) =>
-            renderMessage({
-              id: message.id,
-              humanMessage: message.rawHuman,
-              model: message.model,
-              image: message.image,
-              props: message.props,
-              aiMessage: message.rawAI,
-            })
-          )}
+          {currentSession?.messages?.map((message) => renderMessage(message))}
         </div>
-        {isLastStreamBelongsToCurrentSession &&
+        {/* {isLastStreamBelongsToCurrentSession &&
           streamingMessage?.props?.query &&
           !streamingMessage?.error &&
           renderMessage({
@@ -160,7 +146,7 @@ export const ChatMessages = () => {
             <AlertTitle>Ahh! Something went wrong!</AlertTitle>
             <AlertDescription>{streamingMessage?.error}</AlertDescription>
           </Alert>
-        )}
+        )} */}
       </div>
     </div>
   );
