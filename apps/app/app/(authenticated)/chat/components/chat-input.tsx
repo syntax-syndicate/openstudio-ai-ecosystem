@@ -72,8 +72,9 @@ export const ChatInput = () => {
   const { getModelByKey } = useModelList();
   const { open: openSettings } = useSettings();
   const { showPopup, selectedText, handleClearSelection } = useTextSelection();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const [open, setOpen] = useState(false);
+  const [commandInput, setCommandInput] = useState('');
 
   const [attachment, setAttachment] = useState<TAttachment>();
 
@@ -426,6 +427,15 @@ export const ChatInput = () => {
       </>
     );
   };
+
+  const focusToInput = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+      const len = inputRef.current.value.length;
+      inputRef.current.setSelectionRange(len, len);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -457,6 +467,7 @@ export const ChatInput = () => {
                   minRows={1}
                   maxRows={6}
                   value={inputValue}
+                  ref={inputRef}
                   autoComplete="off"
                   autoCapitalize="off"
                   placeholder="Ask AI anything ..."
@@ -466,6 +477,7 @@ export const ChatInput = () => {
                       setOpen(true);
                     }
                     setInputValue(e.currentTarget.value);
+                    focusToInput();
                   }}
                   onKeyDown={handleKeyDown}
                   className="w-full resize-none border-none bg-transparent px-2 py-1.5 text-sm leading-5 tracking-[0.01em] outline-none "
@@ -504,7 +516,21 @@ export const ChatInput = () => {
           </PopoverAnchor>
           <PopoverContent className="w-[700px] overflow-hidden rounded-2xl p-0">
             <CMDKCommand>
-              <CommandInput placeholder="Search framework..." className="h-9" />
+              <CommandInput
+                placeholder="Search framework..."
+                className="h-9"
+                value={commandInput}
+                onValueChange={setCommandInput}
+                onKeyDown={(e) => {
+                  if (
+                    (e.key === 'Delete' || e.key === 'Backspace') &&
+                    !commandInput
+                  ) {
+                    setOpen(false);
+                    focusToInput();
+                  }
+                }}
+              />
               <CommandEmpty>No framework found.</CommandEmpty>
               <CommandList className="p-1">
                 {examplePrompts?.map((example, index) => (
