@@ -345,7 +345,14 @@ mark.prompt-highlight {
   border-radius: 8px;
 }
 .tiptap .is-editor-empty:first-child::before {
-  color: #adb5bd;
+  color: rgba(0, 0, 0, 0.5);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.dark .tiptap .is-editor-empty:first-child::before {
+  color: rgba(255, 255, 255, 0.5);
   content: attr(data-placeholder);
   float: left;
   height: 0;

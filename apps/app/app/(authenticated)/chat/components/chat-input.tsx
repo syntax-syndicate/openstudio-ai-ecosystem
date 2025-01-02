@@ -1,6 +1,5 @@
 import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
-import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greeting';
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
@@ -116,7 +115,7 @@ export const ChatInput = () => {
       Paragraph,
       Text,
       Placeholder.configure({
-        placeholder: 'Write something …',
+        placeholder: 'Type / or Enter prompt here...',
       }),
       Enter,
       ShiftEnter,
@@ -528,11 +527,11 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-zinc-50 to-transparent px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800',
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-white to-transparent px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800',
         isNewSession && 'top-0'
       )}
     >
-      {isNewSession && <ChatGreeting />}
+      {/* {isNewSession && <ChatGreeting />} */}
       <div className="flex flex-row items-center gap-2">
         {renderScrollToBottom()}
         {renderReplyButton()}
@@ -548,7 +547,7 @@ export const ChatInput = () => {
               variants={slideUpVariant}
               initial={'initial'}
               animate={editor?.isActive ? 'animate' : 'initial'}
-              className="flex w-[700px] flex-col items-start gap-0 overflow-hidden rounded-[1.25em] border border-black/10 bg-white shadow-sm dark:border-white/5 dark:bg-white/5"
+              className="flex w-[700px] flex-col items-start gap-0 overflow-hidden rounded-[1.25em] bg-zinc-100 dark:border-white/5 dark:bg-white/5"
             >
               {selectedPrompt && (
                 <div className="w-full px-1 pt-1">
@@ -587,7 +586,7 @@ export const ChatInput = () => {
                   <ArrowUp size={20} weight="bold" />
                 </Button>
               </div>
-              <div className="flex w-full flex-row items-center justify-start gap-2 px-2 pt-1 pb-2">
+              <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
                 <ModelSelect />
 
                 <div className="flex-1"></div>
@@ -644,12 +643,14 @@ export const ChatInput = () => {
           </PopoverContent>
         </Popover>
       </div>
-      <ChatExamples
-        show={isNewSession}
-        onExampleClick={(prompt) => {
-          handleRunModel(prompt);
-        }}
-      />
+      <div className="flex flex-col items-center justify-center">
+        <ChatExamples
+          show={isNewSession}
+          onExampleClick={(prompt) => {
+            handleRunModel(prompt);
+          }}
+        />
+      </div>
     </div>
   );
 };

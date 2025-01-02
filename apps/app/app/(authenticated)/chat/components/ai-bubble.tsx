@@ -1,5 +1,6 @@
 import { RegenerateWithModelSelect } from '@/app/(authenticated)/chat/components/regenerate-model-select';
 import { useChatContext } from '@/app/context/chat/context';
+import { useSettings } from '@/app/context/settings/context';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { useMarkdown } from '@/app/hooks/use-mdx';
@@ -8,7 +9,6 @@ import { Check, Copy, Info, TrashSimple } from '@phosphor-icons/react';
 import {
   Alert,
   AlertDescription,
-  AlertTitle,
 } from '@repo/design-system/components/ui/alert';
 import { Button } from '@repo/design-system/components/ui/button';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
@@ -28,6 +28,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   const { getModelByKey } = useModelList();
   const { renderMarkdown } = useMarkdown();
   const modelForMessage = getModelByKey(model);
+  const { open: openSettings } = useSettings();
   const handleCopyContent = () => {
     messageRef?.current && rawAI && copy(rawAI);
   };
@@ -57,8 +58,18 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
         )}
         {errorMesssage && (
           <Alert variant="destructive">
-            <AlertTitle>Something went wrong</AlertTitle>
-            <AlertDescription> {errorMesssage}</AlertDescription>
+            <AlertDescription>
+              Something went wrong. Make sure your API key is working.
+              <Button
+                variant="link"
+                size="link"
+                onClick={() => {
+                  openSettings();
+                }}
+              >
+                Check API Key
+              </Button>{' '}
+            </AlertDescription>
           </Alert>
         )}
         <div className="flex w-full flex-row items-center justify-between py-3 opacity-50 transition-opacity hover:opacity-100">

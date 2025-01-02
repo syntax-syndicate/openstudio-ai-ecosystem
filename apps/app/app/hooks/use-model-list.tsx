@@ -32,6 +32,7 @@ export type TModel = {
   outputPrice?: number;
   tokens: number;
   baseModel: TBaseModel;
+  maxOutputTokens?: number;
 };
 export const useModelList = () => {
   const { getPreferences } = usePreferences();
@@ -88,6 +89,7 @@ export const useModelList = () => {
       tokens: 128000,
       icon: () => <ModelIcon size="md" type="gpt4" />,
       baseModel: 'openai',
+      maxOutputTokens: 2048,
     },
     {
       name: 'GPT4 Turbo',
@@ -98,6 +100,7 @@ export const useModelList = () => {
       outputPrice: 30,
       icon: () => <ModelIcon size="md" type="gpt4" />,
       baseModel: 'openai',
+      maxOutputTokens: 4095,
     },
     {
       name: 'GPT4',
@@ -108,6 +111,7 @@ export const useModelList = () => {
       outputPrice: 60,
       icon: () => <ModelIcon size="md" type="gpt4" />,
       baseModel: 'openai',
+      maxOutputTokens: 4095,
     },
     {
       name: 'GPT3.5 Turbo',
@@ -118,6 +122,7 @@ export const useModelList = () => {
       tokens: 16385,
       icon: () => <ModelIcon size="md" type="gpt3" />,
       baseModel: 'openai',
+      maxOutputTokens: 4095,
     },
     {
       name: 'GPT3.5 Turbo 0125',
@@ -126,6 +131,7 @@ export const useModelList = () => {
       tokens: 16385,
       icon: () => <ModelIcon size="md" type="gpt3" />,
       baseModel: 'openai',
+      maxOutputTokens: 4095,
     },
     {
       name: 'GPT3.5 Turbo Instruct',
@@ -136,6 +142,7 @@ export const useModelList = () => {
       outputPrice: 2,
       icon: () => <ModelIcon size="md" type="gpt3" />,
       baseModel: 'openai',
+      maxOutputTokens: 4095,
     },
     {
       name: 'Claude 3 Opus',
@@ -146,6 +153,7 @@ export const useModelList = () => {
       tokens: 200000,
       icon: () => <ModelIcon size="md" type="anthropic" />,
       baseModel: 'anthropic',
+      maxOutputTokens: 4095,
     },
     {
       name: 'Claude 3 Sonnet',
@@ -156,6 +164,7 @@ export const useModelList = () => {
       tokens: 200000,
       icon: () => <ModelIcon size="md" type="anthropic" />,
       baseModel: 'anthropic',
+      maxOutputTokens: 4095,
     },
     {
       name: 'Claude 3 Haiku',
@@ -166,6 +175,7 @@ export const useModelList = () => {
       tokens: 200000,
       icon: () => <ModelIcon size="md" type="anthropic" />,
       baseModel: 'anthropic',
+      maxOutputTokens: 4095,
     },
     {
       name: 'Gemini Pro 1.5',
@@ -176,6 +186,7 @@ export const useModelList = () => {
       tokens: 200000,
       icon: () => <ModelIcon size="md" type="gemini" />,
       baseModel: 'gemini',
+      maxOutputTokens: 4095,
     },
     {
       name: 'Gemini Flash 1.5',
@@ -186,6 +197,7 @@ export const useModelList = () => {
       tokens: 200000,
       icon: () => <ModelIcon size="md" type="gemini" />,
       baseModel: 'gemini',
+      maxOutputTokens: 8190,
     },
     {
       name: 'Gemini Pro',
@@ -196,6 +208,7 @@ export const useModelList = () => {
       tokens: 200000,
       icon: () => <ModelIcon size="md" type="gemini" />,
       baseModel: 'gemini',
+      maxOutputTokens: 4095,
     },
   ];
   const getModelByKey = (key: TModelKey) => {
