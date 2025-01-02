@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 
 export const ModelSelect = () => {
   const [selectedModel, setSelectedModel] = useState<TModelKey>('gpt-4-turbo');
-
+  const [isOpen, setIsOpen] = useState(false);
   const { getPreferences, setPreferences } = usePreferences();
   const { getModelByKey, models } = useModelList();
 
@@ -26,7 +26,7 @@ export const ModelSelect = () => {
   const activeModel = getModelByKey(selectedModel);
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger>
         <Button
           variant="secondary"
@@ -48,6 +48,7 @@ export const ModelSelect = () => {
               onClick={() => {
                 setPreferences({ defaultModel: model.key }).then(() => {
                   setSelectedModel(model.key);
+                  setIsOpen(false);
                 });
               }}
             >

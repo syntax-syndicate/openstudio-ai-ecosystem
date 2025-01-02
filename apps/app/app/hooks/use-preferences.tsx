@@ -2,11 +2,22 @@ import type { TBaseModel, TModelKey } from '@/app/hooks/use-model-list';
 import { get, set } from 'idb-keyval';
 
 export type TApiKeys = Partial<Record<TBaseModel, string>>;
-const defaultPreferences: TPreferences = {
-  defaultModel: 'gpt-4-turbo',
-};
+
 export type TPreferences = {
   defaultModel: TModelKey;
+  systemPrompt: string;
+  messageLimit: number | 'all';
+  temperature: number;
+  topP: number;
+  topK: number;
+};
+export const defaultPreferences: TPreferences = {
+  defaultModel: 'gpt-4-turbo',
+  systemPrompt: 'You are a helpful assistant.',
+  messageLimit: 'all',
+  temperature: 0.5,
+  topP: 1.0,
+  topK: 5,
 };
 
 export const usePreferences = () => {

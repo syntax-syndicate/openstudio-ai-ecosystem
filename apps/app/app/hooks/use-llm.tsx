@@ -4,12 +4,15 @@ import {
   useChatSession,
 } from '@/app/hooks/use-chat-session';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
-import { usePreferences } from '@/app/hooks/use-preferences';
-import { getInstruction, getRole } from '@/app/lib/prompts';
+import {
+  defaultPreferences,
+  usePreferences,
+} from '@/app/hooks/use-preferences';
 import type { Serialized } from '@langchain/core/load/serializable';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import type { LLMResult } from '@langchain/core/outputs';
 import {
+  type BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from '@langchain/core/prompts';
@@ -39,60 +42,55 @@ export const useLLM = ({
   onStreamEnd,
   onError,
 }: TUseLLM) => {
-  const { getSessionById, addMessageToSession } = useChatSession();
+  const { getSessionById, addMessageToSession, sortMessages } =
+    useChatSession();
   const { getApiKey, getPreferences } = usePreferences();
   const { createInstance, getModelByKey } = useModelList();
+  const abortController = new AbortController();
+
+  const stopGeneration = () => {
+    abortController?.abort();
+  };
 
   const preparePrompt = async (props: PromptProps, history: TChatMessage[]) => {
-    const messageHistory = history;
-
-    console.log('preparing prompt', props, history);
-    const prompt = ChatPromptTemplate.fromMessages(
-      messageHistory?.length > 0
-        ? [
-            [
-              'system',
-              `You are {role} Answer user's question based on the following context:"""{context}""". You can also refer these previous conversations if needed: `,
-            ],
-            new MessagesPlaceholder('chat_history'),
-            ['user', '{input}'],
-          ]
-        : [
-            props?.context
-              ? [
-                  'system',
-                  "You are {role}.  Answer user's question based on the following context: {context}",
-                ]
-              : ['system', 'You are {role}. {type}'],
-
-            ['user', '{input}'],
-          ]
-    );
-
-    const previousMessageHistory = messageHistory.reduce(
-      (acc: (HumanMessage | AIMessage)[], { rawAI, rawHuman }) => [
-        ...acc,
-        new HumanMessage(rawHuman),
-        new AIMessage(rawAI),
-      ],
-      []
-    );
-
-    return await prompt.formatMessages(
-      messageHistory?.length > 0
-        ? {
-            role: getRole(props.role),
-            chat_history: previousMessageHistory,
-            context: props.context,
-            input: props.query,
-          }
-        : {
-            role: getRole(props.role),
-            type: getInstruction(props.type),
-            context: props.context,
-            input: props.query,
-          }
-    );
+    const preferences = await getPreferences();
+    const messageLimit =
+      preferences.messageLimit || defaultPreferences.messageLimit;
+    const hasPreviousMessages = history?.length > 0;
+    const systemPrompt =
+      preferences.systemPrompt || defaultPreferences.systemPrompt;
+    const system: BaseMessagePromptTemplateLike = [
+      'system',
+      `${systemPrompt}.  Answer user's question based on the following context: """{context}""" ${
+        hasPreviousMessages
+          ? `You can also refer these previous conversations if needed:`
+          : ``
+      } `,
+    ];
+    const messageHolders = new MessagesPlaceholder('chat_history');
+    const user: BaseMessagePromptTemplateLike = ['user', '{input}'];
+    const prompt = ChatPromptTemplate.fromMessages([
+      system,
+      messageHolders,
+      user,
+    ]);
+    const previousMessageHistory = sortMessages(history, 'createdAt')
+      .slice(0, messageLimit === 'all' ? history.length : messageLimit)
+      .reduce(
+        //@ts-ignore
+        (acc: (HumanMessage | AIMessage)[], { rawAI, rawHuman }) => [
+          ...acc,
+          new HumanMessage(rawHuman),
+          new AIMessage(rawAI),
+        ],
+        []
+      );
+    console.log(messageLimit, previousMessageHistory);
+    return await prompt.formatMessages({
+      chat_history: previousMessageHistory || [],
+      context: props.context,
+      input: props.query,
+    });
   };
 
   const runModel = async (props: PromptProps, sessionId: string) => {
@@ -128,9 +126,6 @@ export const useLLM = ({
       props,
       currentSession?.messages || []
     );
-
-    const abortController = new AbortController();
-    abortController.abort();
 
     const model = await createInstance(selectedModel, apiKey);
     const stream = await model.stream(formattedChatPrompt, {
@@ -201,5 +196,6 @@ export const useLLM = ({
 
   return {
     runModel,
+    stopGeneration,
   };
 };

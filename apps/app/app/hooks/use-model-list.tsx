@@ -1,4 +1,8 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
+import {
+  defaultPreferences,
+  usePreferences,
+} from '@/app/hooks/use-preferences';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { ChatOpenAI } from '@langchain/openai';
@@ -26,13 +30,21 @@ export type TModel = {
 };
 
 export const useModelList = () => {
+  const { getPreferences } = usePreferences();
   const createInstance = async (model: TModel, apiKey: string) => {
+    const preferences = await getPreferences();
+    const temperature =
+      preferences.temperature || defaultPreferences.temperature;
+    const topP = preferences.topP || defaultPreferences.topP;
+    const topK = preferences.topK || defaultPreferences.topK;
     switch (model.baseModel) {
       case 'openai':
         return new ChatOpenAI({
           model: model.key,
           streaming: true,
           apiKey,
+          temperature,
+          topP,
         });
       case 'anthropic':
         return new ChatAnthropic({
@@ -40,12 +52,18 @@ export const useModelList = () => {
           apiKey,
           streaming: true,
           anthropicApiUrl: `${window.location.origin}/api/anthropic/`,
+          temperature,
+          topP,
+          topK,
         });
       case 'gemini':
         return new ChatGoogleGenerativeAI({
           model: model.key,
           apiKey,
           streaming: true,
+          temperature,
+          topP,
+          topK,
         });
       default:
         throw new Error('Invalid model');

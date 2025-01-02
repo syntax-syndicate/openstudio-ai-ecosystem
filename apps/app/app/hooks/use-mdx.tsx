@@ -47,30 +47,14 @@ export const useMarkdown = () => {
           ),
           list: (children, ordered) => {
             if (ordered) {
-              return (
-                <motion.ol
-                  className="ml-8 list-decimal"
-                  initial="hidden"
-                  animate="visible"
-                >
-                  {children}
-                </motion.ol>
-              );
+              return <ol className="ml-8 list-decimal">{children}</ol>;
             }
-            return (
-              <motion.ul
-                className="ml-8 list-disc"
-                initial="hidden"
-                animate="visible"
-              >
-                {children}
-              </motion.ul>
-            );
+            return <ul className="ml-8 list-disc">{children}</ul>;
           },
           listItem: (children) => (
-            <motion.li className="my-4" initial="hidden" animate="visible">
+            <li className="my-4">
               <p className="text-sm leading-7 ">{children}</p>
-            </motion.li>
+            </li>
           ),
           strong: (children) => (
             <motion.strong
@@ -83,24 +67,16 @@ export const useMarkdown = () => {
           ),
           code: (code, lang) => {
             return (
-              <motion.div
-                className="my-4 w-full"
-                initial="hidden"
-                animate="visible"
-              >
+              <div className="my-4 w-full">
                 <CodeBlock lang={lang} code={code?.toString()} />
-              </motion.div>
+              </div>
             );
           },
           codespan(code, lang) {
             return (
-              <motion.span
-                initial="hidden"
-                animate="visible"
-                className="rounded-md bg-[#41db8f]/20 px-2 py-1 text-[#41db8f] text-xs"
-              >
+              <span className="rounded-md bg-[#41db8f]/20 px-2 py-1 text-[#41db8f] text-xs">
                 {code}
-              </motion.span>
+              </span>
             );
           },
         }}

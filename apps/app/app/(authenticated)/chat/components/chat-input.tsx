@@ -1,10 +1,14 @@
+import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
 import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greeting';
+import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
+import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
+import { PromptType, RoleType } from '@/app/lib/prompts';
 import {
   ArrowUp,
   ClockClockwise,
@@ -13,6 +17,7 @@ import {
   Plus,
   Quotes,
   StarFour,
+  Stop,
   StopCircle,
   X,
 } from '@phosphor-icons/react';
@@ -32,10 +37,6 @@ import { encodingForModel } from 'js-tiktoken';
 import moment from 'moment';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useChatContext } from '../../../context/chat/context';
-import { PromptType, RoleType } from '../../../lib/prompts';
-import { AudioWaveSpinner } from './audio-wave';
-import { ModelSelect } from './model-select';
 
 export const ChatInput = () => {
   const { sessionId } = useParams();
@@ -47,26 +48,35 @@ export const ChatInput = () => {
   const [inputValue, setInputValue] = useState('');
   const [contextValue, setContextValue] = useState<string>('');
   const { showPopup, selectedText, handleClearSelection } = useTextSelection();
-  const { runModel, createSession, currentSession, streamingMessage } =
-    useChatContext();
+  const {
+    runModel,
+    createSession,
+    currentSession,
+    streamingMessage,
+    stopGeneration,
+  } = useChatContext();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const enc = encodingForModel('gpt-3.5-turbo');
 
+  const handleRunModel = () => {
+    runModel(
+      {
+        role: RoleType.assistant,
+        type: PromptType.ask,
+        query: inputValue,
+        context: contextValue,
+      },
+      sessionId!.toString()
+    );
+    setContextValue('');
+    setInputValue('');
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      runModel(
-        {
-          role: RoleType.assistant,
-          type: PromptType.ask,
-          query: inputValue,
-          context: contextValue,
-        },
-        sessionId!.toString()
-      );
-      setContextValue('');
-      setInputValue('');
+      handleRunModel();
     }
   };
 
@@ -227,6 +237,28 @@ export const ChatInput = () => {
     return `Good Evening, ${name}.`;
   };
 
+  const renderStopButton = () => {
+    if (streamingMessage?.loading) {
+      return (
+        <motion.span
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+        >
+          <Button
+            onClick={() => {
+              stopGeneration();
+            }}
+            variant="secondary"
+            size="sm"
+          >
+            <Stop size={20} weight="bold" /> Stop
+          </Button>
+        </motion.span>
+      );
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -263,7 +295,7 @@ export const ChatInput = () => {
           variants={slideUpVariant}
           initial={'initial'}
           animate={'animate'}
-          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-2xl bg-white/10"
+          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] bg-white/10"
         >
           <div className="flex h-14 w-full flex-row items-center gap-0 px-3">
             {renderNewSession()}
@@ -282,7 +314,12 @@ export const ChatInput = () => {
             />
             {renderRecordingControls()}
 
-            <Button size="icon" variant="ghost" className="ml-1 h-8 min-w-8">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="ml-1 h-8 min-w-8"
+              onClick={handleRunModel}
+            >
               <ArrowUp size={20} weight="bold" />
             </Button>
           </div>

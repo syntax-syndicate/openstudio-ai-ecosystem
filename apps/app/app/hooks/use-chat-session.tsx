@@ -98,6 +98,7 @@ export const useChatSession = () => {
       (session: TChatSession) => session.id !== id
     );
     await set('chat-sessions', newSessions);
+    return newSessions;
   };
 
   const sortSessions = (
@@ -105,6 +106,10 @@ export const useChatSession = () => {
     sortBy: 'createdAt' | 'updatedAt'
   ) => {
     return sessions.sort((a, b) => moment(b[sortBy]).diff(moment(a[sortBy])));
+  };
+
+  const sortMessages = (messages: TChatMessage[], sortBy: 'createdAt') => {
+    return messages.sort((a, b) => moment(b[sortBy]).diff(moment(a[sortBy])));
   };
 
   const createNewSession = async () => {
@@ -138,5 +143,6 @@ export const useChatSession = () => {
     createNewSession,
     clearSessions,
     sortSessions,
+    sortMessages,
   };
 };
