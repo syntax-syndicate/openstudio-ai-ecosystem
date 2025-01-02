@@ -14,7 +14,12 @@ export default function ChatLayout({
   return (
     <>
       <Header pages={['Conversation']} page="Chat Sessions"></Header>
-      <ThemeProvider attribute="class">
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
         <TooltipProvider>
           <SettingsProvider>
             <ChatProvider>
