@@ -43,14 +43,19 @@ export const ModelSelect = () => {
             {activeModel?.icon()} {activeModel?.name}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="no-scrollbar max-h-[260px] min-w-[250px] overflow-y-auto text-sm">
+        <DropdownMenuContent
+          side="top"
+          sideOffset={4}
+          className="no-scrollbar max-h-[260px] min-w-[250px] overflow-y-auto text-sm"
+        >
           {models.map((model) => (
             <DropdownMenuSub key={model.key}>
               <DropdownMenuSubTrigger asChild>
                 <DropdownMenuItem
                   className={cn(
+                    'font-medium text-sm',
                     activeModel?.key === model.key &&
-                      'bg-zinc-200 dark:bg-zinc-800'
+                      'bg-zinc-50 dark:bg-black/30'
                   )}
                   key={model.key}
                   onClick={() => {
@@ -68,7 +73,7 @@ export const ModelSelect = () => {
                 </DropdownMenuItem>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
-                <DropdownMenuSubContent className="dark flex min-w-[280px] flex-col gap-3 rounded-xl bg-zinc-900 p-4 text-sm tracking-[0.1px]">
+                <DropdownMenuSubContent className="dark flex min-w-[280px] flex-col gap-3 rounded-2xl bg-zinc-800 p-4 text-sm tracking-[0.1px]">
                   <ModelInfo model={model} />
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>

@@ -547,7 +547,7 @@ export const ChatInput = () => {
               variants={slideUpVariant}
               initial={'initial'}
               animate={editor?.isActive ? 'animate' : 'initial'}
-              className="flex w-[700px] flex-col items-start gap-0 overflow-hidden rounded-[1.25em] bg-zinc-100 dark:border-white/5 dark:bg-white/5"
+              className="flex w-[700px] flex-col items-start gap-0 overflow-hidden rounded-[1.25em] bg-zinc-50 dark:border-white/5 dark:bg-white/5"
             >
               {selectedPrompt && (
                 <div className="w-full px-1 pt-1">
@@ -609,7 +609,7 @@ export const ChatInput = () => {
             <CMDKCommand>
               <CommandInput
                 placeholder="Search..."
-                className="h-9"
+                className="h-10"
                 value={commandInput}
                 onValueChange={setCommandInput}
                 onKeyDown={(e) => {
@@ -623,7 +623,7 @@ export const ChatInput = () => {
                 }}
               />
               <CommandEmpty>No framework found.</CommandEmpty>
-              <CommandList className="max-h-[140px] p-1">
+              <CommandList className="max-h-[140px] p-2">
                 {roles?.map((role, index) => (
                   <CommandItem
                     key={index}

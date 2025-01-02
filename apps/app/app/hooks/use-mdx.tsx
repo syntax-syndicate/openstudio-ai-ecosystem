@@ -65,7 +65,7 @@ export const useMarkdown = () => {
           },
           codespan(code, lang) {
             return (
-              <span className="rounded-md bg-zinc-200 px-2 py-1 font-semibold text-xs text-zinc-600 dark:bg-[#41db8f]/20 dark:text-[#41db8f]">
+              <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-xs text-zinc-800 dark:bg-white/10 dark:text-white">
                 {code}
               </span>
             );
