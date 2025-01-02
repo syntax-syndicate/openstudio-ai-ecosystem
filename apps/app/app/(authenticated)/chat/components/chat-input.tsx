@@ -11,8 +11,7 @@ import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
-import { PromptType, RoleType } from '@/app/lib/prompts';
-import { examplePrompts } from '@/app/lib/prompts';
+import { PromptType, RoleType, roles } from '@/app/lib/prompts';
 import {
   ArrowElbowDownRight,
   ArrowUp,
@@ -62,6 +61,7 @@ export const ChatInput = () => {
   const { open: openFilters } = useFilters();
   const { showButton, scrollToBottom } = useScrollToBottom();
   const router = useRouter();
+  const [selectedPrompt, setSelectedPrompt] = useState<string>();
   const { startRecording, stopRecording, recording, text, transcribing } =
     useRecordVoice();
   const { runModel, createSession, currentSession, streaming, stopGeneration } =
@@ -160,16 +160,16 @@ export const ChatInput = () => {
         return;
       }
       console.log(inputValue);
-      runModel(
-        {
+      runModel({
+        sessionId: sessionId!.toString(),
+        props: {
           role: RoleType.assistant,
           type: PromptType.ask,
           image: attachment?.base64,
           query: query || inputValue,
           context: contextValue,
         },
-        sessionId!.toString()
-      );
+      });
       setAttachment(undefined);
       setContextValue('');
       setInputValue('');
@@ -197,14 +197,14 @@ export const ChatInput = () => {
   useEffect(() => {
     if (text) {
       setInputValue(text);
-      runModel(
-        {
+      runModel({
+        props: {
           role: RoleType.assistant,
           type: PromptType.ask,
           query: text,
         },
-        sessionId!.toString()
-      );
+        sessionId: sessionId!.toString(),
+      });
       setInputValue('');
     }
   }, [text]);
@@ -459,19 +459,36 @@ export const ChatInput = () => {
               variants={slideUpVariant}
               initial={'initial'}
               animate={'animate'}
-              className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] border border-black/10 bg-white shadow-sm dark:border-white/5 dark:bg-white/5"
+              className="flex w-[700px] flex-col items-start gap-0 overflow-hidden rounded-[1.25em] border border-black/10 bg-white shadow-sm dark:border-white/5 dark:bg-white/5"
             >
+              {selectedPrompt && (
+                <div className="w-full px-1 pt-1">
+                  <div className="flex w-full flex-row items-center rounded-t-2xl rounded-b-md bg-black/10 py-2 pr-2 pl-3 text-xs text-zinc-600">
+                    <p className="w-full">{selectedPrompt}</p>
+                    <Button
+                      size={'iconXS'}
+                      variant="ghost"
+                      onClick={() => {
+                        setSelectedPrompt(undefined);
+                        focusToInput();
+                      }}
+                      className="ml-4 flex-shrink-0"
+                    >
+                      <X size={16} weight="bold" />
+                    </Button>
+                  </div>
+                </div>
+              )}
               <div className="flex min-h-14 w-full flex-row items-start gap-0 px-3 pt-3">
                 {renderNewSession()}
                 <TextareaAutosize
                   minRows={1}
                   maxRows={6}
-                  value={inputValue}
                   ref={inputRef}
+                  value={inputValue}
                   autoComplete="off"
                   autoCapitalize="off"
                   placeholder="Ask AI anything ..."
-                  defaultValue="Just a single line..."
                   onChange={(e) => {
                     if (e.target.value === '/') {
                       setOpen(true);
@@ -532,17 +549,18 @@ export const ChatInput = () => {
                 }}
               />
               <CommandEmpty>No framework found.</CommandEmpty>
-              <CommandList className="p-1">
-                {examplePrompts?.map((example, index) => (
+              <CommandList className="max-h-[140px] p-1">
+                {roles?.map((role, index) => (
                   <CommandItem
                     key={index}
                     onSelect={() => {
-                      setInputValue(example.prompt);
+                      setSelectedPrompt(role.name);
+                      setInputValue(role.content);
                       inputRef.current?.focus();
                       setOpen(false);
                     }}
                   >
-                    {example.title}
+                    {role.name}
                   </CommandItem>
                 ))}
               </CommandList>

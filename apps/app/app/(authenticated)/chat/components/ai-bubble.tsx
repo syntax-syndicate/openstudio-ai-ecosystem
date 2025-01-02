@@ -1,23 +1,28 @@
+import { RegenerateWithModelSelect } from '@/app/(authenticated)/chat/components/regenerate-model-select';
 import { useChatContext } from '@/app/context/chat/context';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { useMarkdown } from '@/app/hooks/use-mdx';
-import { useModelList } from '@/app/hooks/use-model-list';
+import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
+import { Check, Copy, Info, TrashSimple } from '@phosphor-icons/react';
 import {
-  ArrowClockwise,
-  Check,
-  Copy,
-  Info,
-  TrashSimple,
-} from '@phosphor-icons/react';
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '@repo/design-system/components/ui/alert';
 import { Button } from '@repo/design-system/components/ui/button';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { encodingForModel } from 'js-tiktoken';
 import { useRef } from 'react';
 
-export const AIMessageBubble = (props: TChatMessage) => {
-  const { id, rawAI, isLoading, model } = props;
+export type TAIMessageBubble = {
+  chatMessage: TChatMessage;
+  isLast: boolean;
+};
+
+export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
+  const { id, rawAI, isLoading, model, errorMesssage } = chatMessage;
   const messageRef = useRef<HTMLDivElement>(null);
   const { showCopied, copy } = useClipboard();
   const { getModelByKey } = useModelList();
@@ -26,7 +31,7 @@ export const AIMessageBubble = (props: TChatMessage) => {
   const handleCopyContent = () => {
     messageRef?.current && rawAI && copy(rawAI);
   };
-  const { removeMessage } = useChatContext();
+  const { removeMessage, runModel } = useChatContext();
 
   const getTokenCount = (
     message: Partial<Pick<TChatMessage, 'model' | 'rawAI'>>
@@ -50,6 +55,12 @@ export const AIMessageBubble = (props: TChatMessage) => {
         {rawAI && (
           <div className="w-full pb-2">{renderMarkdown(rawAI, isLoading)}</div>
         )}
+        {errorMesssage && (
+          <Alert variant="destructive">
+            <AlertTitle>Something went wrong</AlertTitle>
+            <AlertDescription> {errorMesssage}</AlertDescription>
+          </Alert>
+        )}
         <div className="flex w-full flex-row items-center justify-between py-3 opacity-50 transition-opacity hover:opacity-100">
           {isLoading && <Spinner />}
           {!isLoading && (
@@ -68,11 +79,18 @@ export const AIMessageBubble = (props: TChatMessage) => {
                   )}
                 </Button>
               </Tooltip>
-              <Tooltip content="Regenerate">
-                <Button variant="ghost" size="iconSm" rounded="lg">
-                  <ArrowClockwise size={16} weight="bold" />
-                </Button>
-              </Tooltip>
+              {chatMessage && isLast && (
+                <RegenerateWithModelSelect
+                  onRegenerate={(model: TModelKey) => {
+                    runModel({
+                      messageId: chatMessage.id,
+                      model: model,
+                      props: chatMessage.props,
+                      sessionId: chatMessage.sessionId,
+                    });
+                  }}
+                />
+              )}
               <Tooltip content="Delete">
                 <Button
                   variant="ghost"

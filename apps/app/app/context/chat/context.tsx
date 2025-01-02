@@ -1,6 +1,7 @@
 'use client';
 
-import type { PromptProps, TChatSession } from '@/app/hooks/use-chat-session';
+import type { TChatSession } from '@/app/hooks/use-chat-session';
+import type { TRunModel } from '@/app/hooks/use-llm';
 import { createContext, useContext } from 'react';
 
 export type TChatContext = {
@@ -14,7 +15,7 @@ export type TChatContext = {
   currentSession: TChatSession | undefined;
   streaming: boolean;
   stopGeneration: () => void;
-  runModel: (props: PromptProps, sessionId: string) => Promise<void>;
+  runModel: (props: TRunModel) => Promise<void>;
   removeMessage: (messageId: string) => void;
 };
 export const ChatContext = createContext<TChatContext | undefined>(undefined);
