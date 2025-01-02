@@ -1,4 +1,3 @@
-import { default as BoringAvatar } from "boring-avatars";
 import { cn } from "@repo/design-system/lib/utils";
 
 export type TAvatar = {
@@ -14,19 +13,13 @@ export const Avatar = ({ name, size = "md" }: TAvatar) => {
   return (
     <div className={
       cn(
-        "relative rounded-full",
-        size === "sm" && "w-7 h-7",
-        size === "md" && "w-8 h-8",
-        size === "lg" && "w-12 h-12",
+        "rounded-full relative text-zinc-900/70 dark:text-white dark:bg-white/10 bg-black/10",
+        size === "sm" && "min-w-7 h-7",
+        size === "md" && "min-w-8 h-8",
+        size === "lg" && "min-w-12 h-12"
       )
     }>
-      <BoringAvatar
-        size={sizes[size]}
-        name={name}
-        variant="marble"
-        colors={["#FFFFFF"]}
-      />
-      <p className="text-zinc-900/70 font-bold uppercase absolute inset-0 flex items-center justify-center">
+      <p className=" font-bold uppercase absolute inset-0 flex items-center justify-center">
         {name?.[0]}
       </p>
     </div>

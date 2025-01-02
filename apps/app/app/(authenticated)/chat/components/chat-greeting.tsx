@@ -12,7 +12,7 @@ export const ChatGreeting = () => {
   return (
     <div className="flex w-[680px] flex-row items-center justify-start gap-2">
       <motion.h1
-        className="font-semibold text-2xl text-zinc-100 tracking-tight"
+        className="font-semibold text-2xl text-zinc-800 tracking-tight dark:text-zinc-100"
         initial={{ opacity: 0 }}
         animate={{
           opacity: 1,

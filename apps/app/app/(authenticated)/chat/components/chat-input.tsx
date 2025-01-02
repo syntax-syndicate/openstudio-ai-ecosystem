@@ -227,7 +227,7 @@ export const ChatInput = () => {
   const renderNewSession = () => {
     if (isNewSession) {
       return (
-        <div className="flex h-8 min-w-8 items-center justify-center">
+        <div className="flex h-8 min-w-8 items-center justify-center text-zinc-500 dark:text-white">
           <StarFour size={24} weight="fill" />
         </div>
       );
@@ -380,7 +380,7 @@ export const ChatInput = () => {
           variants={slideUpVariant}
           initial={'initial'}
           animate={'animate'}
-          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] border border-white/5 bg-white/5"
+          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] border border-zinc-200 bg-zinc-100 dark:border-white/5 dark:bg-white/5"
         >
           <div className="flex h-14 w-full flex-row items-center gap-0 px-3">
             {renderNewSession()}

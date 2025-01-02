@@ -14,11 +14,10 @@ export const ChatExamples = ({ onExampleClick }: TChatExamples) => {
           <motion.div
             initial={{
               rotate: 0,
-              scale: 0.9,
+              scale: 0.8,
               opacity: 0,
             }}
-            transition={{ delay: 1 }}
-            className="flex w-full cursor-pointer flex-col items-start gap-2 rounded-2xl border border-white/5 bg-zinc-800 px-4 py-3 text-sm text-zinc-400 hover:scale-[101%] hover:bg-black/20"
+            className="flex w-full cursor-pointer flex-col items-start gap-2 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-600 hover:bg-zinc-50 dark:border-white/5 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-black/20"
             key={index}
             animate={{
               rotate: index % 2 === 0 ? -2 : 2,
@@ -37,12 +36,12 @@ export const ChatExamples = ({ onExampleClick }: TChatExamples) => {
               size={20}
               weight="bold"
               className={cn(
-                index === 0 && 'text-purple-400',
-                index === 1 && 'text-green-400',
-                index === 2 && 'text-blue-400'
+                index === 0 && 'text-purple-500 dark:text-purple-400',
+                index === 1 && 'text-teal-500 dark:text-teal-400',
+                index === 2 && 'text-blue-500 dark:text-blue-400'
               )}
             />
-            <p className="w-full font-semibold text-sm text-white">
+            <p className="w-full font-medium text-sm text-zinc-800 dark:text-white">
               {example.title}
             </p>
           </motion.div>
