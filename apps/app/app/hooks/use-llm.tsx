@@ -28,11 +28,11 @@ export type TRunModel = {
 };
 
 export type TUseLLM = {
-  onInit: (props: TChatMessage) => Promise<void>;
-  onStreamStart: (props: TChatMessage) => Promise<void>;
-  onStream: (props: TChatMessage) => Promise<void>;
-  onStreamEnd: (props: TChatMessage) => Promise<void>;
-  onError: (props: TChatMessage) => Promise<void>;
+  onInit?: (props: TChatMessage) => Promise<void>;
+  onStreamStart?: (props: TChatMessage) => Promise<void>;
+  onStream?: (props: TChatMessage) => Promise<void>;
+  onStreamEnd?: (props: TChatMessage) => Promise<void>;
+  onError?: (props: TChatMessage) => Promise<void>;
 };
 
 export const useLLM = ({
@@ -137,7 +137,7 @@ export const useLLM = ({
     const messageLimit =
       preferences.messageLimit || defaultPreferences.messageLimit;
 
-    onInit({
+    onInit?.({
       props,
       id: newMessageId,
       model: modelKey,
@@ -156,7 +156,7 @@ export const useLLM = ({
       const apiKey = await getApiKey(selectedModelKey?.baseModel);
 
       if (!apiKey) {
-        onError({
+        onError?.({
           props,
           id: newMessageId,
           sessionId,
@@ -226,7 +226,7 @@ export const useLLM = ({
       }
 
       let streamedMessage = '';
-      onStreamStart({
+      onStreamStart?.({
         id: newMessageId,
         props,
         sessionId,
@@ -243,7 +243,7 @@ export const useLLM = ({
       for await (const chunk of stream) {
         streamedMessage += chunk.content;
         console.log(chunk.additional_kwargs);
-        onStream({
+        onStream?.({
           id: newMessageId,
           props,
           sessionId,
@@ -270,11 +270,11 @@ export const useLLM = ({
       };
 
       addMessageToSession(sessionId, chatMessage).then(() => {
-        onStreamEnd(chatMessage);
+        onStreamEnd?.(chatMessage);
       });
     } catch (err) {
       console.error(err);
-      onError({
+      onError?.({
         props,
         id: newMessageId,
         sessionId,

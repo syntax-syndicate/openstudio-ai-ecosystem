@@ -1,6 +1,6 @@
 'use client';
 
-import { Toaster } from 'sonner';
+import { Toaster } from '@repo/design-system/components/ui/toaster';
 
 export type MainLayoutProps = {
   children: React.ReactNode;
