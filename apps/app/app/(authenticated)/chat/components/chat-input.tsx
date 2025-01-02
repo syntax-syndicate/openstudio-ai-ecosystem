@@ -12,6 +12,7 @@ import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
 import { PromptType, RoleType } from '@/app/lib/prompts';
+import { examplePrompts } from '@/app/lib/prompts';
 import {
   ArrowElbowDownRight,
   ArrowUp,
@@ -29,19 +30,26 @@ import {
 import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
-import { Input } from '@repo/design-system/components/ui/input';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@repo/design-system/components/ui/tooltip';
+  Command as CMDKCommand,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@repo/design-system/components/ui/command';
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from '@repo/design-system/components/ui/popover';
+import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
-import moment from 'moment';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
+import TextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'sonner';
 
 export type TAttachment = {
@@ -56,9 +64,6 @@ export const ChatInput = () => {
   const router = useRouter();
   const { startRecording, stopRecording, recording, text, transcribing } =
     useRecordVoice();
-  const [inputValue, setInputValue] = useState('');
-  const [contextValue, setContextValue] = useState<string>('');
-  const { showPopup, selectedText, handleClearSelection } = useTextSelection();
   const {
     runModel,
     createSession,
@@ -66,11 +71,14 @@ export const ChatInput = () => {
     streamingMessage,
     stopGeneration,
   } = useChatContext();
+  const [inputValue, setInputValue] = useState('');
+  const [contextValue, setContextValue] = useState<string>('');
   const { getPreferences, getApiKey } = usePreferences();
   const { getModelByKey } = useModelList();
   const { open: openSettings } = useSettings();
-
+  const { showPopup, selectedText, handleClearSelection } = useTextSelection();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [open, setOpen] = useState(false);
 
   const [attachment, setAttachment] = useState<TAttachment>();
 
@@ -93,12 +101,15 @@ export const ChatInput = () => {
 
   const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     const reader = new FileReader();
+
     const fileTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (file && !fileTypes.includes(file?.type)) {
       toast('Please select a valid image (JPEG, PNG, GIF).');
       return;
     }
+
     reader.onload = () => {
       if (typeof reader.result !== 'string') return;
       const base64String = reader?.result?.split(',')[1];
@@ -107,17 +118,18 @@ export const ChatInput = () => {
         base64: `data:${file?.type};base64,${base64String}`,
       }));
     };
+
     if (file) {
       setAttachment((prev) => ({
         ...prev,
         file,
       }));
-
       const resizedFile = await resizeFile(file);
 
       reader.readAsDataURL(file);
     }
   };
+
   const handleFileSelect = () => {
     document.getElementById('fileInput')?.click();
   };
@@ -142,13 +154,16 @@ export const ChatInput = () => {
       if (!selectedModel?.baseModel) {
         throw new Error('Model not found');
       }
+
       const apiKey = await getApiKey(selectedModel?.baseModel);
       console.log(apiKey);
+
       if (!apiKey) {
         toast.error('API key is missing. Please check your settings.');
         openSettings(selectedModel?.baseModel);
         return;
       }
+      console.log(inputValue);
       runModel(
         {
           role: RoleType.assistant,
@@ -165,8 +180,12 @@ export const ChatInput = () => {
     });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const keyCode = e?.which || e?.keyCode;
+
+    if (keyCode === 13 && !e.shiftKey) {
+      // Don't generate a new line
+      e.preventDefault();
       handleRunModel();
     }
   };
@@ -215,27 +234,22 @@ export const ChatInput = () => {
     }
 
     return (
-      <Tooltip>
-        <TooltipTrigger>
-          <Button
-            size="icon"
-            variant="ghost"
-            className="h-8 min-w-8"
-            onClick={() => {
-              startRecording();
-              setTimeout(() => {
-                stopRecording();
-              }, 20000);
-            }}
-            onTouchStart={startRecording}
-            onTouchEnd={stopRecording}
-          >
-            <Microphone size={20} weight="bold" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent collisionPadding={4}>
-          <p>Record</p>
-        </TooltipContent>
+      <Tooltip content="Record">
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-8 min-w-8"
+          onClick={() => {
+            startRecording();
+            setTimeout(() => {
+              stopRecording();
+            }, 20000);
+          }}
+          onTouchStart={startRecording}
+          onTouchEnd={stopRecording}
+        >
+          <Microphone size={20} weight="bold" />
+        </Button>
       </Tooltip>
     );
   };
@@ -250,24 +264,19 @@ export const ChatInput = () => {
     }
 
     return (
-      <Tooltip>
-        <TooltipTrigger>
-          <Button
-            size="icon"
-            variant={'ghost'}
-            className="h-8 min-w-8"
-            onClick={() => {
-              createSession().then((session) => {
-                router.push(`/chat/${session.id}`);
-              });
-            }}
-          >
-            <Plus size={20} weight="bold" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>New Session</p>
-        </TooltipContent>
+      <Tooltip content="New Session">
+        <Button
+          size="icon"
+          variant={'ghost'}
+          className="h-8 min-w-8"
+          onClick={() => {
+            createSession().then((session) => {
+              router.push(`/chat/${session.id}`);
+            });
+          }}
+        >
+          <Plus size={20} weight="bold" />
+        </Button>
       </Tooltip>
     );
   };
@@ -330,14 +339,6 @@ export const ChatInput = () => {
     }
   };
 
-  const renderGreeting = (name: string) => {
-    const date = moment();
-    const hours = date.get('hour');
-    if (hours < 12) return `Good Morning, ${name}.`;
-    if (hours < 18) return `Good Afternoon, ${name}.`;
-    return `Good Evening, ${name}.`;
-  };
-
   const renderStopButton = () => {
     if (streamingMessage?.loading) {
       return (
@@ -389,6 +390,7 @@ export const ChatInput = () => {
       );
     }
   };
+
   const renderSelectedContext = () => {
     if (contextValue) {
       return (
@@ -411,6 +413,7 @@ export const ChatInput = () => {
       );
     }
   };
+
   const renderFileUpload = () => {
     return (
       <>
@@ -431,7 +434,6 @@ export const ChatInput = () => {
       </>
     );
   };
-
   return (
     <div
       className={cn(
@@ -449,69 +451,93 @@ export const ChatInput = () => {
       <div className="flex flex-col gap-1">
         {renderSelectedContext()}
         {renderAttachedImage()}
-        <motion.div
-          variants={slideUpVariant}
-          initial={'initial'}
-          animate={'animate'}
-          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] border border-black/10 bg-white shadow-sm dark:border-white/5 dark:bg-white/5"
-        >
-          <div className="flex h-14 w-full flex-row items-center gap-0 px-3">
-            {renderNewSession()}
-            <Input
-              placeholder="Ask AI anything ..."
-              value={inputValue}
-              type="text"
-              ref={inputRef}
-              autoComplete="off"
-              autoCapitalize="off"
-              variant="ghost"
-              onChange={(e) => {
-                setInputValue(e.currentTarget.value);
-              }}
-              onKeyDown={handleKeyDown}
-              className="px-2"
-            />
-            {renderRecordingControls()}
-
-            <Button
-              size="icon"
-              variant={!!inputValue ? 'secondary' : 'ghost'}
-              disabled={!inputValue}
-              className="ml-1 h-8 min-w-8"
-              onClick={() => {
-                handleRunModel();
-              }}
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverAnchor>
+            <motion.div
+              variants={slideUpVariant}
+              initial={'initial'}
+              animate={'animate'}
+              className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] border border-black/10 bg-white shadow-sm dark:border-white/5 dark:bg-white/5"
             >
-              <ArrowUp size={20} weight="bold" />
-            </Button>
-          </div>
-          <div className="flex w-full flex-row items-center justify-start gap-2 px-2 pt-1 pb-2">
-            <ModelSelect />
+              <div className="flex min-h-14 w-full flex-row items-start gap-0 px-3 pt-3">
+                {renderNewSession()}
+                <TextareaAutosize
+                  minRows={1}
+                  maxRows={6}
+                  value={inputValue}
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  placeholder="Ask AI anything ..."
+                  defaultValue="Just a single line..."
+                  onChange={(e) => {
+                    if (e.target.value === '/') {
+                      setOpen(true);
+                    }
+                    setInputValue(e.currentTarget.value);
+                  }}
+                  onKeyDown={handleKeyDown}
+                  className="w-full resize-none border-none bg-transparent px-2 py-1.5 text-sm leading-5 tracking-[0.01em] outline-none "
+                />
 
-            <div className="flex-1"></div>
+                {renderRecordingControls()}
 
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={openFilters}
-              className="px-1.5"
-            >
-              <ClockClockwise size={16} weight="bold" /> History
-              <Badge>
-                <Command size={12} weight="bold" /> K
-              </Badge>
-            </Button>
-          </div>
-        </motion.div>
+                <Button
+                  size="icon"
+                  variant={!!inputValue ? 'secondary' : 'ghost'}
+                  disabled={!inputValue}
+                  className="ml-1 h-8 min-w-8"
+                  onClick={() => handleRunModel()}
+                >
+                  <ArrowUp size={20} weight="bold" />
+                </Button>
+              </div>
+              <div className="flex w-full flex-row items-center justify-start gap-2 px-2 pt-1 pb-2">
+                <ModelSelect />
+
+                <div className="flex-1"></div>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={openFilters}
+                  className="px-1.5"
+                >
+                  <ClockClockwise size={16} weight="bold" /> History
+                  <Badge>
+                    <Command size={12} weight="bold" /> K
+                  </Badge>
+                </Button>
+              </div>
+            </motion.div>
+          </PopoverAnchor>
+          <PopoverContent className="w-[700px] overflow-hidden rounded-2xl p-0">
+            <CMDKCommand>
+              <CommandInput placeholder="Search framework..." className="h-9" />
+              <CommandEmpty>No framework found.</CommandEmpty>
+              <CommandList className="p-1">
+                {examplePrompts?.map((example, index) => (
+                  <CommandItem
+                    key={index}
+                    onSelect={() => {
+                      setInputValue(example.prompt);
+                      inputRef.current?.focus();
+                      setOpen(false);
+                    }}
+                  >
+                    {example.title}
+                  </CommandItem>
+                ))}
+              </CommandList>
+            </CMDKCommand>
+          </PopoverContent>
+        </Popover>
       </div>
-      {isNewSession && (
-        <ChatExamples
-          show={isNewSession}
-          onExampleClick={(prompt) => {
-            handleRunModel(prompt);
-          }}
-        />
-      )}
+      <ChatExamples
+        show={isNewSession}
+        onExampleClick={(prompt) => {
+          handleRunModel(prompt);
+        }}
+      />
     </div>
   );
 };

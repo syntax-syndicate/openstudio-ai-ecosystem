@@ -12,6 +12,7 @@ import {
   CommandItem,
   CommandList,
 } from '@repo/design-system/components/ui/command';
+import { cn } from '@repo/design-system/lib/utils';
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -52,7 +53,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Actions">
             <CommandItem
-              className="gap-3"
+              className={cn('gap-3')}
               value="new"
               onSelect={(value) => {
                 createSession().then((session) => {
@@ -122,7 +123,12 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
               <CommandItem
                 key={session.id}
                 value={`${session.id}/${session.title}`}
-                className="w-full gap-3"
+                className={cn(
+                  'w-full gap-3',
+                  currentSession?.id === session.id
+                    ? 'bg-black/10 dark:bg-black/10'
+                    : ''
+                )}
                 onSelect={(value) => {
                   router.push(`/chat/${session.id}`);
                   dismiss();

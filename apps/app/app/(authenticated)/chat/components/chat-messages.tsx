@@ -2,14 +2,12 @@ import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble
 import { useChatContext } from '@/app/context/chat/context';
 import type { PromptProps, TChatMessage } from '@/app/hooks/use-chat-session';
 import type { TModelKey } from '@/app/hooks/use-model-list';
-import { getRelativeDate } from '@/app/lib/date';
 import { ArrowElbowDownRight, Warning } from '@phosphor-icons/react';
 import {
   Alert,
   AlertDescription,
   AlertTitle,
 } from '@repo/design-system/components/ui/alert';
-import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
 import moment from 'moment';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
@@ -113,7 +111,7 @@ export const ChatMessages = () => {
       id="chat-container"
     >
       <div className="flex w-[700px] flex-col gap-24">
-        {messagesByDate &&
+        {/* {messagesByDate &&
           Object.keys(messagesByDate).map((date) => {
             return (
               <div className="flex flex-col" key={date}>
@@ -132,7 +130,19 @@ export const ChatMessages = () => {
                 </div>
               </div>
             );
-          })}
+          })} */}
+        <div className="flex w-full flex-col items-start gap-8">
+          {currentSession?.messages?.map((message) =>
+            renderMessage({
+              id: message.id,
+              humanMessage: message.rawHuman,
+              model: message.model,
+              image: message.image,
+              props: message.props,
+              aiMessage: message.rawAI,
+            })
+          )}
+        </div>
         {isLastStreamBelongsToCurrentSession &&
           streamingMessage?.props?.query &&
           !streamingMessage?.error &&
