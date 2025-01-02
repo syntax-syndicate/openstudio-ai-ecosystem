@@ -21,7 +21,7 @@ export const GeminiSettings = () => {
   }, []);
   return (
     <div className="flex flex-col items-start gap-2 px-6">
-      <p className="py-4 font-medium text-md text-white">
+      <p className="py-4 font-medium text-md text-zinc-600 dark:text-white">
         Google Gemini Settings
       </p>
       <div className="flex flex-row items-end justify-between">

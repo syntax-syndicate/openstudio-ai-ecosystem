@@ -2,7 +2,7 @@
 import { useChatContext } from '@/app/context/chat/context';
 import { FiltersContext } from '@/app/context/filters/context';
 import { useChatSession } from '@/app/hooks/use-chat-session';
-import { Chat, Eraser, Plus, TrashSimple } from '@phosphor-icons/react';
+import { Eraser, Plus, StarFour, TrashSimple } from '@phosphor-icons/react';
 import { ModeToggle } from '@repo/design-system/components/mode-toggle';
 import {
   CommandDialog,
@@ -116,13 +116,13 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                   dismiss();
                 }}
               >
-                <Chat
+                <StarFour
                   size={14}
-                  weight="fill"
+                  weight="bold"
                   className="flex-shrink-0 text-zinc-500"
                 />{' '}
                 <span className="w-full truncate">{session.title}</span>
-                <span className="flex-shrink-0 pl-4 text-xs dark:text-zinc-700">
+                <span className="flex-shrink-0 pl-4 text-xs text-zinc-400 dark:text-zinc-700">
                   {moment(session.createdAt).fromNow(true)}
                 </span>
               </CommandItem>

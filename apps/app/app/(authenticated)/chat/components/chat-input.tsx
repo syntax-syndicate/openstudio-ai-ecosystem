@@ -244,7 +244,7 @@ export const ChatInput = () => {
     if (isNewSession) {
       return (
         <div className="flex h-8 min-w-8 items-center justify-center text-zinc-500 dark:text-white">
-          <StarFour size={24} weight="fill" />
+          <StarFour size={20} weight="fill" />
         </div>
       );
     }

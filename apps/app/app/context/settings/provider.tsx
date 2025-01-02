@@ -66,8 +66,8 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       {children}
       <Dialog open={isSettingOpen} onOpenChange={setIsSettingOpen}>
         <DialogContent className="flex h-[600px] min-w-[800px] flex-row overflow-hidden border border-white/5 p-0">
-          <div className="absolute top-0 bottom-0 left-0 flex w-[250px] flex-col bg-black/10 p-2">
-            <p className="px-2 py-2 font-semibold text-white/30 text-xs">
+          <div className="absolute top-0 bottom-0 left-0 flex w-[250px] flex-col bg-black/5 p-2 dark:bg-black/10">
+            <p className="px-2 py-2 font-semibold text-xs text-zinc-500">
               GENERAL
             </p>
             {settingMenu.map((menu) => (
@@ -75,14 +75,14 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}
                 key={menu.key}
                 onClick={() => setSelectedMenu(menu.key)}
-                className="justify-start gap-3 px-3"
+                className="justify-start gap-2 px-2"
                 size="default"
               >
                 {menu.icon()}
                 {menu.name}
               </Button>
             ))}
-            <p className="px-2 py-2 font-semibold text-white/30 text-xs">
+            <p className="px-2 py-2 font-semibold text-xs text-zinc-500 ">
               MODELS
             </p>
             {modelsMenu.map((menu) => (
@@ -90,7 +90,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}
                 key={menu.key}
                 onClick={() => setSelectedMenu(menu.key)}
-                className="justify-start gap-3 px-3"
+                className="justify-start gap-2 px-2"
                 size="default"
               >
                 {menu.icon()}
