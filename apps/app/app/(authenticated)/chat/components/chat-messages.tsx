@@ -61,16 +61,16 @@ export const ChatMessages = () => {
     return (
       <div className="flex w-full flex-col items-start gap-1" key={props.id}>
         {props.props?.context && (
-          <div className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 pl-3 text-sm">
+          <div className="flex flex-row gap-2 rounded-2xl border border-transparent bg-transparent p-2 pr-4 pl-3 text-sm hover:border-white/5 hover:bg-black/30">
             <Quotes size={16} weight="fill" className="flex-shrink-0" />
             <span className="pt-[0.35em] pb-[0.25em] leading-6">
               {props.props?.context}
             </span>
           </div>
         )}
-        <div className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 text-sm">
+        <div className="flex flex-row gap-2 rounded-2xl border border-transparent bg-transparent p-4 pr-4 text-sm hover:border-white/5 hover:bg-black/30">
           <Avatar name="Vineeth" size="sm" />
-          <span className="pt-[0.25em] pb-[0.15em] leading-6">
+          <span className="pt-[0.20em] pb-[0.15em] leading-6">
             {props.humanMessage}
           </span>
         </div>
@@ -95,7 +95,7 @@ export const ChatMessages = () => {
 
   return (
     <div
-      className="flex h-screen w-full flex-col items-center overflow-y-auto pt-[60px] pb-[200px]"
+      className="no-scrollbar flex h-screen w-full flex-col items-center overflow-y-auto pt-[60px] pb-[200px]"
       ref={chatContainer}
       id="chat-container"
     >

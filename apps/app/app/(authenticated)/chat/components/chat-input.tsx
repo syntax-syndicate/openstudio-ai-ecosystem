@@ -36,7 +36,6 @@ import {
 } from '@repo/design-system/components/ui/tooltip';
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
-import { encodingForModel } from 'js-tiktoken';
 import moment from 'moment';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -65,9 +64,10 @@ export const ChatInput = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const enc = encodingForModel('gpt-3.5-turbo');
-
   const handleRunModel = (query?: string) => {
+    if (!query && !inputValue) {
+      return;
+    }
     getPreferences().then(async (preference) => {
       const selectedModel = getModelByKey(preference.defaultModel);
       console.log(selectedModel?.baseModel);
@@ -316,7 +316,7 @@ export const ChatInput = () => {
           variants={slideUpVariant}
           initial={'initial'}
           animate={'animate'}
-          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] bg-white/10"
+          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] border border-white/5 bg-white/5"
         >
           <div className="flex h-14 w-full flex-row items-center gap-0 px-3">
             {renderNewSession()}
@@ -337,8 +337,8 @@ export const ChatInput = () => {
             {renderRecordingControls()}
 
             <Button
-              size="icon"
-              variant="ghost"
+              variant={!!inputValue ? 'secondary' : 'ghost'}
+              disabled={!inputValue}
               className="ml-1 h-8 min-w-8"
               onClick={() => {
                 handleRunModel();

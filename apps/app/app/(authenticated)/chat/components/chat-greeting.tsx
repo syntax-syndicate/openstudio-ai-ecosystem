@@ -5,9 +5,9 @@ export const ChatGreeting = () => {
   const renderGreeting = (name: string) => {
     const date = moment();
     const hours = date.get('hour');
-    if (hours < 12) return `Good Morning, ${name}.`;
-    if (hours < 18) return `Good Afternoon, ${name}.`;
-    return `Good Evening, ${name}.`;
+    if (hours < 12) return `Good Morning,`;
+    if (hours < 18) return `Good Afternoon,`;
+    return `Good Evening,`;
   };
   return (
     <div className="flex w-[680px] flex-row items-center justify-start gap-2">

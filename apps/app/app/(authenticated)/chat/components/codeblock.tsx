@@ -1,6 +1,11 @@
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { CheckIcon, CopyIcon } from '@radix-ui/react-icons';
 import { Button } from '@repo/design-system/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@repo/design-system/components/ui/tooltip';
 import hljs from 'highlight.js';
 import { useEffect, useRef } from 'react';
 
@@ -23,16 +28,22 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
     <div className="w-full rounded-2xl bg-black/20 p-4">
       <div className="flex w-full items-center justify-between pl-2">
         <p className="text-xs">{language}</p>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => {
-            code && copy(code);
-          }}
-        >
-          {showCopied ? <CheckIcon /> : <CopyIcon />}
-          {showCopied ? 'copied' : 'copy'}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                code && copy(code);
+              }}
+            >
+              {showCopied ? <CheckIcon /> : <CopyIcon />}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent collisionPadding={4}>
+            {showCopied ? 'copied' : 'copy'}
+          </TooltipContent>
+        </Tooltip>
       </div>
       <pre className="w-full">
         <code
