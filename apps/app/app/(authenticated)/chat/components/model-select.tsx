@@ -42,7 +42,7 @@ export const ModelSelect = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="no-scrollbar max-h-[260px] min-w-[250px] overflow-y-auto text-sm">
           {models.map((model) => (
-            <DropdownMenuSub>
+            <DropdownMenuSub key={model.key}>
               <DropdownMenuSubTrigger asChild>
                 <DropdownMenuItem
                   className={cn(
