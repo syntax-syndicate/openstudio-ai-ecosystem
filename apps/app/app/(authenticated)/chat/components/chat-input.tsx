@@ -43,12 +43,17 @@ import {
 } from '@repo/design-system/components/ui/popover';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
+import Document from '@tiptap/extension-document';
+import Highlight from '@tiptap/extension-highlight';
+import Paragraph from '@tiptap/extension-paragraph';
+import Placeholder from '@tiptap/extension-placeholder';
+import Text from '@tiptap/extension-text';
+import { EditorContent, Extension, Mark, useEditor } from '@tiptap/react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
-import TextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'sonner';
 
 export type TAttachment = {
@@ -66,7 +71,7 @@ export const ChatInput = () => {
     useRecordVoice();
   const { runModel, createSession, currentSession, streaming, stopGeneration } =
     useChatContext();
-  const [inputValue, setInputValue] = useState('');
+  // const [inputValue, setInputValue] = useState('');
   const [contextValue, setContextValue] = useState<string>('');
   const { getPreferences, getApiKey } = usePreferences();
   const { getModelByKey } = useModelList();
@@ -77,6 +82,91 @@ export const ChatInput = () => {
   const [commandInput, setCommandInput] = useState('');
 
   const [attachment, setAttachment] = useState<TAttachment>();
+
+  const ShiftEnter = Extension.create({
+    addKeyboardShortcuts() {
+      return {
+        'Shift-Enter': (_) => {
+          return _.editor.commands.enter();
+        },
+      };
+    },
+  });
+  const Enter = Extension.create({
+    addKeyboardShortcuts() {
+      return {
+        Enter: (_) => {
+          if (_.editor.getText()?.length > 0) {
+            handleRunModel(_.editor.getText(), () => {
+              _.editor.commands.clearContent();
+            });
+          }
+          return true;
+        },
+      };
+    },
+  });
+  const inputRegex = /\{\{(.*?)\}\}/g;
+  const CustomMark = Mark.create({
+    name: 'customMark',
+  });
+  const editor = useEditor({
+    extensions: [
+      Document,
+      Paragraph,
+      Text,
+      Placeholder.configure({
+        placeholder: 'Write something …',
+      }),
+      Enter,
+      ShiftEnter,
+      Highlight.configure({
+        HTMLAttributes: {
+          class: 'prompt-highlight',
+        },
+      }),
+    ],
+    content: ``,
+    // onUpdate({ editor }) {
+    //   const text = editor.getText();
+    //   const html = editor.getHTML();
+    //   if (text === "/") {
+    //     setOpen(true);
+    //   } else {
+    //     console.log(text);
+    //     const newHTML = html.replace(
+    //       /{{(.*?)}}/g,
+    //       ` <mark class="prompt-highlight">$1</mark> `
+    //     );
+    //     if (newHTML !== html) {
+    //       editor.commands.setContent(newHTML, true, {
+    //         preserveWhitespace: true,
+    //       });
+    //     }
+    //     setOpen(false);
+    //   }
+    // },
+    onTransaction(props) {
+      const { editor } = props;
+      const text = editor.getText();
+      const html = editor.getHTML();
+      if (text === '/') {
+        setOpen(true);
+      } else {
+        console.log(text);
+        const newHTML = html.replace(
+          /{{{{(.*?)}}}}/g,
+          ` <mark class="prompt-highlight">$1</mark> `
+        );
+        if (newHTML !== html) {
+          editor.commands.setContent(newHTML, true, {
+            preserveWhitespace: true,
+          });
+        }
+        setOpen(false);
+      }
+    },
+  });
 
   const resizeFile = (file: File) =>
     new Promise((resolve) => {
@@ -130,8 +220,9 @@ export const ChatInput = () => {
     document.getElementById('fileInput')?.click();
   };
 
-  const handleRunModel = (query?: string) => {
-    if (!query && !inputValue) {
+  const handleRunModel = (query?: string, clear?: () => void) => {
+    console.log('handleRunModel');
+    if (!query) {
       return;
     }
     getPreferences().then(async (preference) => {
@@ -159,20 +250,21 @@ export const ChatInput = () => {
         openSettings(selectedModel?.baseModel);
         return;
       }
-      console.log(inputValue);
+
       runModel({
         sessionId: sessionId!.toString(),
         props: {
           role: RoleType.assistant,
           type: PromptType.ask,
           image: attachment?.base64,
-          query: query || inputValue,
+          query: query,
           context: contextValue,
         },
       });
       setAttachment(undefined);
       setContextValue('');
-      setInputValue('');
+      console.log(editor);
+      clear?.();
     });
   };
 
@@ -196,7 +288,7 @@ export const ChatInput = () => {
 
   useEffect(() => {
     if (text) {
-      setInputValue(text);
+      editor?.commands.setContent(text);
       runModel({
         props: {
           role: RoleType.assistant,
@@ -205,7 +297,7 @@ export const ChatInput = () => {
         },
         sessionId: sessionId!.toString(),
       });
-      setInputValue('');
+      editor?.commands.clearContent();
     }
   }, [text]);
 
@@ -429,11 +521,8 @@ export const ChatInput = () => {
   };
 
   const focusToInput = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      const len = inputRef.current.value.length;
-      inputRef.current.setSelectionRange(len, len);
-    }
+    editor?.commands.clearContent();
+    editor?.commands.focus('end');
   };
 
   return (
@@ -458,7 +547,7 @@ export const ChatInput = () => {
             <motion.div
               variants={slideUpVariant}
               initial={'initial'}
-              animate={'animate'}
+              animate={editor?.isActive ? 'animate' : 'initial'}
               className="flex w-[700px] flex-col items-start gap-0 overflow-hidden rounded-[1.25em] border border-black/10 bg-white shadow-sm dark:border-white/5 dark:bg-white/5"
             >
               {selectedPrompt && (
@@ -481,31 +570,17 @@ export const ChatInput = () => {
               )}
               <div className="flex min-h-14 w-full flex-row items-start gap-0 px-3 pt-3">
                 {renderNewSession()}
-                <TextareaAutosize
-                  minRows={1}
-                  maxRows={6}
-                  ref={inputRef}
-                  value={inputValue}
-                  autoComplete="off"
-                  autoCapitalize="off"
-                  placeholder="Ask AI anything ..."
-                  onChange={(e) => {
-                    if (e.target.value === '/') {
-                      setOpen(true);
-                    }
-                    setInputValue(e.currentTarget.value);
-                    focusToInput();
-                  }}
-                  onKeyDown={handleKeyDown}
-                  className="w-full resize-none border-none bg-transparent px-2 py-1.5 text-sm leading-5 tracking-[0.01em] outline-none "
+                <EditorContent
+                  editor={editor}
+                  className="wysiwyg max-h-[120px] min-h-12 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none [&>*]:leading-6 [&>*]:outline-none"
                 />
 
                 {renderRecordingControls()}
 
                 <Button
                   size="icon"
-                  variant={!!inputValue ? 'secondary' : 'ghost'}
-                  disabled={!inputValue}
+                  variant={!!editor?.getText() ? 'secondary' : 'ghost'}
+                  disabled={!editor?.getText()}
                   className="ml-1 h-8 min-w-8"
                   onClick={() => handleRunModel()}
                 >
@@ -554,9 +629,10 @@ export const ChatInput = () => {
                   <CommandItem
                     key={index}
                     onSelect={() => {
-                      setSelectedPrompt(role.name);
-                      setInputValue(role.content);
-                      inputRef.current?.focus();
+                      editor?.commands.setContent(role.content);
+                      editor?.commands.insertContent('');
+                      console.log(editor?.getText());
+                      editor?.commands.focus('end');
                       setOpen(false);
                     }}
                   >

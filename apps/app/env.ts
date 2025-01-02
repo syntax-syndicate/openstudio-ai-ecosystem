@@ -27,8 +27,14 @@ export const env = createEnv({
   server: {},
   client: {
     NEXT_PUBLIC_OPENAI_API_KEY: z.string().min(1).startsWith('sk-').optional(),
+    NEXT_PUBLIC_TAVILY_API_KEY: z
+      .string()
+      .min(1)
+      .startsWith('tvly-')
+      .optional(),
   },
   runtimeEnv: {
     NEXT_PUBLIC_OPENAI_API_KEY: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    NEXT_PUBLIC_TAVILY_API_KEY: process.env.NEXT_PUBLIC_TAVILY_API_KEY,
   },
 });

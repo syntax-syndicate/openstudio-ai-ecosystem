@@ -1,4 +1,5 @@
 import { CodeBlock } from '@/app/(authenticated)/chat/components/codeblock';
+import { LinkBlock } from '@/app/(authenticated)/chat/components/link-block';
 import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
 import type { JSX } from 'react';
@@ -34,11 +35,7 @@ export const useMarkdown = () => {
             return <h1 className="font-medium text-md">{children}</h1>;
           },
           link: (href, text) => {
-            return (
-              <a href={href} target="_blank" rel="noreferrer">
-                {text}
-              </a>
-            );
+            return <LinkBlock url={href} />;
           },
           blockquote: (children) => (
             <div>
