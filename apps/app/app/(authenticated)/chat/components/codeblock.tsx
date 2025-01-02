@@ -25,7 +25,7 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
     }
   }, [code, language]);
   return (
-    <div className="w-full rounded-2xl bg-black/20 p-4">
+    <div className="w-full flex-shrink-0 rounded-2xl bg-black/20 p-4">
       <div className="flex w-full items-center justify-between pl-2">
         <p className="text-xs">{language}</p>
         <Tooltip>

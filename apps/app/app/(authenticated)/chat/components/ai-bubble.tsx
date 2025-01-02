@@ -51,7 +51,7 @@ export const AIMessageBubble = (props: TRenderMessageProps) => {
       className="flex w-full flex-col items-start rounded-2xl border border-white/5 bg-white/5 px-4"
     >
       {aiMessage && (
-        <div className="pt-4 pb-2">
+        <div className="w-full pt-4 pb-2">
           {renderMarkdown(aiMessage, id === 'streaming')}
         </div>
       )}

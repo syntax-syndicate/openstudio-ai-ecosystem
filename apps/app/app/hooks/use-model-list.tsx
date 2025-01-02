@@ -37,6 +37,8 @@ export const useModelList = () => {
       preferences.temperature || defaultPreferences.temperature;
     const topP = preferences.topP || defaultPreferences.topP;
     const topK = preferences.topK || defaultPreferences.topK;
+    const maxTokens = preferences.maxTokens || model.tokens;
+
     switch (model.baseModel) {
       case 'openai':
         return new ChatOpenAI({
@@ -45,6 +47,7 @@ export const useModelList = () => {
           apiKey,
           temperature,
           topP,
+          maxTokens,
         });
       case 'anthropic':
         return new ChatAnthropic({
@@ -55,6 +58,7 @@ export const useModelList = () => {
           temperature,
           topP,
           topK,
+          maxTokens,
         });
       case 'gemini':
         return new ChatGoogleGenerativeAI({
@@ -64,6 +68,7 @@ export const useModelList = () => {
           temperature,
           topP,
           topK,
+          maxOutputTokens: maxTokens,
         });
       default:
         throw new Error('Invalid model');
