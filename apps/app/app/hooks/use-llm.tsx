@@ -6,7 +6,9 @@ import {
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
 import { usePreferences } from '@/app/hooks/use-preferences';
 import { getInstruction, getRole } from '@/app/lib/prompts';
+import type { Serialized } from '@langchain/core/load/serializable';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
+import type { LLMResult } from '@langchain/core/outputs';
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
@@ -119,10 +121,29 @@ export const useLLM = ({
         props,
         currentSession?.messages || []
       );
+
+      const abortController = new AbortController();
+      abortController.abort();
+
       const stream = await model.stream(formattedChatPrompt, {
         options: {
           stream: true,
+          signal: abortController.signal,
         },
+        callbacks: [
+          {
+            handleLLMStart: async (llm: Serialized, prompts: string[]) => {
+              console.log(JSON.stringify(llm, null, 2));
+              console.log(JSON.stringify(prompts, null, 2));
+            },
+            handleLLMEnd: async (output: LLMResult) => {
+              console.log(JSON.stringify(output, null, 2));
+            },
+            handleLLMError: async (err: Error) => {
+              console.error(err);
+            },
+          },
+        ],
       });
 
       if (!stream) {

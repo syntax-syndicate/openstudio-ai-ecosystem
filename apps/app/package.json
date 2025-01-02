@@ -38,6 +38,7 @@
     "highlight.js": "^11.11.1",
     "idb-keyval": "^6.2.1",
     "import-in-the-middle": "^1.12.0",
+    "js-tiktoken": "^1.0.16",
     "lottie-react": "^2.4.0",
     "lottie-web": "^5.12.2",
     "lucide-react": "^0.469.0",

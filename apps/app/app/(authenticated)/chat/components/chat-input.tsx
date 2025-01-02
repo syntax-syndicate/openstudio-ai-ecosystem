@@ -1,12 +1,19 @@
+import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
+import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
+import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
+import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
+import { useTextSelection } from '@/app/hooks/use-text-selection';
+import { PromptType, RoleType } from '@/app/lib/prompts';
 import {
-  ArrowElbowDownLeft,
+  ArrowUp,
   ClockClockwise,
   Command,
   Microphone,
   Plus,
+  Quotes,
   StarFour,
   StopCircle,
   X,
@@ -15,16 +22,13 @@ import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
-import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
+import { encodingForModel } from 'js-tiktoken';
+import moment from 'moment';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useChatContext } from '@/app/context/chat/context';
-import { PromptType, RoleType } from '@/app/lib/prompts';
-import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
-import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 
 const slideUpVariant = {
   initial: { y: 50, opacity: 0 },
@@ -34,7 +38,8 @@ const slideUpVariant = {
     transition: { duration: 0.5, ease: 'easeInOut' },
   },
 };
-const zoomVariant = {
+
+export const zoomVariant = {
   initial: { scale: 0.8, opacity: 0 },
   animate: {
     scale: 1,
@@ -53,7 +58,11 @@ export const ChatInput = () => {
   const [inputValue, setInputValue] = useState('');
   const { runModel, createSession, currentSession, streamingMessage } =
     useChatContext();
+
+  const { selectedText, showPopup } = useTextSelection();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const enc = encodingForModel('gpt-3.5-turbo');
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -111,6 +120,14 @@ export const ChatInput = () => {
     }
   }, [text]);
 
+  const renderGreeting = (name: string) => {
+    const date = moment();
+    const hours = date.get('hour');
+    if (hours < 12) return `Good Morning, ${name}.`;
+    if (hours < 18) return `Good Afternoon, ${name}.`;
+    return `Good Evening, ${name}.`;
+  };
+
   return (
     <div
       className={cn(
@@ -130,23 +147,38 @@ export const ChatInput = () => {
               },
             }}
           >
-            <span className="text-zinc-500">Good morning! 👋 </span>
+            <span className="text-zinc-500">
+              {renderGreeting('Vineeth')} 👋{' '}
+            </span>
             <br />
-            How can I help you with today? 😊
+            How can I help you today? 😊
           </motion.h1>
         </div>
       )}
-      {showButton && (
-         <motion.span
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-        >
-          <Button onClick={scrollToBottom} variant="secondary" size="icon">
-            <ArrowDown size={20} weight="bold" />
-          </Button>
-        </motion.span>
-      )}
+      <div className="flex flex-row items-center gap-2">
+        {showButton && !showPopup && (
+          <motion.span
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+          >
+            <Button onClick={scrollToBottom} variant="secondary" size="iconSm">
+              <ArrowDown size={20} weight="bold" />
+            </Button>
+          </motion.span>
+        )}
+        {showPopup && (
+          <motion.span
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+          >
+            <Button onClick={() => {}} variant="secondary" size="sm">
+              <Quotes size={20} weight="bold" /> Reply
+            </Button>
+          </motion.span>
+        )}
+      </div>
 
       <div className="flex flex-col gap-1">
         <motion.div
@@ -238,21 +270,21 @@ export const ChatInput = () => {
               </Button>
             )}
 
-            <div className="flex h-8 min-w-8 items-center justify-center">
-              <ArrowElbowDownLeft size={16} weight="bold" />
-            </div>
+            <Button size="icon" variant="ghost" className="ml-1 h-8 min-w-8">
+              <ArrowUp size={20} weight="bold" />
+            </Button>
           </div>
           <div className="flex w-full flex-row items-center justify-start gap-2 p-2">
             <ModelSelect />
-            {/* <Button variant="secondary" size="sm">
-              <Book size={16} weight="bold" /> Prompts
-            </Button>
-            <Button variant="secondary" size="sm">
-              <GearSix size={16} weight="bold" /> Settings
-            </Button> */}
+
             <div className="flex-1"></div>
 
-            <Button variant="secondary" size="sm" onClick={openFilters}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={openFilters}
+              className="px-1.5"
+            >
               <ClockClockwise size={16} weight="bold" /> History
               <Badge>
                 <Command size={12} weight="bold" /> K
@@ -262,42 +294,20 @@ export const ChatInput = () => {
         </motion.div>
       </div>
       {isNewSession && (
-        <div className="flex flex-col gap-1">
-          <LabelDivider
-            label={'Examples'}
-            className="pt-0"
-            transitionDuration={4}
-          />
-          <div className="grid w-[700px] grid-cols-3 gap-2">
-            {examples?.map((example, index) => (
-              <motion.div
-                variants={zoomVariant}
-                transition={{ delay: 1 }}
-                initial={'initial'}
-                animate={'animate'}
-                className="flex w-full cursor-pointer flex-col items-start gap-2 rounded-2xl border border-white/5 px-4 py-3 text-sm text-zinc-400 hover:scale-[101%] hover:bg-black/20"
-                key={index}
-                onClick={() => {
-                  runModel(
-                    {
-                      role: RoleType.assistant,
-                      type: PromptType.ask,
-                      query: example.prompt,
-                    },
-                    sessionId!.toString()
-                  );
-                }}
-              >
-                <p className="w-full font-semibold text-sm text-white">
-                  {example.title}
-                </p>
-                <p className="w-full truncate text-xs text-zinc-500">
-                  {example.prompt}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+        <ChatExamples
+          examples={examples}
+          onExampleClick={(prompt) => {
+            setInputValue(prompt);
+            runModel(
+              {
+                role: RoleType.assistant,
+                type: PromptType.ask,
+                query: prompt,
+              },
+              sessionId!.toString()
+            );
+          }}
+        />
       )}
     </div>
   );
