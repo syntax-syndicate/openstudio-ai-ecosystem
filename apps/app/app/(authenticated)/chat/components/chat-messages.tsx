@@ -69,8 +69,8 @@ export const ChatMessages = () => {
           </div>
         )}
         <div className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 text-sm">
-          <Avatar name="Vineeth" />
-          <span className="pt-[0.35em] pb-[0.25em] leading-6">
+          <Avatar name="Vineeth" size="sm" />
+          <span className="pt-[0.25em] pb-[0.15em] leading-6">
             {props.humanMessage}
           </span>
         </div>
@@ -99,13 +99,13 @@ export const ChatMessages = () => {
       ref={chatContainer}
       id="chat-container"
     >
-      <div className="flex w-[700px] flex-col gap-8">
+      <div className="flex w-[700px] flex-col gap-24">
         {messagesByDate &&
           Object.keys(messagesByDate).map((date) => {
             return (
               <div className="flex flex-col" key={date}>
                 <LabelDivider label={getRelativeDate(date)} />
-                <div className="flex w-full flex-col items-start gap-4">
+                <div className="flex w-full flex-col items-start gap-12">
                   {messagesByDate[date].map((message) =>
                     renderMessage({
                       id: message.id,
