@@ -12,13 +12,14 @@ import {
 import { Avatar } from '@repo/design-system/components/ui/custom-avatar';
 import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
 import moment from 'moment';
+import Image from 'next/image';
 import { useEffect, useRef } from 'react';
-
 export type TRenderMessageProps = {
   id: string;
   humanMessage: string;
   props?: PromptProps;
   model: TModelKey;
+  image?: string;
   aiMessage?: string;
   loading?: boolean;
 };
@@ -68,6 +69,15 @@ export const ChatMessages = () => {
             </span>
           </div>
         )}
+        {props?.props?.image && (
+          <Image
+            src={props?.props?.image}
+            alt="uploaded image"
+            className="h-[120px] min-w-[120px] rotate-6 rounded-2xl border border-white/5 object-cover shadow-md"
+            width={0}
+            height={0}
+          />
+        )}
         <div className="flex flex-row gap-2 rounded-2xl border border-transparent bg-transparent p-4 pr-4 text-sm hover:border-white/5 hover:bg-black/30">
           <Avatar name="Vineeth" size="sm" />
           <span className="pt-[0.20em] pb-[0.15em] leading-6">
@@ -111,6 +121,7 @@ export const ChatMessages = () => {
                       id: message.id,
                       humanMessage: message.rawHuman,
                       model: message.model,
+                      image: message.image,
                       props: message.props,
                       aiMessage: message.rawAI,
                     })
@@ -127,7 +138,7 @@ export const ChatMessages = () => {
             humanMessage: streamingMessage?.props?.query,
             aiMessage: streamingMessage?.message,
             model: streamingMessage?.model,
-
+            image: streamingMessage?.props?.image,
             loading: streamingMessage?.loading,
           })}
         {streamingMessage?.error && (

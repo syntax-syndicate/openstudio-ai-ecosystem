@@ -17,6 +17,7 @@ import {
   ClockClockwise,
   Command,
   Microphone,
+  Paperclip,
   Plus,
   Quotes,
   StarFour,
@@ -24,6 +25,7 @@ import {
   StopCircle,
   X,
 } from '@phosphor-icons/react';
+import { ArrowElbowDownRight } from '@phosphor-icons/react';
 import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -37,9 +39,15 @@ import {
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import moment from 'moment';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
+
+export type TAttachment = {
+  file?: File;
+  base64?: string;
+};
 
 export const ChatInput = () => {
   const { sessionId } = useParams();
@@ -64,6 +72,35 @@ export const ChatInput = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [attachment, setAttachment] = useState<TAttachment>();
+  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    const reader = new FileReader();
+    const fileTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (file && !fileTypes.includes(file?.type)) {
+      toast('Please select a valid image (JPEG, PNG, GIF).');
+      return;
+    }
+    reader.onload = () => {
+      if (typeof reader.result !== 'string') return;
+      const base64String = reader?.result?.split(',')[1];
+      setAttachment((prev) => ({
+        ...prev,
+        base64: `data:${file?.type};base64,${base64String}`,
+      }));
+    };
+    if (file) {
+      setAttachment((prev) => ({
+        ...prev,
+        file,
+      }));
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleFileSelect = () => {
+    document.getElementById('fileInput')?.click();
+  };
+
   const handleRunModel = (query?: string) => {
     if (!query && !inputValue) {
       return;
@@ -85,11 +122,13 @@ export const ChatInput = () => {
         {
           role: RoleType.assistant,
           type: PromptType.ask,
+          image: attachment?.base64,
           query: query || inputValue,
           context: contextValue,
         },
         sessionId!.toString()
       );
+      setAttachment(undefined);
       setContextValue('');
       setInputValue('');
     });
@@ -296,9 +335,34 @@ export const ChatInput = () => {
       <div className="flex flex-col gap-1">
         {contextValue && (
           <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
-            <Quotes size={16} weight="fill" />
+            <ArrowElbowDownRight size={16} weight="fill" />
             <p className="ml-2 w-full overflow-hidden truncate text-sm ">
               {contextValue}
+            </p>
+            <Button
+              size={'iconSm'}
+              variant="ghost"
+              onClick={() => {
+                setContextValue('');
+              }}
+              className="ml-4 flex-shrink-0"
+            >
+              <X size={16} weight="bold" />
+            </Button>
+          </div>
+        )}
+        {attachment?.base64 && attachment?.file && (
+          <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
+            <ArrowElbowDownRight size={20} weight="bold" />
+            <p className="relative ml-2 flex w-full flex-row items-center gap-2 text-xs">
+              <Image
+                src={attachment.base64}
+                alt="uploaded image"
+                className="tanslate-y-[50%] absolute h-[60px] min-w-[60px] rotate-6 rounded-xl border border-white/5 object-cover shadow-md"
+                width={0}
+                height={0}
+              />
+              <span className="ml-[70px]">{attachment?.file?.name}</span>
             </p>
             <Button
               size={'iconSm'}
@@ -349,11 +413,24 @@ export const ChatInput = () => {
           </div>
           <div className="flex w-full flex-row items-center justify-start gap-2 px-2 pt-1 pb-2">
             <ModelSelect />
-
+            <input
+              type="file"
+              id="fileInput"
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleFileSelect}
+              className="px-1.5"
+            >
+              <Paperclip size={16} weight="bold" /> Attach
+            </Button>
             <div className="flex-1"></div>
 
             <Button
-              variant="secondary"
+              variant="ghost"
               size="sm"
               onClick={openFilters}
               className="px-1.5"
