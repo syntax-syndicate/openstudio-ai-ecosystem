@@ -1,18 +1,13 @@
-import { zoomVariant } from '@/app/(authenticated)/chat/components/chat-input';
+import { zoomVariant } from '@/app/lib/framer-motion';
+import { examplePrompts } from '@/app/lib/prompts';
 import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
 import { motion } from 'framer-motion';
 
-export type TExample = {
-  title: string;
-  prompt: string;
-};
-
 export type TChatExamples = {
-  examples: TExample[];
   onExampleClick: (prompt: string) => void;
 };
 
-export const ChatExamples = ({ examples, onExampleClick }: TChatExamples) => {
+export const ChatExamples = ({ onExampleClick }: TChatExamples) => {
   return (
     <div className="flex flex-col gap-1">
       <LabelDivider
@@ -21,7 +16,7 @@ export const ChatExamples = ({ examples, onExampleClick }: TChatExamples) => {
         transitionDuration={4}
       />
       <div className="grid w-[700px] grid-cols-3 gap-2">
-        {examples?.map((example, index) => (
+        {examplePrompts?.map((example, index) => (
           <motion.div
             variants={zoomVariant}
             transition={{ delay: 1 }}

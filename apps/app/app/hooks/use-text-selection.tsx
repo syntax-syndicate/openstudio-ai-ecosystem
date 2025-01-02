@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 
-interface UseTextSelectionPopup {
-  selectedText: string;
-  showPopup: boolean;
-}
-
-export const useTextSelection = (): UseTextSelectionPopup => {
+export const useTextSelection = () => {
   const [selectedText, setSelectedText] = useState<string>('');
   const [showPopup, setShowPopup] = useState<boolean>(false);
   useEffect(() => {
@@ -35,5 +30,12 @@ export const useTextSelection = (): UseTextSelectionPopup => {
       chatContainer.removeEventListener('mousedown', handleMouseDown);
     };
   }, [showPopup]);
-  return { selectedText, showPopup };
+
+  const handleClearSelection = () => {
+    setShowPopup(false);
+    setSelectedText('');
+    window.getSelection()?.removeAllRanges();
+  };
+
+  return { selectedText, showPopup, handleClearSelection };
 };

@@ -1,9 +1,9 @@
 import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble';
 import { useChatContext } from '@/app/context/chat/context';
-import type { TChatMessage } from '@/app/hooks/use-chat-session';
+import type { PromptProps, TChatMessage } from '@/app/hooks/use-chat-session';
 import type { TModelKey } from '@/app/hooks/use-model-list';
 import { getRelativeDate } from '@/app/lib/date';
-import { Warning } from '@phosphor-icons/react';
+import { Quotes, Warning } from '@phosphor-icons/react';
 import {
   Alert,
   AlertDescription,
@@ -18,6 +18,7 @@ import { useEffect, useRef } from 'react';
 export type TRenderMessageProps = {
   key: string;
   humanMessage: string;
+  props?: PromptProps;
   model: TModelKey;
   aiMessage?: string;
   loading?: boolean;
@@ -61,6 +62,21 @@ export const ChatMessages = () => {
     const { key, humanMessage } = props;
     return (
       <div className="flex w-full flex-col items-start gap-1" key={key}>
+        {props.props?.context && (
+          <motion.div
+            className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 pl-3 text-sm"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+              transition: { duration: 1, ease: 'easeInOut' },
+            }}
+          >
+            <Quotes size={16} weight="fill" className="mt-2 flex-shrink-0" />
+            <span className="pt-[0.35em] pb-[0.25em] leading-6">
+              {props.props?.context}
+            </span>
+          </motion.div>
+        )}
         <motion.div
           className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 text-sm"
           initial={{ opacity: 0 }}
@@ -115,6 +131,7 @@ export const ChatMessages = () => {
                       key: message.id,
                       humanMessage: message.rawHuman,
                       model: message.model,
+                      props: message.props,
                       aiMessage: message.rawAI,
                     })
                   )}

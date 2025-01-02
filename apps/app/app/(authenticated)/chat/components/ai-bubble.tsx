@@ -1,3 +1,4 @@
+import type { TRenderMessageProps } from '@/app/(authenticated)/chat/components/chat-messages';
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { useMarkdown } from '@/app/hooks/use-mdx';
 import { useModelList } from '@/app/hooks/use-model-list';
@@ -6,7 +7,6 @@ import { Button } from '@repo/design-system/components/ui/button';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
-import type { TRenderMessageProps } from '@/app/(authenticated)/chat/components/chat-messages';
 
 export const AIMessageBubble = (props: TRenderMessageProps) => {
   const { key, humanMessage, aiMessage, loading, model } = props;

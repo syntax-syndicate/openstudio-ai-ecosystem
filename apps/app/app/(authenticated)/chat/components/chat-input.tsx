@@ -1,12 +1,10 @@
-import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
-import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
-import { useChatContext } from '@/app/context/chat/context';
+import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greeting';
 import { useFilters } from '@/app/context/filters/context';
 import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
-import { PromptType, RoleType } from '@/app/lib/prompts';
+import { slideUpVariant } from '@/app/lib/framer-motion';
 import {
   ArrowUp,
   ClockClockwise,
@@ -23,30 +21,21 @@ import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@repo/design-system/components/ui/tooltip';
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { encodingForModel } from 'js-tiktoken';
 import moment from 'moment';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-
-const slideUpVariant = {
-  initial: { y: 50, opacity: 0 },
-  animate: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.5, ease: 'easeInOut' },
-  },
-};
-
-export const zoomVariant = {
-  initial: { scale: 0.8, opacity: 0 },
-  animate: {
-    scale: 1,
-    opacity: 1,
-    transition: { duration: 0.5, ease: 'easeInOut', delay: 1 },
-  },
-};
+import { useChatContext } from '../../../context/chat/context';
+import { PromptType, RoleType } from '../../../lib/prompts';
+import { AudioWaveSpinner } from './audio-wave';
+import { ModelSelect } from './model-select';
 
 export const ChatInput = () => {
   const { sessionId } = useParams();
@@ -56,10 +45,11 @@ export const ChatInput = () => {
   const { startRecording, stopRecording, recording, text, transcribing } =
     useRecordVoice();
   const [inputValue, setInputValue] = useState('');
+  const [contextValue, setContextValue] = useState<string>('');
+  const { showPopup, selectedText, handleClearSelection } = useTextSelection();
   const { runModel, createSession, currentSession, streamingMessage } =
     useChatContext();
 
-  const { selectedText, showPopup } = useTextSelection();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const enc = encodingForModel('gpt-3.5-turbo');
@@ -71,9 +61,11 @@ export const ChatInput = () => {
           role: RoleType.assistant,
           type: PromptType.ask,
           query: inputValue,
+          context: contextValue,
         },
         sessionId!.toString()
       );
+      setContextValue('');
       setInputValue('');
     }
   };
@@ -86,24 +78,6 @@ export const ChatInput = () => {
 
   const isNewSession =
     !currentSession?.messages?.length && !streamingMessage?.loading;
-
-  const examples = [
-    {
-      title: 'Implement JWT Auth for Express.js',
-      prompt:
-        'Develop a secure user authentication system in a Node.js application using JSON Web Tokens (JWT) for authorization and authentication.',
-    },
-    {
-      title: 'The Nature of Reality',
-      prompt:
-        'Discuss the concept of reality from both a subjective and objective perspective, incorporating theories from famous philosophers.',
-    },
-    {
-      title: 'Professional Meeting Follow-Up',
-      prompt:
-        'Write a follow-up email to a potential employer after a job interview, expressing gratitude for the opportunity and reiterating your interest in the position.',
-    },
-  ];
 
   useEffect(() => {
     if (text) {
@@ -120,6 +94,131 @@ export const ChatInput = () => {
     }
   }, [text]);
 
+  const renderRecordingControls = () => {
+    if (recording) {
+      return (
+        <div className="flex h-10 flex-row items-center rounded-xl bg-black/50 px-2 py-1">
+          <AudioWaveSpinner />
+          <Button
+            variant="ghost"
+            size="iconSm"
+            onClick={() => {
+              stopRecording();
+            }}
+            onTouchStart={startRecording}
+            onTouchEnd={stopRecording}
+          >
+            <StopCircle size={20} weight="fill" className="text-red-300" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="iconXS"
+            rounded="default"
+            onClick={() => {
+              stopRecording();
+            }}
+            onTouchStart={startRecording}
+            onTouchEnd={stopRecording}
+          >
+            <X size={12} weight="bold" />
+          </Button>
+        </div>
+      );
+    }
+    if (transcribing) {
+      return <Spinner />;
+    }
+    return (
+      <Tooltip>
+        <TooltipTrigger>
+          <Button
+            size="icon"
+            variant="ghost"
+            className="h-8 min-w-8"
+            onClick={() => {
+              startRecording();
+              setTimeout(() => {
+                stopRecording();
+              }, 20000);
+            }}
+            onTouchStart={startRecording}
+            onTouchEnd={stopRecording}
+          >
+            <Microphone size={20} weight="bold" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent collisionPadding={4}>
+          <p>Record</p>
+        </TooltipContent>
+      </Tooltip>
+    );
+  };
+
+  const renderNewSession = () => {
+    if (isNewSession) {
+      return (
+        <div className="flex h-8 min-w-8 items-center justify-center">
+          <StarFour size={24} weight="fill" />
+        </div>
+      );
+    }
+
+    return (
+      <Button
+        size="icon"
+        variant={'ghost'}
+        className="h-8 min-w-8"
+        onClick={() => {
+          createSession().then((session) => {
+            router.push(`/chat/${session.id}`);
+          });
+        }}
+      >
+        <Plus size={20} weight="bold" />
+      </Button>
+    );
+  };
+
+  const renderScrollToBottom = () => {
+    if (showButton && !showPopup) {
+      return (
+        <motion.span
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+        >
+          <Button onClick={scrollToBottom} variant="secondary" size="iconSm">
+            <ArrowDown size={20} weight="bold" />
+          </Button>
+        </motion.span>
+      );
+    }
+  };
+
+  const renderReplyButton = () => {
+    if (showPopup) {
+      return (
+        <motion.span
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+        >
+          <Button
+            onClick={() => {
+              setContextValue(selectedText);
+              handleClearSelection();
+              inputRef.current?.focus();
+            }}
+            variant="secondary"
+            size="sm"
+          >
+            <Quotes size={20} weight="bold" /> Reply
+          </Button>
+        </motion.span>
+      );
+    }
+  };
+
   const renderGreeting = (name: string) => {
     const date = moment();
     const hours = date.get('hour');
@@ -131,81 +230,43 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-4 bg-gradient-to-t from-70% from-white to-white/10 px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800 dark:to-transparent',
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-white to-white/10 px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800 dark:to-transparent',
         isNewSession && 'top-0'
       )}
     >
-      {isNewSession && (
-        <div className="flex w-[680px] flex-row items-center justify-start gap-2">
-          <motion.h1
-            className="font-semibold text-2xl text-zinc-100 tracking-tight"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: 1,
-              transition: {
-                duration: 1,
-              },
-            }}
-          >
-            <span className="text-zinc-500">
-              {renderGreeting('Vineeth')} 👋{' '}
-            </span>
-            <br />
-            How can I help you today? 😊
-          </motion.h1>
-        </div>
-      )}
+      {isNewSession && <ChatGreeting />}
       <div className="flex flex-row items-center gap-2">
-        {showButton && !showPopup && (
-          <motion.span
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-          >
-            <Button onClick={scrollToBottom} variant="secondary" size="iconSm">
-              <ArrowDown size={20} weight="bold" />
-            </Button>
-          </motion.span>
-        )}
-        {showPopup && (
-          <motion.span
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-          >
-            <Button onClick={() => {}} variant="secondary" size="sm">
-              <Quotes size={20} weight="bold" /> Reply
-            </Button>
-          </motion.span>
-        )}
+        {renderScrollToBottom()}
+        {renderReplyButton()}
       </div>
 
       <div className="flex flex-col gap-1">
+        {contextValue && (
+          <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
+            <Quotes size={16} weight="fill" />
+            <p className="ml-2 w-full overflow-hidden truncate text-sm ">
+              {contextValue}
+            </p>
+            <Button
+              size={'iconSm'}
+              variant="ghost"
+              onClick={() => {
+                setContextValue('');
+              }}
+              className="ml-4 flex-shrink-0"
+            >
+              <X size={16} weight="bold" />
+            </Button>
+          </div>
+        )}
         <motion.div
           variants={slideUpVariant}
           initial={'initial'}
           animate={'animate'}
-          className="flex w-[700px] flex-col gap-0 rounded-[1.25rem] bg-white/10"
+          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-2xl bg-white/10"
         >
           <div className="flex h-14 w-full flex-row items-center gap-0 px-3">
-            {isNewSession ? (
-              <div className="flex h-8 min-w-8 items-center justify-center">
-                <StarFour size={24} weight="fill" />
-              </div>
-            ) : (
-              <Button
-                size="icon"
-                variant={'ghost'}
-                className="h-8 min-w-8"
-                onClick={() => {
-                  createSession().then((session) => {
-                    router.push(`/chat/${session.id}`);
-                  });
-                }}
-              >
-                <Plus size={20} weight="bold" />
-              </Button>
-            )}
+            {renderNewSession()}
             <Input
               placeholder="Ask AI anything ..."
               value={inputValue}
@@ -219,62 +280,13 @@ export const ChatInput = () => {
               onKeyDown={handleKeyDown}
               className="px-2"
             />
-            {recording ? (
-              <div className="flex h-10 flex-row items-center rounded-xl bg-black/50 px-2 py-1">
-                <AudioWaveSpinner />
-                <Button
-                  variant="ghost"
-                  size="iconSm"
-                  onClick={() => {
-                    stopRecording();
-                  }}
-                  onTouchStart={startRecording}
-                  onTouchEnd={stopRecording}
-                >
-                  <StopCircle
-                    size={20}
-                    weight="fill"
-                    className="text-red-300"
-                  />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="iconXS"
-                  rounded="default"
-                  onClick={() => {
-                    stopRecording();
-                  }}
-                  onTouchStart={startRecording}
-                  onTouchEnd={stopRecording}
-                >
-                  <X size={12} weight="bold" />
-                </Button>
-              </div>
-            ) : transcribing ? (
-              <Spinner />
-            ) : (
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-8 min-w-8"
-                onClick={() => {
-                  startRecording();
-                  setTimeout(() => {
-                    stopRecording();
-                  }, 20000);
-                }}
-                onTouchStart={startRecording}
-                onTouchEnd={stopRecording}
-              >
-                <Microphone size={20} weight="bold" />
-              </Button>
-            )}
+            {renderRecordingControls()}
 
             <Button size="icon" variant="ghost" className="ml-1 h-8 min-w-8">
               <ArrowUp size={20} weight="bold" />
             </Button>
           </div>
-          <div className="flex w-full flex-row items-center justify-start gap-2 p-2">
+          <div className="flex w-full flex-row items-center justify-start gap-2 px-2 pt-1 pb-2">
             <ModelSelect />
 
             <div className="flex-1"></div>
@@ -295,7 +307,6 @@ export const ChatInput = () => {
       </div>
       {isNewSession && (
         <ChatExamples
-          examples={examples}
           onExampleClick={(prompt) => {
             setInputValue(prompt);
             runModel(
