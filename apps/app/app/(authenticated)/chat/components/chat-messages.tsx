@@ -9,7 +9,6 @@ import {
   AlertDescription,
   AlertTitle,
 } from '@repo/design-system/components/ui/alert';
-import { Avatar } from '@repo/design-system/components/ui/custom-avatar';
 import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
 import moment from 'moment';
 import Image from 'next/image';
@@ -60,9 +59,9 @@ export const ChatMessages = () => {
 
   const renderMessage = (props: TRenderMessageProps) => {
     return (
-      <div className="flex w-full flex-col items-start gap-1" key={props.id}>
+      <div className="flex w-full flex-col items-end gap-1" key={props.id}>
         {props.props?.context && (
-          <div className="flex flex-row gap-2 rounded-2xl border border-transparent bg-transparent bg-zinc-800 p-2 pr-4 pl-3 text-sm text-zinc-200 hover:border-white/5 dark:bg-black/30">
+          <div className="flex flex-row gap-2 rounded-2xl border border-transparent bg-black/10 p-2 pr-4 pl-3 text-sm text-zinc-600 hover:border-white/5 dark:bg-black/30 dark:text-zinc-100">
             <ArrowElbowDownRight
               size={20}
               weight="bold"
@@ -77,13 +76,13 @@ export const ChatMessages = () => {
           <Image
             src={props?.props?.image}
             alt="uploaded image"
-            className="h-[120px] min-w-[120px] rotate-6 rounded-2xl border border-white/5 object-cover shadow-md"
+            className="h-[120px] min-w-[120px] rounded-2xl border border-black/10 object-cover shadow-sm dark:border-white/10"
             width={0}
+            sizes="50vw"
             height={0}
           />
         )}
-        <div className="dark flex flex-row gap-2 rounded-2xl bg-zinc-800 p-2 pr-4 text-sm text-zinc-200 dark:bg-black/30">
-          <Avatar name="Vineeth" size="sm" />
+        <div className="ml-16 flex flex-row gap-2 rounded-2xl bg-black/10 px-3 py-2 text-sm text-zinc-600 dark:bg-black/30 dark:text-zinc-100">
           <span className="pt-[0.20em] pb-[0.15em] leading-6">
             {props.humanMessage}
           </span>
@@ -119,7 +118,7 @@ export const ChatMessages = () => {
             return (
               <div className="flex flex-col" key={date}>
                 <LabelDivider label={getRelativeDate(date)} />
-                <div className="flex w-full flex-col items-start gap-12">
+                <div className="flex w-full flex-col items-start gap-8">
                   {messagesByDate[date].map((message) =>
                     renderMessage({
                       id: message.id,

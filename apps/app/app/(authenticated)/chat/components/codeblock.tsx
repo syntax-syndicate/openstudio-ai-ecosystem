@@ -25,14 +25,14 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
     }
   }, [code, language]);
   return (
-    <div className="w-full flex-shrink-0 rounded-2xl border border-black/10 bg-white p-4 text-zinc-600 dark:border-transparent dark:bg-black/20 dark:text-white">
-      <div className="flex w-full items-center justify-between pl-2">
-        <p className="text-xs">{language}</p>
+    <div className="w-full flex-shrink-0 rounded-2xl border border-black/10 bg-white text-zinc-600 dark:border-transparent dark:bg-black/20 dark:text-white">
+      <div className="flex w-full items-center justify-between p-2">
+        <p className="px-2 text-xs text-zinc-500">{language}</p>
         <Tooltip>
           <TooltipTrigger>
             <Button
               size="sm"
-              variant="secondary"
+              variant="ghost"
               onClick={() => {
                 code && copy(code);
               }}
@@ -45,7 +45,7 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
           </TooltipContent>
         </Tooltip>
       </div>
-      <pre className="w-full">
+      <pre className="w-full p-6">
         <code
           className={`hljs language-${language} inline-block w-full overflow-x-auto whitespace-pre-wrap break-words pr-[100%] text-sm`}
           ref={ref}

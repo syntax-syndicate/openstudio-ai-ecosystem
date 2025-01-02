@@ -13,6 +13,7 @@ import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
 import { PromptType, RoleType } from '@/app/lib/prompts';
 import {
+  ArrowElbowDownRight,
   ArrowUp,
   ClockClockwise,
   Command,
@@ -25,7 +26,6 @@ import {
   StopCircle,
   X,
 } from '@phosphor-icons/react';
-import { ArrowElbowDownRight } from '@phosphor-icons/react';
 import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -41,6 +41,7 @@ import moment from 'moment';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { type ChangeEvent, useEffect, useRef, useState } from 'react';
+import Resizer from 'react-image-file-resizer';
 import { toast } from 'sonner';
 
 export type TAttachment = {
@@ -72,7 +73,25 @@ export const ChatInput = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [attachment, setAttachment] = useState<TAttachment>();
-  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+
+  const resizeFile = (file: File) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        1000,
+        1000,
+        'JPEG',
+        100,
+        0,
+        (uri) => {
+          console.log(typeof uri);
+          resolve(uri);
+        },
+        'file'
+      );
+    });
+
+  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     const reader = new FileReader();
     const fileTypes = ['image/jpeg', 'image/png', 'image/gif'];
@@ -93,6 +112,9 @@ export const ChatInput = () => {
         ...prev,
         file,
       }));
+
+      const resizedFile = await resizeFile(file);
+
       reader.readAsDataURL(file);
     }
   };
@@ -106,6 +128,16 @@ export const ChatInput = () => {
     }
     getPreferences().then(async (preference) => {
       const selectedModel = getModelByKey(preference.defaultModel);
+
+      if (
+        selectedModel?.key &&
+        !['gpt-4-turbo', 'gpt-4o'].includes(selectedModel?.key) &&
+        attachment?.base64
+      ) {
+        toast.error('This model does not support image input.');
+        return;
+      }
+
       console.log(selectedModel?.baseModel);
       if (!selectedModel?.baseModel) {
         throw new Error('Model not found');
@@ -218,18 +250,25 @@ export const ChatInput = () => {
     }
 
     return (
-      <Button
-        size="icon"
-        variant={'ghost'}
-        className="h-8 min-w-8"
-        onClick={() => {
-          createSession().then((session) => {
-            router.push(`/chat/${session.id}`);
-          });
-        }}
-      >
-        <Plus size={20} weight="bold" />
-      </Button>
+      <Tooltip>
+        <TooltipTrigger>
+          <Button
+            size="icon"
+            variant={'ghost'}
+            className="h-8 min-w-8"
+            onClick={() => {
+              createSession().then((session) => {
+                router.push(`/chat/${session.id}`);
+              });
+            }}
+          >
+            <Plus size={20} weight="bold" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>New Session</p>
+        </TooltipContent>
+      </Tooltip>
     );
   };
 
@@ -321,10 +360,82 @@ export const ChatInput = () => {
     }
   };
 
+  const renderAttachedImage = () => {
+    if (attachment?.base64 && attachment?.file) {
+      return (
+        <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
+          <ArrowElbowDownRight size={20} weight="bold" />
+          <p className="relative ml-2 flex w-full flex-row items-center gap-2 text-xs">
+            <Image
+              src={attachment.base64}
+              alt="uploaded image"
+              className="tanslate-y-[50%] absolute h-[60px] min-w-[60px] rotate-6 rounded-xl border border-white/5 object-cover shadow-md"
+              width={0}
+              height={0}
+            />
+            <span className="ml-[70px]">{attachment?.file?.name}</span>
+          </p>
+          <Button
+            size={'iconSm'}
+            variant="ghost"
+            onClick={() => {
+              setContextValue('');
+            }}
+            className="ml-4 flex-shrink-0"
+          >
+            <X size={16} weight="bold" />
+          </Button>
+        </div>
+      );
+    }
+  };
+  const renderSelectedContext = () => {
+    if (contextValue) {
+      return (
+        <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
+          <ArrowElbowDownRight size={16} weight="fill" />
+          <p className="ml-2 w-full overflow-hidden truncate text-sm ">
+            {contextValue}
+          </p>
+          <Button
+            size={'iconSm'}
+            variant="ghost"
+            onClick={() => {
+              setContextValue('');
+            }}
+            className="ml-4 flex-shrink-0"
+          >
+            <X size={16} weight="bold" />
+          </Button>
+        </div>
+      );
+    }
+  };
+  const renderFileUpload = () => {
+    return (
+      <>
+        <input
+          type="file"
+          id="fileInput"
+          className="hidden"
+          onChange={handleImageUpload}
+        />
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleFileSelect}
+          className="px-1.5"
+        >
+          <Paperclip size={16} weight="bold" /> Attach
+        </Button>
+      </>
+    );
+  };
+
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-white to-transparent px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800',
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-zinc-50 to-transparent px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800',
         isNewSession && 'top-0'
       )}
     >
@@ -336,49 +447,8 @@ export const ChatInput = () => {
       </div>
 
       <div className="flex flex-col gap-1">
-        {contextValue && (
-          <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
-            <ArrowElbowDownRight size={16} weight="fill" />
-            <p className="ml-2 w-full overflow-hidden truncate text-sm ">
-              {contextValue}
-            </p>
-            <Button
-              size={'iconSm'}
-              variant="ghost"
-              onClick={() => {
-                setContextValue('');
-              }}
-              className="ml-4 flex-shrink-0"
-            >
-              <X size={16} weight="bold" />
-            </Button>
-          </div>
-        )}
-        {attachment?.base64 && attachment?.file && (
-          <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
-            <ArrowElbowDownRight size={20} weight="bold" />
-            <p className="relative ml-2 flex w-full flex-row items-center gap-2 text-xs">
-              <Image
-                src={attachment.base64}
-                alt="uploaded image"
-                className="tanslate-y-[50%] absolute h-[60px] min-w-[60px] rotate-6 rounded-xl border border-white/5 object-cover shadow-md"
-                width={0}
-                height={0}
-              />
-              <span className="ml-[70px]">{attachment?.file?.name}</span>
-            </p>
-            <Button
-              size={'iconSm'}
-              variant="ghost"
-              onClick={() => {
-                setContextValue('');
-              }}
-              className="ml-4 flex-shrink-0"
-            >
-              <X size={16} weight="bold" />
-            </Button>
-          </div>
-        )}
+        {renderSelectedContext()}
+        {renderAttachedImage()}
         <motion.div
           variants={slideUpVariant}
           initial={'initial'}
@@ -390,8 +460,8 @@ export const ChatInput = () => {
             <Input
               placeholder="Ask AI anything ..."
               value={inputValue}
-              ref={inputRef}
               type="text"
+              ref={inputRef}
               autoComplete="off"
               autoCapitalize="off"
               variant="ghost"
@@ -404,6 +474,7 @@ export const ChatInput = () => {
             {renderRecordingControls()}
 
             <Button
+              size="icon"
               variant={!!inputValue ? 'secondary' : 'ghost'}
               disabled={!inputValue}
               className="ml-1 h-8 min-w-8"
@@ -416,20 +487,7 @@ export const ChatInput = () => {
           </div>
           <div className="flex w-full flex-row items-center justify-start gap-2 px-2 pt-1 pb-2">
             <ModelSelect />
-            <input
-              type="file"
-              id="fileInput"
-              className="hidden"
-              onChange={handleImageUpload}
-            />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleFileSelect}
-              className="px-1.5"
-            >
-              <Paperclip size={16} weight="bold" /> Attach
-            </Button>
+
             <div className="flex-1"></div>
 
             <Button
@@ -448,8 +506,8 @@ export const ChatInput = () => {
       </div>
       {isNewSession && (
         <ChatExamples
+          show={isNewSession}
           onExampleClick={(prompt) => {
-            setInputValue(prompt);
             handleRunModel(prompt);
           }}
         />

@@ -3,6 +3,7 @@ import { useChatContext } from '@/app/context/chat/context';
 import { FiltersContext } from '@/app/context/filters/context';
 import { useChatSession } from '@/app/hooks/use-chat-session';
 import { Chat, Eraser, Plus, TrashSimple } from '@phosphor-icons/react';
+import { ModeToggle } from '@repo/design-system/components/mode-toggle';
 import {
   CommandDialog,
   CommandEmpty,
@@ -62,6 +63,15 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
             >
               <Plus size={14} weight="bold" />
               New session
+            </CommandItem>
+            <CommandItem
+              className="gap-3"
+              value="theme"
+              onSelect={(value) => {
+                dismiss();
+              }}
+            >
+              <ModeToggle /> Toggle Theme
             </CommandItem>
             <CommandItem
               className="gap-3"

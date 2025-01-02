@@ -11,11 +11,11 @@ export const LabelDivider = ({ label, className, transitionDuration = 1 }: TLabe
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: transitionDuration } }}
-      className={cn("flex flex-row items-center w-full pb-4 pt-8", className)}
+      className={cn("flex flex-row items-center w-full py-4", className)}
     >
-      <div className="w-full h-[1px] dark:bg-white/5 bg-black/5"></div>
+      <div className="w-full h-[1px] dark:from-white/5 from-black/5 bg-gradient-to-r to-transparent"></div>
       <p className="text-xs text-zinc-500 px-2 flex-shrink-0">{label}</p>
-      <div className="w-full h-[1px] dark:bg-white/5 bg-black/5"></div>
+      <div className="w-full h-[1px] dark:from-white/5 from-black/5 bg-gradient-to-r to-transparent"></div>
     </motion.div>
   );
 };

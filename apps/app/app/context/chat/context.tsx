@@ -5,10 +5,10 @@ import type { TStreamProps } from '@/app/hooks/use-llm';
 import { createContext, useContext } from 'react';
 
 export type TChatContext = {
-  chatSession: TChatSession[];
   sessions: TChatSession[];
   refetchSessions: () => void;
-  isSessionLoading: boolean;
+  isAllSessionLoading: boolean;
+  isCurrentSessionLoading: boolean;
   createSession: () => Promise<TChatSession>;
   removeSession: (sessionId: string) => Promise<void>;
   clearChatSessions: () => Promise<void>;
