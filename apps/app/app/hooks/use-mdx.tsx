@@ -20,7 +20,7 @@ export const useMarkdown = () => {
             <motion.span
               variants={variants}
               animate={'visible'}
-              className="text-zinc-700 dark:text-zinc-100"
+              className="text-zinc-700 tracking-[0.01em] dark:text-zinc-100"
               initial={animate ? 'hidden' : 'visible'}
             >
               {children}
