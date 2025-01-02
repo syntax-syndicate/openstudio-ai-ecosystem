@@ -17,7 +17,7 @@ export const ChatExamples = ({ onExampleClick }: TChatExamples) => {
               scale: 0.8,
               opacity: 0,
             }}
-            className="flex w-full cursor-pointer flex-col items-start gap-2 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-600 hover:bg-zinc-50 dark:border-white/5 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-black/20"
+            className="flex w-full cursor-pointer flex-col items-start gap-2 rounded-2xl border border-dark/10 bg-white px-4 py-3 text-sm text-zinc-600 shadow-sm hover:bg-zinc-50 dark:border-white/5 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-black/20"
             key={index}
             animate={{
               rotate: index % 2 === 0 ? -2 : 2,

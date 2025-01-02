@@ -30,7 +30,6 @@ import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
-import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import {
   Tooltip,
   TooltipContent,
@@ -167,8 +166,7 @@ export const ChatInput = () => {
   const renderRecordingControls = () => {
     if (recording) {
       return (
-        <div className="flex h-10 flex-row items-center rounded-xl bg-black/50 px-2 py-1">
-          <AudioWaveSpinner />
+        <>
           <Button
             variant="ghost"
             size="iconSm"
@@ -180,24 +178,10 @@ export const ChatInput = () => {
           >
             <StopCircle size={20} weight="fill" className="text-red-300" />
           </Button>
-          <Button
-            variant="ghost"
-            size="iconXS"
-            rounded="default"
-            onClick={() => {
-              stopRecording();
-            }}
-            onTouchStart={startRecording}
-            onTouchEnd={stopRecording}
-          >
-            <X size={12} weight="bold" />
-          </Button>
-        </div>
+        </>
       );
     }
-    if (transcribing) {
-      return <Spinner />;
-    }
+
     return (
       <Tooltip>
         <TooltipTrigger>
@@ -249,8 +233,26 @@ export const ChatInput = () => {
     );
   };
 
+  const renderListeningIndicator = () => {
+    if (transcribing) {
+      return (
+        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-4 py-1 text-sm text-white dark:bg-zinc-900">
+          <AudioWaveSpinner /> <p>Transcribing ...</p>
+        </div>
+      );
+    }
+    if (recording) {
+      return (
+        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-2 py-1 pr-4 text-sm text-white dark:bg-zinc-900">
+          <AudioWaveSpinner />
+          <p>Listening ...</p>
+        </div>
+      );
+    }
+  };
+
   const renderScrollToBottom = () => {
-    if (showButton && !showPopup) {
+    if (showButton && !showPopup && !recording && !transcribing) {
       return (
         <motion.span
           initial={{ scale: 0, opacity: 0 }}
@@ -266,7 +268,7 @@ export const ChatInput = () => {
   };
 
   const renderReplyButton = () => {
-    if (showPopup) {
+    if (showPopup && !recording && !transcribing) {
       return (
         <motion.span
           initial={{ scale: 0, opacity: 0 }}
@@ -322,7 +324,7 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-white to-white/10 px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800 dark:to-transparent',
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-white to-transparent px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800',
         isNewSession && 'top-0'
       )}
     >
@@ -330,6 +332,7 @@ export const ChatInput = () => {
       <div className="flex flex-row items-center gap-2">
         {renderScrollToBottom()}
         {renderReplyButton()}
+        {renderListeningIndicator()}
       </div>
 
       <div className="flex flex-col gap-1">
@@ -380,7 +383,7 @@ export const ChatInput = () => {
           variants={slideUpVariant}
           initial={'initial'}
           animate={'animate'}
-          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] border border-zinc-200 bg-zinc-100 dark:border-white/5 dark:bg-white/5"
+          className="flex w-[700px] flex-col gap-0 overflow-hidden rounded-[1.25em] border border-black/10 bg-white shadow-sm dark:border-white/5 dark:bg-white/5"
         >
           <div className="flex h-14 w-full flex-row items-center gap-0 px-3">
             {renderNewSession()}

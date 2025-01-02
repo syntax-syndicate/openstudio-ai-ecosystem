@@ -17,7 +17,7 @@ export default function ChatLayout({
         <SettingsProvider>
           <ChatProvider>
             <FiltersProvider>
-              <div className="flex h-screen w-full flex-row dark:bg-zinc-800">
+              <div className="flex h-screen w-full flex-row bg-[#E9E9EC] dark:bg-zinc-800">
                 {children}
                 <Toaster />
               </div>
