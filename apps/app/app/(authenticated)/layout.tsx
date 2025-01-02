@@ -34,11 +34,11 @@ const AppLayout = async ({ children }: AppLayoutProperties) => {
   return (
     <SidebarProvider>
       <GlobalSidebar>
-        {betaFeature && (
+        {/* {betaFeature && (
           <div className="m-4 rounded-full bg-success p-1.5 text-center text-sm text-success-foreground">
             Beta feature now available
           </div>
-        )}
+        )} */}
         {children}
       </GlobalSidebar>
       <PostHogIdentifier />

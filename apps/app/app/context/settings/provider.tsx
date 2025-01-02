@@ -5,7 +5,6 @@ import { AnthropicSettings } from '@/app/(authenticated)/chat/components/setting
 import { CommonSettings } from '@/app/(authenticated)/chat/components/settings/common';
 import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/gemini';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/openai';
-import { useChatContext } from '@/app/context/chat/context';
 import { SettingsContext } from '@/app/context/settings/context';
 import { GearSix } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -13,7 +12,6 @@ import {
   Dialog,
   DialogContent,
 } from '@repo/design-system/components/ui/dialog';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export type TSettingsProvider = {
@@ -26,8 +24,6 @@ export type TSettingMenuItem = {
   component: React.ReactNode;
 };
 export const SettingsProvider = ({ children }: TSettingsProvider) => {
-  const { sessions, createSession } = useChatContext();
-  const router = useRouter();
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState('common');
   const open = (key?: string) => {
@@ -46,7 +42,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
   const modelsMenu: TSettingMenuItem[] = [
     {
       name: 'OpenAI',
-      key: 'open-ai',
+      key: 'openai',
       icon: () => <ModelIcon type="openai" size="md" />,
       component: <OpenAISettings />,
     },

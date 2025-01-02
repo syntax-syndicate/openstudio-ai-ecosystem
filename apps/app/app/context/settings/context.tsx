@@ -2,7 +2,7 @@
 import { createContext, useContext } from 'react';
 
 export type TSettingsContext = {
-  open: () => void;
+  open: (menu?: string) => void;
   dismiss: () => void;
 };
 

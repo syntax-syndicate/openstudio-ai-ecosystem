@@ -2,6 +2,7 @@ import { Header } from '@/app/(authenticated)/components/header';
 import { ChatProvider } from '@/app/context/chat/provider';
 import { FiltersProvider } from '@/app/context/filters/provider';
 import { SettingsProvider } from '@/app/context/settings/provider';
+import { Toaster } from '@repo/design-system/components/ui/sonner';
 import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
 
 export default function ChatLayout({
@@ -13,15 +14,16 @@ export default function ChatLayout({
     <>
       <Header pages={['Conversation']} page="Chat Sessions"></Header>
       <TooltipProvider>
-        <ChatProvider>
-          <SettingsProvider>
+        <SettingsProvider>
+          <ChatProvider>
             <FiltersProvider>
               <div className="flex h-screen w-full flex-row dark:bg-zinc-800">
                 {children}
+                <Toaster />
               </div>
             </FiltersProvider>
-          </SettingsProvider>
-        </ChatProvider>
+          </ChatProvider>
+        </SettingsProvider>
       </TooltipProvider>
     </>
   );

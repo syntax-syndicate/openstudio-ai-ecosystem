@@ -1,10 +1,13 @@
 'use client';
 
 import { ChatContext } from '@/app/context/chat/context';
+import { useSettings } from '@/app/context/settings/context';
 import { useChatSession } from '@/app/hooks/use-chat-session';
 import type { TChatSession } from '@/app/hooks/use-chat-session';
 import { useLLM } from '@/app/hooks/use-llm';
 import type { TStreamProps } from '@/app/hooks/use-llm';
+import { useModelList } from '@/app/hooks/use-model-list';
+import { usePreferences } from '@/app/hooks/use-preferences';
 import { useParams } from 'next/navigation';
 import type React from 'react';
 import { useEffect, useState } from 'react';
@@ -24,6 +27,9 @@ export const ChatProvider = ({ children }: TChatProvider) => {
   } = useChatSession();
   const [sessions, setSessions] = useState<TChatSession[]>([]);
   const [isSessionLoading, setIsSessionLoading] = useState<boolean>(true);
+  const { getApiKey, getPreferences } = usePreferences();
+  const { open: openSettings } = useSettings();
+  const { getModelByKey } = useModelList();
   const [currentSession, setCurrentSession] = useState<
     TChatSession | undefined
   >();

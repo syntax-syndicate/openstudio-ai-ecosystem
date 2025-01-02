@@ -4,6 +4,9 @@ import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greetin
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
+import { useSettings } from '@/app/context/settings/context';
+import { useModelList } from '@/app/hooks/use-model-list';
+import { usePreferences } from '@/app/hooks/use-preferences';
 import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
@@ -37,6 +40,7 @@ import { encodingForModel } from 'js-tiktoken';
 import moment from 'moment';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 export const ChatInput = () => {
   const { sessionId } = useParams();
@@ -55,23 +59,40 @@ export const ChatInput = () => {
     streamingMessage,
     stopGeneration,
   } = useChatContext();
+  const { getPreferences, getApiKey } = usePreferences();
+  const { getModelByKey } = useModelList();
+  const { open: openSettings } = useSettings();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const enc = encodingForModel('gpt-3.5-turbo');
 
   const handleRunModel = () => {
-    runModel(
-      {
-        role: RoleType.assistant,
-        type: PromptType.ask,
-        query: inputValue,
-        context: contextValue,
-      },
-      sessionId!.toString()
-    );
-    setContextValue('');
-    setInputValue('');
+    getPreferences().then(async (preference) => {
+      const selectedModel = getModelByKey(preference.defaultModel);
+      console.log(selectedModel?.baseModel);
+      if (!selectedModel?.baseModel) {
+        throw new Error('Model not found');
+      }
+      const apiKey = await getApiKey(selectedModel?.baseModel);
+      console.log(apiKey);
+      if (!apiKey) {
+        toast.error('API key is missing. Please check your settings.');
+        openSettings(selectedModel?.baseModel);
+        return;
+      }
+      runModel(
+        {
+          role: RoleType.assistant,
+          type: PromptType.ask,
+          query: inputValue,
+          context: contextValue,
+        },
+        sessionId!.toString()
+      );
+      setContextValue('');
+      setInputValue('');
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -303,6 +324,7 @@ export const ChatInput = () => {
               placeholder="Ask AI anything ..."
               value={inputValue}
               ref={inputRef}
+              type="text"
               autoComplete="off"
               autoCapitalize="off"
               variant="ghost"
