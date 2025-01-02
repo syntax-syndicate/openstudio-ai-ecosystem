@@ -1,8 +1,8 @@
 import { headers } from 'next/headers';
-import { type NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import OpenAI, { toFile } from 'openai';
 
-export async function POST(req: NextRequest, resp: NextResponse) {
+export async function POST(req: NextRequest) {
   const headersList = headers();
   const apiKey = (await headersList).get('x-api-key');
   if (!apiKey) {
