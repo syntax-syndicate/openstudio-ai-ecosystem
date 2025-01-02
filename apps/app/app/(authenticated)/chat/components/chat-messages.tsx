@@ -11,12 +11,11 @@ import {
 } from '@repo/design-system/components/ui/alert';
 import { Avatar } from '@repo/design-system/components/ui/custom-avatar';
 import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
-import { motion } from 'framer-motion';
 import moment from 'moment';
 import { useEffect, useRef } from 'react';
 
 export type TRenderMessageProps = {
-  key: string;
+  id: string;
   humanMessage: string;
   props?: PromptProps;
   model: TModelKey;
@@ -59,37 +58,22 @@ export const ChatMessages = () => {
     streamingMessage?.sessionId === currentSession?.id;
 
   const renderMessage = (props: TRenderMessageProps) => {
-    const { key, humanMessage } = props;
     return (
-      <div className="flex w-full flex-col items-start gap-1" key={key}>
+      <div className="flex w-full flex-col items-start gap-1" key={props.id}>
         {props.props?.context && (
-          <motion.div
-            className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 pl-3 text-sm"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: 1,
-              transition: { duration: 1, ease: 'easeInOut' },
-            }}
-          >
+          <div className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 pl-3 text-sm">
             <Quotes size={16} weight="fill" className="flex-shrink-0" />
             <span className="pt-[0.35em] pb-[0.25em] leading-6">
               {props.props?.context}
             </span>
-          </motion.div>
+          </div>
         )}
-        <motion.div
-          className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 text-sm"
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: 1,
-            transition: { duration: 1, ease: 'easeInOut' },
-          }}
-        >
+        <div className="flex flex-row gap-2 rounded-2xl border border-white/5 bg-black/30 p-2 pr-4 text-sm">
           <Avatar name="Vineeth" />
           <span className="pt-[0.35em] pb-[0.25em] leading-6">
-            {humanMessage}
+            {props.humanMessage}
           </span>
-        </motion.div>
+        </div>
         <AIMessageBubble {...props} />
       </div>
     );
@@ -115,11 +99,7 @@ export const ChatMessages = () => {
       ref={chatContainer}
       id="chat-container"
     >
-      <motion.div
-        className="flex w-[620px] flex-col gap-8"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { duration: 1, ease: 'easeInOut' } }}
-      >
+      <div className="flex w-[700px] flex-col gap-8">
         {messagesByDate &&
           Object.keys(messagesByDate).map((date) => {
             return (
@@ -128,7 +108,7 @@ export const ChatMessages = () => {
                 <div className="flex w-full flex-col items-start gap-4">
                   {messagesByDate[date].map((message) =>
                     renderMessage({
-                      key: message.id,
+                      id: message.id,
                       humanMessage: message.rawHuman,
                       model: message.model,
                       props: message.props,
@@ -143,10 +123,11 @@ export const ChatMessages = () => {
           streamingMessage?.props?.query &&
           !streamingMessage?.error &&
           renderMessage({
-            key: 'streaming',
+            id: 'streaming',
             humanMessage: streamingMessage?.props?.query,
             aiMessage: streamingMessage?.message,
             model: streamingMessage?.model,
+
             loading: streamingMessage?.loading,
           })}
         {streamingMessage?.error && (
@@ -156,7 +137,7 @@ export const ChatMessages = () => {
             <AlertDescription>{streamingMessage?.error}</AlertDescription>
           </Alert>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 };

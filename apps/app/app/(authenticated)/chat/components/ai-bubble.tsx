@@ -1,15 +1,20 @@
 import type { TRenderMessageProps } from '@/app/(authenticated)/chat/components/chat-messages';
+import { useChatContext } from '@/app/context/chat/context';
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { useMarkdown } from '@/app/hooks/use-mdx';
 import { useModelList } from '@/app/hooks/use-model-list';
-import { ArrowClockwise, Check, Copy } from '@phosphor-icons/react';
+import {
+  ArrowClockwise,
+  Check,
+  Copy,
+  TrashSimple,
+} from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
-import { motion } from 'framer-motion';
 import { useRef } from 'react';
 
 export const AIMessageBubble = (props: TRenderMessageProps) => {
-  const { key, humanMessage, aiMessage, loading, model } = props;
+  const { id, humanMessage, aiMessage, loading, model } = props;
   const messageRef = useRef<HTMLDivElement>(null);
   const { showCopied, copy } = useClipboard();
   const { getModelByKey } = useModelList();
@@ -18,32 +23,23 @@ export const AIMessageBubble = (props: TRenderMessageProps) => {
   const handleCopyContent = () => {
     messageRef?.current && aiMessage && copy(aiMessage);
   };
+  const { removeMessage } = useChatContext();
 
   return (
-    <motion.div
+    <div
       ref={messageRef}
-      className="flex w-full flex-col items-start rounded-2xl border border-white/5 bg-white/5 px-4 pt-4 pb-2"
-      //   initial={{ opacity: 0, y: 10 }}
-      //   animate={{
-      //     opacity: 1,
-      //     y: 0,
-      //     transition: { duration: 1, ease: 'easeInOut' },
-      //   }}
+      className="flex w-full flex-col items-start rounded-2xl border border-white/5 bg-white/5 px-4"
     >
-      {aiMessage && renderMarkdown(aiMessage, key === 'streaming')}
-      {loading && <Spinner />}
-      <div className="flex w-full flex-row items-center justify-between py-1 opacity-50 transition-opacity hover:opacity-100">
-        <motion.p
-          className="flex flex-row items-center gap-2 py-1/2 text-xs text-zinc-500"
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: 1,
-            transition: { duration: 1, ease: 'easeInOut' },
-          }}
-        >
-          {modelForMessage?.icon()}
-          {modelForMessage?.name}
-        </motion.p>
+      {aiMessage && (
+        <div className="pt-4 pb-2">
+          {renderMarkdown(aiMessage, id === 'streaming')}
+        </div>
+      )}
+
+      <div className="flex w-full flex-row items-center justify-between py-3 opacity-50 transition-opacity hover:opacity-100">
+        <p className="flex flex-row items-center gap-2 py-1/2 text-xs text-zinc-500">
+          {loading ? <Spinner /> : modelForMessage?.name}
+        </p>
         {!loading && (
           <div className="flex flex-row gap-1">
             <Button
@@ -61,9 +57,19 @@ export const AIMessageBubble = (props: TRenderMessageProps) => {
             <Button variant="ghost" size="iconSm" rounded="lg">
               <ArrowClockwise size={16} weight="regular" />
             </Button>
+            <Button
+              variant="ghost"
+              size="iconSm"
+              rounded="lg"
+              onClick={() => {
+                removeMessage(id);
+              }}
+            >
+              <TrashSimple size={16} weight="regular" />
+            </Button>
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 };

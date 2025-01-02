@@ -67,7 +67,7 @@ export const ChatInput = () => {
 
   const enc = encodingForModel('gpt-3.5-turbo');
 
-  const handleRunModel = () => {
+  const handleRunModel = (query?: string) => {
     getPreferences().then(async (preference) => {
       const selectedModel = getModelByKey(preference.defaultModel);
       console.log(selectedModel?.baseModel);
@@ -85,7 +85,7 @@ export const ChatInput = () => {
         {
           role: RoleType.assistant,
           type: PromptType.ask,
-          query: inputValue,
+          query: query || inputValue,
           context: contextValue,
         },
         sessionId!.toString()
@@ -370,7 +370,7 @@ export const ChatInput = () => {
         <ChatExamples
           onExampleClick={(prompt) => {
             setInputValue(prompt);
-            handleRunModel();
+            handleRunModel(prompt);
           }}
         />
       )}
