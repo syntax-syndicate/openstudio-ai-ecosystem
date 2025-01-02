@@ -1,9 +1,6 @@
-import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
-import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
-import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useRecordVoice } from '@/app/hooks/use-record-voice';
-import { PromptType, RoleType } from '@/app/lib/prompts';
+import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import {
   ArrowElbowDownLeft,
   ClockClockwise,
@@ -14,15 +11,20 @@ import {
   StopCircle,
   X,
 } from '@phosphor-icons/react';
+import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
+import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { LabelDivider } from '@repo/design-system/components/ui/label-divider';
+import { useChatContext } from '../../../context/chat/context';
+import { PromptType, RoleType } from '../../../lib/prompts';
+import { AudioWaveSpinner } from './audio-wave';
+import { ModelSelect } from './model-select';
 
 const slideUpVariant = {
   initial: { y: 50, opacity: 0 },
@@ -44,6 +46,7 @@ const zoomVariant = {
 export const ChatInput = () => {
   const { sessionId } = useParams();
   const { open: openFilters } = useFilters();
+  const { showButton, scrollToBottom } = useScrollToBottom();
   const router = useRouter();
   const { startRecording, stopRecording, recording, text, transcribing } =
     useRecordVoice();
@@ -76,20 +79,20 @@ export const ChatInput = () => {
     !currentSession?.messages?.length && !streamingMessage?.loading;
 
   const examples = [
-      {
-      title: "Implement JWT Auth for Express.js",
+    {
+      title: 'Implement JWT Auth for Express.js',
       prompt:
-        "Develop a secure user authentication system in a Node.js application using JSON Web Tokens (JWT) for authorization and authentication.",
+        'Develop a secure user authentication system in a Node.js application using JSON Web Tokens (JWT) for authorization and authentication.',
     },
     {
-      title: "The Nature of Reality",
+      title: 'The Nature of Reality',
       prompt:
-        "Discuss the concept of reality from both a subjective and objective perspective, incorporating theories from famous philosophers.",
+        'Discuss the concept of reality from both a subjective and objective perspective, incorporating theories from famous philosophers.',
     },
     {
-      title: "Professional Meeting Follow-Up",
+      title: 'Professional Meeting Follow-Up',
       prompt:
-        "Write a follow-up email to a potential employer after a job interview, expressing gratitude for the opportunity and reiterating your interest in the position.",
+        'Write a follow-up email to a potential employer after a job interview, expressing gratitude for the opportunity and reiterating your interest in the position.',
     },
   ];
 
@@ -111,7 +114,7 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-6 bg-gradient-to-t from-70% from-white to-white/10 px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800 dark:to-transparent',
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-4 bg-gradient-to-t from-70% from-white to-white/10 px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800 dark:to-transparent',
         isNewSession && 'top-0'
       )}
     >
@@ -133,13 +136,18 @@ export const ChatInput = () => {
           </motion.h1>
         </div>
       )}
+      {showButton && (
+        <Button onClick={scrollToBottom} variant="secondary" size="icon">
+          <ArrowDown size={20} weight="bold" />
+        </Button>
+      )}
 
       <div className="flex flex-col gap-1">
         <motion.div
           variants={slideUpVariant}
           initial={'initial'}
           animate={'animate'}
-          className="flex w-[700px] flex-col gap-0 rounded-[1.25rem] bg-white/10 "
+          className="flex w-[700px] flex-col gap-0 rounded-[1.25rem] bg-white/10"
         >
           <div className="flex h-14 w-full flex-row items-center gap-0 px-3">
             {isNewSession ? (
@@ -161,7 +169,7 @@ export const ChatInput = () => {
               </Button>
             )}
             <Input
-              placeholder="Ask AI anything ... 🤖"
+              placeholder="Ask AI anything ..."
               value={inputValue}
               ref={inputRef}
               autoComplete="off"
@@ -249,15 +257,19 @@ export const ChatInput = () => {
       </div>
       {isNewSession && (
         <div className="flex flex-col gap-1">
-          <LabelDivider label={"Examples"} className="pt-0" transitionDuration={4} />
-          <div className="grid grid-cols-3 gap-2 w-[700px]">
+          <LabelDivider
+            label={'Examples'}
+            className="pt-0"
+            transitionDuration={4}
+          />
+          <div className="grid w-[700px] grid-cols-3 gap-2">
             {examples?.map((example, index) => (
               <motion.div
                 variants={zoomVariant}
                 transition={{ delay: 1 }}
-                initial={"initial"}
-                animate={"animate"}
-                className="flex flex-col gap-2 items-start text-sm py-3 px-4 border border-white/5 text-zinc-400 w-full rounded-2xl hover:bg-black/20 hover:scale-[101%] cursor-pointer"
+                initial={'initial'}
+                animate={'animate'}
+                className="flex w-full cursor-pointer flex-col items-start gap-2 rounded-2xl border border-white/5 px-4 py-3 text-sm text-zinc-400 hover:scale-[101%] hover:bg-black/20"
                 key={index}
                 onClick={() => {
                   runModel(
@@ -270,10 +282,10 @@ export const ChatInput = () => {
                   );
                 }}
               >
-                <p className="text-sm text-white font-semibold w-full">
+                <p className="w-full font-semibold text-sm text-white">
                   {example.title}
                 </p>
-                <p className="text-xs text-zinc-500 truncate w-full">
+                <p className="w-full truncate text-xs text-zinc-500">
                   {example.prompt}
                 </p>
               </motion.div>

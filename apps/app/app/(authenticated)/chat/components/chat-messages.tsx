@@ -97,6 +97,7 @@ export const ChatMessages = () => {
     <div
       className="flex h-screen w-full flex-col items-center overflow-y-auto pt-[60px] pb-[200px]"
       ref={chatContainer}
+      id="chat-container"
     >
       <motion.div
         className="flex w-[600px] flex-col gap-8"
