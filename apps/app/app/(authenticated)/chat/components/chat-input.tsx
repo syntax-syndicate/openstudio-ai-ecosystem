@@ -21,10 +21,10 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useChatContext } from '../../../context/chat/context';
-import { PromptType, RoleType } from '../../../lib/prompts';
-import { AudioWaveSpinner } from './audio-wave';
-import { ModelSelect } from './model-select';
+import { useChatContext } from '@/app/context/chat/context';
+import { PromptType, RoleType } from '@/app/lib/prompts';
+import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
+import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 
 const slideUpVariant = {
   initial: { y: 50, opacity: 0 },
@@ -137,9 +137,15 @@ export const ChatInput = () => {
         </div>
       )}
       {showButton && (
-        <Button onClick={scrollToBottom} variant="secondary" size="icon">
-          <ArrowDown size={20} weight="bold" />
-        </Button>
+         <motion.span
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+        >
+          <Button onClick={scrollToBottom} variant="secondary" size="icon">
+            <ArrowDown size={20} weight="bold" />
+          </Button>
+        </motion.span>
       )}
 
       <div className="flex flex-col gap-1">
