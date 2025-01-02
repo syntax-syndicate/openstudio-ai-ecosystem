@@ -2,7 +2,8 @@
 import { useChatContext } from '@/app/context/chat/context';
 import { FiltersContext } from '@/app/context/filters/context';
 import { useChatSession } from '@/app/hooks/use-chat-session';
-import { Eraser, Plus, StarFour, TrashSimple } from '@phosphor-icons/react';
+import { useModelList } from '@/app/hooks/use-model-list';
+import { Eraser, Plus, TrashSimple } from '@phosphor-icons/react';
 import { ModeToggle } from '@repo/design-system/components/mode-toggle';
 import {
   CommandDialog,
@@ -31,6 +32,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
   } = useChatContext();
   const { sortSessions } = useChatSession();
   const router = useRouter();
+  const { getModelByKey } = useModelList();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const open = () => setIsFilterOpen(true);
   const dismiss = () => setIsFilterOpen(false);
@@ -134,11 +136,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                   dismiss();
                 }}
               >
-                <StarFour
-                  size={14}
-                  weight="bold"
-                  className="flex-shrink-0 text-zinc-500"
-                />{' '}
+                {getModelByKey(session.messages?.[0]?.model)?.icon()}
                 <span className="w-full truncate">{session.title}</span>
                 <span className="flex-shrink-0 pl-4 text-xs text-zinc-400 dark:text-zinc-700">
                   {moment(session.createdAt).fromNow(true)}
