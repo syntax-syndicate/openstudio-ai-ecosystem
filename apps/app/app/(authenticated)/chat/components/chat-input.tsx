@@ -517,7 +517,7 @@ export const ChatInput = () => {
           <PopoverContent className="w-[700px] overflow-hidden rounded-2xl p-0">
             <CMDKCommand>
               <CommandInput
-                placeholder="Search framework..."
+                placeholder="Search..."
                 className="h-9"
                 value={commandInput}
                 onValueChange={setCommandInput}
