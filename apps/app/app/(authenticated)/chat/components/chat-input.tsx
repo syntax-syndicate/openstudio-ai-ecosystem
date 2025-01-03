@@ -1,7 +1,3 @@
-import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
-import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
-import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
-import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useSettings } from '@/app/context/settings/context';
 import { useModelList } from '@/app/hooks/use-model-list';
@@ -10,7 +6,6 @@ import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
-import { PromptType, RoleType, roles } from '@/app/lib/prompts';
 import {
   ArrowElbowDownRight,
   ArrowUp,
@@ -47,13 +42,18 @@ import Highlight from '@tiptap/extension-highlight';
 import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
-import { EditorContent, Extension, Mark, useEditor } from '@tiptap/react';
+import { EditorContent, Extension, useEditor } from '@tiptap/react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
 import { toast } from 'sonner';
+import { useChatContext } from '@/app/context/chat/context';
+import { PromptType, RoleType, roles } from '@/app/lib/prompts';
+import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
+import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
+import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 
 export type TAttachment = {
   file?: File;
@@ -105,10 +105,7 @@ export const ChatInput = () => {
       };
     },
   });
-  const inputRegex = /\{\{(.*?)\}\}/g;
-  const CustomMark = Mark.create({
-    name: 'customMark',
-  });
+  
   const editor = useEditor({
     extensions: [
       Document,
@@ -126,25 +123,7 @@ export const ChatInput = () => {
       }),
     ],
     content: ``,
-    // onUpdate({ editor }) {
-    //   const text = editor.getText();
-    //   const html = editor.getHTML();
-    //   if (text === "/") {
-    //     setOpen(true);
-    //   } else {
-    //     console.log(text);
-    //     const newHTML = html.replace(
-    //       /{{(.*?)}}/g,
-    //       ` <mark class="prompt-highlight">$1</mark> `
-    //     );
-    //     if (newHTML !== html) {
-    //       editor.commands.setContent(newHTML, true, {
-    //         preserveWhitespace: true,
-    //       });
-    //     }
-    //     setOpen(false);
-    //   }
-    // },
+    autofocus: true,
     onTransaction(props) {
       const { editor } = props;
       const text = editor.getText();
@@ -166,6 +145,12 @@ export const ChatInput = () => {
       }
     },
   });
+
+  useEffect(() => {
+    if (editor?.isActive) {
+      editor.commands.focus("end");
+    }
+  }, [editor?.isActive]);
 
   const resizeFile = (file: File) =>
     new Promise((resolve) => {
@@ -519,8 +504,11 @@ export const ChatInput = () => {
     );
   };
 
-  const focusToInput = () => {
+  const clearInput = () => {
     editor?.commands.clearContent();
+  };
+
+  const focusToInput = () => {
     editor?.commands.focus('end');
   };
 
@@ -571,7 +559,8 @@ export const ChatInput = () => {
                 {renderNewSession()}
                 <EditorContent
                   editor={editor}
-                  className="wysiwyg max-h-[120px] min-h-12 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none [&>*]:leading-6 [&>*]:outline-none"
+                  autoFocus
+                  className="w-full min-h-10 text-sm max-h-[120px] overflow-y-auto outline-none focus:outline-none p-1 [&>*]:outline-none [&>*]:leading-6 wysiwyg cursor-text"
                 />
 
                 {renderRecordingControls()}
@@ -581,7 +570,7 @@ export const ChatInput = () => {
                   variant={!!editor?.getText() ? 'secondary' : 'ghost'}
                   disabled={!editor?.getText()}
                   className="ml-1 h-8 min-w-8"
-                  onClick={() => handleRunModel()}
+                  onClick={() => handleRunModel(editor?.getText())}
                 >
                   <ArrowUp size={20} weight="bold" />
                 </Button>
@@ -618,6 +607,7 @@ export const ChatInput = () => {
                     !commandInput
                   ) {
                     setOpen(false);
+                    clearInput();
                     focusToInput();
                   }
                 }}
