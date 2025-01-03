@@ -13,8 +13,7 @@ type RootLayoutProperties = {
 const RootLayout = ({ children }: RootLayoutProperties) => (
   <html
     lang="en"
-    // className={cn(fonts, inter.className)}
-    className={cn(fonts)}
+    className={cn(fonts, inter.className)}
     suppressHydrationWarning
   >
     <body>
