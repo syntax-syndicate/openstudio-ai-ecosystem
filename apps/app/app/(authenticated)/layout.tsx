@@ -19,17 +19,17 @@ type AppLayoutProperties = {
 };
 
 const AppLayout = async ({ children }: AppLayoutProperties) => {
-  // if (env.ARCJET_KEY) {
-  //   await secure(['CATEGORY:PREVIEW']);
-  // }
+  if (env.ARCJET_KEY) {
+    await secure(['CATEGORY:PREVIEW']);
+  }
 
-  // const user = await currentUser();
-  // const { redirectToSignIn } = await auth();
-  // const betaFeature = await showBetaFeature();
+  const user = await currentUser();
+  const { redirectToSignIn } = await auth();
+  const betaFeature = await showBetaFeature();
 
-  // if (!user) {
-  //   redirectToSignIn();
-  // }
+  if (!user) {
+    redirectToSignIn();
+  }
 
   return (
     <SidebarProvider>
