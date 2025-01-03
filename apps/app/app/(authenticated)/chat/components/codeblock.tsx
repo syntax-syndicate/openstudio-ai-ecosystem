@@ -1,5 +1,5 @@
 import { useClipboard } from '@/app/hooks/use-clipboard';
-import { ibmPlex } from '@/app/lib/fonts';
+// import { ibmPlex } from '@/app/lib/fonts';
 import { Check } from '@phosphor-icons/react';
 import { Copy } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -58,7 +58,7 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
       </div>
       <pre className="w-full px-6 py-2">
         <code
-          style={ibmPlex.style}
+          // style={ibmPlex.style}
           className={`hljs language-${language} inline-block w-full overflow-x-auto whitespace-pre-wrap break-words pr-[100%] text-sm tracking-wide`}
           ref={ref}
         ></code>
