@@ -18,7 +18,7 @@ export const CommonSettings = () => {
     return (
       <Button
         variant="link"
-        size="sm"
+        size="linkSm"
         onClick={() => {
           setPreferences({ [key]: defaultPreferences[key] });
           formik.setFieldValue(key, defaultPreferences[key]);
@@ -31,12 +31,12 @@ export const CommonSettings = () => {
 
   return (
     <div className="no-scrollbar flex h-full flex-col items-start gap-2 overflow-y-auto px-6 pb-12">
-      <p className="py-4 font-medium text-md text-zinc-600 dark:text-white">
+      <p className="py-4 font-medium text-md text-zinc-800 dark:text-white">
         Default Settings
       </p>
 
       <div className="flex w-full flex-col">
-        <div className="flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between py-2">
           <p className="flex flex-row items-center gap-1 text-xs text-zinc-500">
             System Default Prompt <Info weight="regular" size={14} />
           </p>
@@ -54,14 +54,14 @@ export const CommonSettings = () => {
       </div>
 
       <div className="flex w-full flex-col">
-        <div className="flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between py-2">
           <p className="flex flex-row items-center gap-2 text-xs text-zinc-500">
-            Messages Limit
+            Context Length
           </p>
           {renderResetToDefault('messageLimit')}
         </div>
 
-        <div className="flex w-full flex-col justify-between gap-2 rounded-xl bg-zinc-100 p-3 dark:bg-white/5">
+        <div className="flex w-full flex-col justify-between gap-2 rounded-xl bg-zinc-50 p-3 dark:bg-white/5">
           <div className="flex w-full flex-row justify-between">
             <p className="text-sm">Use all Previous Messages</p>
             <Switch
@@ -75,7 +75,7 @@ export const CommonSettings = () => {
           {formik.values.messageLimit !== 'all' && (
             <>
               <p className="flex flex-row items-center gap-2 text-xs text-zinc-500">
-                Message Limit <Info weight="regular" size={14} />
+                Previous Messages Limit <Info weight="regular" size={14} />
               </p>
 
               <Input
@@ -94,7 +94,7 @@ export const CommonSettings = () => {
       </div>
 
       <div className="flex w-full flex-col">
-        <div className="flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between py-2">
           <p className="flex flex-row items-center gap-1 text-xs text-zinc-500">
             Max Tokens <Info weight="regular" size={14} />
           </p>
@@ -114,7 +114,7 @@ export const CommonSettings = () => {
       </div>
       <div className="grid w-full grid-cols-2 gap-2">
         <div className="flex flex-col">
-          <div className="flex w-full flex-row items-center justify-between">
+          <div className="flex w-full flex-row items-center justify-between py-2">
             <Tooltip content="Temprature">
               <p className="flex flex-row items-center gap-1 text-xs text-zinc-500">
                 Temperature <Info weight="regular" size={14} />
@@ -122,7 +122,7 @@ export const CommonSettings = () => {
             </Tooltip>
             {renderResetToDefault('temperature')}
           </div>
-          <div className="flex w-full flex-col justify-between gap-2 rounded-xl bg-zinc-100 p-3 dark:bg-white/5">
+          <div className="flex w-full flex-col justify-between gap-2 rounded-xl bg-zinc-50 p-3 dark:bg-white/5">
             <p className="font-medium text-xl text-zinc-600 dark:text-white">
               {formik.values.temperature}
             </p>
@@ -152,7 +152,7 @@ export const CommonSettings = () => {
         </div>
 
         <div className="flex flex-col">
-          <div className="flex w-full flex-row items-center justify-between">
+          <div className="flex w-full flex-row items-center justify-between py-2">
             <Tooltip content="TopP">
               <p className="flex flex-row items-center gap-1 text-xs text-zinc-500">
                 TopP <Info weight="regular" size={14} />
@@ -160,7 +160,7 @@ export const CommonSettings = () => {
             </Tooltip>
             {renderResetToDefault('topP')}
           </div>
-          <div className="flex w-full flex-col justify-between gap-2 rounded-xl bg-zinc-100 p-3 dark:bg-white/5">
+          <div className="flex w-full flex-col justify-between gap-2 rounded-xl bg-zinc-50 p-3 dark:bg-white/5">
             <p className="font-medium text-xl text-zinc-600 dark:text-white">
               {formik.values.topP}
             </p>
@@ -187,7 +187,7 @@ export const CommonSettings = () => {
           </div>
         </div>
         <div className="flex flex-col">
-          <div className="flex w-full flex-row items-center justify-between">
+          <div className="flex w-full flex-row items-center justify-between py-2">
             <Tooltip content="TopK">
               <p className="flex flex-row items-center gap-1 text-xs text-zinc-500">
                 TopK <Info weight="regular" size={14} />
@@ -195,7 +195,7 @@ export const CommonSettings = () => {
             </Tooltip>
             {renderResetToDefault('topK')}
           </div>
-          <div className="flex w-full flex-col justify-between gap-2 rounded-xl bg-zinc-100 p-3 dark:bg-white/5">
+          <div className="flex w-full flex-col justify-between gap-2 rounded-xl bg-zinc-50 p-3 dark:bg-white/5">
             <p className="font-medium text-xl text-zinc-600 dark:text-white">
               {formik.values.topK}
             </p>

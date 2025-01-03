@@ -5,6 +5,7 @@ import { useChatSession } from '@/app/hooks/use-chat-session';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { Eraser, Plus, TrashSimple } from '@phosphor-icons/react';
 import { ModeToggle } from '@repo/design-system/components/mode-toggle';
+import { Button } from '@repo/design-system/components/ui/button';
 import {
   CommandDialog,
   CommandEmpty,
@@ -13,6 +14,7 @@ import {
   CommandItem,
   CommandList,
 } from '@repo/design-system/components/ui/command';
+import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { cn } from '@repo/design-system/lib/utils';
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
@@ -33,6 +35,9 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
   const { sortSessions } = useChatSession();
   const router = useRouter();
   const { getModelByKey } = useModelList();
+
+  const { toast } = useToast();
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const open = () => setIsFilterOpen(true);
   const dismiss = () => setIsFilterOpen(false);
@@ -64,11 +69,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                 });
               }}
             >
-              <Plus
-                size={14}
-                weight="bold"
-                className="flex-shrink-0 text-zinc-500"
-              />
+              <Plus size={14} weight="bold" className="flex-shrink-0 " />
               New session
             </CommandItem>
             <CommandItem
@@ -93,30 +94,39 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                   });
               }}
             >
-              <TrashSimple
-                size={14}
-                weight="bold"
-                className="flex-shrink-0 text-zinc-500"
-              />
+              <TrashSimple size={14} weight="bold" className="flex-shrink-0 " />
               Delete current session
             </CommandItem>
             <CommandItem
               className="gap-3"
               value="clear history"
               onSelect={(value) => {
-                clearChatSessions().then(() => {
-                  createSession().then((session) => {
-                    router.push(`/chat/${session?.id}`);
-                    dismiss();
-                  });
+                dismiss();
+                toast({
+                  title: 'Are you sure?',
+                  description:
+                    'This will clear all chat history. This action cannot be undone.',
+                  variant: 'destructive',
+                  action: (
+                    <Button
+                      size="sm"
+                      variant="default"
+                      onClick={() => {
+                        clearChatSessions().then(() => {
+                          createSession().then((session) => {
+                            router.push(`/chat/${session?.id}`);
+                            dismiss();
+                          });
+                        });
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  ),
                 });
               }}
             >
-              <Eraser
-                size={14}
-                weight="bold"
-                className="flex-shrink-0 text-zinc-500"
-              />
+              <Eraser size={14} weight="bold" className="flex-shrink-0" />
               Clear History
             </CommandItem>
           </CommandGroup>

@@ -5,16 +5,21 @@ import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { useMarkdown } from '@/app/hooks/use-mdx';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
-import { Check, Copy, Info, TrashSimple } from '@phosphor-icons/react';
+import { useTokenCounter } from '@/app/hooks/use-token-counter';
+import { Check, Copy, TrashSimple } from '@phosphor-icons/react';
 import {
   Alert,
   AlertDescription,
 } from '@repo/design-system/components/ui/alert';
 import { Button } from '@repo/design-system/components/ui/button';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@repo/design-system/components/ui/popover';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
-import { encodingForModel } from 'js-tiktoken';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export type TAIMessageBubble = {
   chatMessage: TChatMessage;
@@ -29,26 +34,17 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   const { renderMarkdown } = useMarkdown();
   const modelForMessage = getModelByKey(model);
   const { open: openSettings } = useSettings();
+  const { getTokenCount } = useTokenCounter();
+  const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+
   const handleCopyContent = () => {
     messageRef?.current && rawAI && copy(rawAI);
   };
   const { removeMessage, runModel } = useChatContext();
 
-  const getTokenCount = (
-    message: Partial<Pick<TChatMessage, 'model' | 'rawAI'>>
-  ) => {
-    const enc = encodingForModel('gpt-3.5-turbo');
-    if (message.rawAI) {
-      return enc.encode(message.rawAI).length;
-    }
-    return undefined;
-  };
-
-  const tokenCount = getTokenCount({ model, rawAI });
-
   return (
     <div className="mt-6 flex w-full flex-row gap-2">
-      <div className="p-3">{modelForMessage?.icon()}</div>
+      <div className="px-3 py-1">{modelForMessage?.icon()}</div>
       <div
         ref={messageRef}
         className=" flex w-full flex-col items-start rounded-2xl"
@@ -72,7 +68,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
             </AlertDescription>
           </Alert>
         )}
-        <div className="flex w-full flex-row items-center justify-between py-3 opacity-50 transition-opacity hover:opacity-100">
+        <div className="flex w-full flex-row items-center justify-between py-3 opacity-70 transition-opacity hover:opacity-100">
           {isLoading && <Spinner />}
           {!isLoading && (
             <div className="flex flex-row gap-1">
@@ -103,28 +99,46 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
                 />
               )}
               <Tooltip content="Delete">
-                <Button
-                  variant="ghost"
-                  size="iconSm"
-                  rounded="lg"
-                  onClick={() => {
-                    removeMessage(id);
-                  }}
+                <Popover
+                  open={openDeleteConfirm}
+                  onOpenChange={setOpenDeleteConfirm}
                 >
-                  <TrashSimple size={16} weight="bold" />
-                </Button>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="iconSm" rounded="lg">
+                      <TrashSimple size={16} weight="bold" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <p className="pb-2 font-medium text-sm">
+                      Are you sure you want to delete this message?
+                    </p>
+                    <div className="flex flex-row gap-1">
+                      <Button
+                        variant="default"
+                        className="bg-red-600 hover:bg-red-700"
+                        onClick={() => {
+                          removeMessage(id);
+                        }}
+                      >
+                        Delete Message
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          setOpenDeleteConfirm(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </Tooltip>
             </div>
           )}
-          {tokenCount && !isLoading && (
+          {!isLoading && (
             <div className="flex flex-row items-center gap-2 text-xs text-zinc-500">
               {modelForMessage?.name}
-              <Tooltip content="Estimated Output Tokens">
-                <span className="flex cursor-pointer flex-row items-center gap-1 p-2 text-xs">
-                  {`${tokenCount} tokens`}
-                  <Info size={14} weight="bold" />
-                </span>
-              </Tooltip>
             </div>
           )}
         </div>

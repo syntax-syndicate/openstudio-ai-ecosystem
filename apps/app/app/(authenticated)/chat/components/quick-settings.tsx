@@ -24,7 +24,7 @@ export const QuickSettings = () => {
     return (
       <Button
         variant="link"
-        size="sm"
+        size="linkSm"
         onClick={() => {
           setPreferences({ [key]: defaultPreferences[key] });
           formik.setFieldValue(key, defaultPreferences[key]);
@@ -41,10 +41,14 @@ export const QuickSettings = () => {
           <SlidersHorizontal size={20} weight="bold" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="roundex-2xl mr-8 p-1 dark:bg-zinc-700">
-        <div className="grid grid-cols-1 gap-1 p-3">
-          {selectedModel && <ModelInfo model={selectedModel} />}
-          <div className="mt-4 flex w-full flex-col border-black/10 border-t dark:border-white/10">
+      <PopoverContent className="roundex-2xl mr-8 p-0 dark:bg-zinc-700">
+        {selectedModel && (
+          <div className="border-black/10 border-b p-3 dark:border-white/10">
+            <ModelInfo model={selectedModel} showDetails={false} />
+          </div>
+        )}
+        <div className="grid grid-cols-1 p-1">
+          <div className="flex w-full flex-col rounded-2xl p-3 hover:bg-zinc-50 dark:hover:bg-black/30">
             <div className="flex w-full flex-row items-center justify-between">
               <Tooltip content="Temprature">
                 <p className="flex flex-row items-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
@@ -77,7 +81,7 @@ export const QuickSettings = () => {
               </p>
             </div>
           </div>
-          <div className="flex w-full flex-col">
+          <div className="flex w-full flex-col rounded-2xl p-3 hover:bg-zinc-50 dark:hover:bg-black/30">
             <div className="flex w-full flex-row items-center justify-between">
               <Tooltip content="Temprature">
                 <p className="flex flex-row items-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
@@ -110,7 +114,7 @@ export const QuickSettings = () => {
               </p>
             </div>
           </div>{' '}
-          <div className="flex w-full flex-col">
+          <div className="flex w-full flex-col rounded-2xl p-3 hover:bg-zinc-50 dark:hover:bg-black/30">
             <div className="flex w-full flex-row items-center justify-between">
               <Tooltip content="TopP">
                 <p className="flex flex-row items-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
@@ -139,7 +143,7 @@ export const QuickSettings = () => {
               </p>
             </div>
           </div>{' '}
-          <div className="flex w-full flex-col">
+          <div className="flex w-full flex-col rounded-2xl p-3 hover:bg-zinc-50 dark:hover:bg-black/30">
             <div className="flex w-full flex-row items-center justify-between">
               <Tooltip content="TopK">
                 <p className="flex flex-row items-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">

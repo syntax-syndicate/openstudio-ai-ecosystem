@@ -1,4 +1,5 @@
 import { examplePrompts } from '@/app/lib/prompts';
+import { Asterisk } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 
 export type TChatExamples = {
@@ -15,7 +16,7 @@ export const ChatExamples = ({ onExampleClick, show }: TChatExamples) => {
             initial={{
               opacity: 0,
             }}
-            className="flex w-full cursor-pointer flex-col items-start gap-2 rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-zinc-600 hover:bg-zinc-50 dark:border-white/5 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-black/20"
+            className="flex w-full cursor-pointer flex-col items-start gap-4 rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-zinc-600 hover:bg-zinc-50 dark:border-white/5 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-black/20"
             key={index}
             animate={{
               opacity: 1,
@@ -24,6 +25,7 @@ export const ChatExamples = ({ onExampleClick, show }: TChatExamples) => {
               onExampleClick(example.prompt);
             }}
           >
+            <Asterisk size={20} weight="bold" />
             <p className="w-full font-medium text-sm text-zinc-800 dark:text-white">
               {example.title}
             </p>

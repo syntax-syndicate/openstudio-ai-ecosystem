@@ -30,7 +30,7 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
   return (
     <div
       className={cn(
-        'w-full flex-shrink-0 rounded-2xl border border-black/10 bg-white text-zinc-600 dark:border-white/5 dark:bg-black/20 dark:text-white'
+        'w-full flex-shrink-0 rounded-2xl border border-transparent bg-zinc-50/50 text-zinc-600 dark:border-white/5 dark:bg-black/20 dark:text-white'
       )}
     >
       <div className="flex w-full items-center justify-between p-2">
