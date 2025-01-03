@@ -1,3 +1,7 @@
+import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
+import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
+import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
+import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useSettings } from '@/app/context/settings/context';
 import { useModelList } from '@/app/hooks/use-model-list';
@@ -6,6 +10,7 @@ import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
+import { PromptType, RoleType, roles } from '@/app/lib/prompts';
 import {
   ArrowElbowDownRight,
   ArrowUp,
@@ -36,8 +41,10 @@ import {
   PopoverContent,
 } from '@repo/design-system/components/ui/popover';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
+import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { cn } from '@repo/design-system/lib/utils';
 import Document from '@tiptap/extension-document';
+import HardBreak from '@tiptap/extension-hard-break';
 import Highlight from '@tiptap/extension-highlight';
 import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -48,12 +55,6 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
-import { toast } from 'sonner';
-import { useChatContext } from '@/app/context/chat/context';
-import { PromptType, RoleType, roles } from '@/app/lib/prompts';
-import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
-import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
-import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 
 export type TAttachment = {
   file?: File;
@@ -65,6 +66,7 @@ export const ChatInput = () => {
   const { open: openFilters } = useFilters();
   const { showButton, scrollToBottom } = useScrollToBottom();
   const router = useRouter();
+  const { toast } = useToast();
   const [selectedPrompt, setSelectedPrompt] = useState<string>();
   const { startRecording, stopRecording, recording, text, transcribing } =
     useRecordVoice();
@@ -105,7 +107,7 @@ export const ChatInput = () => {
       };
     },
   });
-  
+
   const editor = useEditor({
     extensions: [
       Document,
@@ -121,6 +123,7 @@ export const ChatInput = () => {
           class: 'prompt-highlight',
         },
       }),
+      HardBreak,
     ],
     content: ``,
     autofocus: true,
@@ -148,7 +151,7 @@ export const ChatInput = () => {
 
   useEffect(() => {
     if (editor?.isActive) {
-      editor.commands.focus("end");
+      editor.commands.focus('end');
     }
   }, [editor?.isActive]);
 
@@ -176,7 +179,11 @@ export const ChatInput = () => {
 
     const fileTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (file && !fileTypes.includes(file?.type)) {
-      toast('Please select a valid image (JPEG, PNG, GIF).');
+      toast({
+        title: 'Invalid format',
+        description: 'Please select a valid image (JPEG, PNG, GIF).',
+        variant: 'destructive',
+      });
       return;
     }
 
@@ -217,7 +224,11 @@ export const ChatInput = () => {
         !['gpt-4-turbo', 'gpt-4o'].includes(selectedModel?.key) &&
         attachment?.base64
       ) {
-        toast.error('This model does not support image input.');
+        toast({
+          title: 'Ahh!',
+          description: 'This model does not support image input.',
+          variant: 'destructive',
+        });
         return;
       }
 
@@ -230,7 +241,11 @@ export const ChatInput = () => {
       console.log(apiKey);
 
       if (!apiKey) {
-        toast.error('API key is missing. Please check your settings.');
+        toast({
+          title: 'Ahh!',
+          description: 'API key is missing. Please check your settings.',
+          variant: 'destructive',
+        });
         openSettings(selectedModel?.baseModel);
         return;
       }
@@ -310,7 +325,18 @@ export const ChatInput = () => {
           size="icon"
           variant="ghost"
           className="h-8 min-w-8"
-          onClick={() => {
+          onClick={async () => {
+            const apiKey = await getApiKey('openai');
+            if (!apiKey) {
+              toast({
+                title: 'API key missing',
+                description:
+                  'Recordings require OpenAI API key. Please check settings.',
+                variant: 'destructive',
+              });
+              openSettings('openai');
+              return;
+            }
             startRecording();
             setTimeout(() => {
               stopRecording();
@@ -537,30 +563,12 @@ export const ChatInput = () => {
               animate={editor?.isActive ? 'animate' : 'initial'}
               className="flex w-[700px] flex-col items-start gap-0 overflow-hidden rounded-[1.25em] bg-zinc-50 dark:border-white/5 dark:bg-white/5"
             >
-              {selectedPrompt && (
-                <div className="w-full px-1 pt-1">
-                  <div className="flex w-full flex-row items-center rounded-t-2xl rounded-b-md bg-black/10 py-2 pr-2 pl-3 text-xs text-zinc-600">
-                    <p className="w-full">{selectedPrompt}</p>
-                    <Button
-                      size={'iconXS'}
-                      variant="ghost"
-                      onClick={() => {
-                        setSelectedPrompt(undefined);
-                        focusToInput();
-                      }}
-                      className="ml-4 flex-shrink-0"
-                    >
-                      <X size={16} weight="bold" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-              <div className="flex min-h-14 w-full flex-row items-start gap-0 px-3 pt-3">
+              <div className="flex min-h-14 w-full flex-row items-end gap-0 px-3 pt-3 pb-2">
                 {renderNewSession()}
                 <EditorContent
                   editor={editor}
                   autoFocus
-                  className="w-full min-h-10 text-sm max-h-[120px] overflow-y-auto outline-none focus:outline-none p-1 [&>*]:outline-none [&>*]:leading-6 wysiwyg cursor-text"
+                  className="wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none [&>*]:leading-6 [&>*]:outline-none"
                 />
 
                 {renderRecordingControls()}
@@ -614,6 +622,10 @@ export const ChatInput = () => {
               />
               <CommandEmpty>No framework found.</CommandEmpty>
               <CommandList className="max-h-[140px] p-2">
+                <CommandItem onSelect={() => {}} disabled={true}>
+                  <Plus size={14} weight="bold" className="flex-shrink-0" />{' '}
+                  Create New Prompt <Badge>Coming soon</Badge>
+                </CommandItem>
                 {roles?.map((role, index) => (
                   <CommandItem
                     key={index}

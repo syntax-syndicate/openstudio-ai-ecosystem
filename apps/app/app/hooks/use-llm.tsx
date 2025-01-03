@@ -199,6 +199,13 @@ export const useLLM = ({
         }) as RunnableLike,
       ]);
 
+      const promptValue = await prompt.formatPromptValue({
+        chat_history: previousAllowedChatHistory || [],
+        context: props.context,
+        input: props.query,
+      });
+      console.log('pm', promptValue.toString());
+
       const stream = await chain.stream(
         {
           chat_history: previousAllowedChatHistory || [],
@@ -212,7 +219,7 @@ export const useLLM = ({
                 console.log('LLM Start');
               },
               handleLLMEnd: async (output: LLMResult) => {
-                console.log('LLM End');
+                console.log('LLM End', output);
               },
               handleLLMError: async (err: Error) => {
                 console.error(err);
@@ -241,9 +248,13 @@ export const useLLM = ({
         createdAt: moment().toISOString(),
       });
 
+      let finalChunk;
+
       for await (const chunk of stream) {
         streamedMessage += chunk.content;
-        console.log(chunk.additional_kwargs);
+
+        console.log('chunk', chunk);
+
         onStream?.({
           id: newMessageId,
           props,
