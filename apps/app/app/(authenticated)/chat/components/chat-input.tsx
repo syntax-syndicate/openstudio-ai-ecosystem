@@ -384,14 +384,14 @@ export const ChatInput = () => {
   const renderListeningIndicator = () => {
     if (transcribing) {
       return (
-        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-4 py-1 text-sm md:text-base text-white dark:bg-zinc-900">
+        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-4 py-1 text-sm text-white md:text-base dark:bg-zinc-900">
           <AudioWaveSpinner /> <p>Transcribing ...</p>
         </div>
       );
     }
     if (recording) {
       return (
-        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-2 py-1 pr-4 text-sm md:text-base text-white dark:bg-zinc-900">
+        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-2 py-1 pr-4 text-sm text-white md:text-base dark:bg-zinc-900">
           <AudioWaveSpinner />
           <p>Listening ...</p>
         </div>
@@ -571,7 +571,7 @@ export const ChatInput = () => {
                 <EditorContent
                   editor={editor}
                   autoFocus
-                  className="wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm md:text-base outline-none focus:outline-none [&>*]:leading-6 [&>*]:outline-none"
+                  className="wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-6 [&>*]:outline-none"
                 />
 
                 {renderRecordingControls()}

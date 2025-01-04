@@ -1,7 +1,7 @@
+import { CodeBlock } from '@/app/(authenticated)/chat/components/codeblock';
 import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
 import type { JSX } from 'react';
-import { CodeBlock } from '@/app/(authenticated)/chat/components/codeblock';
 
 const VARIANTS = {
   hidden: { opacity: 0 },
@@ -26,7 +26,7 @@ export const useMarkdown = () => {
           </motion.span>
         ),
         paragraph: (children) => (
-          <p className="text-sm md:text-base leading-7">{children}</p>
+          <p className="text-sm leading-7 md:text-base">{children}</p>
         ),
         heading: (children, level) => {
           const Heading = `h${level}` as keyof JSX.IntrinsicElements;
@@ -42,7 +42,7 @@ export const useMarkdown = () => {
         ),
         blockquote: (children) => (
           <blockquote className="border-gray-300 border-l-4 pl-4 italic">
-            <p className="text-sm md:text-base leading-7 ">{children}</p>
+            <p className="text-sm leading-7 md:text-base ">{children}</p>
           </blockquote>
         ),
         list: (children, ordered) =>
@@ -53,7 +53,7 @@ export const useMarkdown = () => {
           ),
         listItem: (children) => (
           <li className="my-4">
-            <p className="text-sm md:text-base leading-7 ">{children}</p>
+            <p className="text-sm leading-7 md:text-base ">{children}</p>
           </li>
         ),
         strong: (children) => (
@@ -65,7 +65,7 @@ export const useMarkdown = () => {
           </div>
         ),
         codespan: (code) => (
-          <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-xs md:text-sm text-zinc-800 dark:bg-white/10 dark:text-white">
+          <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-xs text-zinc-800 md:text-sm dark:bg-white/10 dark:text-white">
             {code}
           </span>
         ),
@@ -78,7 +78,7 @@ export const useMarkdown = () => {
         ),
         tableHeader(children) {
           return (
-            <thead className="w-full bg-zinc-50 font-medium text-sm md:text-base text-zinc-800 uppercase dark:bg-white/10 dark:text-white/20">
+            <thead className="w-full bg-zinc-50 font-medium text-sm text-zinc-800 uppercase md:text-base dark:bg-white/10 dark:text-white/20">
               {children}
             </thead>
           );

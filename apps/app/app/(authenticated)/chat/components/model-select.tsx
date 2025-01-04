@@ -39,7 +39,11 @@ export const ModelSelect = () => {
     <>
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="gap-2 pr-3 pl-1 text-sm md:text-base" size="sm">
+          <Button
+            variant="ghost"
+            className="gap-2 pr-3 pl-1 text-sm md:text-base"
+            size="sm"
+          >
             {activeModel?.icon()} {activeModel?.name}
           </Button>
         </DropdownMenuTrigger>
@@ -73,7 +77,7 @@ export const ModelSelect = () => {
                 </DropdownMenuItem>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
-                <DropdownMenuSubContent className="dark flex min-w-[280px] flex-col gap-3 rounded-2xl bg-zinc-800 p-4 text-sm md:text-base tracking-[0.1px]">
+                <DropdownMenuSubContent className="dark flex min-w-[280px] flex-col gap-3 rounded-2xl bg-zinc-800 p-4 text-sm tracking-[0.1px] md:text-base">
                   <ModelInfo model={model} />
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>

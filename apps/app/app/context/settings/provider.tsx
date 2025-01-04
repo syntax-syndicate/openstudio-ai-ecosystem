@@ -67,9 +67,9 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
     <SettingsContext.Provider value={{ open, dismiss }}>
       {children}
       <Dialog open={isSettingOpen} onOpenChange={setIsSettingOpen}>
-        <DialogContent className="flex h-[96dvh] w-[96dvw] flex-col overflow-hidden rounded-xl border border-white/5 p-0 md:h-[600px] md:min-w-[800px] md:flex-row">
+        <DialogContent className="flex max-h-[80dvh] w-[96dvw] flex-col overflow-hidden rounded-xl border border-white/5 p-0 md:h-[600px] md:min-w-[800px] md:flex-row">
           <div className="absolute top-0 right-0 left-0 flex w-full flex-row gap-1 bg-black/5 p-2 md:bottom-0 md:w-[250px] md:flex-col md:gap-0 dark:bg-black/10">
-            <p className="hidden px-2 py-2 font-semibold text-sm md:text-base text-zinc-500 md:flex">
+            <p className="hidden px-2 py-2 font-semibold text-sm text-zinc-500 md:flex md:text-base">
               GENERAL
             </p>
             {settingMenu.map((menu) => (
@@ -85,7 +85,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 </div>
                 <span
                   className={cn(
-                    'text-sm md:text-base md:flex',
+                    'text-sm md:flex md:text-base',
                     selectedMenu === menu.key ? 'flex' : 'hidden'
                   )}
                 >
@@ -93,7 +93,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 </span>
               </Button>
             ))}
-            <p className="hidden px-2 py-2 font-semibold text-sm md:text-base text-zinc-500 md:flex ">
+            <p className="hidden px-2 py-2 font-semibold text-sm text-zinc-500 md:flex md:text-base ">
               MODELS
             </p>
             {modelsMenu.map((menu) => (
@@ -107,7 +107,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 {menu.icon()}
                 <span
                   className={cn(
-                    'text-sm md:text-base md:flex',
+                    'text-sm md:flex md:text-base',
                     selectedMenu === menu.key ? 'flex' : 'hidden'
                   )}
                 >
@@ -117,7 +117,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
               </Button>
             ))}
           </div>
-          <div className="no-scrollbar mt-[60px] h-full w-full overflow-y-auto md:mt-0 md:ml-[250px]">
+          <div className="no-scrollbar mt-[60px] h-full w-full overflow-y-auto pb-16 md:mt-0 md:ml-[250px]">
             {selectedMenuItem?.component}
           </div>
         </DialogContent>

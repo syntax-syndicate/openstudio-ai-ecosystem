@@ -22,12 +22,14 @@ export const GeminiSettings = () => {
     });
   }, []);
   return (
-    <div className="flex flex-col items-start gap-2 px-6">
+    <div className="flex flex-col items-start gap-2 px-3 md:px-6">
       <p className="py-4 font-medium text-md text-zinc-800 dark:text-white">
         Google Gemini Settings
       </p>
       <div className="flex flex-row items-end justify-between">
-        <p className="text-sm md:text-base text-zinc-500">Google Gemini API Key</p>
+        <p className="text-sm text-zinc-500 md:text-base">
+          Google Gemini API Key
+        </p>
       </div>
       <Input
         placeholder="xxxxxxxxxxxxxxxxxxxxxxxx"

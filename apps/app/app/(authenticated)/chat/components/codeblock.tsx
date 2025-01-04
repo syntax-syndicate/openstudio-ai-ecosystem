@@ -34,7 +34,7 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
       )}
     >
       <div className="flex w-full items-center justify-between p-2">
-        <p className="px-2 text-sm md:text-base text-zinc-500">{language}</p>
+        <p className="px-2 text-sm text-zinc-500 md:text-base">{language}</p>
         <Tooltip>
           <TooltipTrigger>
             <Button
@@ -59,7 +59,7 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
       <pre className="w-full px-6 py-2">
         <code
           style={ibmPlex.style}
-          className={`hljs language-${language} inline-block w-full overflow-x-auto whitespace-pre-wrap break-words pr-[100%] text-sm md:text-base tracking-wide`}
+          className={`hljs language-${language} inline-block w-full overflow-x-auto whitespace-pre-wrap break-words pr-[100%] text-sm tracking-wide md:text-base`}
           ref={ref}
         ></code>
       </pre>
