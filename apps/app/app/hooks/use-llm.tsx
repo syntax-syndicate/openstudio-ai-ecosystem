@@ -68,7 +68,7 @@ export const useLLM = ({
           : ``
       } ${
         hasPreviousMessages
-          ? `You can also refer these previous conversations if needed:`
+          ? `You can also refer these previous conversations if needed.`
           : ``
       }`,
     ];
@@ -95,8 +95,8 @@ export const useLLM = ({
 
     const prompt = ChatPromptTemplate.fromMessages([
       system,
-      messageHolders,
       user,
+      messageHolders,
     ]);
 
     return prompt;
