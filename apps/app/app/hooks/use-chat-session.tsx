@@ -8,13 +8,6 @@ import { get, set } from 'idb-keyval';
 import moment from 'moment';
 import { v4 } from 'uuid';
 
-export enum ModelType {
-  GPT3 = 'gpt-3',
-  GPT4 = 'gpt-4',
-  CLAUDE2 = 'claude-2',
-  CLAUDE3 = 'claude-3',
-}
-
 export type InputProps = {
   type: PromptType;
   context?: string;
@@ -275,6 +268,18 @@ export const useChatSession = (id?: string) => {
     mutationFn: async (id: string) => await getSessionById(id),
   });
 
+  const addSessionsMutation = useMutation({
+    mutationFn: async (sessions: TChatSession[]) => {
+      const existingSessions = await getSessions();
+      const newSessions = [...existingSessions, ...sessions];
+      await set('chat-sessions', newSessions);
+      return newSessions;
+    },
+    onSuccess: () => {
+      sessionsQuery.refetch();
+    },
+  });
+
   return {
     sessionsQuery,
     setSessionMutation,
@@ -287,5 +292,6 @@ export const useChatSession = (id?: string) => {
     clearSessionsMutation,
     removeMessageByIdMutation,
     getSessionByIdMutation,
+    addSessionsMutation,
   };
 };

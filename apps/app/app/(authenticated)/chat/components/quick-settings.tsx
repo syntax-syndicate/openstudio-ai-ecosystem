@@ -38,8 +38,7 @@ export const QuickSettings = () => {
     );
   };
 
-  const model =
-    preferences?.defaultModel && getModelByKey(preferences?.defaultModel);
+  const model = getModelByKey(preferences?.defaultModel);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>

@@ -57,6 +57,7 @@ export const SessionsProvider = ({ children }: TSessionsProvider) => {
     addMessageToSessionMutation,
     getSessionByIdMutation,
     getSessionByIdQuery,
+    addSessionsMutation,
   } = props;
   const currentSessionQuery = getSessionByIdQuery;
   const { push, refresh } = useRouter();
