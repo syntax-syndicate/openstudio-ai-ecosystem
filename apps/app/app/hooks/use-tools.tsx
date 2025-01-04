@@ -149,6 +149,7 @@ export type TTool = {
   name: string;
   loadingMessage?: string;
   resultMessage?: string;
+  isBeta?: boolean;
   //TODO: type should be zod object
   tool: (arg?: any) => DynamicStructuredTool<any>;
   icon: (size: IconSize) => ReactNode;
@@ -170,6 +171,7 @@ export const useTools = () => {
       key: 'web_search',
       tool: webSearchTool,
       name: 'Google Search',
+      isBeta: true,
       loadingMessage: 'Searching on web...',
       resultMessage: 'Results from Google Search',
       icon: (size: IconSize) => <ModelIcon type="websearch" size={size} />,
@@ -179,6 +181,7 @@ export const useTools = () => {
       key: 'duckduckgo_search',
       tool: duckduckGoTool,
       name: 'DuckDuckGo Search',
+      isBeta: true,
       loadingMessage: 'Searching on web...',
       resultMessage: 'Results from DuckDuckGo Search',
       icon: (size: IconSize) => <ModelIcon type="websearch" size={size} />,
@@ -188,6 +191,7 @@ export const useTools = () => {
       key: 'read_website',
       tool: readWebsiteTool,
       name: 'Read Website',
+      isBeta: true,
       loadingMessage: 'Analyzing website...',
       resultMessage: 'Results from Website Reader',
       icon: (size: IconSize) => <ModelIcon type="websearch" size={size} />,
