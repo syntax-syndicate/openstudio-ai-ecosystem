@@ -7,10 +7,11 @@ import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import type { TRunModel } from '@/app/hooks/use-llm';
 import type { TModelKey } from '@/app/hooks/use-model-list';
 import { removeExtraSpaces } from '@/app/lib/helper';
-import { ArrowElbowDownRight, Info, TrashSimple } from '@phosphor-icons/react';
+import { ArrowElbowDownRight, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
+import moment from 'moment';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
@@ -78,6 +79,8 @@ export const ChatMessages = () => {
     );
   };
 
+  console.log('currentSession bot', currentSession);
+
   return (
     <div
       className="no-scrollbar flex h-[100dvh] w-full flex-col items-center overflow-y-auto pt-[60px] pb-[200px]"
@@ -104,11 +107,6 @@ export const ChatMessages = () => {
             </Type>
             {!currentSession?.messages?.length && (
               <div className="flex flex-row gap-1">
-                <Tooltip content="Bot Info">
-                  <Button variant="outline" size="iconSm" onClick={() => {}}>
-                    <Info size={16} weight="bold" />
-                  </Button>
-                </Tooltip>
                 <Button
                   variant="outline"
                   size="sm"
@@ -126,7 +124,10 @@ export const ChatMessages = () => {
                       updateSessionMutation.mutate(
                         {
                           sessionId: currentSession.id,
-                          session: { bot: undefined },
+                          session: {
+                            bot: undefined,
+                            updatedAt: moment().toISOString(),
+                          },
                         },
                         {
                           onSuccess: () => {

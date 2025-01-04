@@ -1,4 +1,6 @@
 import type { TModelKey } from '@/app/hooks/use-model-list';
+import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { get, set } from 'idb-keyval';
 import { v4 } from 'uuid';
 
@@ -22,21 +24,59 @@ export const useBots = () => {
     const newBots = [...bots, { ...bot, id: v4() }];
     set('bots', newBots);
   };
-  const publishBot = async (botId: string) => {
-    // TODO: Implement publishBot
+
+  const deleteBot = async (id: string) => {
+    const bots = await getBots();
+    const newBots = bots?.filter((bot) => bot.id !== id) || [];
+    set('bots', newBots);
   };
-  const fetchPublicBots = async (): Promise<TBot[]> => {
-    // TODO: Implement publishBot
-    return [];
-  };
-  const updateBot = async (botId: string, bot: TBot) => {
+
+  const updateBot = async (botId: string, newBot: Omit<TBot, 'id'>) => {
     const bots = await getBots();
     const newBots = bots.map((bot) => {
       if (bot.id === botId) {
-        return bot;
+        return { ...bot, ...newBot };
       }
       return bot;
     });
+    set('bots', newBots);
   };
-  return { getBots, createBot, updateBot };
+
+  const botsQuery = useQuery({
+    queryKey: ['bots'],
+    queryFn: getBots,
+  });
+  const createBotMutation = useMutation({
+    mutationFn: createBot,
+    onSuccess: () => {
+      botsQuery.refetch();
+    },
+  });
+  const deleteBotMutation = useMutation({
+    mutationFn: deleteBot,
+    onSuccess: () => {
+      botsQuery.refetch();
+    },
+  });
+  const updateBotMutation = useMutation({
+    mutationFn: ({
+      botId,
+      newBot,
+    }: {
+      botId: string;
+      newBot: Omit<TBot, 'id'>;
+    }) => updateBot(botId, newBot),
+    onSuccess: () => {
+      botsQuery.refetch();
+    },
+  });
+  return {
+    getBots,
+    createBot,
+    updateBot,
+    botsQuery,
+    createBotMutation,
+    updateBotMutation,
+    deleteBotMutation,
+  };
 };

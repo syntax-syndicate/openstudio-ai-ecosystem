@@ -1,19 +1,16 @@
-import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
+import { HistoryItem } from '@/app/(authenticated)/chat/components/history/history-item';
 import { useSessionsContext } from '@/app/context/sessions/provider';
-import { useModelList } from '@/app/hooks/use-model-list';
 import { sortSessions } from '@/app/lib/helper';
 import { Plus, SidebarSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { cn } from '@repo/design-system/lib/utils';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
 
 export const HistorySidebar = () => {
   const { sessions, createSession, currentSession } = useSessionsContext();
   const [open, setOpen] = useState(false);
-  const router = useRouter();
-  const { getModelByKey } = useModelList();
+
   return (
     <Drawer.Root direction="left" open={open} onOpenChange={setOpen}>
       <Drawer.Trigger asChild>
@@ -47,6 +44,7 @@ export const HistorySidebar = () => {
                     createSession({
                       redirect: true,
                     });
+                    setOpen(false);
                   }}
                 >
                   <Plus size={20} weight="bold" />
@@ -56,32 +54,13 @@ export const HistorySidebar = () => {
                 <p className="text-sm text-zinc-500">Recent History</p>
               </div>
               {sortSessions(sessions, 'updatedAt')?.map((session) => (
-                <div
+                <HistoryItem
+                  session={session}
                   key={session.id}
-                  className={cn(
-                    'flex w-full cursor-pointer flex-row items-center gap-2 rounded-xl p-2 hover:bg-black/10 hover:dark:bg-black/30',
-                    currentSession?.id === session.id
-                      ? 'bg-black/10 dark:bg-black/30'
-                      : ''
-                  )}
-                  onClick={() => {
-                    router.push(`/chat/${session.id}`);
+                  dismiss={() => {
                     setOpen(false);
                   }}
-                >
-                  {session.bot ? (
-                    <BotAvatar
-                      size="small"
-                      name={session?.bot?.name}
-                      avatar={session?.bot?.avatar}
-                    />
-                  ) : (
-                    getModelByKey(session.messages?.[0]?.model)?.icon()
-                  )}
-                  <span className="w-full truncate text-xs md:text-sm">
-                    {session.title}
-                  </span>
-                </div>
+                />
               ))}
             </div>
             <div className="absolute right-[-20px] flex h-full w-4 flex-col items-center justify-center">

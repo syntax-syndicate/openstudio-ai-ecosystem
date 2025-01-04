@@ -1,6 +1,6 @@
 import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
-import { type TBot, useBots } from '@/app/hooks/use-bots';
+import type { TBot } from '@/app/hooks/use-bots';
 import { convertFileToBase64 } from '@/app/lib/helper';
 import { ArrowLeft, Plus } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -14,10 +14,10 @@ import { useEffect, useRef } from 'react';
 export type TCreateBot = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onCreateBot: (bot: Omit<TBot, 'id'>) => void;
 };
 
-export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
-  const { createBot } = useBots();
+export const CreateBot = ({ open, onOpenChange, onCreateBot }: TCreateBot) => {
   const botTitleRef = useRef<HTMLInputElement | null>(null);
 
   const formik = useFormik<Omit<TBot, 'id'>>({
@@ -30,7 +30,7 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
       deafultBaseModel: 'gemini-pro',
     },
     onSubmit: (values) => {
-      createBot(values);
+      onCreateBot(values);
       clearBot();
       onOpenChange(false);
     },

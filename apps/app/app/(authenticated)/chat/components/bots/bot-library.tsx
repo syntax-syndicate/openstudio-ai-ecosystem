@@ -1,6 +1,12 @@
 import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import type { TBot } from '@/app/hooks/use-bots';
-import { BookBookmark, FolderSimple, Plus } from '@phosphor-icons/react';
+import {
+  BookBookmark,
+  DotsThree,
+  FolderSimple,
+  Plus,
+  TrashSimple,
+} from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Command,
@@ -9,6 +15,12 @@ import {
   CommandItem,
   CommandList,
 } from '@repo/design-system/components/ui/command';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@repo/design-system/components/ui/dropdown-menu';
 
 export type TBotLibrary = {
   open: boolean;
@@ -17,6 +29,7 @@ export type TBotLibrary = {
   publicBots: TBot[];
   onTabChange: (tab: 'public' | 'local') => void;
   onCreate: () => void;
+  onDelete: (bot: TBot) => void;
   assignBot: (Bot: TBot) => void;
 };
 
@@ -28,6 +41,7 @@ export const BotLibrary = ({
   localBots,
   publicBots,
   assignBot,
+  onDelete,
 }: TBotLibrary) => {
   return (
     <Command>
@@ -86,6 +100,27 @@ export const BotLibrary = ({
                     {bot.description}
                   </p>
                 </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="iconSm">
+                      <DotsThree size={24} weight="bold" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="min-w-[200px] text-sm md:text-base"
+                    align="end"
+                  >
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        onDelete(bot);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <TrashSimple size={14} weight="bold" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </CommandItem>
           ))}

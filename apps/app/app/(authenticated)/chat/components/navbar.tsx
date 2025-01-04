@@ -1,4 +1,4 @@
-import { HistorySidebar } from '@/app/(authenticated)/chat/components/side-bar';
+import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
 import { useBots } from '@/app/context/bots/context';
 import { useFilters } from '@/app/context/filters/context';
 import { usePrompts } from '@/app/context/prompts/context';

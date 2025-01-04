@@ -30,7 +30,7 @@ export const PluginSelect = ({ selectedModel }: TPluginSelect) => {
         availableToolsKey.includes(p)
       ) || []
     );
-  }, [isOpen]);
+  }, [isOpen, preferences]);
 
   const model = getModelByKey(selectedModel);
 

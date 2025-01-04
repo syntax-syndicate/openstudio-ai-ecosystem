@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { get, set } from 'idb-keyval';
 import { v4 } from 'uuid';
 
@@ -28,9 +30,48 @@ export const usePrompts = () => {
     await set('prompts', newPrompts);
     return newPrompts;
   };
+
+  const deletePrompt = async (id: string) => {
+    const prompts = await getPrompts();
+    const newPrompts = prompts?.filter((prompt) => prompt.id !== id) || [];
+    await set('prompts', newPrompts);
+  };
+  const promptsQuery = useQuery({
+    queryKey: ['prompts'],
+    queryFn: getPrompts,
+  });
+  const createPromptMutation = useMutation({
+    mutationFn: setPrompt,
+    onSuccess: () => {
+      promptsQuery.refetch();
+    },
+  });
+  const updatePromptMutation = useMutation({
+    mutationFn: ({
+      id,
+      prompt,
+    }: {
+      id: string;
+      prompt: Partial<Omit<TPrompt, 'id'>>;
+    }) => updatePrompt(id, prompt),
+    onSuccess: () => {
+      promptsQuery.refetch();
+    },
+  });
+  const deletePromptMutation = useMutation({
+    mutationFn: deletePrompt,
+    onSuccess: () => {
+      promptsQuery.refetch();
+    },
+  });
+
   return {
     getPrompts,
     setPrompt,
     updatePrompt,
+    promptsQuery,
+    createPromptMutation,
+    updatePromptMutation,
+    deletePromptMutation,
   };
 };
