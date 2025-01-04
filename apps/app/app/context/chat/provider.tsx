@@ -83,17 +83,17 @@ export const ChatProvider = ({ children }: TChatProvider) => {
     if (!sessionId) {
       return;
     }
-    getSessionById(sessionId?.toString())
-      .then((session) => {
+    getSessionById(sessionId?.toString()).then((session) => {
+      if (session) {
         setCurrentSession(session);
         setCurrentSessionLoading(false);
-      })
-      .catch(() => {
+      } else {
         createNewSession().then((session) => {
           setCurrentSession(session);
           setCurrentSessionLoading(false);
         });
-      });
+      }
+    });
   };
 
   useEffect(() => {

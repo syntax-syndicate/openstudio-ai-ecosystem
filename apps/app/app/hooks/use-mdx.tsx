@@ -1,4 +1,5 @@
 import { CodeBlock } from '@/app/(authenticated)/chat/components/codeblock';
+import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
 import type { JSX } from 'react';
@@ -30,7 +31,16 @@ export const useMarkdown = () => {
         ),
         heading: (children, level) => {
           const Heading = `h${level}` as keyof JSX.IntrinsicElements;
-          return <Heading className="font-medium text-md">{children}</Heading>;
+          return (
+            <Heading
+              className={cn(
+                'font-medium',
+                level < 4 ? 'py-2 text-lg' : 'py-1 text-md'
+              )}
+            >
+              {children}
+            </Heading>
+          );
         },
         link: (href, text) => (
           <a
@@ -47,9 +57,9 @@ export const useMarkdown = () => {
         ),
         list: (children, ordered) =>
           ordered ? (
-            <ol className="ml-8 list-decimal">{children}</ol>
+            <ol className="ml-4 list-decimal">{children}</ol>
           ) : (
-            <ul className="ml-8 list-disc">{children}</ul>
+            <ul className="ml-4 list-disc">{children}</ul>
           ),
         listItem: (children) => (
           <li className="my-4">
@@ -57,7 +67,7 @@ export const useMarkdown = () => {
           </li>
         ),
         strong: (children) => (
-          <strong className="font-semibold">{children}</strong>
+          <strong className="font-medium">{children}</strong>
         ),
         code: (code, lang) => (
           <div className="my-4 w-full flex-shrink-0">
@@ -65,10 +75,11 @@ export const useMarkdown = () => {
           </div>
         ),
         codespan: (code) => (
-          <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-xs text-zinc-800 md:text-sm dark:bg-white/10 dark:text-white">
+          <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-sm text-zinc-800 md:text-base dark:bg-white/10 dark:text-white">
             {code}
           </span>
         ),
+        br: () => <br />,
         table: (children) => (
           <div className="my-3 overflow-x-auto rounded-xl border border-zinc-100 dark:border-white/10 ">
             <table className="w-full overflow-hidden text-left text-gray-600 text-sm md:text-base rtl:text-right dark:text-gray-200">
@@ -90,7 +101,7 @@ export const useMarkdown = () => {
         },
         tableCell(children, flags) {
           if (flags.header) {
-            return <th className="p-3 text-sm md:text-base">{children}</th>;
+            return <th className="p-3 text-xs md:text-sm">{children}</th>;
           }
           return <td className="p-3 text-sm md:text-base">{children}</td>;
         },

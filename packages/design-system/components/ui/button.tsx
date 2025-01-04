@@ -5,30 +5,30 @@ import * as React from "react";
 import { cn } from "@repo/design-system/lib/utils";
 
 const buttonVariants = cva(
-   "inline-flex items-center gap-1 justify-center whitespace-nowrap rounded-md text-sm md:text-base  transition-colors focus-visible:outline-none ",
+   "inline-flex items-center gap-1 justify-center whitespace-nowrap rounded-md text-xs md:text-sm  transition-colors focus-visible:outline-none ",
   {
     variants: {
       variant: {
         default:
           "bg-primary text-primary-foreground font-normal  hover:bg-primary/90",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-red-400 dark:bg-red-400/50 text-destructive-foreground hover:bg-red-500 dark:hover:bg-red-500/50",
         outline:
           "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-black/10 text-zinc-600 dark:text-zinc-300 hover:bg-black/15 dark:bg-white/10",
          ghost:
           "hover:bg-black/10 dark:hover:bg-white/10 text-zinc-600 hover:text-zinc-800 dark:text-zinc-200 dark:hover:text-white",
-         link: "text-primary underline-offset-4 hover:underline h-auto decoration-black/20 dark:decoration-white/20",
+         link: "text-zinc-600 text-zinc-400 underline-offset-4 hover:underline h-auto decoration-black/20 dark:decoration-white/20",
       },
       size: {
         default: "h-10 px-4 py-3",
-        sm: "h-8 px-3 text-sm md:text-base",
+        sm: "h-8 px-3 text-xs md:text-sm",
         lg: "h-12  px-8",
         icon: "h-9 min-w-9",
         iconSm: "h-8 min-w-8",
-        iconXS: "h-6 min-w-6 text-sm md:text-base",
-        linkSm: "p-0 text-sm md:text-base",
+        iconXS: "h-6 min-w-6 text-xs md:text-sm",
+        linkSm: "p-0 text-xs md:text-sm",
         link: "p-0"
       },
       rounded: {

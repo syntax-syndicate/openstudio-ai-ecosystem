@@ -90,7 +90,7 @@ export const useChatSession = () => {
   };
   const updateSession = async (
     sessionId: string,
-    newSession: Omit<TChatSession, 'id'>
+    newSession: Partial<Omit<TChatSession, 'id'>>
   ) => {
     const sessions = await getSessions();
     const newSessions = sessions.map((session) => {
@@ -141,7 +141,7 @@ export const useChatSession = () => {
   };
 
   const sortMessages = (messages: TChatMessage[], sortBy: 'createdAt') => {
-    return messages.sort((a, b) => moment(b[sortBy]).diff(moment(a[sortBy])));
+    return messages.sort((a, b) => moment(a[sortBy]).diff(moment(b[sortBy])));
   };
 
   const createNewSession = async () => {

@@ -1,4 +1,5 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
+import { HistorySidebar } from '@/app/(authenticated)/chat/components/side-bar';
 import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useSettings } from '@/app/context/settings/context';
@@ -8,10 +9,13 @@ import {
   GearSix,
   Moon,
   Plus,
+  Robot,
   Sun,
+  Textbox,
 } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
+import { ComingSoon } from '@repo/design-system/components/ui/coming-soon';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,15 +55,21 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="absolute top-0 right-0 left-0 z-50 flex flex-row items-center justify-between bg-gradient-to-b from-70% from-white to-transparent p-2 pb-6 md:p-4 dark:from-zinc-800">
+    <div className="absolute top-0 right-0 left-0 z-50 flex flex-row items-center justify-between bg-gradient-to-b from-70% from-white to-transparent p-2 pb-6 md:p-3 dark:from-zinc-800">
       <div className="flex flex-row items-center gap-2">
+        <HistorySidebar />
         <ModelIcon type="chathub" size="md" />
         <p className="text-sm text-zinc-500 md:text-base">ChatHub</p>
         <Badge>Beta</Badge>
       </div>
       <div className="flex flex-row items-center gap-2">
         {renderNewSession()}
-        <Button variant="ghost" size="iconSm" onClick={openFilters}>
+        <Button
+          variant="ghost"
+          size="iconSm"
+          onClick={openFilters}
+          className="flex md:hidden"
+        >
           <Command size={20} weight="bold" />
         </Button>
         <DropdownMenu
@@ -75,6 +85,14 @@ export const Navbar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mr-2 min-w-[250px] text-sm md:text-base">
+            <DropdownMenuItem onClick={() => {}}>
+              <Robot size={14} weight="bold" />
+              Bots <ComingSoon />
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>
+              <Textbox size={14} weight="bold" />
+              Prompts <ComingSoon />
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 openSettings();

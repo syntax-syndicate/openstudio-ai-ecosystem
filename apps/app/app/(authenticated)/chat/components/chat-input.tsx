@@ -1,6 +1,7 @@
 import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
+import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
 import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useSettings } from '@/app/context/settings/context';
@@ -10,6 +11,7 @@ import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
+import { removeExtraSpaces } from '@/app/lib/helper';
 import { PromptType, RoleType, roles } from '@/app/lib/prompts';
 import {
   ArrowElbowDownRight,
@@ -27,6 +29,7 @@ import {
 import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
+import { ComingSoon } from '@repo/design-system/components/ui/coming-soon';
 import {
   Command as CMDKCommand,
   CommandEmpty,
@@ -69,8 +72,14 @@ export const ChatInput = () => {
   const [selectedPrompt, setSelectedPrompt] = useState<string>();
   const { startRecording, stopRecording, recording, text, transcribing } =
     useRecordVoice();
-  const { runModel, createSession, currentSession, streaming, stopGeneration } =
-    useChatContext();
+  const {
+    runModel,
+    createSession,
+    currentSession,
+    streaming,
+    stopGeneration,
+    refetchSessions,
+  } = useChatContext();
   // const [inputValue, setInputValue] = useState("");
   const [contextValue, setContextValue] = useState<string>('');
   const { getPreferences, getApiKey } = usePreferences();
@@ -99,8 +108,8 @@ export const ChatInput = () => {
         Enter: (_) => {
           if (_.editor.getText()?.length > 0) {
             handleRunModel(_.editor.getText(), () => {
-              clearInput();
-              focusToInput();
+              _.editor.commands.clearContent();
+              _.editor.commands.focus('end');
             });
           }
           return true;
@@ -238,13 +247,11 @@ export const ChatInput = () => {
         return;
       }
 
-      console.log(selectedModel?.baseModel);
       if (!selectedModel?.baseModel) {
         throw new Error('Model not found');
       }
 
       const apiKey = await getApiKey(selectedModel?.baseModel);
-      console.log(apiKey);
 
       if (!apiKey) {
         toast({
@@ -255,21 +262,21 @@ export const ChatInput = () => {
         openSettings(selectedModel?.baseModel);
         return;
       }
-      runModel({
+
+      setAttachment(undefined);
+      setContextValue('');
+      clear?.();
+      await runModel({
         sessionId: sessionId!.toString(),
         props: {
           role: RoleType.assistant,
           type: PromptType.ask,
           image: attachment?.base64,
-          query: query,
-          context: contextValue,
+          query: removeExtraSpaces(query),
+          context: removeExtraSpaces(contextValue),
         },
       });
-      setAttachment(undefined);
-      setContextValue('');
-
-      console.log(editor);
-      clear?.();
+      await refetchSessions();
     });
   };
 
@@ -283,6 +290,7 @@ export const ChatInput = () => {
 
   useEffect(() => {
     if (text) {
+      editor?.commands.clearContent();
       editor?.commands.setContent(text);
       runModel({
         props: {
@@ -296,6 +304,21 @@ export const ChatInput = () => {
     }
   }, [text]);
 
+  const startVoiceRecording = async () => {
+    const apiKey = await getApiKey('openai');
+    if (!apiKey) {
+      toast({
+        title: 'API key missing',
+        description:
+          'Recordings require OpenAI API key. Please check settings.',
+        variant: 'destructive',
+      });
+      openSettings('openai');
+      return;
+    }
+    startRecording();
+  };
+
   const renderRecordingControls = () => {
     if (recording) {
       return (
@@ -306,8 +329,6 @@ export const ChatInput = () => {
             onClick={() => {
               stopRecording();
             }}
-            onTouchStart={startRecording}
-            onTouchEnd={stopRecording}
           >
             <StopCircle size={20} weight="fill" className="text-red-300" />
           </Button>
@@ -321,25 +342,7 @@ export const ChatInput = () => {
           size="icon"
           variant="ghost"
           className="h-8 min-w-8"
-          onClick={async () => {
-            const apiKey = await getApiKey('openai');
-            if (!apiKey) {
-              toast({
-                title: 'API key missing',
-                description:
-                  'Recordings require OpenAI API key. Please check settings.',
-                variant: 'destructive',
-              });
-              openSettings('openai');
-              return;
-            }
-            startRecording();
-            setTimeout(() => {
-              stopRecording();
-            }, 20000);
-          }}
-          onTouchStart={startRecording}
-          onTouchEnd={stopRecording}
+          onClick={startVoiceRecording}
         >
           <Microphone size={20} weight="bold" />
         </Button>
@@ -510,11 +513,10 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 bg-gradient-to-t from-70% from-white to-transparent px-2 pt-16 pb-1 transition-all duration-1000 ease-in-out md:justify-center md:px-4 md:pb-4 dark:from-zinc-800',
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-1 bg-gradient-to-t from-70% from-white to-transparent px-2 pt-16 pb-4 transition-all duration-1000 ease-in-out md:justify-center md:px-4 dark:from-zinc-800',
         isNewSession && 'top-0 '
       )}
     >
-      {/* {isNewSession && <ChatGreeting />} */}
       <div className="flex flex-row items-center gap-2">
         {renderScrollToBottom()}
         {renderReplyButton()}
@@ -542,7 +544,7 @@ export const ChatInput = () => {
               animate={editor?.isActive ? 'animate' : 'initial'}
               className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-2xl bg-zinc-50 dark:border-white/5 dark:bg-white/5"
             >
-              <div className="flex w-full flex-row items-end gap-0 px-3 py-2">
+              <div className="flex w-full flex-row items-end gap-0 py-2 pr-2 pl-2 md:pl-3">
                 {/* {renderNewSession()} */}
                 <EditorContent
                   editor={editor}
@@ -565,6 +567,22 @@ export const ChatInput = () => {
                   }
                 >
                   <ArrowUp size={20} weight="bold" />
+                </Button>
+              </div>
+              <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
+                <ModelSelect />
+                <QuickSettings />
+                <div className="flex-1"></div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={openFilters}
+                  className="px-1.5"
+                >
+                  <ClockClockwise size={16} weight="bold" /> History
+                  <Badge variant="outline" className="hidden md:flex">
+                    <Command size={16} weight="bold" /> K
+                  </Badge>
                 </Button>
               </div>
             </motion.div>
@@ -595,7 +613,7 @@ export const ChatInput = () => {
               <CommandList className="max-h-[160px] p-2">
                 <CommandItem onSelect={() => {}} disabled={true}>
                   <Plus size={14} weight="bold" className="flex-shrink-0" />{' '}
-                  Create New Prompt <Badge>Coming soon</Badge>
+                  Create New Prompt <ComingSoon />
                 </CommandItem>
                 {roles?.map((role, index) => (
                   <CommandItem
@@ -615,23 +633,14 @@ export const ChatInput = () => {
             </CMDKCommand>
           </PopoverContent>
         </Popover>
-        <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
-          <ModelSelect />
-
-          <div className="flex-1"></div>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={openFilters}
-            className="px-1.5"
-          >
-            <ClockClockwise size={16} weight="bold" /> History
-            <Badge>
-              <Command size={12} weight="bold" /> K
-            </Badge>
-          </Button>
-        </div>
+        {isNewSession && (
+          <div className="fixed right-0 bottom-0 left-0 flex w-full flex-row justify-center p-3 text-xs">
+            <p className="text-xs text-zinc-500/50">
+              P.S. Your data is stored locally on local storage, not in the
+              cloud.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
