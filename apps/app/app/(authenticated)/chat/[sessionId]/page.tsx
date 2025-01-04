@@ -3,11 +3,11 @@
 import { ChatInput } from '@/app/(authenticated)/chat/components/chat-input';
 import { ChatMessages } from '@/app/(authenticated)/chat/components/chat-messages';
 import { Navbar } from '@/app/(authenticated)/chat/components/navbar';
-import { useChatContext } from '@/app/context/chat/context';
+import { useSessionsContext } from '@/app/context/sessions/provider';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 
 const ChatSessionPage = () => {
-  const { isCurrentSessionLoading, isAllSessionLoading } = useChatContext();
+  const { isCurrentSessionLoading, isAllSessionLoading } = useSessionsContext();
 
   const renderLoader = () => {
     return (

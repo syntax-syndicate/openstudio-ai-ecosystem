@@ -3,7 +3,6 @@ import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
 import { defaultPreferences } from '@/app/hooks/use-preferences';
 
 import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { GearSix } from '@phosphor-icons/react';
 import { DropdownMenuSubTrigger } from '@radix-ui/react-dropdown-menu';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -97,12 +96,6 @@ export const ModelSelect = ({
             </DropdownMenuSub>
           ))}
           <DropdownMenuSeparator />
-          <DropdownMenuItem key={'manage'} onClick={() => {}}>
-            <div className="flex w-6 flex-row justify-center">
-              <GearSix size={16} weight="bold" />
-            </div>
-            Manage Models
-          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

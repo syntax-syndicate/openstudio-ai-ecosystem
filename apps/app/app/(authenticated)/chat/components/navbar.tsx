@@ -1,8 +1,8 @@
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/side-bar';
 import { useBots } from '@/app/context/bots/context';
-import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { usePrompts } from '@/app/context/prompts/context';
+import { useSessionsContext } from '@/app/context/sessions/provider';
 import { useSettings } from '@/app/context/settings/context';
 import {
   Book,
@@ -32,7 +32,7 @@ export const Navbar = () => {
   const { open: openFilters } = useFilters();
   const { open: openPrompts } = usePrompts();
   const { open: openBots } = useBots();
-  const { createSession } = useChatContext();
+  const { createSession } = useSessionsContext();
   const renderNewSession = () => {
     return (
       <Tooltip content="New Session">

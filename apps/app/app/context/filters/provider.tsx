@@ -1,9 +1,9 @@
 'use client';
 import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
-import { useChatContext } from '@/app/context/chat/context';
 import { FiltersContext } from '@/app/context/filters/context';
-import { useChatSession } from '@/app/hooks/use-chat-session';
+import { useSessionsContext } from '@/app/context/sessions/provider';
 import { useModelList } from '@/app/hooks/use-model-list';
+import { sortSessions } from '@/app/lib/helper';
 import { Plus, TrashSimple } from '@phosphor-icons/react';
 import { Moon, Sun } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -29,20 +29,19 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
   const {
     sessions,
     createSession,
-    clearChatSessions,
-    removeSession,
+    removeSessionMutation,
+    clearSessionsMutation,
     currentSession,
     refetchSessions,
-  } = useChatContext();
+  } = useSessionsContext();
   const { toast, dismiss } = useToast();
-  const { sortSessions } = useChatSession();
   const router = useRouter();
   const { getModelByKey } = useModelList();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { theme, setTheme } = useTheme();
 
   const open = () => {
-    refetchSessions();
+    refetchSessions?.();
     setIsFilterOpen(true);
   };
 
@@ -93,11 +92,13 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
               variant="default"
               onClick={() => {
                 currentSession?.id &&
-                  removeSession(currentSession?.id).then(() => {
-                    createSession({
-                      redirect: true,
-                    });
-                    dismiss();
+                  removeSessionMutation.mutate(currentSession?.id, {
+                    onSuccess() {
+                      createSession({
+                        redirect: true,
+                      });
+                      dismiss();
+                    },
                   });
               }}
             >

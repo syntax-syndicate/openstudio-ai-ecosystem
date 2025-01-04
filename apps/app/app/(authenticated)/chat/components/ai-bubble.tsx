@@ -1,6 +1,7 @@
 import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { RegenerateWithModelSelect } from '@/app/(authenticated)/chat/components/regenerate-model-select';
-import { useChatContext } from '@/app/context/chat/context';
+import { useChatContext } from '@/app/context/chat/provider';
+import { useSessionsContext } from '@/app/context/sessions/provider';
 import { useSettings } from '@/app/context/settings/context';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { useClipboard } from '@/app/hooks/use-clipboard';
@@ -52,7 +53,8 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   const { renderMarkdown, links } = useMarkdown();
   const { open: openSettings } = useSettings();
 
-  const { removeMessage, currentSession, handleRunModel } = useChatContext();
+  const { handleRunModel } = useChatContext();
+  const { currentSession, removeMessage } = useSessionsContext();
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
 
   const modelForMessage = getModelByKey(model);
@@ -139,10 +141,6 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
               {chatMessage && isLast && (
                 <RegenerateWithModelSelect
                   onRegenerate={(model: TModelKey) => {
-                    console.log(
-                      'Regenerating with model',
-                      chatMessage.sessionId
-                    );
                     handleRunModel({
                       input: chatMessage.rawHuman,
                       messageId: chatMessage.id,

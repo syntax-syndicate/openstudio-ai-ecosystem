@@ -2,9 +2,8 @@ import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble
 import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { GreetingBubble } from '@/app/(authenticated)/chat/components/greeting-bubble';
 import { useBots } from '@/app/context/bots/context';
-import { useChatContext } from '@/app/context/chat/context';
+import { useSessionsContext } from '@/app/context/sessions/provider';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
-import { useChatSession } from '@/app/hooks/use-chat-session';
 import type { TRunModel } from '@/app/hooks/use-llm';
 import type { TModelKey } from '@/app/hooks/use-model-list';
 import { removeExtraSpaces } from '@/app/lib/helper';
@@ -28,8 +27,8 @@ export type TRenderMessageProps = {
 export type TMessageListByDate = Record<string, TChatMessage[]>;
 
 export const ChatMessages = () => {
-  const { currentSession, refetchCurrentSession } = useChatContext();
-  const { updateSession } = useChatSession();
+  const { currentSession, refetchCurrentSession } = useSessionsContext();
+  const { updateSessionMutation } = useSessionsContext();
   const chatContainer = useRef<HTMLDivElement>(null);
   const { open: openBot } = useBots();
 
@@ -124,8 +123,17 @@ export const ChatMessages = () => {
                     variant="outline"
                     size="iconSm"
                     onClick={() => {
-                      updateSession(currentSession.id, { bot: undefined });
-                      refetchCurrentSession();
+                      updateSessionMutation.mutate(
+                        {
+                          sessionId: currentSession.id,
+                          session: { bot: undefined },
+                        },
+                        {
+                          onSuccess: () => {
+                            refetchCurrentSession?.();
+                          },
+                        }
+                      );
                     }}
                   >
                     <TrashSimple size={16} weight="bold" />

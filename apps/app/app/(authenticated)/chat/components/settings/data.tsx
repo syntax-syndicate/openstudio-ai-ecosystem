@@ -1,7 +1,7 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
+import { useSessionsContext } from '@/app/context/sessions/provider';
 import { useSettings } from '@/app/context/settings/context';
-import { useChatSession } from '@/app/hooks/use-chat-session';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 
 export const Data = () => {
   const { push } = useRouter();
-  const { clearSessions, createNewSession } = useChatSession();
+  const { clearSessionsMutation, createSession } = useSessionsContext();
   const { dismiss } = useSettings();
   const { toast } = useToast();
 
@@ -24,16 +24,18 @@ export const Data = () => {
           size="sm"
           variant="default"
           onClick={() => {
-            clearSessions().then(() => {
-              createNewSession().then((session) => {
+            clearSessionsMutation.mutate(undefined, {
+              onSuccess: () => {
                 toast({
                   title: 'Data Cleared',
                   description: 'All chat data has been cleared',
                   variant: 'default',
                 });
-                push(`/chat/${session?.id}`);
+                createSession({
+                  redirect: true,
+                });
                 dismiss();
-              });
+              },
             });
           }}
         >

@@ -1,43 +1,36 @@
-import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
-import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
-import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
-import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
-import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
-import { useSettings } from '@/app/context/settings/context';
 import type { TModelKey } from '@/app/hooks/use-model-list';
 import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
+import { cn } from '@repo/design-system/lib/utils';
+
 import {
+  ArrowDown,
   ArrowElbowDownRight,
   ArrowUp,
   ClockClockwise,
   Command,
-  Microphone,
-  Paperclip,
   Quotes,
-  Stop,
-  StopCircle,
   X,
 } from '@phosphor-icons/react';
-import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
-import { Badge } from '@repo/design-system/components/ui/badge';
-import { Button } from '@repo/design-system/components/ui/button';
-import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
-import { useToast } from '@repo/design-system/components/ui/use-toast';
-import { cn } from '@repo/design-system/lib/utils';
 
-import { Footer } from '@/app/(authenticated)/chat/components/footer';
-import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
+import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
+import { Badge } from '@repo/design-system/components/ui/badge';
 import { EditorContent } from '@tiptap/react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { type ChangeEvent, useEffect, useRef, useState } from 'react';
-import Resizer from 'react-image-file-resizer';
+import { useEffect, useRef, useState } from 'react';
+
+import { Footer } from '@/app/(authenticated)/chat/components/footer';
+import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
+import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
+import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
+import { useChatContext } from '@/app/context/chat/provider';
+import { usePreferenceContext } from '@/app/context/preferences/provider';
+import { useSessionsContext } from '@/app/context/sessions/provider';
+import { Button } from '@repo/design-system/components/ui/button';
 
 export type TAttachment = {
   file?: File;
@@ -48,12 +41,15 @@ export const ChatInput = () => {
   const { sessionId } = useParams();
   const { open: openFilters } = useFilters();
   const { showButton, scrollToBottom } = useScrollToBottom();
-  const { toast } = useToast();
-  const { startRecording, stopRecording, recording, text, transcribing } =
-    useRecordVoice();
   const {
-    currentSession,
-    stopGeneration,
+    renderListeningIndicator,
+    renderRecordingControls,
+    recording,
+    text,
+    transcribing,
+  } = useRecordVoice();
+  const { currentSession } = useSessionsContext();
+  const {
     editor,
     handleRunModel,
     openPromptsBotCombo,
@@ -61,78 +57,20 @@ export const ChatInput = () => {
     sendMessage,
   } = useChatContext();
   const [contextValue, setContextValue] = useState<string>('');
-  const { apiKeys } = usePreferenceContext();
+
   const { preferences } = usePreferenceContext();
-  const { open: openSettings } = useSettings();
+
   const { showPopup, selectedText, handleClearSelection } = useTextSelection();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [selectedModel, setSelectedModel] = useState<TModelKey>(
-    preferences?.defaultModel || 'gpt-3.5-turbo'
+    preferences.defaultModel
   );
-
-  const [attachment, setAttachment] = useState<TAttachment>();
 
   useEffect(() => {
     if (editor?.isActive) {
       editor.commands.focus('end');
     }
   }, [editor?.isActive]);
-
-  const resizeFile = (file: File) =>
-    new Promise((resolve) => {
-      Resizer.imageFileResizer(
-        file,
-        1000,
-        1000,
-        'JPEG',
-        100,
-        0,
-        (uri) => {
-          console.log(typeof uri);
-          resolve(uri);
-        },
-        'file'
-      );
-    });
-
-  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    const reader = new FileReader();
-
-    const fileTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    if (file && !fileTypes.includes(file?.type)) {
-      toast({
-        title: 'Invalid format',
-        description: 'Please select a valid image (JPEG, PNG, GIF).',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    reader.onload = () => {
-      if (typeof reader.result !== 'string') return;
-      const base64String = reader?.result?.split(',')[1];
-      setAttachment((prev) => ({
-        ...prev,
-        base64: `data:${file?.type};base64,${base64String}`,
-      }));
-    };
-
-    if (file) {
-      setAttachment((prev) => ({
-        ...prev,
-        file,
-      }));
-      const resizedFile = await resizeFile(file);
-
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleFileSelect = () => {
-    document.getElementById('fileInput')?.click();
-  };
 
   useEffect(() => {
     if (sessionId) {
@@ -147,7 +85,6 @@ export const ChatInput = () => {
     if (text) {
       editor?.commands.clearContent();
       editor?.commands.setContent(text);
-      console.log('Voice run', sessionId!.toString());
       handleRunModel({
         input: text,
         sessionId: sessionId!.toString(),
@@ -156,80 +93,6 @@ export const ChatInput = () => {
       editor?.commands.clearContent();
     }
   }, [text]);
-
-  const startVoiceRecording = async () => {
-    const openAIAPIKeys = apiKeys.openai;
-    if (!openAIAPIKeys) {
-      toast({
-        title: 'API key missing',
-        description:
-          'Recordings require OpenAI API key. Please check settings.',
-        variant: 'destructive',
-      });
-      openSettings('openai');
-      return;
-    }
-    if (preferences?.whisperSpeechToTextEnabled) {
-      startRecording();
-    } else {
-      toast({
-        title: 'Enable Speech to Text',
-        description:
-          'Recordings require Speech to Text enabled. Please check settings.',
-        variant: 'destructive',
-      });
-      openSettings('voice-input');
-    }
-  };
-
-  const renderRecordingControls = () => {
-    if (recording) {
-      return (
-        <>
-          <Button
-            variant="ghost"
-            size="iconSm"
-            onClick={() => {
-              stopRecording();
-            }}
-          >
-            <StopCircle size={20} weight="fill" className="text-red-300" />
-          </Button>
-        </>
-      );
-    }
-
-    return (
-      <Tooltip content="Record">
-        <Button
-          size="icon"
-          variant="ghost"
-          className="h-8 min-w-8"
-          onClick={startVoiceRecording}
-        >
-          <Microphone size={20} weight="bold" />
-        </Button>
-      </Tooltip>
-    );
-  };
-
-  const renderListeningIndicator = () => {
-    if (transcribing) {
-      return (
-        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-4 py-1 text-sm text-white md:text-base dark:bg-zinc-900">
-          <AudioWaveSpinner /> <p>Transcribing ...</p>
-        </div>
-      );
-    }
-    if (recording) {
-      return (
-        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-2 py-1 pr-4 text-sm text-white md:text-base dark:bg-zinc-900">
-          <AudioWaveSpinner />
-          <p>Listening ...</p>
-        </div>
-      );
-    }
-  };
 
   const renderScrollToBottom = () => {
     if (showButton && !showPopup && !recording && !transcribing) {
@@ -271,56 +134,6 @@ export const ChatInput = () => {
     }
   };
 
-  const renderStopButton = () => {
-    return (
-      <motion.span
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0, opacity: 0 }}
-      >
-        <Button
-          onClick={() => {
-            stopGeneration();
-          }}
-          variant="secondary"
-          size="sm"
-        >
-          <Stop size={20} weight="bold" /> Stop
-        </Button>
-      </motion.span>
-    );
-  };
-
-  const renderAttachedImage = () => {
-    if (attachment?.base64 && attachment?.file) {
-      return (
-        <div className="flex h-10 w-full flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300 md:w-[700px]">
-          <ArrowElbowDownRight size={20} weight="bold" />
-          <p className="relative ml-2 flex w-full flex-row items-center gap-2 text-sm md:text-base">
-            <Image
-              src={attachment.base64}
-              alt="uploaded image"
-              className="tanslate-y-[50%] absolute h-[60px] min-w-[60px] rotate-6 rounded-xl border border-white/5 object-cover shadow-md"
-              width={0}
-              height={0}
-            />
-            <span className="ml-[70px]">{attachment?.file?.name}</span>
-          </p>
-          <Button
-            size={'iconSm'}
-            variant="ghost"
-            onClick={() => {
-              setContextValue('');
-            }}
-            className="ml-4 flex-shrink-0"
-          >
-            <X size={16} weight="bold" />
-          </Button>
-        </div>
-      );
-    }
-  };
-
   const renderSelectedContext = () => {
     if (contextValue) {
       return (
@@ -344,35 +157,6 @@ export const ChatInput = () => {
     }
   };
 
-  const renderFileUpload = () => {
-    return (
-      <>
-        <input
-          type="file"
-          id="fileInput"
-          className="hidden"
-          onChange={handleImageUpload}
-        />
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleFileSelect}
-          className="px-1.5"
-        >
-          <Paperclip size={16} weight="bold" /> Attach
-        </Button>
-      </>
-    );
-  };
-
-  const clearInput = () => {
-    editor?.commands.clearContent();
-  };
-
-  const focusToInput = () => {
-    editor?.commands.focus('end');
-  };
-
   return (
     <div
       className={cn(
@@ -388,13 +172,12 @@ export const ChatInput = () => {
 
       <div className="flex w-full flex-col gap-1 md:w-[700px]">
         {renderSelectedContext()}
-        {renderAttachedImage()}
         {editor && (
           <PromptsBotsCombo
             open={openPromptsBotCombo}
             onBack={() => {
-              clearInput();
-              focusToInput();
+              editor?.commands.clearContent();
+              editor?.commands.focus('end');
             }}
             onPromptSelect={(prompt) => {
               editor?.commands.setContent(prompt.content);
@@ -422,6 +205,9 @@ export const ChatInput = () => {
                     console.log('keydown', e.key);
                     if (e.key === 'Enter' && !e.shiftKey) {
                       sendMessage();
+                    }
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
                     }
                   }}
                   className="no-scrollbar [&>*]:no-scrollbar wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-6 [&>*]:outline-none"

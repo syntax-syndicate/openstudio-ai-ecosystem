@@ -4,14 +4,12 @@ import type { LLMResult } from '@langchain/core/outputs';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 
 import { usePreferenceContext } from '@/app/context/preferences/provider';
-import {
-  type TChatMessage,
-  type TChatSession,
-  useChatSession,
-} from '@/app/hooks/use-chat-session';
+import { useSessionsContext } from '@/app/context/sessions/provider';
+import type { TChatMessage, TChatSession } from '@/app/hooks/use-chat-session';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
 import { defaultPreferences } from '@/app/hooks/use-preferences';
 import { useTools } from '@/app/hooks/use-tools';
+import { sortMessages } from '@/app/lib/helper';
 import {
   type BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
@@ -35,8 +33,8 @@ export type TUseLLM = {
 };
 
 export const useLLM = ({ onChange }: TUseLLM) => {
-  const { getSessionById, addMessageToSession, sortMessages, updateSession } =
-    useChatSession();
+  const { addMessageToSession, getSessionById, updateSessionMutation } =
+    useSessionsContext();
   const { apiKeys, preferences } = usePreferenceContext();
   const { createInstance, getModelByKey } = useModelList();
   const abortController = new AbortController();
@@ -109,10 +107,10 @@ export const useLLM = ({ onChange }: TUseLLM) => {
 
   const runModel = async (props: TRunModel) => {
     const { sessionId, messageId, input, context, image, model } = props;
-    const currentSession = await getSessionById(sessionId);
 
+    const selectedSession = await getSessionById(sessionId);
     console.log('run model', props);
-    console.log('current session', currentSession);
+    console.log('current session', selectedSession);
 
     if (!input) {
       return;
@@ -122,7 +120,7 @@ export const useLLM = ({ onChange }: TUseLLM) => {
     const modelKey = model || preferences.defaultModel;
 
     const allPreviousMessages =
-      currentSession?.messages?.filter((m) => m.id !== messageId) || [];
+      selectedSession?.messages?.filter((m) => m.id !== messageId) || [];
     const chatHistory = sortMessages(allPreviousMessages, 'createdAt');
     const plugins = preferences.defaultPlugins || [];
 
@@ -163,8 +161,8 @@ export const useLLM = ({ onChange }: TUseLLM) => {
       context: context,
       image,
       history:
-        currentSession?.messages?.filter((m) => m.id !== messageId) || [],
-      bot: currentSession?.bot,
+        selectedSession?.messages?.filter((m) => m.id !== messageId) || [],
+      bot: selectedSession?.bot,
     });
 
     const selectedModel = await createInstance(selectedModelKey, apiKey);
@@ -205,7 +203,6 @@ export const useLLM = ({ onChange }: TUseLLM) => {
         tools: availableTools,
       });
     }
-
     const chainWithoutTools = prompt.pipe(selectedModel as any);
 
     let streamedMessage = '';
@@ -217,6 +214,7 @@ export const useLLM = ({ onChange }: TUseLLM) => {
       !!availableTools?.length && agentExecutor
         ? agentExecutor
         : chainWithoutTools;
+
     const stream: any = await executor.invoke(
       {
         chat_history: previousAllowedChatHistory || [],
@@ -385,10 +383,12 @@ export const useLLM = ({ onChange }: TUseLLM) => {
       console.log('title generation', generation);
 
       const newTitle = generation?.content?.toString() || session.title;
-      await updateSession(
+      await updateSessionMutation.mutate({
         sessionId,
-        newTitle ? { title: newTitle, updatedAt: moment().toISOString() } : {}
-      );
+        session: newTitle
+          ? { title: newTitle, updatedAt: moment().toISOString() }
+          : {},
+      });
     } catch (e) {
       console.error(e);
       return firstMessage.rawHuman;
