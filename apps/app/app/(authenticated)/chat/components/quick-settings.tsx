@@ -70,13 +70,13 @@ export const QuickSettings = () => {
               }}
             />
             <div className="flex w-full flex-row justify-between">
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Precise
               </p>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Neutral
               </p>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Creative
               </p>
             </div>
@@ -103,13 +103,13 @@ export const QuickSettings = () => {
               }}
             />
             <div className="flex w-full flex-row justify-between">
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Precise
               </p>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Neutral
               </p>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Creative
               </p>
             </div>
@@ -135,10 +135,10 @@ export const QuickSettings = () => {
               }}
             />
             <div className="flex w-full flex-row justify-between">
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Precise
               </p>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Creative
               </p>
             </div>
@@ -164,10 +164,10 @@ export const QuickSettings = () => {
               }}
             />
             <div className="flex w-full flex-row justify-between">
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Precise
               </p>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-600">
+              <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-600">
                 Creative
               </p>
             </div>
