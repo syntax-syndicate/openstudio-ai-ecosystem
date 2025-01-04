@@ -328,7 +328,6 @@ export const ChatInput = () => {
             onClick={() => {
               stopRecording();
             }}
-            onTouchStart={stopRecording}
           >
             <StopCircle size={20} weight="fill" className="text-red-300" />
           </Button>
@@ -343,7 +342,6 @@ export const ChatInput = () => {
           variant="ghost"
           className="h-8 min-w-8"
           onClick={startVoiceRecording}
-          onTouchStart={startVoiceRecording}
         >
           <Microphone size={20} weight="bold" />
         </Button>
