@@ -1,9 +1,9 @@
 'use client';
+import { usePreferences } from '@/app/hooks/use-preferences';
 import { blobToBase64, createMediaStream } from '@/app/lib/record';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { OpenAI, toFile } from 'openai';
-import { useRef, useState, useEffect } from 'react';
-import { usePreferences } from '@/app/hooks/use-preferences';
+import { useEffect, useRef, useState } from 'react';
 
 interface UseRecordVoiceResult {
   recording: boolean;
@@ -14,7 +14,7 @@ interface UseRecordVoiceResult {
 }
 
 export const useRecordVoice = (): UseRecordVoiceResult => {
-  const [text, setText] = useState<string>("");
+  const [text, setText] = useState<string>('');
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
   );
@@ -46,10 +46,10 @@ export const useRecordVoice = (): UseRecordVoiceResult => {
     try {
       setIsTranscribing(true);
 
-      const apiKey = await getApiKey("openai");
+      const apiKey = await getApiKey('openai');
 
       if (!apiKey) {
-        throw new Error("API key not found");
+        throw new Error('API key not found');
       }
 
       const openai = new OpenAI({
@@ -57,22 +57,22 @@ export const useRecordVoice = (): UseRecordVoiceResult => {
         dangerouslyAllowBrowser: true,
       });
 
-      const audioBuffer = Buffer.from(base64data, "base64");
+      const audioBuffer = Buffer.from(base64data, 'base64');
 
       const transcription = await openai.audio.transcriptions.create({
-        file: await toFile(audioBuffer, "audio.wav", {
-          type: "audio/wav",
+        file: await toFile(audioBuffer, 'audio.wav', {
+          type: 'audio/wav',
         }),
-        model: "whisper-1",
+        model: 'whisper-1',
       });
 
       setText(transcription?.text);
     } catch (error) {
       console.error(error);
       toast({
-        title: "Failed to transcribe",
-        description: "Something went wrong. Check your openai settings.",
-        variant: "destructive",
+        title: 'Failed to transcribe',
+        description: 'Something went wrong. Check your openai settings.',
+        variant: 'destructive',
       });
     } finally {
       setIsTranscribing(false);
@@ -92,7 +92,7 @@ export const useRecordVoice = (): UseRecordVoiceResult => {
     };
 
     mediaRecorder.onstop = () => {
-      const audioBlob = new Blob(chunks.current, { type: "audio/wav" });
+      const audioBlob = new Blob(chunks.current, { type: 'audio/wav' });
 
       blobToBase64(audioBlob, getText);
     };
@@ -101,7 +101,7 @@ export const useRecordVoice = (): UseRecordVoiceResult => {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then(initialMediaRecorder)
