@@ -48,7 +48,7 @@ const CommandInput = React.forwardRef<
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+        "flex h-10 w-full rounded-md bg-transparent py-3 text-sm md:text-base outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
@@ -80,7 +80,7 @@ const CommandEmpty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className="py-6 text-center text-sm"
+    className="py-6 text-center text-sm md:text-base"
     {...props}
   />
 ))
@@ -94,7 +94,7 @@ const CommandGroup = React.forwardRef<
   <CommandPrimitive.Group
     ref={ref}
     className={cn(
-       "overflow-hidden text-foreground [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium dark:[&_[cmdk-group-heading]]:text-white/30 [&_[cmdk-group-heading]]:text-zinc-800/50",
+      "overflow-hidden text-foreground [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-sm md:text-base [&_[cmdk-group-heading]]:font-medium dark:[&_[cmdk-group-heading]]:text-white/30 [&_[cmdk-group-heading]]:text-zinc-800/50",
       className
     )}
     {...props}
@@ -122,7 +122,7 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-       "relative flex cursor-pointer gap-2 text-zinc-800 dark:text-zinc-100 items-center rounded-xl !px-3 py-1.5 min-h-10 text-sm outline-none aria-selected:bg-zinc-100 dark:aria-selected:bg-zinc-900/50 aria-selected:text-zinc-800 aria-disabled:opacity-50 aria-disabled:pointer-events-none dark:aria-selected:text-zinc-100",
+      "relative flex cursor-pointer gap-2 text-zinc-800 dark:text-zinc-100 items-center rounded-xl !px-3 py-1.5 min-h-10 text-sm md:text-base outline-none aria-selected:bg-zinc-100 dark:aria-selected:bg-zinc-900/50 aria-selected:text-zinc-800 aria-disabled:opacity-50 aria-disabled:pointer-events-none dark:aria-selected:text-zinc-100",
       className
     )}
     {...props}
@@ -138,7 +138,7 @@ const CommandShortcut = ({
   return (
     <span
       className={cn(
-        "ml-auto text-xs tracking-widest text-muted-foreground",
+        "ml-auto text-sm md:text-base tracking-widest text-muted-foreground",
         className
       )}
       {...props}

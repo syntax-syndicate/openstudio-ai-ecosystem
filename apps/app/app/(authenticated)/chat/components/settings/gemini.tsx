@@ -27,7 +27,7 @@ export const GeminiSettings = () => {
         Google Gemini Settings
       </p>
       <div className="flex flex-row items-end justify-between">
-        <p className="text-xs text-zinc-500">Google Gemini API Key</p>
+        <p className="text-sm md:text-base text-zinc-500">Google Gemini API Key</p>
       </div>
       <Input
         placeholder="xxxxxxxxxxxxxxxxxxxxxxxx"

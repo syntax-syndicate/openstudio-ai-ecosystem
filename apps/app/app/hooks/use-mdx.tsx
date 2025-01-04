@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
 import type { JSX } from 'react';
-import { CodeBlock } from '../(authenticated)/chat/components/codeblock';
+import { CodeBlock } from '@/app/(authenticated)/chat/components/codeblock';
 
 const VARIANTS = {
   hidden: { opacity: 0 },
@@ -26,7 +26,7 @@ export const useMarkdown = () => {
           </motion.span>
         ),
         paragraph: (children) => (
-          <p className="text-sm leading-7">{children}</p>
+          <p className="text-sm md:text-base leading-7">{children}</p>
         ),
         heading: (children, level) => {
           const Heading = `h${level}` as keyof JSX.IntrinsicElements;
@@ -42,7 +42,7 @@ export const useMarkdown = () => {
         ),
         blockquote: (children) => (
           <blockquote className="border-gray-300 border-l-4 pl-4 italic">
-            <p className="text-sm leading-7 ">{children}</p>
+            <p className="text-sm md:text-base leading-7 ">{children}</p>
           </blockquote>
         ),
         list: (children, ordered) =>
@@ -53,7 +53,7 @@ export const useMarkdown = () => {
           ),
         listItem: (children) => (
           <li className="my-4">
-            <p className="text-sm leading-7 ">{children}</p>
+            <p className="text-sm md:text-base leading-7 ">{children}</p>
           </li>
         ),
         strong: (children) => (
@@ -65,20 +65,20 @@ export const useMarkdown = () => {
           </div>
         ),
         codespan: (code) => (
-          <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-xs text-zinc-800 dark:bg-white/10 dark:text-white">
+          <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-xs md:text-sm text-zinc-800 dark:bg-white/10 dark:text-white">
             {code}
           </span>
         ),
         table: (children) => (
           <div className="my-3 overflow-x-auto rounded-xl border border-zinc-100 dark:border-white/10 ">
-            <table className="w-full overflow-hidden text-left text-gray-600 text-sm rtl:text-right dark:text-gray-200">
+            <table className="w-full overflow-hidden text-left text-gray-600 text-sm md:text-base rtl:text-right dark:text-gray-200">
               {children}
             </table>
           </div>
         ),
         tableHeader(children) {
           return (
-            <thead className="w-full bg-zinc-50 font-medium text-xs text-zinc-800 uppercase dark:bg-white/10 dark:text-white/20">
+            <thead className="w-full bg-zinc-50 font-medium text-sm md:text-base text-zinc-800 uppercase dark:bg-white/10 dark:text-white/20">
               {children}
             </thead>
           );
@@ -90,9 +90,9 @@ export const useMarkdown = () => {
         },
         tableCell(children, flags) {
           if (flags.header) {
-            return <th className="p-3 text-xs">{children}</th>;
+            return <th className="p-3 text-sm md:text-base">{children}</th>;
           }
-          return <td className="p-3 text-sm">{children}</td>;
+          return <td className="p-3 text-sm md:text-base">{children}</td>;
         },
         tableBody: (children) => <tbody>{children}</tbody>,
       }}

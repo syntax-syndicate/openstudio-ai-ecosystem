@@ -384,14 +384,14 @@ export const ChatInput = () => {
   const renderListeningIndicator = () => {
     if (transcribing) {
       return (
-        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-4 py-1 text-sm text-white dark:bg-zinc-900">
+        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-4 py-1 text-sm md:text-base text-white dark:bg-zinc-900">
           <AudioWaveSpinner /> <p>Transcribing ...</p>
         </div>
       );
     }
     if (recording) {
       return (
-        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-2 py-1 pr-4 text-sm text-white dark:bg-zinc-900">
+        <div className="flex h-10 flex-row items-center gap-2 rounded-full bg-zinc-800 px-2 py-1 pr-4 text-sm md:text-base text-white dark:bg-zinc-900">
           <AudioWaveSpinner />
           <p>Listening ...</p>
         </div>
@@ -464,7 +464,7 @@ export const ChatInput = () => {
       return (
         <div className="flex h-10 w-full flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300 md:w-[700px]">
           <ArrowElbowDownRight size={20} weight="bold" />
-          <p className="relative ml-2 flex w-full flex-row items-center gap-2 text-xs">
+          <p className="relative ml-2 flex w-full flex-row items-center gap-2 text-sm md:text-base">
             <Image
               src={attachment.base64}
               alt="uploaded image"
@@ -494,7 +494,7 @@ export const ChatInput = () => {
       return (
         <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
           <ArrowElbowDownRight size={16} weight="fill" />
-          <p className="ml-2 w-full overflow-hidden truncate text-sm ">
+          <p className="ml-2 w-full overflow-hidden truncate text-sm md:text-base">
             {contextValue}
           </p>
           <Button
@@ -571,7 +571,7 @@ export const ChatInput = () => {
                 <EditorContent
                   editor={editor}
                   autoFocus
-                  className="wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none [&>*]:leading-6 [&>*]:outline-none"
+                  className="wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm md:text-base outline-none focus:outline-none [&>*]:leading-6 [&>*]:outline-none"
                 />
 
                 {renderRecordingControls()}

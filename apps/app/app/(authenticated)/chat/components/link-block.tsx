@@ -76,17 +76,17 @@ export const LinkBlock = ({ url }: TLinkBlock) => {
             className="h-6 min-w-6 rounded-md border border-black/10 object-cover"
           />
           <div className="flex w-full flex-col items-start gap-1">
-            <p className="w-full overflow-hidden truncate text-sm text-zinc-800">
+            <p className="w-full overflow-hidden truncate text-sm md:text-base text-zinc-800">
               {ogResult.ogTitle}
             </p>
-            <p className="text-xs text-zinc-400">{ogResult.ogUrl}</p>
+            <p className="text-sm md:text-base text-zinc-400">{ogResult.ogUrl}</p>
           </div>
         </div>,
         ogResult.ogUrl
       )
     : renderConatiner(
         <div>
-          <p className="text-xs text-zinc-400">{url}</p>
+          <p className="text-sm md:text-base text-zinc-400">{url}</p>
         </div>,
         url
       );

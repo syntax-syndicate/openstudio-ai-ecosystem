@@ -148,7 +148,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
               >
                 {getModelByKey(session.messages?.[0]?.model)?.icon()}
                 <span className="w-full truncate">{session.title}</span>
-                <span className="flex-shrink-0 pl-4 text-xs text-zinc-400 dark:text-zinc-700">
+                <span className="flex-shrink-0 pl-4 text-sm md:text-base text-zinc-400 dark:text-zinc-700">
                   {moment(session.createdAt).fromNow(true)}
                 </span>
               </CommandItem>
