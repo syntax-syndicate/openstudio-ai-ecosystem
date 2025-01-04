@@ -49,7 +49,7 @@ export type TChatSession = {
   updatedAt?: string;
 };
 
-export const useChatSession = () => {
+export const useChatSession = (id?: string) => {
   const getSessions = async (): Promise<TChatSession[]> => {
     return (await get('chat-sessions')) || [];
   };
@@ -233,16 +233,14 @@ export const useChatSession = () => {
     },
   });
 
-  const getSessionByIdQuery = (id?: string) =>
-    useQuery({
-      queryKey: ['chat-session', id],
-      queryFn: async () => {
-        if (!id) return;
-        return await getSessionById(id);
-      },
-
-      enabled: !!id,
-    });
+  const getSessionByIdQuery = useQuery({
+    queryKey: ['chat-session', id],
+    queryFn: async () => {
+      if (!id) return;
+      return await getSessionById(id);
+    },
+    enabled: !!id,
+  });
 
   const createNewSessionMutation = useMutation({
     mutationFn: async (bot?: TBot) => await createNewSession(bot),
