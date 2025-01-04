@@ -5,6 +5,8 @@ import { Browser, Calculator, Globe } from '@phosphor-icons/react';
 import axios from 'axios';
 import type { ReactNode } from 'react';
 import { z } from 'zod';
+import { useSettings } from '@/app/context/settings/context';
+import { usePreferences } from '@/app/hooks/use-preferences';
 
 const calculatorTool = () => {
   const calculatorSchema = z.object({
@@ -44,7 +46,7 @@ const webSearchTool = (preference: TPreferences) => {
   return new DynamicStructuredTool({
     name: 'web_search',
     description:
-      'A search engine optimized for comprehensive, accurate, and trusted results. Useful for when you need to answer questions about current events. Input should be a search query.',
+       "A search engine optimized for comprehensive, accurate, and trusted results. Useful for when you need to answer question about current event. Input should be a search query and use this tool if you don't know the answer.",
     schema: webSearchSchema,
     func: async ({ input }, runManager) => {
       const url = 'https://www.googleapis.com/customsearch/v1';
@@ -150,6 +152,8 @@ export type TTool = {
   loadingMessage?: string;
   resultMessage?: string;
   isBeta?: boolean;
+  validate?: () => Promise<boolean>;
+  validationFailedAction?: () => void;
   //TODO: type should be zod object
   tool: (arg?: any) => DynamicStructuredTool<any>;
   icon: (size: IconSize) => ReactNode;
@@ -157,6 +161,8 @@ export type TTool = {
 };
 
 export const useTools = () => {
+  const { getPreferences } = usePreferences();
+  const { open } = useSettings();
   const tools: TTool[] = [
     {
       key: 'calculator',
@@ -172,6 +178,19 @@ export const useTools = () => {
       tool: webSearchTool,
       name: 'Google Search',
       isBeta: true,
+      validate: async () => {
+        const prefrences = await getPreferences();
+        if (
+          !prefrences.googleSearchApiKey ||
+          !prefrences.googleSearchEngineId
+        ) {
+          return false;
+        }
+        return true;
+      },
+      validationFailedAction: () => {
+        open("web-search");
+      },
       loadingMessage: 'Searching on web...',
       resultMessage: 'Results from Google Search',
       icon: (size: IconSize) => <ModelIcon type="websearch" size={size} />,

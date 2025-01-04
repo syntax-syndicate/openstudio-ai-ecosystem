@@ -24,16 +24,19 @@ async function scrapeWebsite(url: string) {
   await browser.close();
   return cleanedContent;
 }
+
 export async function POST(req: NextRequest, resp: NextResponse) {
   const { url } = await req.json();
   if (!url) {
     return Response.json({ error: 'No URL provided' }, { status: 401 });
   }
   const htmlContent = await scrapeWebsite(url);
-  console.log(htmlContent);
+  
   if (!htmlContent) {
     return Response.json({ error: 'Error fetching content' }, { status: 500 });
   }
   const markdownContent = turndownService.turndown(htmlContent);
+
+  console.log(markdownContent);
   return NextResponse.json({ text: markdownContent });
 }

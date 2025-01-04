@@ -81,6 +81,8 @@ export const useChatSession = () => {
             updatedAt: moment().toISOString(),
           };
         }
+
+        console.log("new message", chatMessage);
         return {
           ...session,
           messages: [chatMessage],

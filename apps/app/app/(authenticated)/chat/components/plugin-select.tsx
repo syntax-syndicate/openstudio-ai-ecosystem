@@ -55,19 +55,25 @@ export const PluginSelect = ({ selectedModel }: TPluginSelect) => {
             {tools.map((tool) => (
               <div
                 key={tool.key}
-                className="flex w-full flex-row gap-2 rounded-2xl p-2 text-xs hover:bg-zinc-50 md:text-sm dark:hover:bg-black/30"
+                className="flex text-xs md:text-sm gap-2 flex-row items-center w-full p-2 hover:bg-zinc-50 dark:hover:bg-black/30 rounded-2xl"
               >
                 {tool.icon('md')} {tool.name} <span className="flex-1" />
                 <Switch
                   checked={selectedPlugins.includes(tool.key)}
                   onCheckedChange={(checked) => {
-                    getPreferences().then((preferences) => {
+                    getPreferences().then(async (preferences) => {
                       const defaultPlugins = preferences.defaultPlugins || [];
+                      const isValidated = await tool?.validate?.();
+
                       if (checked) {
-                        setPreferences({
-                          defaultPlugins: [...defaultPlugins, tool.key],
-                        });
-                        setSelectedPlugins([...selectedPlugins, tool.key]);
+                        if (tool?.validate === undefined || isValidated) {
+                          setPreferences({
+                            defaultPlugins: [...defaultPlugins, tool.key],
+                          });
+                          setSelectedPlugins([...selectedPlugins, tool.key]);
+                        } else {
+                          tool?.validationFailedAction?.();
+                        }
                       } else {
                         setPreferences({
                           defaultPlugins: defaultPlugins.filter(

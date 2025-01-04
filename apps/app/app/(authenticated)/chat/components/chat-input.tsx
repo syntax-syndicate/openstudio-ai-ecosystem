@@ -1,5 +1,4 @@
 import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
-import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
 import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
@@ -515,7 +514,7 @@ export const ChatInput = () => {
         {renderReplyButton()}
         {renderListeningIndicator()}
       </div>
-      <div className="flex flex-col items-center justify-center">
+      {/* <div className="flex flex-col items-center justify-center">
         <ChatExamples
           show={isNewSession}
           onExampleClick={(prompt) => {
@@ -525,7 +524,7 @@ export const ChatInput = () => {
             });
           }}
         />
-      </div>
+      </div> */}
       <div className="flex w-full flex-col gap-1 md:w-[700px]">
         {renderSelectedContext()}
         {renderAttachedImage()}
