@@ -32,6 +32,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
     clearChatSessions,
     removeSession,
     currentSession,
+    refetchSessions,
   } = useChatContext();
   const { toast, dismiss } = useToast();
   const { sortSessions } = useChatSession();
@@ -40,7 +41,10 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { theme, setTheme } = useTheme();
 
-  const open = () => setIsFilterOpen(true);
+  const open = () => {
+    refetchSessions();
+    setIsFilterOpen(true);
+  };
 
   const onClose = () => setIsFilterOpen(false);
 
@@ -60,10 +64,10 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
       name: 'New session',
       icon: Plus,
       action: () => {
-        createSession().then((session) => {
-          router.push(`/chat/${session.id}`);
-          onClose();
+        createSession({
+          redirect: true,
         });
+        onClose();
       },
     },
     {
@@ -90,10 +94,10 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
               onClick={() => {
                 currentSession?.id &&
                   removeSession(currentSession?.id).then(() => {
-                    createSession().then((session) => {
-                      router.push(`/chat/${session.id}`);
-                      dismiss();
+                    createSession({
+                      redirect: true,
                     });
+                    dismiss();
                   });
               }}
             >

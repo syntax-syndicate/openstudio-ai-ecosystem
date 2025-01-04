@@ -19,7 +19,7 @@ import { useSettings } from '@/app/context/settings/context';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { usePreferences } from '@/app/hooks/use-preferences';
 import { removeExtraSpaces } from '@/app/lib/helper';
-import { EnterKey, ShiftEnterToLineBreak } from '@/app/lib/tiptap-extensions';
+import { ShiftEnterToLineBreak } from '@/app/lib/tiptap-extensions';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import HardBreak from '@tiptap/extension-hard-break';
 import Text from '@tiptap/extension-text';
@@ -45,7 +45,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
   const [currentSession, setCurrentSession] = useState<
     TChatSession | undefined
   >();
-  const { push } = useRouter();
+  const { push, refresh } = useRouter();
   const { getPreferences, getApiKey } = usePreferences();
   const { getModelByKey } = useModelList();
   const { toast } = useToast();
@@ -77,6 +77,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         messages: [...session.messages, props],
       };
     });
+    fetchAllSessions();
   };
 
   const { runModel, stopGeneration } = useLLM({
@@ -94,6 +95,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
       } else {
         createNewSession().then((session) => {
           push(`/chat/${session.id}`);
+          refresh();
         });
       }
     });
@@ -113,11 +115,13 @@ export const ChatProvider = ({ children }: TChatProvider) => {
     setAllSessionLoading(false);
   };
 
-  const createSession = async (bot?: TBot, redirect?: boolean) => {
+  const createSession = async (props: { bot?: TBot; redirect?: boolean }) => {
+    const { bot, redirect } = props;
     const newSession = await createNewSession(bot);
-    fetchAllSessions();
-    redirect && push(`/chat/${newSession.id}`);
-    return newSession;
+    if (redirect) {
+      push(`/chat/${newSession.id}`);
+      refresh();
+    }
   };
 
   useEffect(() => {
@@ -153,6 +157,9 @@ export const ChatProvider = ({ children }: TChatProvider) => {
   };
 
   const handleRunModel = (props: TRunModel, clear?: () => void) => {
+    console.log('sessionId', sessionId);
+    console.log('currentSession', currentSession);
+    console.log('handleRun', props);
     if (!props?.input) {
       return;
     }
@@ -214,19 +221,6 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         placeholder: 'Type / or Enter prompt here...',
       }),
       ShiftEnterToLineBreak,
-      EnterKey((editor) => {
-        handleRunModel(
-          {
-            input: editor.getText(),
-            sessionId: sessionId!.toString(),
-          },
-          () => {
-            editor.commands.clearContent();
-            editor.commands.insertContent('');
-            editor.commands.focus('end');
-          }
-        );
-      }),
       Highlight.configure({
         HTMLAttributes: {
           class: 'prompt-highlight',
@@ -261,6 +255,24 @@ export const ChatProvider = ({ children }: TChatProvider) => {
     },
   });
 
+  const sendMessage = async () => {
+    if (!editor) {
+      return;
+    }
+    console.log('send button click', sessionId);
+    handleRunModel(
+      {
+        input: editor.getText(),
+        sessionId: sessionId!.toString(),
+      },
+      () => {
+        editor.commands.clearContent();
+        editor.commands.insertContent('');
+        editor.commands.focus('end');
+      }
+    );
+  };
+
   return (
     <ChatContext.Provider
       value={{
@@ -275,6 +287,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         clearChatSessions,
         removeSession,
         currentSession,
+        sendMessage,
         stopGeneration,
         removeMessage,
         openPromptsBotCombo,

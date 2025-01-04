@@ -35,6 +35,9 @@ export const useMarkdown = () => {
         paragraph: (children) => (
           <p className="text-sm leading-7 md:text-base">{children}</p>
         ),
+        em: (children) => (
+          <em className="text-sm italic opacity-50 md:text-base">{children}</em>
+        ),
         heading: (children, level) => {
           const Heading = `h${level}` as keyof JSX.IntrinsicElements;
           return (

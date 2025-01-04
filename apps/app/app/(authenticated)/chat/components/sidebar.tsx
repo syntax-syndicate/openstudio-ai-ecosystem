@@ -9,7 +9,9 @@ export const Sidebar = () => {
     <div className="flex h-[100dvh] w-[250px] flex-col">
       <Button
         onClick={() => {
-          createSession();
+          createSession({
+            redirect: true,
+          });
         }}
       >
         New Session

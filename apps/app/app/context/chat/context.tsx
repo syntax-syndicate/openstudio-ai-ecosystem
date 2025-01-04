@@ -11,7 +11,7 @@ export type TChatContext = {
   refetchSessions: () => void;
   isAllSessionLoading: boolean;
   isCurrentSessionLoading: boolean;
-  createSession: (bot?: TBot, redirect?: boolean) => Promise<TChatSession>;
+  createSession: (props: { bot?: TBot; redirect?: boolean }) => Promise<void>;
   removeSession: (sessionId: string) => Promise<void>;
   clearChatSessions: () => Promise<void>;
   currentSession: TChatSession | undefined;
@@ -22,6 +22,7 @@ export type TChatContext = {
   refetchCurrentSession: () => Promise<void>;
   handleRunModel: (props: TRunModel, clear?: () => void) => void;
   removeMessage: (messageId: string) => void;
+  sendMessage: () => void;
 };
 export const ChatContext = createContext<TChatContext | undefined>(undefined);
 export const useChatContext = () => {

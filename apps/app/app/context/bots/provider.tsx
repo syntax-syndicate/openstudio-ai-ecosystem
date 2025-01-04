@@ -59,7 +59,10 @@ export const BotsProvider = ({ children }: TBotsProvider) => {
 
   const assignBot = (bot: TBot) => {
     if (currentSession?.messages?.length) {
-      createSession(bot, true);
+      createSession({
+        bot,
+        redirect: true,
+      });
     } else {
       currentSession?.id &&
         updateSession(currentSession?.id, { bot }).then(() => {

@@ -23,7 +23,6 @@ import {
 } from '@repo/design-system/components/ui/dropdown-menu';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useTheme } from 'next-themes';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export const Navbar = () => {
@@ -33,7 +32,6 @@ export const Navbar = () => {
   const { open: openFilters } = useFilters();
   const { open: openPrompts } = usePrompts();
   const { open: openBots } = useBots();
-  const { push } = useRouter();
   const { createSession } = useChatContext();
   const renderNewSession = () => {
     return (
@@ -43,8 +41,8 @@ export const Navbar = () => {
           variant={'ghost'}
           className="h-8 min-w-8"
           onClick={() => {
-            createSession().then((session) => {
-              push(`/chat/${session.id}`);
+            createSession({
+              redirect: true,
             });
           }}
         >
