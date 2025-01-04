@@ -1,8 +1,9 @@
+'use client';
 import { usePreferences } from '@/app/hooks/use-preferences';
 import { blobToBase64, createMediaStream } from '@/app/lib/record';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { OpenAI, toFile } from 'openai';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface UseRecordVoiceResult {
   recording: boolean;
@@ -11,6 +12,7 @@ interface UseRecordVoiceResult {
   transcribing: boolean;
   text: string;
 }
+
 export const useRecordVoice = (): UseRecordVoiceResult => {
   const [text, setText] = useState<string>('');
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
@@ -20,15 +22,51 @@ export const useRecordVoice = (): UseRecordVoiceResult => {
   const { getApiKey } = usePreferences();
   const [recording, setRecording] = useState<boolean>(false);
   const [transcribing, setIsTranscribing] = useState<boolean>(false);
+
   const isRecording = useRef<boolean>(false);
   const chunks = useRef<Blob[]>([]);
-  const startRecording = (): void => {
-    if (mediaRecorder) {
+
+  const startRecording = async (): Promise<void> => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.onstart = () => {
+        createMediaStream(stream, true, (peak) => {});
+        chunks.current = [];
+      };
+
+      mediaRecorder.ondataavailable = (ev: BlobEvent) => {
+        chunks.current.push(ev.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(chunks.current, { type: 'audio/wav' });
+        blobToBase64(audioBlob, getText);
+      };
+
+      setMediaRecorder(mediaRecorder);
       isRecording.current = true;
       mediaRecorder.start();
       setRecording(true);
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+      toast({
+        title: 'Microphone access denied',
+        description: 'Please grant microphone access to record audio.',
+        variant: 'destructive',
+      });
     }
   };
+
+  // const startRecording = (): void => {
+  //   if (mediaRecorder) {
+  //     isRecording.current = true;
+  //     mediaRecorder.start();
+  //     setRecording(true);
+  //   }
+  // };
+
   const stopRecording = (): void => {
     if (mediaRecorder) {
       isRecording.current = false;
@@ -36,25 +74,31 @@ export const useRecordVoice = (): UseRecordVoiceResult => {
       setRecording(false);
     }
   };
+
   const getText = async (base64data: string): Promise<void> => {
     try {
       setIsTranscribing(true);
+
       const apiKey = await getApiKey('openai');
+
       if (!apiKey) {
         throw new Error('API key not found');
       }
+
       const openai = new OpenAI({
         apiKey,
         dangerouslyAllowBrowser: true,
       });
+
       const audioBuffer = Buffer.from(base64data, 'base64');
+
       const transcription = await openai.audio.transcriptions.create({
         file: await toFile(audioBuffer, 'audio.wav', {
           type: 'audio/wav',
         }),
         model: 'whisper-1',
       });
-      setIsTranscribing(false);
+
       setText(transcription?.text);
     } catch (error) {
       console.error(error);
@@ -67,28 +111,36 @@ export const useRecordVoice = (): UseRecordVoiceResult => {
       setIsTranscribing(false);
     }
   };
-  const initialMediaRecorder = (stream: MediaStream): void => {
-    const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.onstart = () => {
-      createMediaStream(stream, true, (peak) => {});
-      chunks.current = [];
-    };
-    mediaRecorder.ondataavailable = (ev: BlobEvent) => {
-      chunks.current.push(ev.data);
-    };
-    mediaRecorder.onstop = () => {
-      const audioBlob = new Blob(chunks.current, { type: 'audio/wav' });
-      blobToBase64(audioBlob, getText);
-    };
-    setMediaRecorder(mediaRecorder);
-  };
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      navigator.mediaDevices
-        .getUserMedia({ audio: true })
-        .then(initialMediaRecorder)
-        .catch((error) => console.log(error));
-    }
-  }, []);
+
+  // const initialMediaRecorder = (stream: MediaStream): void => {
+  //   const mediaRecorder = new MediaRecorder(stream);
+
+  //   mediaRecorder.onstart = () => {
+  //     createMediaStream(stream, true, (peak) => {});
+  //     chunks.current = [];
+  //   };
+
+  //   mediaRecorder.ondataavailable = (ev: BlobEvent) => {
+  //     chunks.current.push(ev.data);
+  //   };
+
+  //   mediaRecorder.onstop = () => {
+  //     const audioBlob = new Blob(chunks.current, { type: "audio/wav" });
+
+  //     blobToBase64(audioBlob, getText);
+  //   };
+
+  //   setMediaRecorder(mediaRecorder);
+  // };
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     navigator.mediaDevices
+  //       .getUserMedia({ audio: true })
+  //       .then(initialMediaRecorder)
+  //       .catch((error) => console.log(error));
+  //   }
+  // }, []);
+
   return { recording, startRecording, stopRecording, text, transcribing };
 };

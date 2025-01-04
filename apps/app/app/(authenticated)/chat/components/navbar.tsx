@@ -9,7 +9,9 @@ import {
   GearSix,
   Moon,
   Plus,
+  Robot,
   Sun,
+  Textbox,
 } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -77,6 +79,14 @@ export const Navbar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mr-2 min-w-[250px] text-sm md:text-base">
+            <DropdownMenuItem onClick={() => {}}>
+              <Robot size={14} weight="bold" />
+              Bots<Badge>Coming soon</Badge>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>
+              <Textbox size={14} weight="bold" />
+              Prompts<Badge>Coming soon</Badge>
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 openSettings();

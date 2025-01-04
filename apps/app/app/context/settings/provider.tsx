@@ -4,7 +4,7 @@ import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-ico
 import { AnthropicSettings } from '@/app/(authenticated)/chat/components/settings/anthropic';
 import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/gemini';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/openai';
-import { GearSix } from '@phosphor-icons/react';
+import { GearSix, Microphone } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Dialog,
@@ -40,6 +40,12 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       key: 'common',
       component: <CommonSettings />,
     },
+    {
+      name: 'Voice Input',
+      icon: () => <Microphone size={16} weight="bold" />,
+      key: 'voice-input',
+      component: <CommonSettings />,
+    },
   ];
   const modelsMenu: TSettingMenuItem[] = [
     {
@@ -69,7 +75,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       <Dialog open={isSettingOpen} onOpenChange={setIsSettingOpen}>
         <DialogContent className="flex max-h-[80dvh] w-[96dvw] flex-col overflow-hidden rounded-xl border border-white/5 p-0 md:h-[600px] md:min-w-[800px] md:flex-row">
           <div className="absolute top-0 right-0 left-0 flex w-full flex-row gap-1 bg-black/5 p-2 md:bottom-0 md:w-[250px] md:flex-col md:gap-0 dark:bg-black/10">
-            <p className="hidden px-2 py-2 font-semibold text-sm text-zinc-500 md:flex md:text-base">
+            <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-sm">
               GENERAL
             </p>
             {settingMenu.map((menu) => (
@@ -93,7 +99,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 </span>
               </Button>
             ))}
-            <p className="hidden px-2 py-2 font-semibold text-sm text-zinc-500 md:flex md:text-base ">
+            <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-sm">
               MODELS
             </p>
             {modelsMenu.map((menu) => (

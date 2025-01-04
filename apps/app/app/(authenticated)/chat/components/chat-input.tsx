@@ -11,6 +11,7 @@ import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
+import { removeExtraSpaces } from '@/app/lib/helper';
 import { PromptType, RoleType, roles } from '@/app/lib/prompts';
 import {
   ArrowElbowDownRight,
@@ -262,8 +263,8 @@ export const ChatInput = () => {
           role: RoleType.assistant,
           type: PromptType.ask,
           image: attachment?.base64,
-          query: query,
-          context: contextValue,
+          query: removeExtraSpaces(query),
+          context: removeExtraSpaces(contextValue),
         },
       });
       setAttachment(undefined);
@@ -515,7 +516,6 @@ export const ChatInput = () => {
         isNewSession && 'top-0 '
       )}
     >
-      {/* {isNewSession && <ChatGreeting />} */}
       <div className="flex flex-row items-center gap-2">
         {renderScrollToBottom()}
         {renderReplyButton()}
@@ -633,6 +633,14 @@ export const ChatInput = () => {
             </Badge>
           </Button>
         </div>
+        {isNewSession && (
+          <div className="fixed right-0 bottom-0 left-0 flex w-full flex-row justify-center p-3 text-xs">
+            <p className="text-xs text-zinc-500/50">
+              P.S. Your data is stored locally on local storage, not in the
+              cloud.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

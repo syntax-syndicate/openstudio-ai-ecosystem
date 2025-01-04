@@ -2,6 +2,7 @@ import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble
 import { useChatContext } from '@/app/context/chat/context';
 import type { PromptProps, TChatMessage } from '@/app/hooks/use-chat-session';
 import type { TModelKey } from '@/app/hooks/use-model-list';
+import { removeExtraSpaces } from '@/app/lib/helper';
 import { ArrowElbowDownRight } from '@phosphor-icons/react';
 import moment from 'moment';
 import Image from 'next/image';
@@ -70,8 +71,8 @@ export const ChatMessages = () => {
           />
         )}
         <div className="ml-16 flex flex-row gap-2 rounded-2xl bg-zinc-50 px-3 py-2 text-sm text-zinc-600 md:text-base dark:bg-black/30 dark:text-zinc-100">
-          <span className="pt-[0.20em] pb-[0.15em] leading-6">
-            {message.rawHuman}
+          <span className="whitespace-pre-wrap pt-[0.20em] pb-[0.15em] leading-6">
+            {removeExtraSpaces(message.rawHuman)}
           </span>
         </div>
         <AIMessageBubble chatMessage={message} isLast={isLast} />

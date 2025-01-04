@@ -36,11 +36,13 @@ export const QuickSettings = () => {
   };
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Button variant="ghost" size="iconSm">
-          <SlidersHorizontal size={20} weight="bold" />
-        </Button>
-      </PopoverTrigger>
+      <Tooltip content="Configure Model">
+        <PopoverTrigger asChild>
+          <Button variant="ghost" size="iconSm">
+            <SlidersHorizontal size={20} weight="bold" />
+          </Button>
+        </PopoverTrigger>
+      </Tooltip>
       <PopoverContent className="roundex-2xl mr-8 p-0 dark:bg-zinc-700">
         {selectedModel && (
           <div className="border-black/10 border-b p-3 dark:border-white/10">
