@@ -32,7 +32,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
     removeSession,
     currentSession,
   } = useChatContext();
-  const { toast } = useToast();
+  const { toast, dismiss } = useToast();
   const { sortSessions } = useChatSession();
   const router = useRouter();
   const { getModelByKey } = useModelList();
@@ -41,7 +41,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
 
   const open = () => setIsFilterOpen(true);
 
-  const dismiss = () => setIsFilterOpen(false);
+  const onClose = () => setIsFilterOpen(false);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -77,8 +77,9 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
       name: 'Delete current session',
       icon: TrashSimple,
       action: () => {
+        onClose();
         toast({
-          title: 'Delete?',
+          title: 'Delete Session?',
           description: 'This action cannot be undone.',
           variant: 'destructive',
           action: (
@@ -104,7 +105,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
   ];
 
   return (
-    <FiltersContext.Provider value={{ open, dismiss }}>
+    <FiltersContext.Provider value={{ open, dismiss: onClose }}>
       {children}
 
       <CommandDialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
