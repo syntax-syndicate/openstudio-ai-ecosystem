@@ -1,32 +1,25 @@
-import { env } from '@/env';
-import type { ChatAnthropic } from '@langchain/anthropic';
-import { TavilySearchResults } from '@langchain/community/tools/tavily_search';
-import {
-  AIMessage,
-  type AIMessageChunk,
-  SystemMessage,
-} from '@langchain/core/messages';
-import { RunnableLambda } from '@langchain/core/runnables';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
+import type { TPreferences } from '@/app/hooks/use-preferences';
 import { DynamicStructuredTool } from '@langchain/core/tools';
-import type { IterableReadableStream } from '@langchain/core/utils/stream';
-import type { ChatOpenAI } from '@langchain/openai';
+import { Calculator, Globe } from '@phosphor-icons/react';
+import axios from 'axios';
+import type { ReactNode } from 'react';
 import { z } from 'zod';
 
-const calculatorSchema = z.object({
-  operation: z
-    .enum(['add', 'subtract', 'multiply', 'divide'])
-    .describe('The type of operation to execute.'),
-  number1: z.number().describe('The first number to operate on.'),
-  number2: z.number().describe('The second number to operate on.'),
-});
-
-type CalculatorInput = z.infer<typeof calculatorSchema>;
 const calculatorTool = () => {
+  const calculatorSchema = z.object({
+    operation: z
+      .enum(['add', 'subtract', 'multiply', 'divide'])
+      .describe('The type of operation to execute.'),
+    number1: z.number().describe('The first number to operate on.'),
+    number2: z.number().describe('The second number to operate on.'),
+  });
+
   return new DynamicStructuredTool({
     name: 'calculator',
     description: 'Can perform mathematical operations.',
     schema: calculatorSchema,
-    func: async ({ operation, number1, number2 }: CalculatorInput) => {
+    func: async ({ operation, number1, number2 }) => {
       // Functions must return strings
       if (operation === 'add') {
         return `${number1 + number2}`;
@@ -42,49 +35,104 @@ const calculatorTool = () => {
     },
   });
 };
-type SearchResult = {
-  title: string;
-  url: string;
-  description: string;
-};
-export const useTools = (): {
-  calTool: DynamicStructuredTool<typeof calculatorSchema>;
-  searchTool: TavilySearchResults;
-  toolCalling: (
-    selectedModel: ChatOpenAI | ChatAnthropic
-  ) => RunnableLambda<
-    AIMessage,
-    AIMessage | IterableReadableStream<AIMessageChunk>
-  >;
-} => {
-  const calTool = calculatorTool();
-  const searchTool = new TavilySearchResults({
-    maxResults: 5,
-    apiKey: env.NEXT_PUBLIC_TAVILY_API_KEY,
+
+const webSearchTool = (preference: TPreferences) => {
+  const webSearchSchema = z.object({
+    input: z.string(),
   });
-  const toolCalling = (selectedModel: ChatOpenAI | ChatAnthropic) =>
-    new RunnableLambda({
-      func: async (output: AIMessage) => {
-        const tool = output?.tool_calls?.[0];
-        if (tool?.name === 'calculator') {
-          const result = await calTool.invoke(tool.args as CalculatorInput);
-          return new AIMessage(result);
+
+  return new DynamicStructuredTool({
+    name: 'web_search',
+    description:
+      'A search engine optimized for comprehensive, accurate, and trusted results. Useful for when you need to answer questions about current events. Input should be a search query.',
+    schema: webSearchSchema,
+    func: async ({ input }, runManager) => {
+      const url = 'https://www.googleapis.com/customsearch/v1';
+      const params = {
+        key: preference.googleSearchApiKey,
+        cx: preference.googleSearchEngineId,
+        q: input,
+      };
+
+      try {
+        const response = await axios.get(url, { params });
+
+        if (response.status !== 200) {
+          runManager?.handleToolError('Error performing Google search');
+          throw new Error('Invalid response');
         }
-        if (tool?.name === 'tavily_search_results_json') {
-          const result = await searchTool.invoke(tool.args.input);
-          const parsedResults = JSON.parse(result) as SearchResult[];
-          const searchPrompt = [
-            new SystemMessage(
-              `Based on past conversation here are result from the internet. ${parsedResults.map(
-                (r, index) =>
-                  `${index + 1}. Title: """${r.title}""" \n URL: """${r.url}"""\n description: """${r.description}""" `
-              )} . Please summarize this findings with citation link to their source`
-            ),
-          ];
-          return selectedModel.stream(searchPrompt);
-        }
-        return output;
-      },
-    });
-  return { calTool, searchTool, toolCalling };
+        const googleSearchResult = response.data?.items?.map((item: any) => ({
+          title: item.title,
+          snippet: item.snippet,
+          url: item.link,
+        }));
+
+        const searchInfo = googleSearchResult
+          ?.map(
+            (r: any, index: number) =>
+              `${index + 1}. Title: """${r.title}""" \n URL: """${
+                r.url
+              }"""\n snippet: """${r.snippet}""" `
+          )
+          ?.join('\n\n');
+
+        const searchPrompt = `Information: \n\n ${searchInfo} \n\n Based on snippet please answer the given question with proper citations. Must Remove XML tags if any. Question: ${input}`;
+
+        return searchPrompt;
+      } catch (error) {
+        return 'Error performing Google search. Ask user to check API keys.';
+      }
+    },
+  });
+};
+
+export type TToolKey = 'calculator' | 'web_search';
+export type IconSize = 'sm' | 'md' | 'lg';
+export type TTool = {
+  key: TToolKey;
+  name: string;
+  loadingMessage?: string;
+  resultMessage?: string;
+  //TODO: type should be zod object
+  tool: (arg?: any) => DynamicStructuredTool<any>;
+  icon: (size: IconSize) => ReactNode;
+  smallIcon: () => ReactNode;
+};
+
+export const useTools = () => {
+  const tools: TTool[] = [
+    {
+      key: 'calculator',
+      tool: calculatorTool,
+      name: 'Calculator',
+      loadingMessage: 'Calculating...',
+      resultMessage: 'Calculated Result',
+      icon: (size: IconSize) => <ModelIcon type="calculator" size={size} />,
+      smallIcon: () => <Calculator size={16} weight="bold" />,
+    },
+    {
+      key: 'web_search',
+      tool: webSearchTool,
+      name: 'Google Search',
+      loadingMessage: 'Searching on web...',
+      resultMessage: 'Results from Google Search',
+      icon: (size: IconSize) => <ModelIcon type="websearch" size={size} />,
+      smallIcon: () => <Globe size={16} weight="bold" />,
+    },
+  ];
+
+  const getToolByKey = (key: TToolKey) => {
+    return tools.find((tool) => tool.key === key)?.tool;
+  };
+
+  const getToolInfoByKey = (key: TToolKey) => {
+    return tools.find((tool) => tool.key === key);
+  };
+  return {
+    calculatorTool,
+    webSearchTool,
+    tools,
+    getToolByKey,
+    getToolInfoByKey,
+  };
 };

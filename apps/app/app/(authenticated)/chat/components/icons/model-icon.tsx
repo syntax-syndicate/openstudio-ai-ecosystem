@@ -2,7 +2,15 @@ import { cn } from '@repo/design-system/lib/utils';
 import Image from 'next/image';
 
 export type TModelIcon = {
-  type: 'gpt3' | 'gpt4' | 'anthropic' | 'gemini' | 'openai' | 'chathub';
+  type:
+    | 'gpt3'
+    | 'gpt4'
+    | 'anthropic'
+    | 'gemini'
+    | 'openai'
+    | 'chathub'
+    | 'websearch'
+    | 'calculator';
   size: 'sm' | 'md' | 'lg';
 };
 
@@ -14,6 +22,8 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
     gemini: '/icons/gemini.svg',
     openai: '/icons/openai.svg',
     chathub: '/icons/chathub.svg',
+    websearch: '/icons/websearch.svg',
+    calculator: '/icons/calculator.svg',
   };
   return (
     <Image

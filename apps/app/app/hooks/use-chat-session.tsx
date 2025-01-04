@@ -29,8 +29,11 @@ export type TChatMessage = {
   rawAI?: string;
   sessionId: string;
   props: PromptProps;
-  isLoading: boolean;
-  hasError: boolean;
+  toolName?: string;
+  toolResult?: string;
+  isLoading?: boolean;
+  isToolRunning?: boolean;
+  hasError?: boolean;
   errorMesssage?: string;
   createdAt: string;
 };
@@ -68,7 +71,8 @@ export const useChatSession = () => {
             messages: isExisingMessage
               ? session.messages.map((m) => {
                   if (m.id === chatMessage.id) {
-                    return chatMessage;
+                    console.log('m', chatMessage);
+                    return { ...m, ...chatMessage };
                   }
                   return m;
                 })
@@ -86,6 +90,7 @@ export const useChatSession = () => {
       }
       return session;
     });
+    console.log('newSessions', newSessions);
     await set('chat-sessions', newSessions);
   };
   const updateSession = async (
@@ -99,6 +104,7 @@ export const useChatSession = () => {
       }
       return session;
     });
+    console.log('new updated Sessions', newSessions);
     await set('chat-sessions', newSessions);
   };
   const getSessionById = async (id: string) => {

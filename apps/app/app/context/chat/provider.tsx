@@ -32,28 +32,6 @@ export const ChatProvider = ({ children }: TChatProvider) => {
   const [currentSession, setCurrentSession] = useState<
     TChatSession | undefined
   >();
-  const [streaming, setStreaming] = useState<boolean>(false);
-
-  const { runModel, stopGeneration } = useLLM({
-    onInit: async (props) => {
-      appendToCurrentSession(props);
-    },
-    onStreamStart: async (props) => {
-      appendToCurrentSession(props);
-      setStreaming(true);
-    },
-    onStream: async (props) => {
-      appendToCurrentSession(props);
-    },
-    onStreamEnd: async (props) => {
-      appendToCurrentSession(props);
-      setStreaming(false);
-    },
-    onError: async (error) => {
-      appendToCurrentSession(error);
-      setStreaming(false);
-    },
-  });
 
   const appendToCurrentSession = (props: TChatMessage) => {
     setCurrentSession((session) => {
@@ -66,7 +44,8 @@ export const ChatProvider = ({ children }: TChatProvider) => {
           ...session,
           messages: session.messages.map((message) => {
             if (message.id === props.id) {
-              return props;
+              console.log('message', props);
+              return { message, ...props };
             }
             return message;
           }),
@@ -78,6 +57,10 @@ export const ChatProvider = ({ children }: TChatProvider) => {
       };
     });
   };
+
+  const { runModel, stopGeneration } = useLLM({
+    onChange: appendToCurrentSession,
+  });
 
   const fetchCurrentSession = async () => {
     if (!sessionId) {
@@ -159,7 +142,6 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         runModel,
         clearChatSessions,
         removeSession,
-        streaming,
         currentSession,
         stopGeneration,
         removeMessage,

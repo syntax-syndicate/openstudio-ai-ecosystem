@@ -1,4 +1,5 @@
 import type { TBaseModel, TModelKey } from '@/app/hooks/use-model-list';
+import type { TToolKey } from '@/app/hooks/use-tools';
 import { get, set } from 'idb-keyval';
 
 export type TApiKeys = Partial<Record<TBaseModel, string>>;
@@ -8,15 +9,19 @@ export type TPreferences = {
   systemPrompt: string;
   messageLimit: number | 'all';
   temperature: number;
+  defaultPlugins: TToolKey[];
   maxTokens: number;
   topP: number;
   topK: number;
+  googleSearchEngineId?: string;
+  googleSearchApiKey?: string;
 };
 export const defaultPreferences: TPreferences = {
   defaultModel: 'gpt-4-turbo',
   systemPrompt: 'You are a helpful assistant.',
   messageLimit: 'all',
   temperature: 0.5,
+  defaultPlugins: [],
   maxTokens: 500,
   topP: 1.0,
   topK: 5,

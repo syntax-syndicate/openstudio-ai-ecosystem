@@ -13,6 +13,7 @@ import {
 
 import { CommonSettings } from '@/app/(authenticated)/chat/components/settings/common';
 import { Data } from '@/app/(authenticated)/chat/components/settings/data';
+import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
 import { VoiceInput } from '@/app/(authenticated)/chat/components/settings/voice-input';
 import { SettingsContext } from '@/app/context/settings/context';
 import { cn } from '@repo/design-system/lib/utils';
@@ -75,7 +76,17 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       component: <GeminiSettings />,
     },
   ];
-  const allMenus = [...settingMenu, ...modelsMenu];
+
+  const pluginsMenu: TSettingMenuItem[] = [
+    {
+      name: 'Web Search',
+      key: 'web-search',
+      icon: () => <ModelIcon size="md" type="websearch" />,
+      component: <WebSearchPlugin />,
+    },
+  ];
+
+  const allMenus = [...settingMenu, ...modelsMenu, ...pluginsMenu];
   const selectedMenuItem = allMenus.find((menu) => menu.key === selectedMenu);
   return (
     <SettingsContext.Provider value={{ open, dismiss }}>
@@ -83,7 +94,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       <Dialog open={isSettingOpen} onOpenChange={setIsSettingOpen}>
         <DialogContent className="flex max-h-[80dvh] w-[96dvw] flex-col overflow-hidden rounded-xl border border-white/5 p-0 md:h-[600px] md:min-w-[800px] md:flex-row">
           <div className="absolute top-0 right-0 left-0 flex w-full flex-row gap-1 bg-black/5 p-2 md:bottom-0 md:w-[250px] md:flex-col md:gap-0 dark:bg-black/10">
-            <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-sm">
+            <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-xs">
               GENERAL
             </p>
             {settingMenu.map((menu) => (
@@ -107,10 +118,33 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 </span>
               </Button>
             ))}
-            <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-sm">
+            <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-xs">
               MODELS
             </p>
             {modelsMenu.map((menu) => (
+              <Button
+                variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}
+                key={menu.key}
+                onClick={() => setSelectedMenu(menu.key)}
+                className="justify-start gap-2 px-2"
+                size="default"
+              >
+                {menu.icon()}
+                <span
+                  className={cn(
+                    'text-sm md:flex md:text-base',
+                    selectedMenu === menu.key ? 'flex' : 'hidden'
+                  )}
+                >
+                  {' '}
+                  {menu.name}
+                </span>
+              </Button>
+            ))}
+            <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-xs">
+              PLUGINS
+            </p>
+            {pluginsMenu.map((menu) => (
               <Button
                 variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}
                 key={menu.key}

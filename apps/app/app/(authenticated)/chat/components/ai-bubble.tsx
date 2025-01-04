@@ -6,6 +6,8 @@ import { useClipboard } from '@/app/hooks/use-clipboard';
 import { useMarkdown } from '@/app/hooks/use-mdx';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
 import { useTokenCounter } from '@/app/hooks/use-token-counter';
+import { useTools } from '@/app/hooks/use-tools';
+import type { TToolKey } from '@/app/hooks/use-tools';
 import { Check, Copy, TrashSimple } from '@phosphor-icons/react';
 import {
   Alert,
@@ -27,7 +29,19 @@ export type TAIMessageBubble = {
 };
 
 export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
-  const { id, rawAI, isLoading, model, errorMesssage } = chatMessage;
+  const {
+    id,
+    rawAI,
+    isLoading,
+    model,
+    errorMesssage,
+    isToolRunning,
+    toolName,
+  } = chatMessage;
+  const { getToolInfoByKey } = useTools();
+  const toolUsed = toolName
+    ? getToolInfoByKey(toolName as TToolKey)
+    : undefined;
   const messageRef = useRef<HTMLDivElement>(null);
   const { showCopied, copy } = useClipboard();
   const { getModelByKey } = useModelList();
@@ -49,8 +63,20 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
         ref={messageRef}
         className=" flex w-full flex-col items-start rounded-2xl"
       >
+        {toolUsed && (
+          <div className="flex flex-row items-center gap-2 py-2 text-xs text-zinc-500/60">
+            {toolUsed.smallIcon()}
+            {isToolRunning ? (
+              <p className="text-xs">{toolUsed.loadingMessage}</p>
+            ) : (
+              <p>{toolUsed.resultMessage}</p>
+            )}
+          </div>
+        )}
         {rawAI && (
-          <div className="w-full pb-2">{renderMarkdown(rawAI, isLoading)}</div>
+          <div className="w-full pb-2">
+            {renderMarkdown(rawAI, !!isLoading)}
+          </div>
         )}
         {errorMesssage && (
           <Alert variant="destructive">
@@ -69,7 +95,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
           </Alert>
         )}
         <div className="flex w-full flex-row items-center justify-between py-3 opacity-70 transition-opacity hover:opacity-100">
-          {isLoading && <Spinner />}
+          {isLoading && !isToolRunning && <Spinner />}
           {!isLoading && (
             <div className="flex flex-row gap-1">
               <Tooltip content="Copy">
