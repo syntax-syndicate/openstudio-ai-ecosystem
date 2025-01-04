@@ -23,12 +23,16 @@ import { useEffect, useState } from 'react';
 
 export type TModelSelect = {
   selectedModel: TModelKey;
+  variant?: 'outline' | 'ghost' | 'default' | 'secondary';
   setSelectedModel: (model: TModelKey) => void;
+  className?: string;
 };
 
 export const ModelSelect = ({
   selectedModel,
+  variant,
   setSelectedModel,
+  className,
 }: TModelSelect) => {
   const [isOpen, setIsOpen] = useState(false);
   const { getPreferences, setPreferences } = usePreferences();
@@ -47,8 +51,8 @@ export const ModelSelect = ({
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="ghost"
-            className="gap-2 pr-3 pl-1 text-xs md:text-sm"
+            variant={variant || 'ghost'}
+            className={cn('gap-2 pr-3 pl-1 text-xs md:text-sm', className)}
             size="sm"
           >
             {activeModel?.icon()} {activeModel?.name}

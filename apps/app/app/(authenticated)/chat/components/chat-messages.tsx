@@ -1,9 +1,13 @@
 import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble';
+import { GreetingBubble } from '@/app/(authenticated)/chat/components/greeting-bubble';
+import { useBots } from '@/app/context/bots/context';
 import { useChatContext } from '@/app/context/chat/context';
 import type { PromptProps, TChatMessage } from '@/app/hooks/use-chat-session';
 import type { TModelKey } from '@/app/hooks/use-model-list';
 import { removeExtraSpaces } from '@/app/lib/helper';
-import { ArrowElbowDownRight } from '@phosphor-icons/react';
+import { ArrowElbowDownRight, Info, TrashSimple } from '@phosphor-icons/react';
+import { BotAvatar } from '@repo/design-system/components/ui/bot-avatar';
+import { Button } from '@repo/design-system/components/ui/button';
 import moment from 'moment';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
@@ -32,12 +36,13 @@ moment().calendar(null, {
 export const ChatMessages = () => {
   const { currentSession, runModel } = useChatContext();
   const chatContainer = useRef<HTMLDivElement>(null);
+  const { open: openBot } = useBots();
 
   const isNewSession = currentSession?.messages.length === 0;
 
   useEffect(() => {
     scrollToBottom();
-  }, [currentSession]);
+  }, []);
 
   const scrollToBottom = () => {
     if (chatContainer.current) {
@@ -101,7 +106,38 @@ export const ChatMessages = () => {
       id="chat-container"
     >
       <div className="flex w-full flex-col gap-24 p-4 md:w-[700px] md:p-0">
+        {currentSession?.bot && (
+          <div className="flex flex-col items-center gap-2">
+            <BotAvatar name={currentSession.bot.name} size={40} />
+            <p className="font-medium text-sm text-zinc-800 md:text-base dark:text-white">
+              {currentSession.bot.name}
+            </p>
+            <p className="text-center text-xs text-zinc-500 md:max-w-[400px] md:text-sm">
+              {currentSession.bot.description}
+            </p>
+            {!currentSession?.messages?.length && (
+              <div className="flex flex-row gap-1">
+                <Button variant="outline" size="iconSm" onClick={() => {}}>
+                  <Info size={16} weight="bold" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    openBot('public');
+                  }}
+                >
+                  Change Bot
+                </Button>
+                <Button variant="outline" size="iconSm" onClick={() => {}}>
+                  <TrashSimple size={16} weight="bold" />
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
         <div className="flex w-full flex-col items-start gap-8">
+          {currentSession?.bot && <GreetingBubble bot={currentSession?.bot} />}
           {currentSession?.messages?.map((message, index) =>
             renderMessage(
               message,

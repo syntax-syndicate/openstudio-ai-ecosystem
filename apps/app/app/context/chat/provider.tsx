@@ -1,6 +1,7 @@
 'use client';
 
 import { ChatContext } from '@/app/context/chat/context';
+import type { TBot } from '@/app/hooks/use-bots';
 import {
   type TChatMessage,
   type TChatSession,
@@ -92,9 +93,10 @@ export const ChatProvider = ({ children }: TChatProvider) => {
     setAllSessionLoading(false);
   };
 
-  const createSession = async () => {
-    const newSession = await createNewSession();
+  const createSession = async (bot?: TBot, redirect?: boolean) => {
+    const newSession = await createNewSession(bot);
     fetchAllSessions();
+    redirect && push(`/chat/${newSession.id}`);
     return newSession;
   };
 
@@ -135,6 +137,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
       value={{
         sessions,
         refetchSessions: fetchAllSessions,
+        refetchCurrentSession: fetchCurrentSession,
         isAllSessionLoading,
         isCurrentSessionLoading,
         createSession,

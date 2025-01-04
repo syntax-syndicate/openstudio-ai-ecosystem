@@ -1,10 +1,11 @@
-import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/side-bar';
+import { useBots } from '@/app/context/bots/context';
 import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { usePrompts } from '@/app/context/prompts/context';
 import { useSettings } from '@/app/context/settings/context';
 import {
+  Book,
   Command,
   DotsThree,
   GearSix,
@@ -12,11 +13,8 @@ import {
   Plus,
   Robot,
   Sun,
-  Textbox,
 } from '@phosphor-icons/react';
-import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
-import { ComingSoon } from '@repo/design-system/components/ui/coming-soon';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +32,7 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { open: openFilters } = useFilters();
   const { open: openPrompts } = usePrompts();
+  const { open: openBots } = useBots();
   const { push } = useRouter();
   const { createSession } = useChatContext();
   const renderNewSession = () => {
@@ -59,9 +58,9 @@ export const Navbar = () => {
     <div className="absolute top-0 right-0 left-0 z-50 flex flex-row items-center justify-between bg-gradient-to-b from-70% from-white to-transparent p-2 pb-6 md:p-3 dark:from-zinc-800">
       <div className="flex flex-row items-center gap-2">
         <HistorySidebar />
-        <ModelIcon type="chathub" size="md" />
+        {/* <ModelIcon type="chathub" size="md" />
         <p className="text-sm text-zinc-500 md:text-base">ChatHub</p>
-        <Badge>Beta</Badge>
+        <Badge>Beta</Badge> */}
       </div>
       <div className="flex flex-row items-center gap-2">
         {renderNewSession()}
@@ -86,18 +85,6 @@ export const Navbar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mr-2 min-w-[250px] text-sm md:text-base">
-            <DropdownMenuItem onClick={() => {}}>
-              <Robot size={14} weight="bold" />
-              Bots <ComingSoon />
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                openPrompts();
-              }}
-            >
-              <Textbox size={14} weight="bold" />
-              Prompts <ComingSoon />
-            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 openSettings();
@@ -120,6 +107,22 @@ export const Navbar = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
           <DropdownMenuContent className="mr-2 min-w-[250px] text-sm md:text-base">
+            <DropdownMenuItem
+              onClick={() => {
+                openBots();
+              }}
+            >
+              <Robot size={14} weight="bold" />
+              Bots
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                openPrompts();
+              }}
+            >
+              <Book size={14} weight="bold" />
+              Prompts Library
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 openSettings();

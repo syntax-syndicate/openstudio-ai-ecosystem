@@ -1,13 +1,15 @@
 import type { TModelKey } from '@/app/hooks/use-model-list';
-import { get } from 'idb-keyval';
+import { get, set } from 'idb-keyval';
+import { v4 } from 'uuid';
 
 export type TBot = {
   prompt: string;
   name: string;
   description: string;
+  greetingMessage?: string;
   id: string;
-  avatar: string;
-  status: string;
+  avatar?: string;
+  status?: string;
   deafultBaseModel: TModelKey;
 };
 
@@ -15,9 +17,10 @@ export const useBots = () => {
   const getBots = async (): Promise<TBot[]> => {
     return (await get('bots')) || [];
   };
-  const createBot = async (bot: TBot) => {
+  const createBot = async (bot: Omit<TBot, 'id'>) => {
     const bots = await getBots();
-    const newBots = [...bots, bot];
+    const newBots = [...bots, { ...bot, id: v4() }];
+    set('bots', newBots);
   };
   const publishBot = async (botId: string) => {
     // TODO: Implement publishBot

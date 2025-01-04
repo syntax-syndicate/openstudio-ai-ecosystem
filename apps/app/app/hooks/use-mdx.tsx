@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
 import type { JSX } from 'react';
 
-const VARIANTS = {
+export const REVEAL_ANIMATION_VARIANTS = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -24,7 +24,7 @@ export const useMarkdown = () => {
       renderer={{
         text: (children) => (
           <motion.span
-            variants={VARIANTS}
+            variants={REVEAL_ANIMATION_VARIANTS}
             className="text-zinc-700 tracking-[0.01em] dark:text-zinc-100"
             animate={'visible'}
             initial={animate ? 'hidden' : 'visible'}

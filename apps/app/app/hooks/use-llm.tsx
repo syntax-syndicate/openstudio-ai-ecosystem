@@ -6,6 +6,7 @@ import { useToast } from '@repo/design-system/components/ui/use-toast';
 import {
   type PromptProps,
   type TChatMessage,
+  type TChatSession,
   useChatSession,
 } from '@/app/hooks/use-chat-session';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
@@ -47,21 +48,27 @@ export const useLLM = ({ onChange }: TUseLLM) => {
     abortController?.abort();
   };
 
-  const preparePrompt = async (props: PromptProps, history: TChatMessage[]) => {
+  const preparePrompt = async (
+    props: PromptProps,
+    history: TChatMessage[],
+    bot?: TChatSession['bot']
+  ) => {
     const preferences = await getPreferences();
     const hasPreviousMessages = history?.length > 0;
     const systemPrompt =
-      preferences.systemPrompt || defaultPreferences.systemPrompt;
+      bot?.prompt ||
+      preferences.systemPrompt ||
+      defaultPreferences.systemPrompt;
 
     const system: BaseMessagePromptTemplateLike = [
       'system',
-      `${systemPrompt}.${
+      `${systemPrompt} ${
         props.context
           ? `Answer user's question based on the following context: """{context}"""`
           : ``
       } ${
         hasPreviousMessages
-          ? `You can also refer these previous conversations if needed.`
+          ? `You can also to refer these previous conversations`
           : ``
       }`,
     ];
@@ -152,7 +159,8 @@ export const useLLM = ({ onChange }: TUseLLM) => {
 
     const prompt = await preparePrompt(
       props,
-      currentSession?.messages?.filter((m) => m.id !== messageId) || []
+      currentSession?.messages?.filter((m) => m.id !== messageId) || [],
+      currentSession?.bot
     );
 
     const selectedModel = await createInstance(selectedModelKey, apiKey);

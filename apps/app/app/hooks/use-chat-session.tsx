@@ -1,3 +1,4 @@
+import type { TBot } from '@/app/hooks/use-bots';
 import type { TModelKey } from '@/app/hooks/use-model-list';
 import type { PromptType, RoleType } from '@/app/lib/prompts';
 import { get, set } from 'idb-keyval';
@@ -40,6 +41,7 @@ export type TChatMessage = {
 
 export type TChatSession = {
   messages: TChatMessage[];
+  bot?: TBot;
   title?: string;
   id: string;
   createdAt: string;
@@ -152,7 +154,7 @@ export const useChatSession = () => {
     return messages.sort((a, b) => moment(a[sortBy]).diff(moment(b[sortBy])));
   };
 
-  const createNewSession = async () => {
+  const createNewSession = async (bot?: TBot) => {
     const sessions = (await getSessions()) || [];
     const latestSession = sortSessions(sessions, 'createdAt')?.[0];
     if (latestSession && !latestSession?.messages?.length) {
@@ -162,6 +164,7 @@ export const useChatSession = () => {
       id: v4(),
       messages: [],
       title: 'Untitled',
+      bot,
       createdAt: moment().toISOString(),
     };
     const newSessions = [...sessions, newSession];

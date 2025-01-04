@@ -5,7 +5,6 @@ import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { useMarkdown } from '@/app/hooks/use-mdx';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
-import { useTokenCounter } from '@/app/hooks/use-token-counter';
 import { useTools } from '@/app/hooks/use-tools';
 import type { TToolKey } from '@/app/hooks/use-tools';
 import { Check, Copy, TrashSimple } from '@phosphor-icons/react';
@@ -13,6 +12,7 @@ import {
   Alert,
   AlertDescription,
 } from '@repo/design-system/components/ui/alert';
+import { BotAvatar } from '@repo/design-system/components/ui/bot-avatar';
 import { Button } from '@repo/design-system/components/ui/button';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import {
@@ -48,17 +48,22 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   const { renderMarkdown } = useMarkdown();
   const modelForMessage = getModelByKey(model);
   const { open: openSettings } = useSettings();
-  const { getTokenCount } = useTokenCounter();
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
 
   const handleCopyContent = () => {
     messageRef?.current && rawAI && copy(rawAI);
   };
-  const { removeMessage, runModel } = useChatContext();
+  const { removeMessage, runModel, currentSession } = useChatContext();
 
   return (
     <div className="mt-6 flex w-full flex-col gap-2 md:flex-row">
-      <div className="px-0 py-1 md:px-3">{modelForMessage?.icon()}</div>
+      <div className="px-0 py-1 md:px-3">
+        {currentSession?.bot ? (
+          <BotAvatar size={24} name={currentSession?.bot?.name} />
+        ) : (
+          modelForMessage?.icon()
+        )}
+      </div>
       <div
         ref={messageRef}
         className=" flex w-full flex-col items-start rounded-2xl"
