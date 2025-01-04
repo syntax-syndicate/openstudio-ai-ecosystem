@@ -15,6 +15,7 @@ import {
 } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
+import { ComingSoon } from '@repo/design-system/components/ui/coming-soon';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -81,11 +82,11 @@ export const Navbar = () => {
           <DropdownMenuContent className="mr-2 min-w-[250px] text-sm md:text-base">
             <DropdownMenuItem onClick={() => {}}>
               <Robot size={14} weight="bold" />
-              Bots<Badge>Coming soon</Badge>
+              Bots <ComingSoon />
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => {}}>
               <Textbox size={14} weight="bold" />
-              Prompts<Badge>Coming soon</Badge>
+              Prompts <ComingSoon />
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {

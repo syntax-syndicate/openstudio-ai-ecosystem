@@ -4,7 +4,7 @@ import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-ico
 import { AnthropicSettings } from '@/app/(authenticated)/chat/components/settings/anthropic';
 import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/gemini';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/openai';
-import { GearSix, Microphone } from '@phosphor-icons/react';
+import { Database, GearSix, Microphone } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Dialog,
@@ -12,6 +12,8 @@ import {
 } from '@repo/design-system/components/ui/dialog';
 
 import { CommonSettings } from '@/app/(authenticated)/chat/components/settings/common';
+import { Data } from '@/app/(authenticated)/chat/components/settings/data';
+import { VoiceInput } from '@/app/(authenticated)/chat/components/settings/voice-input';
 import { SettingsContext } from '@/app/context/settings/context';
 import { cn } from '@repo/design-system/lib/utils';
 import { useState } from 'react';
@@ -44,7 +46,13 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       name: 'Voice Input',
       icon: () => <Microphone size={16} weight="bold" />,
       key: 'voice-input',
-      component: <CommonSettings />,
+      component: <VoiceInput />,
+    },
+    {
+      name: 'Data',
+      icon: () => <Database size={16} weight="bold" />,
+      key: 'Your Data',
+      component: <Data />,
     },
   ];
   const modelsMenu: TSettingMenuItem[] = [

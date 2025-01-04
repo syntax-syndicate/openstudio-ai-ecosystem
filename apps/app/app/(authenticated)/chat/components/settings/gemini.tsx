@@ -1,3 +1,4 @@
+import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { useLLMTest } from '@/app/hooks/use-llm-test';
 import { usePreferences } from '@/app/hooks/use-preferences';
 import { ArrowRight, Info } from '@phosphor-icons/react';
@@ -22,10 +23,7 @@ export const GeminiSettings = () => {
     });
   }, []);
   return (
-    <div className="flex flex-col items-start gap-2 px-3 md:px-6">
-      <p className="py-4 font-medium text-md text-zinc-800 dark:text-white">
-        Google Gemini Settings
-      </p>
+    <SettingsContainer title="Gemini Settings">
       <div className="flex flex-row items-end justify-between">
         <p className="text-sm text-zinc-500 md:text-base">
           Google Gemini API Key
@@ -61,6 +59,6 @@ export const GeminiSettings = () => {
           else.
         </AlertDescription>
       </Alert>
-    </div>
+    </SettingsContainer>
   );
 };

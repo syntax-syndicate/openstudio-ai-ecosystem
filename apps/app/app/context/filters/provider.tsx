@@ -3,8 +3,8 @@ import { useChatContext } from '@/app/context/chat/context';
 import { FiltersContext } from '@/app/context/filters/context';
 import { useChatSession } from '@/app/hooks/use-chat-session';
 import { useModelList } from '@/app/hooks/use-model-list';
-import { Eraser, Plus, TrashSimple } from '@phosphor-icons/react';
-import { ModeToggle } from '@repo/design-system/components/mode-toggle';
+import { Plus, TrashSimple } from '@phosphor-icons/react';
+import { Moon, Sun } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   CommandDialog,
@@ -17,13 +17,13 @@ import {
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { cn } from '@repo/design-system/lib/utils';
 import moment from 'moment';
+import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export type TFiltersProvider = {
   children: React.ReactNode;
 };
-
 export const FiltersProvider = ({ children }: TFiltersProvider) => {
   const {
     sessions,
@@ -32,15 +32,17 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
     removeSession,
     currentSession,
   } = useChatContext();
+  const { toast } = useToast();
   const { sortSessions } = useChatSession();
   const router = useRouter();
   const { getModelByKey } = useModelList();
-
-  const { toast } = useToast();
-
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+
   const open = () => setIsFilterOpen(true);
+
   const dismiss = () => setIsFilterOpen(false);
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -51,40 +53,39 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
   }, []);
-  return (
-    <FiltersContext.Provider value={{ open, dismiss }}>
-      {children}
-      <CommandDialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-        <CommandInput placeholder="Search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Actions">
-            <CommandItem
-              className={cn('gap-3')}
-              value="new"
-              onSelect={(value) => {
-                createSession().then((session) => {
-                  router.push(`/chat/${session.id}`);
-                  dismiss();
-                });
-              }}
-            >
-              <Plus size={14} weight="bold" className="flex-shrink-0 " />
-              New session
-            </CommandItem>
-            <CommandItem
-              className="gap-3"
-              value="theme"
-              onSelect={(value) => {
-                dismiss();
-              }}
-            >
-              <ModeToggle /> Toggle Theme
-            </CommandItem>
-            <CommandItem
-              className="gap-3"
-              value="delete"
-              onSelect={(value) => {
+
+  const actions = [
+    {
+      name: 'New session',
+      icon: Plus,
+      action: () => {
+        createSession().then((session) => {
+          router.push(`/chat/${session.id}`);
+          dismiss();
+        });
+      },
+    },
+    {
+      name: `Switch to ${theme === 'light' ? 'dark' : 'light'} mode`,
+      icon: theme === 'light' ? Moon : Sun,
+      action: () => {
+        setTheme(theme === 'light' ? 'dark' : 'light');
+        dismiss();
+      },
+    },
+    {
+      name: 'Delete current session',
+      icon: TrashSimple,
+      action: () => {
+        toast({
+          title: 'Delete?',
+          description: 'This action cannot be undone.',
+          variant: 'destructive',
+          action: (
+            <Button
+              size="sm"
+              variant="default"
+              onClick={() => {
                 currentSession?.id &&
                   removeSession(currentSession?.id).then(() => {
                     createSession().then((session) => {
@@ -94,41 +95,38 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                   });
               }}
             >
-              <TrashSimple size={14} weight="bold" className="flex-shrink-0 " />
-              Delete current session
-            </CommandItem>
-            <CommandItem
-              className="gap-3"
-              value="clear history"
-              onSelect={(value) => {
-                dismiss();
-                toast({
-                  title: 'Are you sure?',
-                  description:
-                    'This will clear all chat history. This action cannot be undone.',
-                  variant: 'destructive',
-                  action: (
-                    <Button
-                      size="sm"
-                      variant="default"
-                      onClick={() => {
-                        clearChatSessions().then(() => {
-                          createSession().then((session) => {
-                            router.push(`/chat/${session?.id}`);
-                            dismiss();
-                          });
-                        });
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  ),
-                });
-              }}
-            >
-              <Eraser size={14} weight="bold" className="flex-shrink-0" />
-              Clear History
-            </CommandItem>
+              Delete
+            </Button>
+          ),
+        });
+      },
+    },
+  ];
+
+  return (
+    <FiltersContext.Provider value={{ open, dismiss }}>
+      {children}
+
+      <CommandDialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+        <CommandInput placeholder="Search..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Actions">
+            {actions.map((action) => (
+              <CommandItem
+                key={action.name}
+                className="gap-2"
+                value={action.name}
+                onSelect={action.action}
+              >
+                <action.icon
+                  size={14}
+                  weight="bold"
+                  className="flex-shrink-0"
+                />
+                {action.name}
+              </CommandItem>
+            ))}
           </CommandGroup>
           <CommandGroup heading="Sessions">
             {sortSessions(sessions, 'updatedAt')?.map((session) => (
@@ -136,7 +134,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                 key={session.id}
                 value={`${session.id}/${session.title}`}
                 className={cn(
-                  'w-full gap-3',
+                  'w-full gap-2',
                   currentSession?.id === session.id
                     ? 'bg-black/10 dark:bg-black/10'
                     : ''
@@ -148,7 +146,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
               >
                 {getModelByKey(session.messages?.[0]?.model)?.icon()}
                 <span className="w-full truncate">{session.title}</span>
-                <span className="flex-shrink-0 pl-4 text-sm text-zinc-400 md:text-base dark:text-zinc-700">
+                <span className="flex-shrink-0 pl-4 text-xs text-zinc-400 md:text-xs dark:text-zinc-700">
                   {moment(session.createdAt).fromNow(true)}
                 </span>
               </CommandItem>

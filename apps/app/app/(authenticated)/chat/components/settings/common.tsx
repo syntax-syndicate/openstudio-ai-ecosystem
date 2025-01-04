@@ -1,3 +1,4 @@
+import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { useModelSettings } from '@/app/hooks/use-model-settings';
 import {
   type TPreferences,
@@ -10,7 +11,6 @@ import { Slider } from '@repo/design-system/components/ui/slider';
 import { Switch } from '@repo/design-system/components/ui/switch';
 import { Textarea } from '@repo/design-system/components/ui/textarea';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
-
 export const CommonSettings = () => {
   const { formik, setPreferences } = useModelSettings({});
 
@@ -30,11 +30,7 @@ export const CommonSettings = () => {
   };
 
   return (
-    <div className="no-scrollbar flex h-full flex-col items-start gap-2 overflow-y-auto px-3 pb-12 md:px-6">
-      <p className="py-4 font-medium text-md text-zinc-800 dark:text-white">
-        Default Settings
-      </p>
-
+    <SettingsContainer title="Model Settings">
       <div className="flex w-full flex-col">
         <div className="flex w-full flex-row items-center justify-between py-2">
           <p className="flex flex-row items-center gap-1 text-sm text-zinc-500 md:text-base">
@@ -221,6 +217,6 @@ export const CommonSettings = () => {
           </div>
         </div>
       </div>
-    </div>
+    </SettingsContainer>
   );
 };

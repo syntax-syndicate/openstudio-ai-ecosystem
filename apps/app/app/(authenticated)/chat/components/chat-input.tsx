@@ -29,6 +29,7 @@ import {
 import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
+import { ComingSoon } from '@repo/design-system/components/ui/coming-soon';
 import {
   Command as CMDKCommand,
   CommandEmpty,
@@ -596,7 +597,7 @@ export const ChatInput = () => {
               <CommandList className="max-h-[160px] p-2">
                 <CommandItem onSelect={() => {}} disabled={true}>
                   <Plus size={14} weight="bold" className="flex-shrink-0" />{' '}
-                  Create New Prompt <Badge>Coming soon</Badge>
+                  Create New Prompt <ComingSoon />
                 </CommandItem>
                 {roles?.map((role, index) => (
                   <CommandItem

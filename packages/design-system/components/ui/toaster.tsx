@@ -11,9 +11,10 @@ import {
 import { useToast } from "@repo/design-system/components/ui/use-toast";
 //@ts-ignore
 import { Check, Warning } from "@phosphor-icons/react";
+import { Button } from "@repo/design-system/components/ui/button";
 
 export function Toaster() {
-  const { toasts } = useToast();
+  const { toasts, dismiss } = useToast();
   return (
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, ...props }) {
@@ -38,9 +39,22 @@ export function Toaster() {
                 {description && (
                   <ToastDescription>{description}</ToastDescription>
                 )}
+                {action && (
+                  <div className="pt-2 flex flex-row gap-1">
+                    {action}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        dismiss();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
               </div>
-              {action}
-              <ToastClose />
+              {!action && <ToastClose />}
             </div>
           </Toast>
         );
