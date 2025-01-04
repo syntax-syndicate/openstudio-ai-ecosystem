@@ -112,7 +112,7 @@ export const CommonSettings = () => {
           }}
         />
       </div>
-      <div className="grid w-full grid-cols-2 gap-2">
+      <div className="grid w-full grid-cols-1 gap-2">
         <div className="flex flex-col">
           <div className="flex w-full flex-row items-center justify-between py-2">
             <Tooltip content="Temprature">
