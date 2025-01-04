@@ -39,7 +39,7 @@ async function scrapeWebsite(url: string) {
   return cleanedContent;
 }
 
-export async function POST(req: NextRequest, resp: NextResponse) {
+export async function POST(req: NextRequest) {
   const { url } = await req.json();
   if (!url) {
     return Response.json({ error: 'No URL provided' }, { status: 401 });
