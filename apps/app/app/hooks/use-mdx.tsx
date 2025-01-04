@@ -1,4 +1,10 @@
 import { CodeBlock } from '@/app/(authenticated)/chat/components/codeblock';
+import { ArrowUpRight, Link } from '@phosphor-icons/react';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@repo/design-system/components/ui/hover-card';
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
@@ -45,12 +51,37 @@ export const useMarkdown = () => {
         link: (href, text) => {
           if (text && href) {
             return (
-              <a
-                href={href}
-                className="rounded-md px-1 py-1 underline decoration-blue-300 underline-offset-4 hover:bg-blue-400/30 dark:bg-white/10"
-              >
-                {text}
-              </a>
+              <HoverCard>
+                <HoverCardTrigger>
+                  <a
+                    href={href}
+                    className="rounded-md px-1 py-1 underline decoration-blue-300 underline-offset-4 hover:bg-blue-400/30 dark:bg-white/10 "
+                  >
+                    {text}
+                  </a>
+                </HoverCardTrigger>
+                <HoverCardContent
+                  sideOffset={12}
+                  className="flex max-w-[500px] cursor-pointer flex-col items-start rounded-xl bg-zinc-700 p-3 hover:bg-zinc-800"
+                  onClick={() => {
+                    window.open(href, '_blank');
+                  }}
+                >
+                  <p className="flex w-full flex-row items-center gap-2 overflow-hidden whitespace-pre-wrap text-xs text-zinc-200 leading-5 dark:text-zinc-200">
+                    <Link
+                      size={16}
+                      weight="bold"
+                      className="flex-shrink-0 text-white"
+                    />
+                    {href}
+                    <ArrowUpRight
+                      size={16}
+                      weight="bold"
+                      className="flex-shrink-0 text-white"
+                    />
+                  </p>
+                </HoverCardContent>
+              </HoverCard>
             );
           }
           return <></>;
