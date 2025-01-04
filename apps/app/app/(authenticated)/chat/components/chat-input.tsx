@@ -462,7 +462,7 @@ export const ChatInput = () => {
   const renderAttachedImage = () => {
     if (attachment?.base64 && attachment?.file) {
       return (
-        <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
+        <div className="flex h-10 w-full flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300 md:w-[700px]">
           <ArrowElbowDownRight size={20} weight="bold" />
           <p className="relative ml-2 flex w-full flex-row items-center gap-2 text-xs">
             <Image
@@ -544,7 +544,7 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-white to-transparent px-4 pt-16 pb-4 transition-all duration-1000 ease-in-out dark:from-zinc-800',
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-white to-transparent px-2 pt-16 pb-1 transition-all duration-1000 ease-in-out md:px-4 md:pb-4 dark:from-zinc-800',
         isNewSession && 'top-0'
       )}
     >
@@ -555,16 +555,16 @@ export const ChatInput = () => {
         {renderListeningIndicator()}
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex w-full flex-col gap-1 md:w-[700px]">
         {renderSelectedContext()}
         {renderAttachedImage()}
         <Popover open={open} onOpenChange={setOpen}>
-          <PopoverAnchor>
+          <PopoverAnchor className="w-full">
             <motion.div
               variants={slideUpVariant}
               initial={'initial'}
               animate={editor?.isActive ? 'animate' : 'initial'}
-              className="flex w-[700px] flex-col items-start gap-0 overflow-hidden rounded-[1.25em] bg-zinc-50 dark:border-white/5 dark:bg-white/5"
+              className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-[1.25em] bg-zinc-50 dark:border-white/5 dark:bg-white/5"
             >
               <div className="flex min-h-14 w-full flex-row items-end gap-0 px-3 pt-3 pb-2">
                 {renderNewSession()}
@@ -605,7 +605,7 @@ export const ChatInput = () => {
               </div>
             </motion.div>
           </PopoverAnchor>
-          <PopoverContent className="w-[700px] overflow-hidden rounded-2xl p-0">
+          <PopoverContent className="min-w-[96vw] overflow-hidden rounded-2xl p-0 md:w-[700px]">
             <CMDKCommand>
               <CommandInput
                 placeholder="Search..."
