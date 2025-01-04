@@ -1,12 +1,12 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { usePreferenceContext } from '@/app/context/preferences/context';
+import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Switch } from '@repo/design-system/components/ui/switch';
 import { Type } from '@repo/design-system/components/ui/text';
 
 export const VoiceInput = () => {
-  const { setPreferencesMutation, preferencesQuery } = usePreferenceContext();
+  const { updatePreferences, preferences } = usePreferenceContext();
 
   return (
     <SettingsContainer title="Speech-to-Text Settings">
@@ -19,9 +19,9 @@ export const VoiceInput = () => {
             </Type>
           </Flex>
           <Switch
-            checked={preferencesQuery?.data?.whisperSpeechToTextEnabled}
+            checked={preferences?.whisperSpeechToTextEnabled}
             onCheckedChange={(checked) => {
-              setPreferencesMutation.mutate({
+              updatePreferences({
                 whisperSpeechToTextEnabled: checked,
               });
             }}

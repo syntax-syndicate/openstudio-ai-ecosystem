@@ -1,4 +1,4 @@
-import { usePreferenceContext } from '@/app/context/preferences/context';
+import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
 import { type TToolKey, useTools } from '@/app/hooks/use-tools';
 import { Plug } from '@phosphor-icons/react';
@@ -20,21 +20,24 @@ export const PluginSelect = ({ selectedModel }: TPluginSelect) => {
   const [isOpen, setIsOpen] = useState(false);
   const { tools } = useTools();
   const { getModelByKey } = useModelList();
-  const { setPreferences, getPreferences, preferencesQuery } =
-    usePreferenceContext();
-  const { data: preference } = preferencesQuery;
+  const { preferences, updatePreferences } = usePreferenceContext();
   const availableTools = tools.filter((tool) => tool.showInMenu);
   const availableToolsKey = availableTools.map((tool) => tool.key);
   const [selectedPlugins, setSelectedPlugins] = useState<TToolKey[]>([]);
   useEffect(() => {
-    getPreferences().then((preferences) => {
-      setSelectedPlugins(preferences.defaultPlugins || []);
-    });
+    setSelectedPlugins(
+      preferences.defaultPlugins?.filter((p) =>
+        availableToolsKey.includes(p)
+      ) || []
+    );
   }, [isOpen]);
+
   const model = getModelByKey(selectedModel);
+
   if (!model?.plugins?.length) {
     return null;
   }
+
   return (
     <>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -62,33 +65,29 @@ export const PluginSelect = ({ selectedModel }: TPluginSelect) => {
                 {tool.icon('md')} {tool.name} <span className="flex-1" />
                 <Switch
                   checked={selectedPlugins.includes(tool.key)}
-                  onCheckedChange={(checked) => {
-                    getPreferences().then(async (preferences) => {
-                      const defaultPlugins = preferences.defaultPlugins || [];
-                      const isValidated = await tool?.validate?.();
+                  onCheckedChange={async (checked) => {
+                    const defaultPlugins = preferences.defaultPlugins || [];
+                    const isValidated = await tool?.validate?.();
 
-                      if (checked) {
-                        if (tool?.validate === undefined || isValidated) {
-                          setPreferences({
-                            defaultPlugins: [...defaultPlugins, tool.key],
-                          });
-                          setSelectedPlugins([...selectedPlugins, tool.key]);
-                        } else {
-                          tool?.validationFailedAction?.();
-                        }
-                      } else {
-                        setPreferences({
-                          defaultPlugins: defaultPlugins.filter(
-                            (plugin) => plugin !== tool.key
-                          ),
+                    if (checked) {
+                      if (tool?.validate === undefined || isValidated) {
+                        updatePreferences({
+                          defaultPlugins: [...defaultPlugins, tool.key],
                         });
-                        setSelectedPlugins(
-                          selectedPlugins.filter(
-                            (plugin) => plugin !== tool.key
-                          )
-                        );
+                        setSelectedPlugins([...selectedPlugins, tool.key]);
+                      } else {
+                        tool?.validationFailedAction?.();
                       }
-                    });
+                    } else {
+                      updatePreferences({
+                        defaultPlugins: defaultPlugins.filter(
+                          (plugin) => plugin !== tool.key
+                        ),
+                      });
+                      setSelectedPlugins(
+                        selectedPlugins.filter((plugin) => plugin !== tool.key)
+                      );
+                    }
                   }}
                 />
               </div>

@@ -1,7 +1,6 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { usePreferenceContext } from '@/app/context/preferences/context';
-import { useModelSettings } from '@/app/hooks/use-model-settings';
+import { usePreferenceContext } from '@/app/context/preferences/provider';
 import {
   type TPreferences,
   defaultPreferences,
@@ -16,8 +15,7 @@ import { Textarea } from '@repo/design-system/components/ui/textarea';
 import type { ChangeEvent } from 'react';
 
 export const CommonSettings = () => {
-  const { preferencesQuery, setPreferencesMutation } = usePreferenceContext();
-  const { formik, setPreferences } = useModelSettings({});
+  const { preferences, updatePreferences } = usePreferenceContext();
 
   const renderResetToDefault = (key: keyof TPreferences) => {
     return (
@@ -26,8 +24,7 @@ export const CommonSettings = () => {
         size="iconXS"
         rounded="lg"
         onClick={() => {
-          setPreferences({ [key]: defaultPreferences[key] });
-          formik.setFieldValue(key, defaultPreferences[key]);
+          updatePreferences({ [key]: defaultPreferences[key] });
         }}
       >
         <ArrowClockwise size={14} weight="bold" />
@@ -39,13 +36,13 @@ export const CommonSettings = () => {
     return (e: ChangeEvent<HTMLInputElement>) => {
       const value = Number(e.target.value);
       if (value < min) {
-        setPreferencesMutation.mutate({ [key]: min });
+        updatePreferences({ [key]: min });
         return;
       } else if (value > max) {
-        setPreferencesMutation.mutate({ [key]: max });
+        updatePreferences({ [key]: max });
         return;
       }
-      setPreferencesMutation.mutate({ [key]: value });
+      updatePreferences({ [key]: value });
     };
   };
 
@@ -56,13 +53,13 @@ export const CommonSettings = () => {
   ) => {
     return (value: number[]) => {
       if (value?.[0] < min) {
-        setPreferencesMutation.mutate({ [key]: min });
+        updatePreferences({ [key]: min });
         return;
       } else if (value?.[0] > max) {
-        setPreferencesMutation.mutate({ [key]: max });
+        updatePreferences({ [key]: max });
         return;
       }
-      setPreferencesMutation.mutate({ [key]: value?.[0] });
+      updatePreferences({ [key]: value?.[0] });
     };
   };
 
@@ -80,11 +77,10 @@ export const CommonSettings = () => {
         </div>
         <Textarea
           name="systemPrompt"
-          value={formik.values.systemPrompt}
+          value={preferences.systemPrompt}
           autoComplete="off"
           onChange={(e) => {
-            setPreferences({ systemPrompt: e.target.value });
-            formik.setFieldValue('systemPrompt', e.target.value);
+            updatePreferences({ systemPrompt: e.target.value });
           }}
         />
       </div>
@@ -103,10 +99,10 @@ export const CommonSettings = () => {
               type="number"
               size="sm"
               className="w-[100px]"
-              value={preferencesQuery?.data?.messageLimit}
+              value={preferences?.messageLimit}
               autoComplete="off"
               onChange={(e) => {
-                setPreferencesMutation.mutate({
+                updatePreferences({
                   messageLimit: Number(e.target.value),
                 });
               }}
@@ -129,10 +125,10 @@ export const CommonSettings = () => {
               type="number"
               size="sm"
               className="w-[100px]"
-              value={preferencesQuery?.data?.maxTokens}
+              value={preferences?.maxTokens}
               autoComplete="off"
               onChange={(e) => {
-                setPreferencesMutation.mutate({
+                updatePreferences({
                   maxTokens: Number(e.target.value),
                 });
               }}
@@ -152,7 +148,7 @@ export const CommonSettings = () => {
           <Flex items="center" gap="sm">
             <Slider
               className="my-2 w-[80px]"
-              value={[Number(preferencesQuery?.data?.temperature)]}
+              value={[Number(preferences?.temperature)]}
               min={0}
               step={0.1}
               max={1}
@@ -163,7 +159,7 @@ export const CommonSettings = () => {
               type="number"
               size="sm"
               className="w-[80px]"
-              value={preferencesQuery?.data?.temperature}
+              value={preferences?.temperature}
               min={0}
               step={1}
               max={100}
@@ -185,7 +181,7 @@ export const CommonSettings = () => {
           <Flex items="center" gap="sm">
             <Slider
               className="my-2 w-[80px]"
-              value={[Number(formik.values.topP)]}
+              value={[Number(preferences.topP)]}
               min={0}
               step={0.01}
               max={1}
@@ -196,7 +192,7 @@ export const CommonSettings = () => {
               type="number"
               size="sm"
               className="w-[80px]"
-              value={formik.values.topP}
+              value={preferences.topP}
               min={0}
               step={1}
               max={1}
@@ -218,7 +214,7 @@ export const CommonSettings = () => {
           <Flex items="center" gap="sm">
             <Slider
               className="my-2 w-[80px]"
-              value={[Number(formik.values.topK)]}
+              value={[Number(preferences.topK)]}
               min={1}
               step={1}
               max={100}
@@ -229,7 +225,7 @@ export const CommonSettings = () => {
               type="number"
               size="sm"
               className="w-[80px]"
-              value={formik.values.topK}
+              value={preferences.topK}
               min={0}
               step={1}
               max={100}

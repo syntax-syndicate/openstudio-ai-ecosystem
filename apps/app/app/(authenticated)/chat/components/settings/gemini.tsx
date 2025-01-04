@@ -1,6 +1,6 @@
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
+import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { useLLMTest } from '@/app/hooks/use-llm-test';
-import { usePreferences } from '@/app/hooks/use-preferences';
 import { ArrowRight, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
@@ -8,15 +8,11 @@ import { useEffect, useState } from 'react';
 
 export const GeminiSettings = () => {
   const [key, setKey] = useState<string>('');
-  const { getApiKey, setApiKey } = usePreferences();
+  const { apiKeys, updateApiKey } = usePreferenceContext();
   const { renderSaveApiKeyButton } = useLLMTest();
   useEffect(() => {
-    getApiKey('gemini').then((key) => {
-      if (key) {
-        setKey(key);
-      }
-    });
-  }, []);
+    setKey(apiKeys.gemini || '');
+  }, [apiKeys.gemini]);
   return (
     <SettingsContainer title="Gemini Settings">
       <div className="flex flex-row items-end justify-between">
@@ -35,7 +31,7 @@ export const GeminiSettings = () => {
       />
       <div className="flex flex-row items-center gap-2">
         {renderSaveApiKeyButton('gemini', key, () => {
-          setApiKey('gemini', key);
+          updateApiKey('gemini', key);
         })}
         <Button
           size="sm"

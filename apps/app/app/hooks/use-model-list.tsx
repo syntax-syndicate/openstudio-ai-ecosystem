@@ -1,8 +1,6 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
-import {
-  defaultPreferences,
-  usePreferences,
-} from '@/app/hooks/use-preferences';
+import { usePreferenceContext } from '@/app/context/preferences/provider';
+import { defaultPreferences } from '@/app/hooks/use-preferences';
 import type { TToolKey } from '@/app/hooks/use-tools';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
@@ -37,9 +35,8 @@ export type TModel = {
   maxOutputTokens?: number;
 };
 export const useModelList = () => {
-  const { getPreferences } = usePreferences();
+  const { preferences } = usePreferenceContext();
   const createInstance = async (model: TModel, apiKey: string) => {
-    const preferences = await getPreferences();
     const temperature =
       preferences.temperature || defaultPreferences.temperature;
     const topP = preferences.topP || defaultPreferences.topP;

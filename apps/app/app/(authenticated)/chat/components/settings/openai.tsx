@@ -1,6 +1,7 @@
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
+import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { useLLMTest } from '@/app/hooks/use-llm-test';
-import { usePreferences } from '@/app/hooks/use-preferences';
+
 import { ArrowRight, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
@@ -8,15 +9,11 @@ import { useEffect, useState } from 'react';
 
 export const OpenAISettings = () => {
   const [key, setKey] = useState<string>('');
-  const { getApiKey, setApiKey } = usePreferences();
+  const { apiKeys, updateApiKey } = usePreferenceContext();
   const { renderSaveApiKeyButton } = useLLMTest();
   useEffect(() => {
-    getApiKey('openai').then((key) => {
-      if (key) {
-        setKey(key);
-      }
-    });
-  }, []);
+    setKey(apiKeys.openai || '');
+  }, [apiKeys.openai]);
   return (
     <SettingsContainer title="OpenAI Settings">
       <div className="flex flex-row items-end justify-between">
@@ -33,7 +30,7 @@ export const OpenAISettings = () => {
       />
       <div className="flex flex-row items-center gap-2">
         {renderSaveApiKeyButton('openai', key, () => {
-          setApiKey('openai', key);
+          updateApiKey('openai', key);
         })}
         <Button
           size="sm"

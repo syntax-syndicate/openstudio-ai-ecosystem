@@ -1,9 +1,8 @@
 import { ModelInfo } from '@/app/(authenticated)/chat/components/model-info';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
-import {
-  defaultPreferences,
-  usePreferences,
-} from '@/app/hooks/use-preferences';
+import { defaultPreferences } from '@/app/hooks/use-preferences';
+
+import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { GearSix } from '@phosphor-icons/react';
 import { DropdownMenuSubTrigger } from '@radix-ui/react-dropdown-menu';
 import { Badge } from '@repo/design-system/components/ui/badge';
@@ -37,11 +36,10 @@ export const ModelSelect = ({
   className,
 }: TModelSelect) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { preferencesQuery, setPreferencesMutation } = usePreferences();
+  const { preferences, updatePreferences } = usePreferenceContext();
   const { getModelByKey, models } = useModelList();
 
-  const activeModel =
-    preferencesQuery?.data?.defaultModel && getModelByKey(selectedModel);
+  const activeModel = preferences?.defaultModel && getModelByKey(selectedModel);
 
   return (
     <>
@@ -75,16 +73,14 @@ export const ModelSelect = ({
                   )}
                   key={model.key}
                   onClick={() => {
-                    setPreferencesMutation.mutate(
+                    updatePreferences(
                       {
                         defaultModel: model.key,
                         maxTokens: defaultPreferences.maxTokens,
                       },
-                      {
-                        onSuccess: () => {
-                          setSelectedModel(model.key);
-                          setIsOpen(false);
-                        },
+                      () => {
+                        setSelectedModel(model.key);
+                        setIsOpen(false);
                       }
                     );
                   }}

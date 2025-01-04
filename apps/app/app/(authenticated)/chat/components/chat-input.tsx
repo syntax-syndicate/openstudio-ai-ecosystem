@@ -6,7 +6,6 @@ import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useSettings } from '@/app/context/settings/context';
 import type { TModelKey } from '@/app/hooks/use-model-list';
-import { usePreferences } from '@/app/hooks/use-preferences';
 import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
@@ -32,7 +31,7 @@ import { cn } from '@repo/design-system/lib/utils';
 
 import { Footer } from '@/app/(authenticated)/chat/components/footer';
 import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
-import { usePreferenceContext } from '@/app/context/preferences/context';
+import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { EditorContent } from '@tiptap/react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -62,12 +61,14 @@ export const ChatInput = () => {
     sendMessage,
   } = useChatContext();
   const [contextValue, setContextValue] = useState<string>('');
-  const { getApiKey } = usePreferences();
+  const { apiKeys } = usePreferenceContext();
+  const { preferences } = usePreferenceContext();
   const { open: openSettings } = useSettings();
-  const { preferencesQuery } = usePreferenceContext();
   const { showPopup, selectedText, handleClearSelection } = useTextSelection();
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedModel, setSelectedModel] = useState<TModelKey>('gpt-4-turbo');
+  const [selectedModel, setSelectedModel] = useState<TModelKey>(
+    preferences?.defaultModel || 'gpt-3.5-turbo'
+  );
 
   const [attachment, setAttachment] = useState<TAttachment>();
 
@@ -157,8 +158,8 @@ export const ChatInput = () => {
   }, [text]);
 
   const startVoiceRecording = async () => {
-    const apiKey = await getApiKey('openai');
-    if (!apiKey) {
+    const openAIAPIKeys = apiKeys.openai;
+    if (!openAIAPIKeys) {
       toast({
         title: 'API key missing',
         description:
@@ -168,7 +169,7 @@ export const ChatInput = () => {
       openSettings('openai');
       return;
     }
-    if (preferencesQuery.data?.whisperSpeechToTextEnabled) {
+    if (preferences?.whisperSpeechToTextEnabled) {
       startRecording();
     } else {
       toast({

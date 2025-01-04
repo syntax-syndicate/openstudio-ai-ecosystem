@@ -20,7 +20,7 @@ export type TPreferences = {
   googleSearchApiKey?: string;
 };
 export const defaultPreferences: TPreferences = {
-  defaultModel: 'gpt-4-turbo',
+  defaultModel: 'gpt-3.5-turbo',
   systemPrompt: 'You are a helpful assistant.',
   messageLimit: 30,
   temperature: 0.5,
