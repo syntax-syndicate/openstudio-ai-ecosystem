@@ -100,8 +100,8 @@ export const ChatInput = () => {
         Enter: (_) => {
           if (_.editor.getText()?.length > 0) {
             handleRunModel(_.editor.getText(), () => {
-              clearInput();
-              focusToInput();
+              _.editor.commands.clearContent();
+              _.editor.commands.focus("end");
             });
           }
           return true;
@@ -543,7 +543,7 @@ export const ChatInput = () => {
               animate={editor?.isActive ? 'animate' : 'initial'}
               className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-2xl bg-zinc-50 dark:border-white/5 dark:bg-white/5"
             >
-              <div className="flex w-full flex-row items-end gap-0 px-3 py-2">
+              <div className="flex w-full flex-row items-end gap-0 pl-4 pr-2 py-2">
                 {/* {renderNewSession()} */}
                 <EditorContent
                   editor={editor}
