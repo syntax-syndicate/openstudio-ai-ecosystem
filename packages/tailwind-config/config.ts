@@ -99,6 +99,16 @@ export const config: Config = {
           ring: 'hsl(var(--sidebar-ring))',
         },
       },
+      fontSize: {
+        xs: "0.78rem",
+        sm: "0.84rem",
+        base: "0.90rem",
+        xl: '1.25rem',
+        '2xl': '1.563rem',
+        '3xl': '1.953rem',
+        '4xl': '2.441rem',
+        '5xl': '3.052rem',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

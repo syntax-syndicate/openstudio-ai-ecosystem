@@ -85,7 +85,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 </div>
                 <span
                   className={cn(
-                    'text-sm md:text-base',
+                    'text-sm md:text-base md:flex',
                     selectedMenu === menu.key ? 'flex' : 'hidden'
                   )}
                 >
@@ -107,7 +107,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 {menu.icon()}
                 <span
                   className={cn(
-                    'text-sm md:text-base',
+                    'text-sm md:text-base md:flex',
                     selectedMenu === menu.key ? 'flex' : 'hidden'
                   )}
                 >
