@@ -2,11 +2,6 @@ import { SettingsContainer } from '@/app/(authenticated)/chat/components/setting
 import { useLLMTest } from '@/app/hooks/use-llm-test';
 import { usePreferences } from '@/app/hooks/use-preferences';
 import { ArrowRight, Info } from '@phosphor-icons/react';
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '@repo/design-system/components/ui/alert';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
 import { useEffect, useState } from 'react';
@@ -14,7 +9,7 @@ import { useEffect, useState } from 'react';
 export const GeminiSettings = () => {
   const [key, setKey] = useState<string>('');
   const { getApiKey, setApiKey } = usePreferences();
-  const { renderTestButton } = useLLMTest();
+  const { renderSaveApiKeyButton } = useLLMTest();
   useEffect(() => {
     getApiKey('gemini').then((key) => {
       if (key) {
@@ -36,11 +31,12 @@ export const GeminiSettings = () => {
         value={key}
         onChange={(e) => {
           setKey(e.target.value);
-          setApiKey('gemini', e.target.value);
         }}
       />
       <div className="flex flex-row items-center gap-2">
-        {renderTestButton('gemini')}
+        {renderSaveApiKeyButton('gemini', key, () => {
+          setApiKey('gemini', key);
+        })}
         <Button
           size="sm"
           variant="secondary"
@@ -51,14 +47,13 @@ export const GeminiSettings = () => {
           Get your API key here <ArrowRight size={16} weight="bold" />
         </Button>
       </div>
-      <Alert variant="success">
-        <Info className="h-4 w-4" />
-        <AlertTitle>Attention!</AlertTitle>
-        <AlertDescription>
+      <div className="flex flex-row items-start gap-1 py-2 text-zinc-500">
+        <Info size={16} weight="bold" />
+        <p className=" text-xs">
           Your API Key is stored locally on your browser and never sent anywhere
           else.
-        </AlertDescription>
-      </Alert>
+        </p>
+      </div>
     </SettingsContainer>
   );
 };

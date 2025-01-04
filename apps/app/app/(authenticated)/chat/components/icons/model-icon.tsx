@@ -10,7 +10,9 @@ export type TModelIcon = {
     | 'openai'
     | 'chathub'
     | 'websearch'
-    | 'calculator';
+    | 'calculator'
+    | 'duckduckgo_search'
+    | 'website_reader';
   size: 'sm' | 'md' | 'lg';
 };
 
@@ -24,6 +26,8 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
     chathub: '/icons/chathub.svg',
     websearch: '/icons/websearch.svg',
     calculator: '/icons/calculator.svg',
+    duckduckgo_search: '/icons/duckduckgo.svg',
+    website_reader: '/icons/website_reader.svg',
   };
   return (
     <Image

@@ -53,7 +53,7 @@ export const QuickSettings = () => {
           <div className="flex w-full flex-col rounded-2xl p-2 hover:bg-zinc-50 dark:hover:bg-black/30">
             <div className="flex w-full flex-row items-center justify-between">
               <Tooltip content="Temprature">
-                <p className="flex flex-row items-center gap-1 text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+                <p className="flex flex-row items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400">
                   MaxTokens <Info weight="regular" size={14} />{' '}
                   {formik.values.maxTokens}
                 </p>
@@ -75,7 +75,7 @@ export const QuickSettings = () => {
           <div className="flex w-full flex-col rounded-2xl p-2 hover:bg-zinc-50 dark:hover:bg-black/30">
             <div className="flex w-full flex-row items-center justify-between">
               <Tooltip content="Temprature">
-                <p className="flex flex-row items-center gap-1 text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+                <p className="flex flex-row items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400">
                   Temperature <Info weight="regular" size={14} />{' '}
                   {formik.values.temperature}
                 </p>
@@ -108,7 +108,7 @@ export const QuickSettings = () => {
           <div className="flex w-full flex-col rounded-2xl p-2 hover:bg-zinc-50 dark:hover:bg-black/30">
             <div className="flex w-full flex-row items-center justify-between">
               <Tooltip content="TopP">
-                <p className="flex flex-row items-center gap-1 text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+                <p className="flex flex-row items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400">
                   TopP <Info weight="regular" size={14} /> {formik.values.topP}
                 </p>
               </Tooltip>
@@ -137,7 +137,7 @@ export const QuickSettings = () => {
           <div className="flex w-full flex-col rounded-2xl p-2 hover:bg-zinc-50 dark:hover:bg-black/30">
             <div className="flex w-full flex-row items-center justify-between">
               <Tooltip content="TopK">
-                <p className="flex flex-row items-center gap-1 text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+                <p className="flex flex-row items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400">
                   TopK <Info weight="regular" size={14} /> {formik.values.topK}
                 </p>
               </Tooltip>

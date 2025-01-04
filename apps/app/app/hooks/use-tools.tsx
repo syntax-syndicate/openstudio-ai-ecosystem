@@ -203,7 +203,9 @@ export const useTools = () => {
       isBeta: true,
       loadingMessage: 'Searching on web...',
       resultMessage: 'Results from DuckDuckGo Search',
-      icon: (size: IconSize) => <ModelIcon type="websearch" size={size} />,
+      icon: (size: IconSize) => (
+        <ModelIcon type="duckduckgo_search" size={size} />
+      ),
       smallIcon: () => <Globe size={16} weight="bold" />,
     },
     {
@@ -213,7 +215,7 @@ export const useTools = () => {
       isBeta: true,
       loadingMessage: 'Analyzing website...',
       resultMessage: 'Results from Website Reader',
-      icon: (size: IconSize) => <ModelIcon type="websearch" size={size} />,
+      icon: (size: IconSize) => <ModelIcon type="website_reader" size={size} />,
       smallIcon: () => <Browser size={16} weight="bold" />,
     },
   ];
