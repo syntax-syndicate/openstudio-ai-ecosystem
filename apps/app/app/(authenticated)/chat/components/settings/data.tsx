@@ -13,9 +13,9 @@ export const Data = () => {
 
   const clearAllData = async () => {
     toast({
-      title: "Clear All Data?",
-      description: "This action cannot be undone.",
-      variant: "destructive",
+      title: 'Clear All Data?',
+      description: 'This action cannot be undone.',
+      variant: 'destructive',
       action: (
         <Button
           size="sm"
@@ -24,9 +24,9 @@ export const Data = () => {
             clearSessions().then(() => {
               createNewSession().then((session) => {
                 toast({
-                  title: "Data Cleared",
-                  description: "All chat data has been cleared",
-                  variant: "default",
+                  title: 'Data Cleared',
+                  description: 'All chat data has been cleared',
+                  variant: 'default',
                 });
                 push(`/chat/${session?.id}`);
                 dismiss();
