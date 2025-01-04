@@ -19,7 +19,7 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="absolute flex justify-between items-center p-2 md:p-4 flex-row top-0 left-0 right-0 bg-gradient-to-b from-white dark:from-zinc-800 to-transparent from-70% z-50">
+    <div className="absolute top-0 right-0 left-0 z-50 flex flex-row items-center justify-between bg-gradient-to-b from-70% from-white to-transparent p-2 md:p-4 dark:from-zinc-800">
       <div className="flex flex-row items-center gap-2">
         <ModelIcon type="chathub" size="md" />
         <p className="text-sm text-zinc-500">ChatHub</p>
