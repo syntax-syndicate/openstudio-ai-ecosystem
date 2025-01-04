@@ -1,4 +1,5 @@
 import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
+import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 import { type TBot, useBots } from '@/app/hooks/use-bots';
 import { convertFileToBase64 } from '@/app/lib/helper';
 import { ArrowLeft, Plus } from '@phosphor-icons/react';
@@ -9,7 +10,6 @@ import { Input } from '@repo/design-system/components/ui/input';
 import { Textarea } from '@repo/design-system/components/ui/textarea';
 import { useFormik } from 'formik';
 import { useEffect, useRef } from 'react';
-import { ModelSelect } from '../model-select';
 
 export type TCreateBot = {
   open: boolean;
@@ -19,6 +19,7 @@ export type TCreateBot = {
 export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
   const { createBot } = useBots();
   const botTitleRef = useRef<HTMLInputElement | null>(null);
+
   const formik = useFormik<Omit<TBot, 'id'>>({
     initialValues: {
       name: '',
@@ -34,9 +35,11 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
       onOpenChange(false);
     },
   });
+
   useEffect(() => {
     botTitleRef?.current?.focus();
   }, [open]);
+
   const clearBot = () => {
     formik.resetForm();
   };
@@ -46,9 +49,8 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
       formik.setFieldValue('avatar', base64);
     });
   };
-
   return (
-    <div className="no-scrollbar relative flex h-full w-full flex-col items-start overflow-y-auto">
+    <div className="relative flex h-full w-full flex-col items-start overflow-hidden">
       <div className="flex w-full flex-row items-center gap-3 border-zinc-500/20 border-b px-2 py-2">
         <Button
           size="iconSm"
@@ -61,7 +63,7 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
         </Button>
         <p className="font-medium text-base">Create New Bot</p>
       </div>
-      <div className="flex w-full flex-1 flex-col items-start gap-4 p-4">
+      <div className="no-scrollbar flex h-full w-full flex-col items-start gap-8 overflow-y-auto p-4 pb-[100px]">
         <div className="flex w-full flex-col gap-2">
           <FormLabel label="Base Model" />
           <ModelSelect
@@ -74,31 +76,36 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
             }}
           />
         </div>
-        <p className="font-medium text-sm md:text-base">Bot Profile</p>
-        <div className="flex w-full flex-row items-center justify-start gap-2">
-          <BotAvatar
-            name={formik.values.name}
-            size="large"
-            avatar={formik.values.avatar}
-          />
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              document.getElementById('avatar')?.click();
-            }}
-          >
-            Upload Avatar
-          </Button>
-          <input
-            type="file"
-            id="avatar"
-            hidden
-            onChange={(e) => {
-              e.target.files?.[0] && uploadFile(e.target.files?.[0]);
-            }}
-          />
+        <div className="flex w-full flex-col gap-2">
+          <FormLabel label="Bot Avatar" />
+
+          <div className="flex w-full flex-row items-center justify-start gap-2">
+            <BotAvatar
+              name={formik.values.name}
+              size="large"
+              avatar={formik.values.avatar}
+            />
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                document.getElementById('avatar')?.click();
+              }}
+            >
+              Upload Avatar
+            </Button>
+            <input
+              type="file"
+              id="avatar"
+              hidden
+              onChange={(e) => {
+                e.target.files?.[0] && uploadFile(e.target.files?.[0]);
+              }}
+            />
+          </div>
         </div>
+
         <div className="flex w-full flex-col gap-2">
           <FormLabel label="Bot Name" />
           <Input
@@ -111,6 +118,7 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
             className="w-full"
           />
         </div>
+
         <div className="flex w-full flex-col gap-2">
           <FormLabel label="Bot Bio">
             A short description of your bot. This will be displayed in the bot
@@ -123,6 +131,7 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
             className="w-full"
           />
         </div>
+
         <div className="flex w-full flex-col gap-2">
           <FormLabel label="Knowledge">
             Provide custom knowledge that your bot will access to inform its
@@ -135,6 +144,7 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
             <Plus size={20} weight="bold" /> Add Knowledge <ComingSoon />
           </Button>
         </div>
+
         <div className="flex w-full flex-col gap-2">
           <FormLabel label="Greeting Message">
             The bot will send this message at the beginning of every
@@ -148,6 +158,7 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
             className="h-12 w-full"
           />
         </div>
+
         <div className="flex w-full flex-col gap-2">
           <FormLabel label="System Prompt">
             Assign bot a role to help users understand what the bot can do.
@@ -161,7 +172,7 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
           />
         </div>
       </div>
-      <div className="sticky right-0 bottom-0 left-0 flex w-full flex-row items-center gap-3 border-zinc-500/20 border-t bg-white px-2 py-2 dark:bg-zinc-800">
+      <div className="absolute right-0 bottom-0 left-0 flex w-full flex-row items-center gap-3 border-zinc-500/20 border-t bg-white px-2 py-2 dark:bg-zinc-800">
         <Button
           size="sm"
           variant="default"
@@ -181,6 +192,7 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
           Cancel
         </Button>
         <div className="flex-1"></div>
+
         <Button
           size="sm"
           variant="default"

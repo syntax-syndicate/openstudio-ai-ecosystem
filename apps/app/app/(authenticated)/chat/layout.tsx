@@ -3,6 +3,7 @@ import { Header } from '@/app/(authenticated)/components/header';
 import { BotsProvider } from '@/app/context/bots/provider';
 import { ChatProvider } from '@/app/context/chat/provider';
 import { FiltersProvider } from '@/app/context/filters/provider';
+import { PreferenceProvider } from '@/app/context/preferences/provider';
 import { PromptsProvider } from '@/app/context/prompts/provider';
 import { ReactQueryProvider } from '@/app/context/react-query/provider';
 import { SettingsProvider } from '@/app/context/settings/provider';
@@ -34,17 +35,19 @@ export default function ChatLayout({
       >
         <ReactQueryProvider>
           <TooltipProvider>
-            <SettingsProvider>
-              <ChatProvider>
-                <FiltersProvider>
-                  <BotsProvider>
-                    <PromptsProvider>
-                      <MainLayout>{children}</MainLayout>
-                    </PromptsProvider>
-                  </BotsProvider>
-                </FiltersProvider>
-              </ChatProvider>
-            </SettingsProvider>
+            <PreferenceProvider>
+              <SettingsProvider>
+                <ChatProvider>
+                  <FiltersProvider>
+                    <BotsProvider>
+                      <PromptsProvider>
+                        <MainLayout>{children}</MainLayout>
+                      </PromptsProvider>
+                    </BotsProvider>
+                  </FiltersProvider>
+                </ChatProvider>
+              </SettingsProvider>
+            </PreferenceProvider>
           </TooltipProvider>
         </ReactQueryProvider>
       </ThemeProvider>

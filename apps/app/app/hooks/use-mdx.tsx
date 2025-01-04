@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion';
+import Markdown from 'marked-react';
+
 import { CodeBlock } from '@/app/(authenticated)/chat/components/codeblock';
 import { ArrowUpRight, Link } from '@phosphor-icons/react';
 import {
@@ -6,9 +9,8 @@ import {
   HoverCardTrigger,
 } from '@repo/design-system/components/ui/hover-card';
 import { cn } from '@repo/design-system/lib/utils';
-import { motion } from 'framer-motion';
-import Markdown from 'marked-react';
-import type { JSX } from 'react';
+import { type ReactNode, useState } from 'react';
+import type { JSX } from 'react/jsx-runtime';
 
 export const REVEAL_ANIMATION_VARIANTS = {
   hidden: { opacity: 0 },
@@ -18,14 +20,23 @@ export const REVEAL_ANIMATION_VARIANTS = {
   },
 };
 
+export type TLink = {
+  href: string;
+  text: ReactNode;
+};
 export const useMarkdown = () => {
-  const renderMarkdown = (message: string, animate: boolean) => (
+  const [links, setLinks] = useState<TLink[]>([]);
+
+  const renderMarkdown = (
+    message: string,
+    animate: boolean,
+    messageId: string
+  ) => (
     <Markdown
       renderer={{
         text: (children) => (
           <motion.span
             variants={REVEAL_ANIMATION_VARIANTS}
-            className="text-zinc-700 tracking-[0.01em] dark:text-zinc-100"
             animate={'visible'}
             initial={animate ? 'hidden' : 'visible'}
           >
@@ -33,19 +44,18 @@ export const useMarkdown = () => {
           </motion.span>
         ),
         paragraph: (children) => (
-          <p className="text-sm leading-7 md:text-base">{children}</p>
+          <p className="text-xs text-zinc-700 leading-relaxed md:text-sm dark:text-zinc-100">
+            {children}
+          </p>
         ),
         em: (children) => (
-          <em className="text-sm italic opacity-50 md:text-base">{children}</em>
+          <em className="text-xs italic opacity-50 md:text-sm">{children}</em>
         ),
         heading: (children, level) => {
           const Heading = `h${level}` as keyof JSX.IntrinsicElements;
           return (
             <Heading
-              className={cn(
-                'font-medium',
-                level < 4 ? 'py-2 text-lg' : 'py-1 text-md'
-              )}
+              className={cn('font-medium', level < 4 ? 'text-md' : 'text-base')}
             >
               {children}
             </Heading>
@@ -59,7 +69,8 @@ export const useMarkdown = () => {
                 <HoverCardTrigger>
                   <a
                     href={href}
-                    className="rounded-md px-1 py-1 underline decoration-blue-300 underline-offset-4 hover:bg-blue-400/30 dark:bg-white/10 "
+                    data-message-id={messageId}
+                    className="rounded-md px-1 py-1 text-blue-500 underline decoration-blue-400/10 underline-offset-4 hover:bg-blue-400/10 hover:decoration-blue-400 dark:text-blue-300"
                   >
                     {text}
                   </a>
@@ -71,7 +82,7 @@ export const useMarkdown = () => {
                     window.open(href, '_blank');
                   }}
                 >
-                  <p className="flex w-full flex-row items-center gap-2 overflow-hidden whitespace-pre-wrap text-xs text-zinc-200 leading-5 dark:text-zinc-200">
+                  <p className="flex w-full flex-row items-center gap-2 overflow-hidden whitespace-pre-wrap text-xs text-zinc-200 leading-relaxed dark:text-zinc-200">
                     <Link
                       size={16}
                       weight="bold"
@@ -92,18 +103,18 @@ export const useMarkdown = () => {
         },
         blockquote: (children) => (
           <blockquote className="border-gray-300 border-l-4 pl-4 italic">
-            <p className="text-sm leading-7 md:text-base ">{children}</p>
+            <p className="text-xs leading-relaxed md:text-sm ">{children}</p>
           </blockquote>
         ),
         list: (children, ordered) =>
           ordered ? (
-            <ol className="ml-4 list-decimal">{children}</ol>
+            <ol className="ml-4 list-decimal text-xs md:text-sm">{children}</ol>
           ) : (
             <ul className="ml-4 list-disc">{children}</ul>
           ),
         listItem: (children) => (
           <li className="my-4">
-            <p className="text-sm leading-7 md:text-base ">{children}</p>
+            <p className="text-xs leading-relaxed md:text-sm">{children}</p>
           </li>
         ),
         strong: (children) => (
@@ -115,25 +126,26 @@ export const useMarkdown = () => {
           </div>
         ),
         codespan: (code) => (
-          <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-sm text-zinc-800 md:text-base dark:bg-white/10 dark:text-white">
+          <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-xs text-zinc-800 md:text-sm dark:bg-white/10 dark:text-white">
             {code}
           </span>
         ),
         br: () => <br />,
         table: (children) => (
           <div className="my-3 overflow-x-auto rounded-xl border border-zinc-100 dark:border-white/10 ">
-            <table className="w-full overflow-hidden text-left text-gray-600 text-sm md:text-base rtl:text-right dark:text-gray-200">
+            <table className="w-full overflow-hidden text-left text-gray-600 text-xs md:text-sm rtl:text-right dark:text-gray-200">
               {children}
             </table>
           </div>
         ),
         tableHeader(children) {
           return (
-            <thead className="w-full bg-zinc-50 font-medium text-sm text-zinc-800 uppercase md:text-base dark:bg-white/10 dark:text-white/20">
+            <thead className="w-full bg-zinc-50 font-medium text-xs text-zinc-800 uppercase md:text-sm dark:bg-white/10 dark:text-white/20">
               {children}
             </thead>
           );
         },
+
         tableRow(children) {
           return (
             <tr className="hover:bg-zinc-50 dark:bg-white/5">{children}</tr>
@@ -143,7 +155,7 @@ export const useMarkdown = () => {
           if (flags.header) {
             return <th className="p-3 text-xs md:text-sm">{children}</th>;
           }
-          return <td className="p-3 text-sm md:text-base">{children}</td>;
+          return <td className="p-3 text-xs md:text-sm">{children}</td>;
         },
         tableBody: (children) => <tbody>{children}</tbody>,
       }}
@@ -152,5 +164,5 @@ export const useMarkdown = () => {
     </Markdown>
   );
 
-  return { renderMarkdown };
+  return { renderMarkdown, links };
 };

@@ -14,12 +14,14 @@ import {
   AlertDescription,
 } from '@repo/design-system/components/ui/alert';
 import { Button } from '@repo/design-system/components/ui/button';
+import { Flex } from '@repo/design-system/components/ui/flex';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@repo/design-system/components/ui/popover';
+import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useRef, useState } from 'react';
 
@@ -38,26 +40,30 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
     isToolRunning,
     toolName,
   } = chatMessage;
+
   const { getToolInfoByKey } = useTools();
+
   const toolUsed = toolName
     ? getToolInfoByKey(toolName as TToolKey)
     : undefined;
   const messageRef = useRef<HTMLDivElement>(null);
   const { showCopied, copy } = useClipboard();
   const { getModelByKey } = useModelList();
-  const { renderMarkdown } = useMarkdown();
-  const modelForMessage = getModelByKey(model);
+  const { renderMarkdown, links } = useMarkdown();
   const { open: openSettings } = useSettings();
+
+  const { removeMessage, currentSession, handleRunModel } = useChatContext();
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+
+  const modelForMessage = getModelByKey(model);
 
   const handleCopyContent = () => {
     messageRef?.current && rawAI && copy(rawAI);
   };
-  const { removeMessage, currentSession, handleRunModel } = useChatContext();
 
   return (
-    <div className="mt-6 flex w-full flex-col gap-2 md:flex-row">
-      <div className="px-0 py-0 md:px-3">
+    <div className="mt-6 flex w-full flex-col md:flex-row">
+      <div className="p-0 md:p-3">
         {currentSession?.bot ? (
           <BotAvatar
             size="small"
@@ -68,25 +74,29 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
           modelForMessage?.icon()
         )}
       </div>
-      <div
+      <Flex
         ref={messageRef}
-        className=" flex w-full flex-col items-start rounded-2xl"
+        direction="col"
+        gap="md"
+        items="start"
+        className="w-full rounded-2xl p-4 hover:bg-zinc-50/50 dark:hover:bg-white/5"
       >
         {toolUsed && (
-          <div className="flex flex-row items-center gap-2 py-2 text-xs text-zinc-500">
+          <Type
+            size="xs"
+            className="flex flex-row items-center gap-2"
+            textColor="tertiary"
+          >
             {toolUsed.smallIcon()}
             {isToolRunning ? (
-              <p className="text-xs">{toolUsed.loadingMessage}</p>
+              <span>{toolUsed.loadingMessage}</span>
             ) : (
-              <p>{toolUsed.resultMessage}</p>
+              <span>{toolUsed.resultMessage}</span>
             )}
-          </div>
+          </Type>
         )}
-        {rawAI && (
-          <div className="w-full pb-2">
-            {renderMarkdown(rawAI, !!isLoading)}
-          </div>
-        )}
+
+        {rawAI && renderMarkdown(rawAI, !!isLoading, id)}
         {errorMesssage && (
           <Alert variant="destructive">
             <AlertDescription>
@@ -99,13 +109,18 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
                 }}
               >
                 Check API Key
-              </Button>{' '}
+              </Button>
             </AlertDescription>
           </Alert>
         )}
-        <div className="flex w-full flex-row items-center justify-between py-3 opacity-70 transition-opacity hover:opacity-100">
+
+        <Flex
+          justify="between"
+          items="center"
+          className="w-full pt-3 opacity-70 transition-opacity hover:opacity-100"
+        >
           {isLoading && !isToolRunning && <Spinner />}
-          {!isLoading && (
+          {!isLoading && !isToolRunning && (
             <div className="flex flex-row gap-1">
               <Tooltip content="Copy">
                 <Button
@@ -174,13 +189,13 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
               </Tooltip>
             </div>
           )}
-          {!isLoading && (
+          {!isLoading && !isToolRunning && (
             <div className="flex flex-row items-center gap-2 text-xs text-zinc-500">
               {modelForMessage?.name}
             </div>
           )}
-        </div>
-      </div>
+        </Flex>
+      </Flex>
     </div>
   );
 };

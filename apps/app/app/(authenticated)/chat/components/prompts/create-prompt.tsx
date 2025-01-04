@@ -14,7 +14,6 @@ import { useEffect, useRef, useState } from 'react';
 
 export type TCreatePrompt = {
   open: boolean;
-
   onOpenChange: (open: boolean) => void;
 };
 
@@ -41,31 +40,36 @@ export const CreatePrompt = ({ open, onOpenChange }: TCreatePrompt) => {
     ],
     content: ``,
     autofocus: true,
+
     onTransaction(props) {
-      //   const { editor } = props;
-      //   const text = editor.getText();
-      //   const html = editor.getHTML();
-      //   const newHTML = html.replace(
-      //     /{{{{(.*?)}}}}/g,
-      //     ` <mark class="prompt-highlight">$1</mark> `
-      //   );
-      //   if (newHTML !== html) {
-      //     editor.commands.setContent(newHTML, true, {
-      //       preserveWhitespace: true,
-      //     });
-      //   }
+      // const { editor } = props;
+      // const text = editor.getText();
+      // setRawPrompt(text);
+      // const html = editor.getHTML();
+      // const newHTML = html.replace(
+      //   /{{{{(.*?)}}}}/g,
+      //   ` <mark class="prompt-highlight">$1</mark> `
+      // );
+      // if (newHTML !== html) {
+      //   editor.commands.setContent(newHTML, true, {
+      //     preserveWhitespace: true,
+      //   });
+      // }
     },
     parseOptions: {
       preserveWhitespace: true,
     },
   });
+
   useEffect(() => {
     promptTitleRef?.current?.focus();
   }, [open]);
+
   const clearPrompt = () => {
     setPromptTitle('');
     editor?.commands.setContent('');
   };
+
   const savePrompt = async () => {
     const content = editor?.getText();
     if (!content) {
@@ -73,10 +77,12 @@ export const CreatePrompt = ({ open, onOpenChange }: TCreatePrompt) => {
     }
     await setPrompt({ name: promptTitle, content });
     clearPrompt();
+
     onOpenChange(false);
   };
+
   return (
-    <div className="flex w-full flex-col items-start">
+    <div className="relative flex h-full w-full flex-col items-start overflow-hidden">
       <div className="flex w-full flex-row items-center gap-3 border-zinc-500/20 border-b px-2 py-2">
         <Button
           size="iconSm"
@@ -89,7 +95,7 @@ export const CreatePrompt = ({ open, onOpenChange }: TCreatePrompt) => {
         </Button>
         <p className="font-medium text-base">Create New Prompt</p>
       </div>
-      <div className="flex w-full flex-1 flex-col p-2">
+      <div className="no-scrollbar flex h-full w-full flex-1 flex-col overflow-y-auto p-2 pb-[80px]">
         <Input
           type="text"
           placeholder="Prompt Title"
@@ -102,15 +108,14 @@ export const CreatePrompt = ({ open, onOpenChange }: TCreatePrompt) => {
         <EditorContent
           editor={editor}
           autoFocus
-          className="no-scrollbar [&>*]:no-scrollbar wysiwyg h-full min-h-24 w-full cursor-text p-3 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-7 [&>*]:outline-none"
+          className="no-scrollbar [&>*]:no-scrollbar w-full cursor-text p-3 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-7 [&>*]:outline-none"
         />
         <p className="flex flex-row items-center gap-2 px-3 py-2 text-xs text-zinc-500">
           Use <Badge>{`{{{{ input }}}}`}</Badge> for user input
         </p>
       </div>
-      <div className="flex w-full flex-row items-center gap-3 border-zinc-500/20 border-t px-2 py-2">
+      <div className="absolute right-0 bottom-0 left-0 flex w-full flex-row items-center gap-3 border-zinc-500/20 border-t bg-white px-2 py-2 dark:bg-zinc-800">
         <Button
-          size="sm"
           variant="default"
           onClick={() => {
             savePrompt();
@@ -119,7 +124,6 @@ export const CreatePrompt = ({ open, onOpenChange }: TCreatePrompt) => {
           Save
         </Button>
         <Button
-          size="sm"
           variant="ghost"
           onClick={() => {
             onOpenChange(false);

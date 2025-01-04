@@ -2,9 +2,11 @@
 
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
 import { AnthropicSettings } from '@/app/(authenticated)/chat/components/settings/anthropic';
+import { CommonSettings } from '@/app/(authenticated)/chat/components/settings/common';
 import { Data } from '@/app/(authenticated)/chat/components/settings/data';
 import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/gemini';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/openai';
+import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
 import { VoiceInput } from '@/app/(authenticated)/chat/components/settings/voice-input';
 import { SettingsContext } from '@/app/context/settings/context';
 import { Database, GearSix, Microphone } from '@phosphor-icons/react';
@@ -13,6 +15,7 @@ import {
   Dialog,
   DialogContent,
 } from '@repo/design-system/components/ui/dialog';
+import { Type } from '@repo/design-system/components/ui/text';
 import { cn } from '@repo/design-system/lib/utils';
 import { useState } from 'react';
 
@@ -20,8 +23,6 @@ export type TSettingsProvider = {
   children: React.ReactNode;
 };
 
-import { CommonSettings } from '@/app/(authenticated)/chat/components/settings/common';
-import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
 export type TSettingMenuItem = {
   name: string;
   key: string;
@@ -91,25 +92,27 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
   ];
 
   const allMenus = [...settingMenu, ...modelsMenu, ...pluginsMenu];
-
   const selectedMenuItem = allMenus.find((menu) => menu.key === selectedMenu);
-
-  console.log(selectedMenuItem, selectedMenu);
 
   return (
     <SettingsContext.Provider value={{ open, dismiss }}>
       {children}
 
       <Dialog open={isSettingOpen} onOpenChange={setIsSettingOpen}>
-        <DialogContent className="flex max-h-[80dvh] w-[96dvw] flex-col gap-0 overflow-hidden rounded-xl border border-white/5 p-0 md:h-[600px] md:min-w-[800px]">
+        <DialogContent className="flex max-h-[80dvh] w-[96dvw] flex-col gap-0 overflow-hidden rounded-2xl border border-white/5 p-0 md:h-[600px] md:min-w-[800px]">
           <div className="w-full border-zinc-500/20 border-b px-4 py-3">
             <p className="font-medium text-md">Settings</p>
           </div>
           <div className="relative mt-60 flex h-full w-full flex-col md:mt-0 md:flex-row">
-            <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row gap-1 overflow-x-auto border-zinc-500/10 border-r px-2 md:bottom-0 md:w-[250px] md:flex-col md:gap-0 md:overflow-y-auto">
-              <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-xs">
+            <div className="no-scrollbar absolute top-0 right-0 left-0 flex h-full w-full flex-row gap-1 overflow-x-auto border-zinc-500/10 border-r px-2 pt-2 pb-16 md:bottom-0 md:w-[250px] md:flex-col md:gap-0 md:overflow-y-auto">
+              <Type
+                size="xxs"
+                textColor="tertiary"
+                className="p-2"
+                weight="medium"
+              >
                 GENERAL
-              </p>
+              </Type>
               {settingMenu.map((menu) => (
                 <Button
                   variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}
@@ -123,7 +126,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                   </div>
                   <span
                     className={cn(
-                      'text-sm md:flex md:text-base',
+                      'text-xs md:flex md:text-sm',
                       selectedMenu === menu.key ? 'flex' : 'hidden'
                     )}
                   >
@@ -131,9 +134,14 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                   </span>
                 </Button>
               ))}
-              <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-xs">
+              <Type
+                size="xxs"
+                textColor="tertiary"
+                className="p-2"
+                weight="medium"
+              >
                 MODELS
-              </p>
+              </Type>{' '}
               {modelsMenu.map((menu) => (
                 <Button
                   variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}
@@ -145,7 +153,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                   {menu.icon()}
                   <span
                     className={cn(
-                      'text-sm md:flex md:text-base',
+                      'text-xs md:flex md:text-sm',
                       selectedMenu === menu.key ? 'flex' : 'hidden'
                     )}
                   >
@@ -154,9 +162,14 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                   </span>
                 </Button>
               ))}
-              <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-xs">
+              <Type
+                size="xxs"
+                textColor="tertiary"
+                className="p-2"
+                weight="medium"
+              >
                 PLUGINS
-              </p>
+              </Type>{' '}
               {pluginsMenu.map((menu) => (
                 <Button
                   variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}
@@ -168,7 +181,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                   {menu.icon()}
                   <span
                     className={cn(
-                      'text-sm md:flex md:text-base',
+                      'text-xs md:flex md:text-sm',
                       selectedMenu === menu.key ? 'flex' : 'hidden'
                     )}
                   >

@@ -5,8 +5,8 @@ export type TSettingsContainer = {
 
 export const SettingsContainer = ({ title, children }: TSettingsContainer) => {
   return (
-    <div className="flex flex-col items-start gap-2 px-3 md:px-6">
-      <p className="py-4 font-medium text-md text-zinc-800 dark:text-white">
+    <div className="flex flex-col items-start gap-2 px-3 md:px-5">
+      <p className="pt-4 pb-2 font-medium text-md text-zinc-800 dark:text-white">
         {title}
       </p>
       {children}

@@ -78,10 +78,10 @@ export const BotLibrary = ({
                 assignBot(bot);
               }}
             >
-              <div className="flex w-full flex-row items-center justify-start gap-2 overflow-hidden p-1">
+              <div className="flex w-full flex-row items-center justify-start gap-3 overflow-hidden p-1">
                 <BotAvatar name={bot.name} size="medium" avatar={bot?.avatar} />
                 <div className="flex w-full flex-col items-start gap-0">
-                  <p className="font-medium text-base">{bot.name}</p>
+                  <p className="font-medium text-sm">{bot.name}</p>
                   <p className="line-clamp-1 w-full text-xs text-zinc-500">
                     {bot.description}
                   </p>

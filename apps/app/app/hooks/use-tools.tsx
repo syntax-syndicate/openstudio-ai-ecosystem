@@ -1,9 +1,9 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
+import { usePreferenceContext } from '@/app/context/preferences/context';
 import { useSettings } from '@/app/context/settings/context';
 import type { TPreferences } from '@/app/hooks/use-preferences';
-import { usePreferences } from '@/app/hooks/use-preferences';
 import { DynamicStructuredTool } from '@langchain/core/tools';
-import { Browser, Calculator, Globe } from '@phosphor-icons/react';
+import { Globe } from '@phosphor-icons/react';
 import axios from 'axios';
 import type { ReactNode } from 'react';
 import { z } from 'zod';
@@ -92,6 +92,7 @@ const duckduckGoTool = () => {
   const webSearchSchema = z.object({
     input: z.string(),
   });
+
   return new DynamicStructuredTool({
     name: 'duckduckgo_search',
     description:
@@ -105,7 +106,9 @@ const duckduckGoTool = () => {
           runManager?.handleToolError('Error performing Duckduck go search');
           throw new Error('Invalid response');
         }
+
         const searchPrompt = `Information: \n\n ${result} \n\n Based on snippet please answer the given question with proper citations without using duckduckgo_search function again. Must Remove XML tags if any. Question: ${input}`;
+
         return searchPrompt;
       } catch (error) {
         return 'Error performing search. Must not use duckduckgo_search tool now. Ask user to check API keys.';
@@ -113,11 +116,13 @@ const duckduckGoTool = () => {
     },
   });
 };
+
 const readWebsiteTool = () => {
   const webSearchSchema = z.object({
     url: z.string().url(),
     query: z.string(),
   });
+
   return new DynamicStructuredTool({
     name: 'read_website',
     description:
@@ -126,12 +131,15 @@ const readWebsiteTool = () => {
     func: async ({ url, query }, runManager) => {
       try {
         const response = await axios.post('/api/extract', { url });
+
         if (!response?.data?.text) {
           runManager?.handleToolError('Error performing Google search');
           throw new Error('Invalid response');
         }
         const content = response.data.text;
+
         const searchPrompt = `Information: \n\n ${content} \n\n\n Based on snippet please answer the given question with proper citations. Must Remove XML tags if any. Question: ${query}`;
+
         return searchPrompt;
       } catch (error) {
         return 'Error performing Google search. Ask user to check API keys.';
@@ -139,12 +147,12 @@ const readWebsiteTool = () => {
     },
   });
 };
+
 export type TToolKey =
   | 'calculator'
   | 'web_search'
   | 'read_website'
   | 'duckduckgo_search';
-
 export type IconSize = 'sm' | 'md' | 'lg';
 export type TTool = {
   key: TToolKey;
@@ -152,32 +160,37 @@ export type TTool = {
   loadingMessage?: string;
   resultMessage?: string;
   isBeta?: boolean;
+  showInMenu?: boolean;
   validate?: () => Promise<boolean>;
   validationFailedAction?: () => void;
-  //TODO: type should be zod object
+  //TODO: add zod schema later
   tool: (arg?: any) => DynamicStructuredTool<any>;
   icon: (size: IconSize) => ReactNode;
   smallIcon: () => ReactNode;
 };
 
 export const useTools = () => {
-  const { getPreferences } = usePreferences();
+  const { getPreferences, preferencesQuery } = usePreferenceContext();
   const { open } = useSettings();
+
+  console.log('preferencesQuery', preferencesQuery);
   const tools: TTool[] = [
-    {
-      key: 'calculator',
-      tool: calculatorTool,
-      name: 'Calculator',
-      loadingMessage: 'Calculating...',
-      resultMessage: 'Calculated Result',
-      icon: (size: IconSize) => <ModelIcon type="calculator" size={size} />,
-      smallIcon: () => <Calculator size={16} weight="bold" />,
-    },
+    // {
+    //   key: "calculator",
+    //   tool: calculatorTool,
+    //   name: "Calculator",
+
+    //   loadingMessage: "Calculating...",
+    //   resultMessage: "Calculated Result",
+    //   icon: (size: IconSize) => <ModelIcon type="calculator" size={size} />,
+    //   smallIcon: () => <Calculator size={16} weight="bold" />,
+    // },
     {
       key: 'web_search',
       tool: webSearchTool,
-      name: 'Google Search',
+      name: 'Web Search',
       isBeta: true,
+      showInMenu: preferencesQuery.data?.defaultWebSearchEngine === 'google',
       validate: async () => {
         const prefrences = await getPreferences();
         if (
@@ -192,7 +205,7 @@ export const useTools = () => {
         open('web-search');
       },
       loadingMessage: 'Searching on web...',
-      resultMessage: 'Results from Google Search',
+      resultMessage: 'Results from web search',
       icon: (size: IconSize) => <ModelIcon type="websearch" size={size} />,
       smallIcon: () => <Globe size={16} weight="bold" />,
     },
@@ -201,31 +214,21 @@ export const useTools = () => {
       tool: duckduckGoTool,
       name: 'DuckDuckGo Search',
       isBeta: true,
-      loadingMessage: 'Searching on web...',
-      resultMessage: 'Results from DuckDuckGo Search',
-      icon: (size: IconSize) => (
-        <ModelIcon type="duckduckgo_search" size={size} />
-      ),
+      showInMenu:
+        preferencesQuery.data?.defaultWebSearchEngine === 'duckduckgo',
+      loadingMessage: 'Searching on DuckDuckGo...',
+      resultMessage: 'Results from DuckDuckGo',
+      icon: (size: IconSize) => <ModelIcon type="websearch" size={size} />,
       smallIcon: () => <Globe size={16} weight="bold" />,
-    },
-    {
-      key: 'read_website',
-      tool: readWebsiteTool,
-      name: 'Read Website',
-      isBeta: true,
-      loadingMessage: 'Analyzing website...',
-      resultMessage: 'Results from Website Reader',
-      icon: (size: IconSize) => <ModelIcon type="website_reader" size={size} />,
-      smallIcon: () => <Browser size={16} weight="bold" />,
     },
   ];
 
   const getToolByKey = (key: TToolKey) => {
-    return tools.find((tool) => tool.key === key)?.tool;
+    return tools.find((tool) => tool.key.includes(key));
   };
 
   const getToolInfoByKey = (key: TToolKey) => {
-    return tools.find((tool) => tool.key === key);
+    return tools.find((tool) => tool.key.includes(key));
   };
   return {
     calculatorTool,

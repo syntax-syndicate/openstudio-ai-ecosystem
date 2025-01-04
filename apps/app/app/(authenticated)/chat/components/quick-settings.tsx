@@ -1,39 +1,51 @@
 import { ModelInfo } from '@/app/(authenticated)/chat/components/model-info';
+import { usePreferenceContext } from '@/app/context/preferences/context';
+import { useModelList } from '@/app/hooks/use-model-list';
 import { useModelSettings } from '@/app/hooks/use-model-settings';
 import {
   type TPreferences,
   defaultPreferences,
 } from '@/app/hooks/use-preferences';
-import { Info, SlidersHorizontal } from '@phosphor-icons/react';
+import { ArrowClockwise, Info, SlidersHorizontal } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import { Flex } from '@repo/design-system/components/ui/flex';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@repo/design-system/components/ui/popover';
 import { Slider } from '@repo/design-system/components/ui/slider';
+import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useState } from 'react';
 
 export const QuickSettings = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { formik, setPreferences, selectedModel } = useModelSettings({
+  const { preferencesQuery } = usePreferenceContext();
+  const { getModelByKey } = useModelList();
+  const { formik, setPreferences } = useModelSettings({
     refresh: isOpen,
   });
   const renderResetToDefault = (key: keyof TPreferences) => {
     return (
       <Button
-        variant="link"
-        size="linkSm"
+        variant="outline"
+        size="iconXS"
+        rounded="lg"
         onClick={() => {
           setPreferences({ [key]: defaultPreferences[key] });
           formik.setFieldValue(key, defaultPreferences[key]);
         }}
       >
-        Reset
+        <ArrowClockwise size={14} weight="bold" />
       </Button>
     );
   };
+
+  const model =
+    preferencesQuery.data?.defaultModel &&
+    getModelByKey(preferencesQuery.data?.defaultModel);
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <Tooltip content="Configure Model">
@@ -43,127 +55,112 @@ export const QuickSettings = () => {
           </Button>
         </PopoverTrigger>
       </Tooltip>
-      <PopoverContent className="roundex-2xl mr-8 p-0 dark:bg-zinc-700">
-        {selectedModel && (
-          <div className="border-black/10 border-b p-3 dark:border-white/10">
-            <ModelInfo model={selectedModel} showDetails={false} />
+      <PopoverContent className="roundex-2xl mr-8 w-[300px] p-0 dark:bg-zinc-700">
+        {model && (
+          <div className="border-black/10 border-b p-2 dark:border-white/10">
+            <ModelInfo model={model} showDetails={false} />
           </div>
         )}
-        <div className="grid grid-cols-1 p-1">
-          <div className="flex w-full flex-col rounded-2xl p-2 hover:bg-zinc-50 dark:hover:bg-black/30">
-            <div className="flex w-full flex-row items-center justify-between">
-              <Tooltip content="Temprature">
-                <p className="flex flex-row items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400">
-                  MaxTokens <Info weight="regular" size={14} />{' '}
-                  {formik.values.maxTokens}
-                </p>
-              </Tooltip>
+        <Flex direction="col" className="w-full px-3 py-1">
+          <Flex items="center" justify="between" className="w-full">
+            <Tooltip content="Temprature">
+              <Type
+                className="flex flex-row items-center gap-1"
+                textColor="secondary"
+              >
+                MaxTokens <Info weight="regular" size={14} />{' '}
+                {formik.values.maxTokens}
+              </Type>
+            </Tooltip>
+            <Flex items="center" gap="md">
+              <Slider
+                className="my-2 w-[80px]"
+                value={[Number(formik.values.maxTokens)]}
+                step={1}
+                min={0}
+                max={model?.maxOutputTokens}
+                onValueChange={(value: number[]) => {
+                  setPreferences({ maxTokens: value?.[0] });
+                  formik.setFieldValue('maxTokens', value?.[0]);
+                }}
+              />
               {renderResetToDefault('maxTokens')}
-            </div>
-            <Slider
-              className="my-2"
-              value={[Number(formik.values.maxTokens)]}
-              step={1}
-              min={0}
-              max={selectedModel?.maxOutputTokens}
-              onValueChange={(value: number[]) => {
-                setPreferences({ maxTokens: value?.[0] });
-                formik.setFieldValue('maxTokens', value?.[0]);
-              }}
-            />
-          </div>
-          <div className="flex w-full flex-col rounded-2xl p-2 hover:bg-zinc-50 dark:hover:bg-black/30">
-            <div className="flex w-full flex-row items-center justify-between">
-              <Tooltip content="Temprature">
-                <p className="flex flex-row items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400">
-                  Temperature <Info weight="regular" size={14} />{' '}
-                  {formik.values.temperature}
-                </p>
-              </Tooltip>
+            </Flex>
+          </Flex>
+          <Flex items="center" justify="between" className="w-full">
+            <Tooltip content="Temprature">
+              <Type
+                className="flex flex-row items-center gap-1"
+                textColor="secondary"
+              >
+                Temperature <Info weight="regular" size={14} />
+                {formik.values.temperature}
+              </Type>
+            </Tooltip>
+            <Flex items="center" gap="md">
+              <Slider
+                className="my-2 w-[80px]"
+                value={[Number(formik.values.temperature)]}
+                step={0.1}
+                min={0.1}
+                max={1}
+                onValueChange={(value: number[]) => {
+                  setPreferences({ temperature: value?.[0] });
+                  formik.setFieldValue('temperature', value?.[0]);
+                }}
+              />
               {renderResetToDefault('temperature')}
-            </div>
-            <Slider
-              className="my-2"
-              value={[Number(formik.values.temperature)]}
-              step={0.1}
-              min={0.1}
-              max={1}
-              onValueChange={(value: number[]) => {
-                setPreferences({ temperature: value?.[0] });
-                formik.setFieldValue('temperature', value?.[0]);
-              }}
-            />
-            <div className="flex w-full flex-row justify-between">
-              <p className="text-[10px] text-zinc-500 md:text-xs dark:text-zinc-600">
-                Precise
-              </p>
-              <p className="text-[10px] text-zinc-500 md:text-xs dark:text-zinc-600">
-                Neutral
-              </p>
-              <p className="text-[10px] text-zinc-500 md:text-xs dark:text-zinc-600">
-                Creative
-              </p>
-            </div>
-          </div>{' '}
-          <div className="flex w-full flex-col rounded-2xl p-2 hover:bg-zinc-50 dark:hover:bg-black/30">
-            <div className="flex w-full flex-row items-center justify-between">
-              <Tooltip content="TopP">
-                <p className="flex flex-row items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400">
-                  TopP <Info weight="regular" size={14} /> {formik.values.topP}
-                </p>
-              </Tooltip>
+            </Flex>
+          </Flex>
+          <Flex items="center" justify="between" className="w-full">
+            <Tooltip content="TopP">
+              <Type
+                className="flex flex-row items-center gap-1"
+                textColor="secondary"
+              >
+                TopP <Info weight="regular" size={14} /> {formik.values.topP}
+              </Type>
+            </Tooltip>
+            <Flex items="center" gap="md">
+              <Slider
+                className="my-2 w-[80px]"
+                value={[Number(formik.values.topP)]}
+                step={0.1}
+                min={0.1}
+                max={1}
+                onValueChange={(value: number[]) => {
+                  setPreferences({ topP: value?.[0] });
+                  formik.setFieldValue('topP', value?.[0]);
+                }}
+              />
               {renderResetToDefault('topP')}
-            </div>
-            <Slider
-              className="my-2"
-              value={[Number(formik.values.topP)]}
-              step={0.1}
-              min={0.1}
-              max={1}
-              onValueChange={(value: number[]) => {
-                setPreferences({ topP: value?.[0] });
-                formik.setFieldValue('topP', value?.[0]);
-              }}
-            />
-            <div className="flex w-full flex-row justify-between">
-              <p className="text-[10px] text-zinc-500 md:text-xs dark:text-zinc-600">
-                Precise
-              </p>
-              <p className="text-[10px] text-zinc-500 md:text-xs dark:text-zinc-600">
-                Creative
-              </p>
-            </div>
-          </div>{' '}
-          <div className="flex w-full flex-col rounded-2xl p-2 hover:bg-zinc-50 dark:hover:bg-black/30">
-            <div className="flex w-full flex-row items-center justify-between">
-              <Tooltip content="TopK">
-                <p className="flex flex-row items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400">
-                  TopK <Info weight="regular" size={14} /> {formik.values.topK}
-                </p>
-              </Tooltip>
+            </Flex>
+          </Flex>
+          <Flex items="center" justify="between" className="w-full">
+            <Tooltip content="TopK">
+              <Type
+                className="flex flex-row items-center gap-1"
+                textColor="secondary"
+              >
+                TopK <Info weight="regular" size={14} /> {formik.values.topK}
+              </Type>
+            </Tooltip>
+            <Flex items="center" gap="md">
+              <Slider
+                className="my-2 w-[80px]"
+                value={[Number(formik.values.topK)]}
+                step={0.1}
+                min={0.1}
+                max={1}
+                onValueChange={(value: number[]) => {
+                  setPreferences({ topK: value?.[0] });
+                  formik.setFieldValue('topK', value?.[0]);
+                }}
+              />
               {renderResetToDefault('topK')}
-            </div>
-            <Slider
-              className="my-2"
-              value={[Number(formik.values.topK)]}
-              step={0.1}
-              min={0.1}
-              max={1}
-              onValueChange={(value: number[]) => {
-                setPreferences({ topK: value?.[0] });
-                formik.setFieldValue('topK', value?.[0]);
-              }}
-            />
-            <div className="flex w-full flex-row justify-between">
-              <p className="text-[10px] text-zinc-500 md:text-xs dark:text-zinc-600">
-                Precise
-              </p>
-              <p className="text-[10px] text-zinc-500 md:text-xs dark:text-zinc-600">
-                Creative
-              </p>
-            </div>
-          </div>
-        </div>
+            </Flex>
+          </Flex>
+        </Flex>
       </PopoverContent>
     </Popover>
   );

@@ -70,23 +70,21 @@ export const PromptLibrary = ({
         </CommandEmpty>
         <CommandList className="px-2 py-2">
           {(tab === 'local' ? localPrompts : publicPrompts)?.map((prompt) => (
-            <CommandItem value={prompt.name} key={prompt.id} className="w-full">
-              <div className="flex w-full flex-row items-center justify-start gap-2 overflow-hidden p-1">
+            <CommandItem
+              value={prompt.name}
+              key={prompt.id}
+              className="w-full"
+              onSelect={() => {
+                onPromptSelect(prompt);
+              }}
+            >
+              <div className="flex w-full flex-row items-center justify-start gap-2 overflow-hidden px-2">
                 <div className="flex w-full flex-col items-start gap-0 py-2">
                   <p className="font-medium text-base">{prompt.name}</p>
-                  <p className="line-clamp-2 w-full text-xs text-zinc-500">
+                  <p className="line-clamp-1 w-full text-xs text-zinc-500">
                     {prompt.content}
                   </p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    onPromptSelect(prompt);
-                  }}
-                >
-                  Use this
-                </Button>
               </div>
             </CommandItem>
           ))}

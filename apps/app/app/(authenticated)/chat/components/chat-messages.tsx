@@ -10,8 +10,8 @@ import type { TModelKey } from '@/app/hooks/use-model-list';
 import { removeExtraSpaces } from '@/app/lib/helper';
 import { ArrowElbowDownRight, Info, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
-import moment from 'moment';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
@@ -27,26 +27,15 @@ export type TRenderMessageProps = {
 
 export type TMessageListByDate = Record<string, TChatMessage[]>;
 
-moment().calendar(null, {
-  sameDay: '[Today]',
-  nextDay: '[Tomorrow]',
-  nextWeek: 'dddd',
-  lastDay: '[Yesterday]',
-  lastWeek: '[Last] dddd',
-  sameElse: 'DD/MM/YYYY',
-});
-
 export const ChatMessages = () => {
   const { currentSession, refetchCurrentSession } = useChatContext();
   const { updateSession } = useChatSession();
   const chatContainer = useRef<HTMLDivElement>(null);
   const { open: openBot } = useBots();
 
-  const isNewSession = currentSession?.messages.length === 0;
-
   useEffect(() => {
     scrollToBottom();
-  }, [currentSession?.messages?.length]);
+  }, [currentSession?.messages]);
 
   const scrollToBottom = () => {
     if (chatContainer.current) {
@@ -90,20 +79,6 @@ export const ChatMessages = () => {
     );
   };
 
-  // group messages by createdAt date by days
-  const messagesByDate = currentSession?.messages.reduce(
-    (acc: TMessageListByDate, message) => {
-      const date = moment(message.createdAt).format('YYYY-MM-DD');
-      if (acc?.[date]) {
-        acc[date] = [...acc[date], message];
-      } else {
-        acc[date] = [message];
-      }
-      return acc;
-    },
-    {}
-  );
-
   return (
     <div
       className="no-scrollbar flex h-[100dvh] w-full flex-col items-center overflow-y-auto pt-[60px] pb-[200px]"
@@ -118,12 +93,16 @@ export const ChatMessages = () => {
               size="medium"
               avatar={currentSession?.bot?.avatar}
             />
-            <p className="font-medium text-sm text-zinc-800 md:text-base dark:text-white">
+            <Type size="base" weight="medium" textColor="primary">
               {currentSession.bot.name}
-            </p>
-            <p className="text-center text-xs text-zinc-500 md:max-w-[400px] md:text-sm">
+            </Type>
+            <Type
+              size="xs"
+              className="text-center md:max-w-[400px]"
+              textColor="tertiary"
+            >
               {currentSession.bot.description}
-            </p>
+            </Type>
             {!currentSession?.messages?.length && (
               <div className="flex flex-row gap-1">
                 <Tooltip content="Bot Info">
@@ -165,14 +144,6 @@ export const ChatMessages = () => {
             )
           )}
         </div>
-
-        {/* {streamingMessage?.error && (
-          <Alert variant="destructive">
-            <Warning size={20} weight="bold" />
-            <AlertTitle>Ahh! Something went wrong!</AlertTitle>
-            <AlertDescription>{streamingMessage?.error}</AlertDescription>
-          </Alert>
-        )} */}
       </div>
     </div>
   );

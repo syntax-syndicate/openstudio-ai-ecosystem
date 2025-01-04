@@ -32,6 +32,7 @@ import { cn } from '@repo/design-system/lib/utils';
 
 import { Footer } from '@/app/(authenticated)/chat/components/footer';
 import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
+import { usePreferenceContext } from '@/app/context/preferences/context';
 import { EditorContent } from '@tiptap/react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -63,7 +64,7 @@ export const ChatInput = () => {
   const [contextValue, setContextValue] = useState<string>('');
   const { getApiKey } = usePreferences();
   const { open: openSettings } = useSettings();
-
+  const { preferencesQuery } = usePreferenceContext();
   const { showPopup, selectedText, handleClearSelection } = useTextSelection();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [selectedModel, setSelectedModel] = useState<TModelKey>('gpt-4-turbo');
@@ -167,7 +168,17 @@ export const ChatInput = () => {
       openSettings('openai');
       return;
     }
-    startRecording();
+    if (preferencesQuery.data?.whisperSpeechToTextEnabled) {
+      startRecording();
+    } else {
+      toast({
+        title: 'Enable Speech to Text',
+        description:
+          'Recordings require Speech to Text enabled. Please check settings.',
+        variant: 'destructive',
+      });
+      openSettings('voice-input');
+    }
   };
 
   const renderRecordingControls = () => {

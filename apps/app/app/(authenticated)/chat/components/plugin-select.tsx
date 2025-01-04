@@ -1,5 +1,5 @@
+import { usePreferenceContext } from '@/app/context/preferences/context';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
-import { usePreferences } from '@/app/hooks/use-preferences';
 import { type TToolKey, useTools } from '@/app/hooks/use-tools';
 import { Plug } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
@@ -20,7 +20,11 @@ export const PluginSelect = ({ selectedModel }: TPluginSelect) => {
   const [isOpen, setIsOpen] = useState(false);
   const { tools } = useTools();
   const { getModelByKey } = useModelList();
-  const { setPreferences, getPreferences } = usePreferences();
+  const { setPreferences, getPreferences, preferencesQuery } =
+    usePreferenceContext();
+  const { data: preference } = preferencesQuery;
+  const availableTools = tools.filter((tool) => tool.showInMenu);
+  const availableToolsKey = availableTools.map((tool) => tool.key);
   const [selectedPlugins, setSelectedPlugins] = useState<TToolKey[]>([]);
   useEffect(() => {
     getPreferences().then((preferences) => {
@@ -50,7 +54,7 @@ export const PluginSelect = ({ selectedModel }: TPluginSelect) => {
             Plugins <Badge>Beta</Badge>
           </p>
           <div className="flex flex-col p-1">
-            {tools.map((tool) => (
+            {availableTools.map((tool) => (
               <div
                 key={tool.key}
                 className="flex w-full flex-row items-center gap-2 rounded-2xl p-2 text-xs hover:bg-zinc-50 md:text-sm dark:hover:bg-black/30"
