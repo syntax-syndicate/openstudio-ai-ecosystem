@@ -99,7 +99,8 @@ export const ChatInput = () => {
         Enter: (_) => {
           if (_.editor.getText()?.length > 0) {
             handleRunModel(_.editor.getText(), () => {
-              _.editor.commands.clearContent();
+              clearInput();
+              focusToInput();
             });
           }
           return true;
@@ -581,7 +582,12 @@ export const ChatInput = () => {
                   variant={!!editor?.getText() ? 'secondary' : 'ghost'}
                   disabled={!editor?.getText()}
                   className="ml-1 h-8 min-w-8"
-                  onClick={() => handleRunModel(editor?.getText())}
+                   onClick={() =>
+                    handleRunModel(editor?.getText(), () => {
+                      clearInput();
+                      focusToInput();
+                    })
+                  }
                 >
                   <ArrowUp size={20} weight="bold" />
                 </Button>
@@ -652,7 +658,10 @@ export const ChatInput = () => {
         <ChatExamples
           show={isNewSession}
           onExampleClick={(prompt) => {
-            handleRunModel(prompt);
+            handleRunModel(prompt, () => {
+              clearInput();
+              focusToInput();
+            });
           }}
         />
       </div>
