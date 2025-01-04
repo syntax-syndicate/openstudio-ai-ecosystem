@@ -49,3 +49,5 @@ export const Type = React.forwardRef<HTMLParagraphElement, TypeProps>(
     );
   }
 );
+
+Type.displayName = "Type";
