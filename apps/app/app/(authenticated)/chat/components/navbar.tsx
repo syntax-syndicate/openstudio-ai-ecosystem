@@ -52,7 +52,7 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="absolute top-0 right-0 left-0 z-50 flex flex-row items-center justify-between bg-gradient-to-b from-70% from-white to-transparent p-2 pb-6 md:p-4 dark:from-zinc-800">
+     <div className="absolute flex justify-between items-center p-2 pb-6 md:p-3 flex-row top-0 left-0 right-0 bg-gradient-to-b from-white dark:from-zinc-800 to-transparent from-70% z-50">
       <div className="flex flex-row items-center gap-2">
         <HistorySidebar />
         <ModelIcon type="chathub" size="md" />
