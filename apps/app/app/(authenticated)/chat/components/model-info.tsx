@@ -14,22 +14,22 @@ export const ModelInfo = ({ model, showDetails = true }: TModelInfo) => {
       </div>
       {showDetails && (
         <>
-          <div className="flex flex-row justify-between text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+          <div className="flex flex-row justify-between text-xs text-zinc-600 md:text-sm dark:text-zinc-400">
             <p className="">Tokens</p>
             <p>{formatNumber(model.tokens)} tokens</p>
           </div>
-          <div className="flex flex-row justify-between text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+          <div className="flex flex-row justify-between text-xs text-zinc-600 md:text-sm dark:text-zinc-400">
             <p className="">Model</p>
             <p>{model.key}</p>
           </div>
           {model.inputPrice && (
-            <div className="flex flex-row justify-between text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+            <div className="flex flex-row justify-between text-xs text-zinc-600 md:text-sm dark:text-zinc-400">
               <p className="">Input Price</p>
               <p>{model.inputPrice} USD / 1M tokens</p>
             </div>
           )}
           {model.outputPrice && (
-            <div className="flex flex-row justify-between text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+            <div className="flex flex-row justify-between text-xs text-zinc-600 md:text-sm dark:text-zinc-400">
               <p className="">Output Price</p>
               <p>{model.outputPrice} USD / 1M tokens</p>
             </div>

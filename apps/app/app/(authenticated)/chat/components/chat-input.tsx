@@ -1,6 +1,7 @@
 import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
+import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
 import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useSettings } from '@/app/context/settings/context';
@@ -510,7 +511,7 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 bg-gradient-to-t from-70% from-white to-transparent px-2 pt-16 pb-1 transition-all duration-1000 ease-in-out md:justify-center md:px-4 md:pb-4 dark:from-zinc-800',
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-1 bg-gradient-to-t from-70% from-white to-transparent px-2 pt-16 pb-1 transition-all duration-1000 ease-in-out md:justify-center md:px-4 md:pb-4 dark:from-zinc-800',
         isNewSession && 'top-0 '
       )}
     >
@@ -615,9 +616,9 @@ export const ChatInput = () => {
             </CMDKCommand>
           </PopoverContent>
         </Popover>
-        <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
+        <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1">
           <ModelSelect />
-
+          <QuickSettings />
           <div className="flex-1"></div>
 
           <Button
@@ -627,8 +628,8 @@ export const ChatInput = () => {
             className="px-1.5"
           >
             <ClockClockwise size={16} weight="bold" /> History
-            <Badge>
-              <Command size={12} weight="bold" /> K
+            <Badge variant="outline">
+              <Command size={16} weight="bold" /> K
             </Badge>
           </Button>
         </div>
