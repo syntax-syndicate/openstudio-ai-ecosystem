@@ -82,7 +82,7 @@ export const useChatSession = () => {
           };
         }
 
-        console.log("new message", chatMessage);
+        console.log('new message', chatMessage);
         return {
           ...session,
           messages: [chatMessage],

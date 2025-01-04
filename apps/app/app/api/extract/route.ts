@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, resp: NextResponse) {
     return Response.json({ error: 'No URL provided' }, { status: 401 });
   }
   const htmlContent = await scrapeWebsite(url);
-  
+
   if (!htmlContent) {
     return Response.json({ error: 'Error fetching content' }, { status: 500 });
   }
