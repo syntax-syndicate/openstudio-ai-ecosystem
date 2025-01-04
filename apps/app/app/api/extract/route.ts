@@ -1,14 +1,13 @@
+import chromium from '@sparticuz/chromium-min';
 import { type NextRequest, NextResponse } from 'next/server';
 import puppeteer from 'puppeteer-core';
 import TurndownService from 'turndown';
-import chromium from "@sparticuz/chromium-min";
-
 
 const turndownService = new TurndownService();
 
 async function getBrowser() {
   return puppeteer.launch({
-    args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
+    args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
     defaultViewport: chromium.defaultViewport,
     executablePath: await chromium.executablePath(
       `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
@@ -17,7 +16,6 @@ async function getBrowser() {
     // ignoreHTTPSErrors: true,
   });
 }
-
 
 async function scrapeWebsite(url: string) {
   const browser = await getBrowser();

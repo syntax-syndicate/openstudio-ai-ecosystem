@@ -2,6 +2,7 @@ import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-ico
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/side-bar';
 import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
+import { usePrompts } from '@/app/context/prompts/context';
 import { useSettings } from '@/app/context/settings/context';
 import {
   Command,
@@ -32,7 +33,7 @@ export const Navbar = () => {
   const { open: openSettings } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const { open: openFilters } = useFilters();
-
+  const { open: openPrompts } = usePrompts();
   const { push } = useRouter();
   const { createSession } = useChatContext();
   const renderNewSession = () => {
@@ -89,7 +90,11 @@ export const Navbar = () => {
               <Robot size={14} weight="bold" />
               Bots <ComingSoon />
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>
+            <DropdownMenuItem
+              onClick={() => {
+                openPrompts();
+              }}
+            >
               <Textbox size={14} weight="bold" />
               Prompts <ComingSoon />
             </DropdownMenuItem>

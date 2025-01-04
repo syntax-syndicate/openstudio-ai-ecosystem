@@ -2,6 +2,8 @@ import { MainLayout } from '@/app/(authenticated)/chat/components/main-layout';
 import { Header } from '@/app/(authenticated)/components/header';
 import { ChatProvider } from '@/app/context/chat/provider';
 import { FiltersProvider } from '@/app/context/filters/provider';
+import { PromptsProvider } from '@/app/context/prompts/provider';
+import { ReactQueryProvider } from '@/app/context/react-query/provider';
 import { SettingsProvider } from '@/app/context/settings/provider';
 import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
 import { ThemeProvider } from '@repo/design-system/providers/theme';
@@ -29,15 +31,19 @@ export default function ChatLayout({
         enableSystem
         disableTransitionOnChange
       >
-        <TooltipProvider>
-          <SettingsProvider>
-            <ChatProvider>
-              <FiltersProvider>
-                <MainLayout>{children}</MainLayout>
-              </FiltersProvider>
-            </ChatProvider>
-          </SettingsProvider>
-        </TooltipProvider>
+        <ReactQueryProvider>
+          <TooltipProvider>
+            <SettingsProvider>
+              <ChatProvider>
+                <FiltersProvider>
+                  <PromptsProvider>
+                    <MainLayout>{children}</MainLayout>
+                  </PromptsProvider>
+                </FiltersProvider>
+              </ChatProvider>
+            </SettingsProvider>
+          </TooltipProvider>
+        </ReactQueryProvider>
       </ThemeProvider>
     </>
   );

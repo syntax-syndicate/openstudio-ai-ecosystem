@@ -105,8 +105,8 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
           <div className="w-full border-zinc-500/20 border-b px-4 py-3">
             <p className="font-medium text-md">Settings</p>
           </div>
-          <div className="relative flex h-full w-full flex-col md:flex-row">
-            <div className="absolute top-0 right-0 left-0 flex w-full flex-row gap-1 border-zinc-500/10 border-r px-2 md:bottom-0 md:w-[250px] md:flex-col md:gap-0">
+          <div className="relative mt-60 flex h-full w-full flex-col md:mt-0 md:flex-row">
+            <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row gap-1 overflow-x-auto border-zinc-500/10 border-r px-2 md:bottom-0 md:w-[250px] md:flex-col md:gap-0 md:overflow-y-auto">
               <p className="hidden px-2 py-2 font-medium text-xs text-zinc-500 md:flex md:text-xs">
                 GENERAL
               </p>

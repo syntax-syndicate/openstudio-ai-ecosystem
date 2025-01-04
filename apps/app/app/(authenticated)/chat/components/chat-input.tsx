@@ -4,6 +4,7 @@ import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-selec
 import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
 import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
+import { usePrompts } from '@/app/context/prompts/context';
 import { useSettings } from '@/app/context/settings/context';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
 import { usePreferences } from '@/app/hooks/use-preferences';
@@ -12,7 +13,7 @@ import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
 import { removeExtraSpaces } from '@/app/lib/helper';
-import { PromptType, RoleType, roles } from '@/app/lib/prompts';
+import { PromptType, RoleType, prompts } from '@/app/lib/prompts';
 import {
   ArrowElbowDownRight,
   ArrowUp,
@@ -29,7 +30,6 @@ import {
 import { ArrowDown } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
-import { ComingSoon } from '@repo/design-system/components/ui/coming-soon';
 import {
   Command as CMDKCommand,
   CommandEmpty,
@@ -81,6 +81,7 @@ export const ChatInput = () => {
   const [open, setOpen] = useState(false);
   const [commandInput, setCommandInput] = useState('');
   const [selectedModel, setSelectedModel] = useState<TModelKey>('gpt-4-turbo');
+  const { open: openPrompts } = usePrompts();
 
   const [attachment, setAttachment] = useState<TAttachment>();
 
@@ -94,7 +95,7 @@ export const ChatInput = () => {
     },
   });
 
-  const Enter = Extension.create({
+  const EnterRunModel = Extension.create({
     addKeyboardShortcuts() {
       return {
         Enter: (_) => {
@@ -118,7 +119,7 @@ export const ChatInput = () => {
       Placeholder.configure({
         placeholder: 'Type / or Enter prompt here...',
       }),
-      Enter,
+      EnterRunModel,
       ShiftEnter,
       Highlight.configure({
         HTMLAttributes: {
@@ -218,14 +219,11 @@ export const ChatInput = () => {
   };
 
   const handleRunModel = (query?: string, clear?: () => void) => {
-    console.log('handleRunmodel');
-
     if (!query) {
       return;
     }
     getPreferences().then(async (preference) => {
       const selectedModel = getModelByKey(preference.defaultModel);
-
       if (
         selectedModel?.key &&
         !['gpt-4-turbo', 'gpt-4o'].includes(selectedModel?.key) &&
@@ -514,7 +512,7 @@ export const ChatInput = () => {
         {renderReplyButton()}
         {renderListeningIndicator()}
       </div>
-      {/* <div className="flex flex-col items-center justify-center">
+      {/* <div className="flex flex-col  justify-center items-center">
         <ChatExamples
           show={isNewSession}
           onExampleClick={(prompt) => {
@@ -605,30 +603,35 @@ export const ChatInput = () => {
                   }
                 }}
               />
-              <CommandEmpty>No framework found.</CommandEmpty>
+              <CommandEmpty>No Prompts found.</CommandEmpty>
               <CommandList className="max-h-[160px] p-2">
-                <CommandItem onSelect={() => {}} disabled={true}>
+                <CommandItem
+                  onSelect={() => {
+                    openPrompts();
+                  }}
+                >
                   <Plus size={14} weight="bold" className="flex-shrink-0" />{' '}
-                  Create New Prompt <ComingSoon />
+                  Create New Prompt
                 </CommandItem>
-                {roles?.map((role, index) => (
+                {prompts?.map((prompt, index) => (
                   <CommandItem
                     key={index}
                     onSelect={() => {
-                      editor?.commands.setContent(role.content);
+                      editor?.commands.setContent(prompt.content);
                       editor?.commands.insertContent('');
                       console.log(editor?.getText());
                       editor?.commands.focus('end');
                       setOpen(false);
                     }}
                   >
-                    {role.name}
+                    {prompt.name}
                   </CommandItem>
                 ))}
               </CommandList>
             </CMDKCommand>
           </PopoverContent>
         </Popover>
+
         {isNewSession && (
           <div className="fixed right-0 bottom-0 left-0 flex w-full flex-row justify-center p-3 text-xs">
             <p className="text-xs text-zinc-500/50">

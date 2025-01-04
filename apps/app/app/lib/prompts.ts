@@ -78,7 +78,7 @@ export const examplePrompts = [
   },
 ];
 
-export const roles = [
+export const prompts = [
   {
     name: 'Fix Grammer and Typos',
     content: `Please correct all the grammar errors found in the text provided below without altering the style of the text. After correcting the errors, list them in a clear and structured format.\n Text to be corrected: {{{{your content here}}}}`,
