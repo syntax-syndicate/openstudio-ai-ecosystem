@@ -1,8 +1,15 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
-import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
+import { useChatContext } from '@/app/context/chat/context';
 import { useFilters } from '@/app/context/filters/context';
 import { useSettings } from '@/app/context/settings/context';
-import { Command, DotsThree, GearSix, Moon, Sun } from '@phosphor-icons/react';
+import {
+  Command,
+  DotsThree,
+  GearSix,
+  Moon,
+  Plus,
+  Sun,
+} from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
@@ -11,7 +18,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
+import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export const Navbar = () => {
@@ -19,6 +28,27 @@ export const Navbar = () => {
   const { open: openSettings } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const { open: openFilters } = useFilters();
+
+  const { push } = useRouter();
+  const { createSession } = useChatContext();
+  const renderNewSession = () => {
+    return (
+      <Tooltip content="New Session">
+        <Button
+          size="icon"
+          variant={'ghost'}
+          className="h-8 min-w-8"
+          onClick={() => {
+            createSession().then((session) => {
+              push(`/chat/${session.id}`);
+            });
+          }}
+        >
+          <Plus size={20} weight="bold" />
+        </Button>
+      </Tooltip>
+    );
+  };
 
   return (
     <div className="absolute top-0 right-0 left-0 z-50 flex flex-row items-center justify-between bg-gradient-to-b from-70% from-white to-transparent p-2 pb-6 md:p-4 dark:from-zinc-800">
@@ -28,7 +58,7 @@ export const Navbar = () => {
         <Badge>Beta</Badge>
       </div>
       <div className="flex flex-row items-center gap-2">
-        <QuickSettings />
+        {renderNewSession()}
         <Button variant="ghost" size="iconSm" onClick={openFilters}>
           <Command size={20} weight="bold" />
         </Button>

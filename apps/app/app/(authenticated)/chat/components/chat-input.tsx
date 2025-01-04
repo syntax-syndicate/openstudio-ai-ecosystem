@@ -20,7 +20,6 @@ import {
   Paperclip,
   Plus,
   Quotes,
-  StarFour,
   Stop,
   StopCircle,
   X,
@@ -72,7 +71,7 @@ export const ChatInput = () => {
     useRecordVoice();
   const { runModel, createSession, currentSession, streaming, stopGeneration } =
     useChatContext();
-  // const [inputValue, setInputValue] = useState('');
+  // const [inputValue, setInputValue] = useState("");
   const [contextValue, setContextValue] = useState<string>('');
   const { getPreferences, getApiKey } = usePreferences();
   const { getModelByKey } = useModelList();
@@ -93,6 +92,7 @@ export const ChatInput = () => {
       };
     },
   });
+
   const Enter = Extension.create({
     addKeyboardShortcuts() {
       return {
@@ -140,6 +140,7 @@ export const ChatInput = () => {
           /{{{{(.*?)}}}}/g,
           ` <mark class="prompt-highlight">$1</mark> `
         );
+
         if (newHTML !== html) {
           editor.commands.setContent(newHTML, true, {
             preserveWhitespace: true,
@@ -216,7 +217,8 @@ export const ChatInput = () => {
   };
 
   const handleRunModel = (query?: string, clear?: () => void) => {
-    console.log('handleRunModel');
+    console.log('handleRunmodel');
+
     if (!query) {
       return;
     }
@@ -253,7 +255,6 @@ export const ChatInput = () => {
         openSettings(selectedModel?.baseModel);
         return;
       }
-
       runModel({
         sessionId: sessionId!.toString(),
         props: {
@@ -266,19 +267,10 @@ export const ChatInput = () => {
       });
       setAttachment(undefined);
       setContextValue('');
+
       console.log(editor);
       clear?.();
     });
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    const keyCode = e?.which || e?.keyCode;
-
-    if (keyCode === 13 && !e.shiftKey) {
-      // Don't generate a new line
-      e.preventDefault();
-      handleRunModel();
-    }
   };
 
   useEffect(() => {
@@ -350,33 +342,6 @@ export const ChatInput = () => {
           onTouchEnd={stopRecording}
         >
           <Microphone size={20} weight="bold" />
-        </Button>
-      </Tooltip>
-    );
-  };
-
-  const renderNewSession = () => {
-    if (isNewSession) {
-      return (
-        <div className="flex h-8 min-w-8 items-center justify-center text-zinc-500 dark:text-white">
-          <StarFour size={20} weight="fill" />
-        </div>
-      );
-    }
-
-    return (
-      <Tooltip content="New Session">
-        <Button
-          size="icon"
-          variant={'ghost'}
-          className="h-8 min-w-8"
-          onClick={() => {
-            createSession().then((session) => {
-              router.push(`/chat/${session.id}`);
-            });
-          }}
-        >
-          <Plus size={20} weight="bold" />
         </Button>
       </Tooltip>
     );
@@ -495,7 +460,7 @@ export const ChatInput = () => {
       return (
         <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
           <ArrowElbowDownRight size={16} weight="fill" />
-          <p className="ml-2 w-full overflow-hidden truncate text-sm md:text-base">
+          <p className="ml-2 w-full overflow-hidden truncate text-sm md:text-base ">
             {contextValue}
           </p>
           <Button
@@ -545,8 +510,8 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-center gap-2 bg-gradient-to-t from-70% from-white to-transparent px-2 pt-16 pb-1 transition-all duration-1000 ease-in-out md:px-4 md:pb-4 dark:from-zinc-800',
-        isNewSession && 'top-0'
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 bg-gradient-to-t from-70% from-white to-transparent px-2 pt-16 pb-1 transition-all duration-1000 ease-in-out md:justify-center md:px-4 md:pb-4 dark:from-zinc-800',
+        isNewSession && 'top-0 '
       )}
     >
       {/* {isNewSession && <ChatGreeting />} */}
@@ -555,7 +520,17 @@ export const ChatInput = () => {
         {renderReplyButton()}
         {renderListeningIndicator()}
       </div>
-
+      <div className="flex flex-col items-center justify-center">
+        <ChatExamples
+          show={isNewSession}
+          onExampleClick={(prompt) => {
+            handleRunModel(prompt, () => {
+              clearInput();
+              focusToInput();
+            });
+          }}
+        />
+      </div>
       <div className="flex w-full flex-col gap-1 md:w-[700px]">
         {renderSelectedContext()}
         {renderAttachedImage()}
@@ -565,10 +540,10 @@ export const ChatInput = () => {
               variants={slideUpVariant}
               initial={'initial'}
               animate={editor?.isActive ? 'animate' : 'initial'}
-              className="flex flex-col items-start gap-0 bg-zinc-50 dark:bg-white/5 w-full dark:border-white/5 rounded-[1.25em] overflow-hidden"
+              className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-2xl bg-zinc-50 dark:border-white/5 dark:bg-white/5"
             >
-              <div className="flex min-h-14 w-full flex-row items-end gap-0 px-3 pt-3 pb-2">
-                {renderNewSession()}
+              <div className="flex w-full flex-row items-end gap-0 px-3 py-2">
+                {/* {renderNewSession()} */}
                 <EditorContent
                   editor={editor}
                   autoFocus
@@ -582,7 +557,7 @@ export const ChatInput = () => {
                   variant={!!editor?.getText() ? 'secondary' : 'ghost'}
                   disabled={!editor?.getText()}
                   className="ml-1 h-8 min-w-8"
-                   onClick={() =>
+                  onClick={() =>
                     handleRunModel(editor?.getText(), () => {
                       clearInput();
                       focusToInput();
@@ -592,29 +567,12 @@ export const ChatInput = () => {
                   <ArrowUp size={20} weight="bold" />
                 </Button>
               </div>
-              <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
-                <ModelSelect />
-
-                <div className="flex-1"></div>
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={openFilters}
-                  className="px-1.5"
-                >
-                  <ClockClockwise size={16} weight="bold" /> History
-                  <Badge>
-                    <Command size={12} weight="bold" /> K
-                  </Badge>
-                </Button>
-              </div>
             </motion.div>
           </PopoverAnchor>
           <PopoverContent
             side="top"
             sideOffset={4}
-            className="min-w-[96vw] md:min-w-[700px] p-0 rounded-2xl overflow-hidden"
+            className="min-w-[96vw] overflow-hidden rounded-2xl p-0 md:min-w-[700px]"
           >
             <CMDKCommand>
               <CommandInput
@@ -657,17 +615,23 @@ export const ChatInput = () => {
             </CMDKCommand>
           </PopoverContent>
         </Popover>
-      </div>
-      <div className="flex flex-col items-center justify-center">
-        <ChatExamples
-          show={isNewSession}
-          onExampleClick={(prompt) => {
-            handleRunModel(prompt, () => {
-              clearInput();
-              focusToInput();
-            });
-          }}
-        />
+        <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
+          <ModelSelect />
+
+          <div className="flex-1"></div>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={openFilters}
+            className="px-1.5"
+          >
+            <ClockClockwise size={16} weight="bold" /> History
+            <Badge>
+              <Command size={12} weight="bold" /> K
+            </Badge>
+          </Button>
+        </div>
       </div>
     </div>
   );

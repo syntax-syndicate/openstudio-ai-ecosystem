@@ -9,7 +9,7 @@ export type TChatExamples = {
 export const ChatExamples = ({ onExampleClick, show }: TChatExamples) => {
   if (!show) return null;
   return (
-    <div className="mt-2 flex flex-col gap-3">
+    <div className="mb-2 flex flex-col gap-3">
       <div className="grid w-full grid-cols-2 gap-1 md:w-[700px] md:grid-cols-4 md:gap-3">
         {examplePrompts?.map((example, index) => (
           <motion.div
