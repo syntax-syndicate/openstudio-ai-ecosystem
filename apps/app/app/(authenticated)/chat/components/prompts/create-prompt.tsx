@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export type TCreatePrompt = {
   open: boolean;
+
   onOpenChange: (open: boolean) => void;
 };
 
@@ -21,6 +22,8 @@ export const CreatePrompt = ({ open, onOpenChange }: TCreatePrompt) => {
   const [promptTitle, setPromptTitle] = useState('');
   const { setPrompt, getPrompts } = usePrompts();
   const promptTitleRef = useRef<HTMLInputElement | null>(null);
+  const [rawPrompt, setRawPrompt] = useState('');
+
   const editor = useEditor({
     extensions: [
       Document,
@@ -39,18 +42,18 @@ export const CreatePrompt = ({ open, onOpenChange }: TCreatePrompt) => {
     content: ``,
     autofocus: true,
     onTransaction(props) {
-      const { editor } = props;
-      const text = editor.getText();
-      const html = editor.getHTML();
-      const newHTML = html.replace(
-        /{{{{(.*?)}}}}/g,
-        ` <mark class="prompt-highlight">$1</mark> `
-      );
-      if (newHTML !== html) {
-        editor.commands.setContent(newHTML, true, {
-          preserveWhitespace: true,
-        });
-      }
+      //   const { editor } = props;
+      //   const text = editor.getText();
+      //   const html = editor.getHTML();
+      //   const newHTML = html.replace(
+      //     /{{{{(.*?)}}}}/g,
+      //     ` <mark class="prompt-highlight">$1</mark> `
+      //   );
+      //   if (newHTML !== html) {
+      //     editor.commands.setContent(newHTML, true, {
+      //       preserveWhitespace: true,
+      //     });
+      //   }
     },
     parseOptions: {
       preserveWhitespace: true,

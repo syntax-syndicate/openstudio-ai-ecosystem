@@ -1,4 +1,5 @@
 import type { TBot } from '@/app/hooks/use-bots';
+import type { TRunModel } from '@/app/hooks/use-llm';
 import type { TModelKey } from '@/app/hooks/use-model-list';
 import type { PromptType, RoleType } from '@/app/lib/prompts';
 import { get, set } from 'idb-keyval';
@@ -14,7 +15,7 @@ export const ModelType = {
 
 export type ModelType = (typeof ModelType)[keyof typeof ModelType];
 
-export type PromptProps = {
+export type InputProps = {
   type: PromptType;
   context?: string;
   role: RoleType;
@@ -29,7 +30,7 @@ export type TChatMessage = {
   rawHuman?: string;
   rawAI?: string;
   sessionId: string;
-  props: PromptProps;
+  runModelProps: TRunModel;
   toolName?: string;
   toolResult?: string;
   isLoading?: boolean;

@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 
 export type TModelSelect = {
   selectedModel: TModelKey;
+  fullWidth?: boolean;
   variant?: 'outline' | 'ghost' | 'default' | 'secondary';
   setSelectedModel: (model: TModelKey) => void;
   className?: string;
@@ -31,6 +32,7 @@ export type TModelSelect = {
 export const ModelSelect = ({
   selectedModel,
   variant,
+  fullWidth,
   setSelectedModel,
   className,
 }: TModelSelect) => {
@@ -60,8 +62,12 @@ export const ModelSelect = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent
           side="top"
+          align="start"
           sideOffset={4}
-          className="no-scrollbar max-h-[260px] min-w-[250px] overflow-y-auto text-xs md:text-sm"
+          className={cn(
+            'no-scrollbar max-h-[260px] overflow-y-auto text-xs md:text-sm',
+            fullWidth ? 'w-full' : 'min-w-[250px]'
+          )}
         >
           {models.map((model) => (
             <DropdownMenuSub key={model.key}>

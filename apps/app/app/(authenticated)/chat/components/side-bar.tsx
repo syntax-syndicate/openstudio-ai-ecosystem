@@ -1,3 +1,4 @@
+import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { useChatContext } from '@/app/context/chat/context';
 import { useChatSession } from '@/app/hooks/use-chat-session';
 import { useModelList } from '@/app/hooks/use-model-list';
@@ -76,7 +77,15 @@ export const HistorySidebar = () => {
                     setOpen(false);
                   }}
                 >
-                  {getModelByKey(session.messages?.[0]?.model)?.icon()}
+                  {session.bot ? (
+                    <BotAvatar
+                      size="small"
+                      name={session?.bot?.name}
+                      avatar={session?.bot?.avatar}
+                    />
+                  ) : (
+                    getModelByKey(session.messages?.[0]?.model)?.icon()
+                  )}
                   <span className="w-full truncate text-xs md:text-sm">
                     {session.title}
                   </span>

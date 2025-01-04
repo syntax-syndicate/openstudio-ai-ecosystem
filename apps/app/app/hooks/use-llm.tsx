@@ -4,7 +4,6 @@ import type { LLMResult } from '@langchain/core/outputs';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 
 import {
-  type PromptProps,
   type TChatMessage,
   type TChatSession,
   useChatSession,
@@ -25,7 +24,9 @@ import moment from 'moment';
 import { v4 } from 'uuid';
 
 export type TRunModel = {
-  props: PromptProps;
+  context?: string;
+  input?: string;
+  image?: string;
   sessionId: string;
   messageId?: string;
   model?: TModelKey;
@@ -42,17 +43,23 @@ export const useLLM = ({ onChange }: TUseLLM) => {
   const { createInstance, getModelByKey } = useModelList();
   const abortController = new AbortController();
   const { toast } = useToast();
-  const { calculatorTool, webSearchTool, getToolByKey } = useTools();
+  const { getToolByKey } = useTools();
 
   const stopGeneration = () => {
     abortController?.abort();
   };
 
-  const preparePrompt = async (
-    props: PromptProps,
-    history: TChatMessage[],
-    bot?: TChatSession['bot']
-  ) => {
+  const preparePrompt = async ({
+    context,
+    image,
+    history,
+    bot,
+  }: {
+    context?: string;
+    image?: string;
+    history: TChatMessage[];
+    bot?: TChatSession['bot'];
+  }) => {
     const preferences = await getPreferences();
     const hasPreviousMessages = history?.length > 0;
     const systemPrompt =
@@ -63,12 +70,12 @@ export const useLLM = ({ onChange }: TUseLLM) => {
     const system: BaseMessagePromptTemplateLike = [
       'system',
       `${systemPrompt} ${
-        props.context
+        context
           ? `Answer user's question based on the following context: """{context}"""`
           : ``
       } ${
         hasPreviousMessages
-          ? `You can also to refer these previous conversations`
+          ? `You can also refer to these previous conversations`
           : ``
       }`,
     ];
@@ -79,7 +86,7 @@ export const useLLM = ({ onChange }: TUseLLM) => {
 
     const user: BaseMessagePromptTemplateLike = [
       'user',
-      props?.image
+      image
         ? [
             {
               type: 'text',
@@ -87,7 +94,7 @@ export const useLLM = ({ onChange }: TUseLLM) => {
             },
             {
               type: 'image_url',
-              image_url: props.image,
+              image_url: image,
             },
           ]
         : userContent,
@@ -103,15 +110,11 @@ export const useLLM = ({ onChange }: TUseLLM) => {
     return prompt;
   };
 
-  const runModel = async ({
-    sessionId,
-    messageId,
-    props,
-    model,
-  }: TRunModel) => {
+  const runModel = async (props: TRunModel) => {
+    const { sessionId, messageId, input, context, image, model } = props;
     const currentSession = await getSessionById(sessionId);
 
-    if (!props?.query) {
+    if (!input) {
       return;
     }
 
@@ -128,11 +131,11 @@ export const useLLM = ({ onChange }: TUseLLM) => {
       preferences.messageLimit || defaultPreferences.messageLimit;
 
     const defaultChangeProps = {
-      props,
+      runModelProps: props,
       id: newMessageId,
       model: modelKey,
       sessionId,
-      rawHuman: props.query,
+      rawHuman: input,
       createdAt: moment().toISOString(),
     };
 
@@ -157,11 +160,13 @@ export const useLLM = ({ onChange }: TUseLLM) => {
       return;
     }
 
-    const prompt = await preparePrompt(
-      props,
-      currentSession?.messages?.filter((m) => m.id !== messageId) || [],
-      currentSession?.bot
-    );
+    const prompt = await preparePrompt({
+      context: context,
+      image,
+      history:
+        currentSession?.messages?.filter((m) => m.id !== messageId) || [],
+      bot: currentSession?.bot,
+    });
 
     const selectedModel = await createInstance(selectedModelKey, apiKey);
 
@@ -205,14 +210,16 @@ export const useLLM = ({ onChange }: TUseLLM) => {
     let streamedMessage = '';
     let toolName: string | undefined;
 
+    console.log('input', input);
+
     const stream: any = await (!!availableTools?.length
       ? agentExecutor
       : chainWithoutTools
     ).invoke(
       {
         chat_history: previousAllowedChatHistory || [],
-        context: props.context,
-        input: props.query,
+        context,
+        input,
       },
       {
         callbacks: [
@@ -313,7 +320,7 @@ export const useLLM = ({ onChange }: TUseLLM) => {
 
     const chatMessage: TChatMessage = {
       ...defaultChangeProps,
-      rawHuman: props.query,
+      rawHuman: input,
       rawAI: stream?.content || stream?.output,
       isToolRunning: false,
       toolName,

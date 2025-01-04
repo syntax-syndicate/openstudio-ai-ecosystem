@@ -1,13 +1,16 @@
 import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble';
+import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { GreetingBubble } from '@/app/(authenticated)/chat/components/greeting-bubble';
 import { useBots } from '@/app/context/bots/context';
 import { useChatContext } from '@/app/context/chat/context';
-import type { PromptProps, TChatMessage } from '@/app/hooks/use-chat-session';
+import type { TChatMessage } from '@/app/hooks/use-chat-session';
+import { useChatSession } from '@/app/hooks/use-chat-session';
+import type { TRunModel } from '@/app/hooks/use-llm';
 import type { TModelKey } from '@/app/hooks/use-model-list';
 import { removeExtraSpaces } from '@/app/lib/helper';
 import { ArrowElbowDownRight, Info, TrashSimple } from '@phosphor-icons/react';
-import { BotAvatar } from '@repo/design-system/components/ui/bot-avatar';
 import { Button } from '@repo/design-system/components/ui/button';
+import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import moment from 'moment';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
@@ -15,7 +18,7 @@ import { useEffect, useRef } from 'react';
 export type TRenderMessageProps = {
   id: string;
   humanMessage?: string;
-  props?: PromptProps;
+  props?: TRunModel;
   model: TModelKey;
   image?: string;
   aiMessage?: string;
@@ -34,7 +37,8 @@ moment().calendar(null, {
 });
 
 export const ChatMessages = () => {
-  const { currentSession, runModel } = useChatContext();
+  const { currentSession, refetchCurrentSession } = useChatContext();
+  const { updateSession } = useChatSession();
   const chatContainer = useRef<HTMLDivElement>(null);
   const { open: openBot } = useBots();
 
@@ -42,7 +46,7 @@ export const ChatMessages = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, []);
+  }, [currentSession?.messages?.length]);
 
   const scrollToBottom = () => {
     if (chatContainer.current) {
@@ -53,21 +57,22 @@ export const ChatMessages = () => {
   const renderMessage = (message: TChatMessage, isLast: boolean) => {
     return (
       <div className="flex w-full flex-col items-end gap-1" key={message.id}>
-        {message?.props?.context && (
+        {message.runModelProps?.context && (
           <div className="flex flex-row gap-2 rounded-2xl border border-transparent bg-zinc-50 p-2 pr-4 pl-3 text-sm text-zinc-600 hover:border-white/5 md:text-base dark:bg-black/30 dark:text-zinc-100">
             <ArrowElbowDownRight
               size={20}
               weight="bold"
               className="flex-shrink-0"
             />
+
             <span className="pt-[0.35em] pb-[0.25em] leading-6">
-              {message?.props?.context}
+              {message.runModelProps?.context}
             </span>
           </div>
         )}
-        {message?.props?.image && (
+        {message?.runModelProps?.image && (
           <Image
-            src={message?.props?.image}
+            src={message?.runModelProps?.image}
             alt="uploaded image"
             className="h-[120px] min-w-[120px] rounded-2xl border border-black/10 object-cover shadow-sm dark:border-white/10"
             width={0}
@@ -108,7 +113,11 @@ export const ChatMessages = () => {
       <div className="flex w-full flex-col gap-24 p-4 md:w-[700px] md:p-0">
         {currentSession?.bot && (
           <div className="flex flex-col items-center gap-2">
-            <BotAvatar name={currentSession.bot.name} size={40} />
+            <BotAvatar
+              name={currentSession.bot.name}
+              size="medium"
+              avatar={currentSession?.bot?.avatar}
+            />
             <p className="font-medium text-sm text-zinc-800 md:text-base dark:text-white">
               {currentSession.bot.name}
             </p>
@@ -117,9 +126,11 @@ export const ChatMessages = () => {
             </p>
             {!currentSession?.messages?.length && (
               <div className="flex flex-row gap-1">
-                <Button variant="outline" size="iconSm" onClick={() => {}}>
-                  <Info size={16} weight="bold" />
-                </Button>
+                <Tooltip content="Bot Info">
+                  <Button variant="outline" size="iconSm" onClick={() => {}}>
+                    <Info size={16} weight="bold" />
+                  </Button>
+                </Tooltip>
                 <Button
                   variant="outline"
                   size="sm"
@@ -129,9 +140,18 @@ export const ChatMessages = () => {
                 >
                   Change Bot
                 </Button>
-                <Button variant="outline" size="iconSm" onClick={() => {}}>
-                  <TrashSimple size={16} weight="bold" />
-                </Button>
+                <Tooltip content="Remove bot">
+                  <Button
+                    variant="outline"
+                    size="iconSm"
+                    onClick={() => {
+                      updateSession(currentSession.id, { bot: undefined });
+                      refetchCurrentSession();
+                    }}
+                  >
+                    <TrashSimple size={16} weight="bold" />
+                  </Button>
+                </Tooltip>
               </div>
             )}
           </div>
@@ -152,7 +172,7 @@ export const ChatMessages = () => {
             <AlertTitle>Ahh! Something went wrong!</AlertTitle>
             <AlertDescription>{streamingMessage?.error}</AlertDescription>
           </Alert>
-        )}  */}
+        )} */}
       </div>
     </div>
   );

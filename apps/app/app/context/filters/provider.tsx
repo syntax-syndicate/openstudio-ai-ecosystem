@@ -1,4 +1,5 @@
 'use client';
+import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { useChatContext } from '@/app/context/chat/context';
 import { FiltersContext } from '@/app/context/filters/context';
 import { useChatSession } from '@/app/hooks/use-chat-session';
@@ -112,7 +113,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
         <CommandInput placeholder="Search..." />
         <CommandList className="border-zinc-500/20 border-t">
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Actions">
+          <CommandGroup heading="QuickActions">
             {actions.map((action) => (
               <CommandItem
                 key={action.name}
@@ -120,16 +121,18 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                 value={action.name}
                 onSelect={action.action}
               >
-                <action.icon
-                  size={14}
-                  weight="bold"
-                  className="flex-shrink-0"
-                />
+                <div className="flex h-6 w-6 items-center justify-center">
+                  <action.icon
+                    size={16}
+                    weight="bold"
+                    className="flex-shrink-0"
+                  />
+                </div>
                 {action.name}
               </CommandItem>
             ))}
           </CommandGroup>
-          <CommandGroup heading="Sessions">
+          <CommandGroup heading="Recent Conversations">
             {sortSessions(sessions, 'updatedAt')?.map((session) => (
               <CommandItem
                 key={session.id}
@@ -145,7 +148,15 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                   onClose();
                 }}
               >
-                {getModelByKey(session.messages?.[0]?.model)?.icon()}
+                {session.bot ? (
+                  <BotAvatar
+                    size="small"
+                    name={session?.bot?.name}
+                    avatar={session?.bot?.avatar}
+                  />
+                ) : (
+                  getModelByKey(session.messages?.[0]?.model)?.icon()
+                )}
                 <span className="w-full truncate">{session.title}</span>
                 <span className="flex-shrink-0 pl-4 text-xs text-zinc-400 md:text-xs dark:text-zinc-700">
                   {moment(session.createdAt).fromNow(true)}

@@ -1,6 +1,7 @@
+import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { type TBot, useBots } from '@/app/hooks/use-bots';
+import { convertFileToBase64 } from '@/app/lib/helper';
 import { ArrowLeft, Plus } from '@phosphor-icons/react';
-import { BotAvatar } from '@repo/design-system/components/ui/bot-avatar';
 import { Button } from '@repo/design-system/components/ui/button';
 import { ComingSoon } from '@repo/design-system/components/ui/coming-soon';
 import { FormLabel } from '@repo/design-system/components/ui/form-label';
@@ -39,6 +40,13 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
   const clearBot = () => {
     formik.resetForm();
   };
+
+  const uploadFile = (file: File) => {
+    convertFileToBase64(file, (base64) => {
+      formik.setFieldValue('avatar', base64);
+    });
+  };
+
   return (
     <div className="no-scrollbar relative flex h-full w-full flex-col items-start overflow-y-auto">
       <div className="flex w-full flex-row items-center gap-3 border-zinc-500/20 border-b px-2 py-2">
@@ -58,6 +66,7 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
           <FormLabel label="Base Model" />
           <ModelSelect
             variant="secondary"
+            fullWidth
             className="h-10 w-full justify-start p-2"
             selectedModel={formik.values.deafultBaseModel}
             setSelectedModel={(model) => {
@@ -67,10 +76,28 @@ export const CreateBot = ({ open, onOpenChange }: TCreateBot) => {
         </div>
         <p className="font-medium text-sm md:text-base">Bot Profile</p>
         <div className="flex w-full flex-row items-center justify-start gap-2">
-          <BotAvatar name={formik.values.name} size={60} />
-          <Button variant="outline" size="sm">
+          <BotAvatar
+            name={formik.values.name}
+            size="large"
+            avatar={formik.values.avatar}
+          />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              document.getElementById('avatar')?.click();
+            }}
+          >
             Upload Avatar
           </Button>
+          <input
+            type="file"
+            id="avatar"
+            hidden
+            onChange={(e) => {
+              e.target.files?.[0] && uploadFile(e.target.files?.[0]);
+            }}
+          />
         </div>
         <div className="flex w-full flex-col gap-2">
           <FormLabel label="Bot Name" />

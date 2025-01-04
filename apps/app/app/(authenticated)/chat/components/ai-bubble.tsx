@@ -1,3 +1,4 @@
+import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { RegenerateWithModelSelect } from '@/app/(authenticated)/chat/components/regenerate-model-select';
 import { useChatContext } from '@/app/context/chat/context';
 import { useSettings } from '@/app/context/settings/context';
@@ -12,7 +13,6 @@ import {
   Alert,
   AlertDescription,
 } from '@repo/design-system/components/ui/alert';
-import { BotAvatar } from '@repo/design-system/components/ui/bot-avatar';
 import { Button } from '@repo/design-system/components/ui/button';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import {
@@ -53,13 +53,17 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   const handleCopyContent = () => {
     messageRef?.current && rawAI && copy(rawAI);
   };
-  const { removeMessage, runModel, currentSession } = useChatContext();
+  const { removeMessage, currentSession, handleRunModel } = useChatContext();
 
   return (
     <div className="mt-6 flex w-full flex-col gap-2 md:flex-row">
-      <div className="px-0 py-1 md:px-3">
+      <div className="px-0 py-0 md:px-3">
         {currentSession?.bot ? (
-          <BotAvatar size={24} name={currentSession?.bot?.name} />
+          <BotAvatar
+            size="small"
+            name={currentSession?.bot?.name}
+            avatar={currentSession?.bot?.avatar}
+          />
         ) : (
           modelForMessage?.icon()
         )}
@@ -120,10 +124,10 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
               {chatMessage && isLast && (
                 <RegenerateWithModelSelect
                   onRegenerate={(model: TModelKey) => {
-                    runModel({
+                    handleRunModel({
+                      input: chatMessage.rawAI,
                       messageId: chatMessage.id,
                       model: model,
-                      props: chatMessage.props,
                       sessionId: chatMessage.sessionId,
                     });
                   }}
