@@ -341,9 +341,6 @@ export const ChatInput = () => {
               return;
             }
             startRecording();
-            setTimeout(() => {
-              stopRecording();
-            }, 20000);
           }}
           onTouchStart={startRecording}
           onTouchEnd={stopRecording}
