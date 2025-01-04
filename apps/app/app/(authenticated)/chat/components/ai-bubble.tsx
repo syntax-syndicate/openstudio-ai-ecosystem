@@ -43,8 +43,8 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   const { removeMessage, runModel } = useChatContext();
 
   return (
-    <div className="mt-6 flex w-full flex-row gap-2">
-      <div className="px-3 py-1">{modelForMessage?.icon()}</div>
+    <div className="mt-6 flex w-full flex-col gap-2 md:flex-row">
+      <div className="px-0 py-1 md:px-3">{modelForMessage?.icon()}</div>
       <div
         ref={messageRef}
         className=" flex w-full flex-col items-start rounded-2xl"
@@ -109,7 +109,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent>
-                    <p className="pb-2 font-medium text-sm">
+                    <p className="pb-2 font-medium text-sm md:text-base">
                       Are you sure you want to delete this message?
                     </p>
                     <div className="flex flex-row gap-1">
@@ -137,7 +137,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
             </div>
           )}
           {!isLoading && (
-            <div className="flex flex-row items-center gap-2 text-xs text-zinc-500">
+            <div className="flex flex-row items-center gap-2 text-xs text-zinc-500 md:text-base">
               {modelForMessage?.name}
             </div>
           )}

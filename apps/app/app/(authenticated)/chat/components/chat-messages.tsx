@@ -48,7 +48,7 @@ export const ChatMessages = () => {
     return (
       <div className="flex w-full flex-col items-end gap-1" key={message.id}>
         {message?.props?.context && (
-          <div className="flex flex-row gap-2 rounded-2xl border border-transparent bg-zinc-50 p-2 pr-4 pl-3 text-sm text-zinc-600 hover:border-white/5 dark:bg-black/30 dark:text-zinc-100">
+          <div className="flex flex-row gap-2 rounded-2xl border border-transparent bg-zinc-50 p-2 pr-4 pl-3 text-sm text-zinc-600 hover:border-white/5 md:text-base dark:bg-black/30 dark:text-zinc-100">
             <ArrowElbowDownRight
               size={20}
               weight="bold"
@@ -69,7 +69,7 @@ export const ChatMessages = () => {
             height={0}
           />
         )}
-        <div className="ml-16 flex flex-row gap-2 rounded-2xl bg-zinc-50 px-3 py-2 text-sm text-zinc-600 dark:bg-black/30 dark:text-zinc-100">
+        <div className="ml-16 flex flex-row gap-2 rounded-2xl bg-zinc-50 px-3 py-2 text-sm text-zinc-600 md:text-base dark:bg-black/30 dark:text-zinc-100">
           <span className="pt-[0.20em] pb-[0.15em] leading-6">
             {message.rawHuman}
           </span>
@@ -95,11 +95,11 @@ export const ChatMessages = () => {
 
   return (
     <div
-      className="no-scrollbar flex h-screen w-full flex-col items-center overflow-y-auto pt-[60px] pb-[200px]"
+      className="no-scrollbar flex h-[100dvh] w-full flex-col items-center overflow-y-auto pt-[60px] pb-[200px]"
       ref={chatContainer}
       id="chat-container"
     >
-      <div className="flex w-[700px] flex-col gap-24">
+      <div className="flex w-full flex-col gap-24 p-4 md:w-[700px] md:p-0">
         <div className="flex w-full flex-col items-start gap-8">
           {currentSession?.messages?.map((message, index) =>
             renderMessage(

@@ -13,7 +13,7 @@ const App = async () => {
   // }, []);
 
   return (
-    <main className="flex h-screen w-screen flex-col items-center justify-center gap-2">
+    <main className="flex h-[100dvh] w-screen flex-col items-center justify-center gap-2">
       <ModelIcon type="chathub" size="lg" />
       <Spinner />
     </main>

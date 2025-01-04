@@ -6,6 +6,15 @@ import { SettingsProvider } from '@/app/context/settings/provider';
 import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
 import { ThemeProvider } from '@repo/design-system/providers/theme';
 
+import type { Viewport } from 'next';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function ChatLayout({
   children,
 }: {
