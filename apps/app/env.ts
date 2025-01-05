@@ -32,9 +32,11 @@ export const env = createEnv({
       .min(1)
       .startsWith('tvly-')
       .optional(),
+    NEXT_PUBLIC_HUGEICONS_API_KEY: z.string().min(1),
   },
   runtimeEnv: {
     NEXT_PUBLIC_OPENAI_API_KEY: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     NEXT_PUBLIC_TAVILY_API_KEY: process.env.NEXT_PUBLIC_TAVILY_API_KEY,
+    NEXT_PUBLIC_HUGEICONS_API_KEY: process.env.NEXT_PUBLIC_HUGEICONS_API_KEY,
   },
 });
