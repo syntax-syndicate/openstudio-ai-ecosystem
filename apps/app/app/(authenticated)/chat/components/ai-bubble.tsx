@@ -1,4 +1,3 @@
-import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { RegenerateWithModelSelect } from '@/app/(authenticated)/chat/components/regenerate-model-select';
 import { useChatContext } from '@/app/context/chat/provider';
 import { useSessionsContext } from '@/app/context/sessions/provider';
@@ -6,7 +5,7 @@ import { useSettings } from '@/app/context/settings/context';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { useMarkdown } from '@/app/hooks/use-mdx';
-import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
+import { useModelList } from '@/app/hooks/use-model-list';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { useTools } from '@/app/hooks/use-tools';
 import type { TToolKey } from '@/app/hooks/use-tools';
@@ -38,11 +37,11 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
     id,
     rawAI,
     isLoading,
-    model,
     stop,
     stopReason,
     isToolRunning,
     toolName,
+    inputProps,
   } = chatMessage;
 
   const { getToolInfoByKey } = useTools();
@@ -52,7 +51,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
     : undefined;
   const messageRef = useRef<HTMLDivElement>(null);
   const { showCopied, copy } = useClipboard();
-  const { getModelByKey } = useModelList();
+  const { getModelByKey, getAssistantByKey } = useModelList();
   const { renderMarkdown, links } = useMarkdown();
   const { open: openSettings } = useSettings();
   const { removeMessage, currentSession } = useSessionsContext();
@@ -60,7 +59,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { selectedText } = useTextSelection();
 
-  const modelForMessage = getModelByKey(model);
+  const modelForMessage = getModelByKey(inputProps.assistant.baseModel);
 
   const handleCopyContent = () => {
     messageRef?.current && rawAI && copy(rawAI);
@@ -122,17 +121,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
 
   return (
     <div className="mt-6 flex w-full flex-row">
-      <div className="p-2 md:px-3 md:py-2">
-        {currentSession?.bot ? (
-          <BotAvatar
-            size="small"
-            name={currentSession?.bot?.name}
-            avatar={currentSession?.bot?.avatar}
-          />
-        ) : (
-          modelForMessage?.icon('sm')
-        )}
-      </div>
+      <div className="p-2 md:px-3 md:py-2">{modelForMessage?.icon('sm')}</div>
       <Flex
         ref={messageRef}
         direction="col"
@@ -221,11 +210,15 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
               </Tooltip>
               {chatMessage && isLast && (
                 <RegenerateWithModelSelect
-                  onRegenerate={(model: TModelKey) => {
+                  onRegenerate={(assistant: string) => {
+                    const props = getAssistantByKey(assistant);
+                    if (!props?.assistant) {
+                      return;
+                    }
                     handleRunModel({
                       input: chatMessage.rawHuman,
                       messageId: chatMessage.id,
-                      model: model,
+                      assistant: props.assistant,
                       sessionId: chatMessage.sessionId,
                     });
                   }}

@@ -21,7 +21,7 @@ import { useState } from 'react';
 export const QuickSettings = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { preferences, updatePreferences } = usePreferenceContext();
-  const { getModelByKey } = useModelList();
+  const { getModelByKey, getAssistantByKey } = useModelList();
 
   const renderResetToDefault = (key: keyof TPreferences) => {
     return (
@@ -38,7 +38,7 @@ export const QuickSettings = () => {
     );
   };
 
-  const model = getModelByKey(preferences?.defaultModel);
+  const assistant = getAssistantByKey(preferences?.defaultAssistant);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -50,9 +50,9 @@ export const QuickSettings = () => {
         </PopoverTrigger>
       </Tooltip>
       <PopoverContent className="roundex-2xl mr-8 w-[300px] p-0 dark:bg-zinc-700">
-        {model && (
+        {assistant && (
           <div className="border-black/10 border-b p-2 dark:border-white/10">
-            <ModelInfo model={model} showDetails={false} />
+            <ModelInfo model={assistant.model} showDetails={false} />
           </div>
         )}
         <Flex direction="col" className="w-full px-3 py-1">
@@ -72,7 +72,7 @@ export const QuickSettings = () => {
                 value={[Number(preferences?.maxTokens)]}
                 step={1}
                 min={0}
-                max={model?.maxOutputTokens}
+                max={assistant?.model?.maxOutputTokens}
                 onValueChange={(value: number[]) => {
                   updatePreferences({ maxTokens: value?.[0] });
                 }}

@@ -1,5 +1,6 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
 import { usePreferenceContext } from '@/app/context/preferences/provider';
+import type { TAssistant } from '@/app/hooks/use-chat-session';
 import { defaultPreferences } from '@/app/hooks/use-preferences';
 import type { TToolKey } from '@/app/hooks/use-tools';
 import { ChatAnthropic } from '@langchain/anthropic';
@@ -11,6 +12,7 @@ import type { JSX } from 'react';
 import { useMemo } from 'react';
 
 export type TBaseModel = 'openai' | 'anthropic' | 'gemini' | 'ollama';
+
 export const models = [
   'gpt-4o',
   'gpt-4',
@@ -25,6 +27,7 @@ export const models = [
   'gemini-1.5-pro-latest',
   'phi3:latest',
 ];
+
 export type TModelKey = (typeof models)[number] | string;
 
 export type TModel = {
@@ -37,8 +40,9 @@ export type TModel = {
   tokens: number;
   plugins: TToolKey[];
   baseModel: TBaseModel;
-  maxOutputTokens?: number;
+  maxOutputTokens: number;
 };
+
 export const useModelList = () => {
   const { preferences } = usePreferenceContext();
 
@@ -70,12 +74,12 @@ export const useModelList = () => {
       case 'anthropic':
         return new ChatAnthropic({
           model: model.key,
-          apiKey,
           streaming: true,
           anthropicApiUrl: `${window.location.origin}/api/anthropic/`,
+          apiKey,
+          maxTokens,
           temperature,
           topP,
-          maxTokens,
           topK,
           maxRetries: 2,
         });
@@ -83,6 +87,7 @@ export const useModelList = () => {
         return new ChatGoogleGenerativeAI({
           model: model.key,
           apiKey,
+          maxOutputTokens: maxTokens,
           streaming: true,
           temperature,
           maxRetries: 1,
@@ -91,7 +96,6 @@ export const useModelList = () => {
           },
           topP,
           topK,
-          maxOutputTokens: maxTokens,
         });
       case 'ollama':
         return new ChatOllama({
@@ -111,11 +115,11 @@ export const useModelList = () => {
     {
       name: 'GPT 4o',
       key: 'gpt-4o',
+      tokens: 128000,
       isNew: true,
       inputPrice: 5,
       outputPrice: 15,
       plugins: ['web_search', 'duckduckgo_search'],
-      tokens: 128000,
       icon: (size) => <ModelIcon size={size} type="gpt4" />,
       baseModel: 'openai',
       maxOutputTokens: 2048,
@@ -137,7 +141,7 @@ export const useModelList = () => {
       key: 'gpt-4',
       tokens: 128000,
       isNew: false,
-      plugins: ['web_search', 'calculator'],
+      plugins: ['web_search', 'duckduckgo_search'],
       inputPrice: 30,
       outputPrice: 60,
       icon: (size) => <ModelIcon size={size} type="gpt4" />,
@@ -153,8 +157,8 @@ export const useModelList = () => {
       plugins: [
         'web_search',
         'calculator',
-        'duckduckgo_search',
         'read_website',
+        'duckduckgo_search',
       ],
       tokens: 16385,
       icon: (size) => <ModelIcon size={size} type="gpt3" />,
@@ -180,20 +184,22 @@ export const useModelList = () => {
       tokens: 200000,
       plugins: [],
       icon: (size) => <ModelIcon size={size} type="anthropic" />,
-      baseModel: 'anthropic',
       maxOutputTokens: 4095,
+
+      baseModel: 'anthropic',
     },
     {
       name: 'Claude 3 Sonnet',
-      key: 'claude-3-sonnet-20240229',
-      isNew: false,
       inputPrice: 3,
       outputPrice: 15,
       plugins: [],
+      key: 'claude-3-sonnet-20240229',
+      isNew: false,
+      maxOutputTokens: 4095,
       tokens: 200000,
       icon: (size) => <ModelIcon size={size} type="anthropic" />,
+
       baseModel: 'anthropic',
-      maxOutputTokens: 4095,
     },
     {
       name: 'Claude 3 Haiku',
@@ -201,11 +207,11 @@ export const useModelList = () => {
       isNew: false,
       inputPrice: 0.25,
       outputPrice: 1.5,
-      plugins: [],
       tokens: 200000,
+      plugins: [],
+      maxOutputTokens: 4095,
       icon: (size) => <ModelIcon size={size} type="anthropic" />,
       baseModel: 'anthropic',
-      maxOutputTokens: 4095,
     },
     {
       name: 'Gemini Pro 1.5',
@@ -217,7 +223,7 @@ export const useModelList = () => {
       tokens: 200000,
       icon: (size) => <ModelIcon size={size} type="gemini" />,
       baseModel: 'gemini',
-      maxOutputTokens: 4095,
+      maxOutputTokens: 8190,
     },
     {
       name: 'Gemini Flash 1.5',
@@ -233,8 +239,8 @@ export const useModelList = () => {
     },
     {
       name: 'Gemini Pro',
-      key: 'gemini-pro',
       isNew: false,
+      key: 'gemini-pro',
       inputPrice: 0.5,
       outputPrice: 1.5,
       plugins: [],
@@ -268,6 +274,7 @@ export const useModelList = () => {
   const getModelByKey = (key: TModelKey) => {
     return allModels.find((model) => model.key === key);
   };
+
   const getTestModelKey = (key: TBaseModel): TModelKey => {
     switch (key) {
       case 'openai':
@@ -280,5 +287,45 @@ export const useModelList = () => {
         return 'phi3:latest';
     }
   };
-  return { models: allModels, createInstance, getModelByKey, getTestModelKey };
+
+  const assistants: TAssistant[] = [
+    ...allModels?.map((model) => ({
+      name: model.name,
+      key: model.key,
+      baseModel: model.key,
+      systemPrompt: preferences.systemPrompt || defaultPreferences.systemPrompt,
+    })),
+    {
+      name: 'Custom Assistant',
+      baseModel: 'gpt-3.5-turbo',
+      key: 'custome-assistant',
+      systemPrompt: 'Be funny and answer always negatively',
+    },
+  ];
+
+  const getAssistantByKey = (
+    key: string
+  ): { assistant: TAssistant; model: TModel } | undefined => {
+    const assistant = assistants.find((assistant) => assistant.key === key);
+    if (!assistant) {
+      return;
+    }
+    const model = getModelByKey(assistant?.baseModel);
+
+    if (!model) {
+      return;
+    }
+    return {
+      assistant,
+      model,
+    };
+  };
+  return {
+    models: allModels,
+    createInstance,
+    getModelByKey,
+    getTestModelKey,
+    assistants,
+    getAssistantByKey,
+  };
 };

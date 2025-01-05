@@ -1,29 +1,33 @@
-import type { TBot } from '@/app/hooks/use-bots';
-import type { TRunModel } from '@/app/hooks/use-llm';
 import type { TModelKey } from '@/app/hooks/use-model-list';
 import { sortSessions } from '@/app/lib/helper';
-import type { PromptType, RoleType } from '@/app/lib/prompts';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { get, set } from 'idb-keyval';
 import moment from 'moment';
 import { v4 } from 'uuid';
 
-export type InputProps = {
-  type: PromptType;
+export type TAssistant = {
+  name: string;
+  systemPrompt: string;
+  baseModel: TModelKey;
+  key: TModelKey | string;
+};
+
+export type TLLMInputProps = {
   context?: string;
-  role: RoleType;
-  query?: string;
+  input?: string;
   image?: string;
+  sessionId: string;
+  messageId?: string;
+  assistant: TAssistant;
 };
 
 export type TChatMessage = {
   id: string;
-  model: TModelKey;
   image?: string;
   rawHuman?: string;
   rawAI?: string;
   sessionId: string;
-  runModelProps: TRunModel;
+  inputProps: TLLMInputProps;
   toolName?: string;
   toolResult?: string;
   isLoading?: boolean;
@@ -35,7 +39,6 @@ export type TChatMessage = {
 
 export type TChatSession = {
   messages: TChatMessage[];
-  bot?: TBot;
   title?: string;
   id: string;
   createdAt: string;
@@ -60,6 +63,7 @@ export const useChatSession = (id?: string) => {
     const sessions = await getSessions();
     const newSessions = sessions.map((session) => {
       if (session.id === sessionId) {
+        console.log('session add message', session);
         if (!!session?.messages?.length) {
           const isExisingMessage = session.messages.find(
             (m) => m.id === chatMessage.id
@@ -77,6 +81,7 @@ export const useChatSession = (id?: string) => {
             updatedAt: moment().toISOString(),
           };
         }
+        console.log('session add message 2', session);
 
         return {
           ...session,
@@ -87,6 +92,8 @@ export const useChatSession = (id?: string) => {
       }
       return session;
     });
+
+    console.log('new add message', newSessions);
 
     await set('chat-sessions', newSessions);
   };
@@ -140,14 +147,10 @@ export const useChatSession = (id?: string) => {
     return newFilteredSessions;
   };
 
-  const createNewSession = async (bot?: TBot) => {
+  const createNewSession = async () => {
     const sessions = (await getSessions()) || [];
     const latestSession = sortSessions(sessions, 'createdAt')?.[0];
     if (latestSession && !latestSession?.messages?.length) {
-      if (latestSession.bot) {
-        await updateSession(latestSession.id, { bot: undefined });
-        return { ...latestSession, bot: undefined };
-      }
       return latestSession;
     }
 
@@ -155,7 +158,6 @@ export const useChatSession = (id?: string) => {
       id: v4(),
       messages: [],
       title: 'Untitled',
-      bot,
       createdAt: moment().toISOString(),
     };
 
@@ -232,11 +234,12 @@ export const useChatSession = (id?: string) => {
       if (!id) return;
       return await getSessionById(id);
     },
+
     enabled: !!id,
   });
 
   const createNewSessionMutation = useMutation({
-    mutationFn: async (bot?: TBot) => await createNewSession(bot),
+    mutationFn: async () => await createNewSession(),
     onSuccess: () => {
       sessionsQuery.refetch();
     },

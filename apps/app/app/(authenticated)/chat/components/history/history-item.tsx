@@ -1,4 +1,3 @@
-import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
 import { useSessionsContext } from '@/app/context/sessions/provider';
 import type { TChatSession } from '@/app/hooks/use-chat-session';
 import { useModelList } from '@/app/hooks/use-model-list';
@@ -29,12 +28,16 @@ export const HistoryItem = ({
     removeSessionByIdMutation,
     createSession,
   } = useSessionsContext();
-  const { getModelByKey } = useModelList();
+  const { getModelByKey, getAssistantByKey } = useModelList();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(session.title);
   const router = useRouter();
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const historyInputRef = useRef<HTMLInputElement>(null);
+
+  const assistantProps = getAssistantByKey(
+    session.messages?.[0]?.inputProps?.assistant?.key
+  );
 
   useEffect(() => {
     if (isEditing) {
@@ -86,15 +89,7 @@ export const HistoryItem = ({
         />
       ) : (
         <>
-          {session.bot ? (
-            <BotAvatar
-              size="small"
-              name={session?.bot?.name}
-              avatar={session?.bot?.avatar}
-            />
-          ) : (
-            getModelByKey(session.messages?.[0]?.model)?.icon('sm')
-          )}
+          {assistantProps?.model.icon('sm')}
           <span className="w-full truncate text-xs md:text-sm">
             {session.title}
           </span>

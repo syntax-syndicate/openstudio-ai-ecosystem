@@ -1,4 +1,5 @@
-import type { TBaseModel, TModelKey } from '@/app/hooks/use-model-list';
+import type { TAssistant } from '@/app/hooks/use-chat-session';
+import type { TBaseModel } from '@/app/hooks/use-model-list';
 import type { TToolKey } from '@/app/hooks/use-tools';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { get, set } from 'idb-keyval';
@@ -6,7 +7,7 @@ import { get, set } from 'idb-keyval';
 export type TApiKeys = Partial<Record<TBaseModel, string>>;
 
 export type TPreferences = {
-  defaultModel: TModelKey;
+  defaultAssistant: TAssistant['key'];
   systemPrompt: string;
   messageLimit: number;
   temperature: number;
@@ -21,8 +22,8 @@ export type TPreferences = {
   googleSearchApiKey?: string;
 };
 export const defaultPreferences: TPreferences = {
-  defaultModel: 'gpt-3.5-turbo',
-  systemPrompt: 'You are a helpful assistant.',
+  defaultAssistant: 'gpt-3.5-turbo',
+  systemPrompt: "You're helpful assistant that can help me with my questions.",
   messageLimit: 30,
   temperature: 0.5,
   ollamaBaseUrl: 'http://localhost:11434',

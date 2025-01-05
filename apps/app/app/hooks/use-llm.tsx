@@ -5,8 +5,12 @@ import { useToast } from '@repo/design-system/components/ui/use-toast';
 
 import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { useSessionsContext } from '@/app/context/sessions/provider';
-import type { TChatMessage, TChatSession } from '@/app/hooks/use-chat-session';
-import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
+import type {
+  TAssistant,
+  TChatMessage,
+  TLLMInputProps,
+} from '@/app/hooks/use-chat-session';
+import { useModelList } from '@/app/hooks/use-model-list';
 import { defaultPreferences } from '@/app/hooks/use-preferences';
 import { useTools } from '@/app/hooks/use-tools';
 import { sortMessages } from '@/app/lib/helper';
@@ -20,15 +24,6 @@ import moment from 'moment';
 import { useState } from 'react';
 import { v4 } from 'uuid';
 
-export type TRunModel = {
-  context?: string;
-  input?: string;
-  image?: string;
-  sessionId: string;
-  messageId?: string;
-  model?: TModelKey;
-};
-
 export type TUseLLM = {
   onChange?: (props: TChatMessage) => void;
   onFinish?: () => void;
@@ -38,7 +33,7 @@ export const useLLM = ({ onChange, onFinish }: TUseLLM) => {
   const { addMessageToSession, getSessionById, updateSessionMutation } =
     useSessionsContext();
   const { apiKeys, preferences } = usePreferenceContext();
-  const { createInstance, getModelByKey } = useModelList();
+  const { createInstance, getModelByKey, getAssistantByKey } = useModelList();
   const { toast } = useToast();
   const { getToolByKey } = useTools();
   const [abortController, setAbortController] = useState<AbortController>();
@@ -52,18 +47,15 @@ export const useLLM = ({ onChange, onFinish }: TUseLLM) => {
     context,
     image,
     history,
-    bot,
+    assistant,
   }: {
     context?: string;
     image?: string;
     history: TChatMessage[];
-    bot?: TChatSession['bot'];
+    assistant: TAssistant;
   }) => {
     const hasPreviousMessages = history?.length > 0;
-    const systemPrompt =
-      bot?.prompt ||
-      preferences.systemPrompt ||
-      defaultPreferences.systemPrompt;
+    const systemPrompt = assistant.systemPrompt;
 
     const system: BaseMessagePromptTemplateLike = [
       'system',
@@ -108,21 +100,21 @@ export const useLLM = ({ onChange, onFinish }: TUseLLM) => {
     return prompt;
   };
 
-  const runModel = async (props: TRunModel) => {
-    const { sessionId, messageId, input, context, image, model } = props;
+  const runModel = async (props: TLLMInputProps) => {
+    const { sessionId, messageId, input, context, image, assistant } = props;
     const currentAbortController = new AbortController();
     setAbortController(currentAbortController);
 
     const selectedSession = await getSessionById(sessionId);
-    console.log('run model', props);
-    console.log('current session', selectedSession);
+
+    console.log('selected props', props);
 
     if (!input) {
       return;
     }
 
     const newMessageId = messageId || v4();
-    const modelKey = model || preferences.defaultModel;
+    const modelKey = assistant.baseModel;
 
     const allPreviousMessages =
       selectedSession?.messages?.filter((m) => m.id !== messageId) || [];
@@ -132,10 +124,9 @@ export const useLLM = ({ onChange, onFinish }: TUseLLM) => {
     const messageLimit =
       preferences.messageLimit || defaultPreferences.messageLimit;
 
-    const defaultChangeProps = {
-      runModelProps: props,
+    const defaultChangeProps: TChatMessage = {
+      inputProps: props,
       id: newMessageId,
-      model: modelKey,
       sessionId,
       rawHuman: input,
       createdAt: moment().toISOString(),
@@ -167,7 +158,7 @@ export const useLLM = ({ onChange, onFinish }: TUseLLM) => {
       image,
       history:
         selectedSession?.messages?.filter((m) => m.id !== messageId) || [],
-      bot: selectedSession?.bot,
+      assistant,
     });
 
     const availableTools =
@@ -197,9 +188,12 @@ export const useLLM = ({ onChange, onFinish }: TUseLLM) => {
 
     console.log('selectedModelFirst', selectedModel);
     console.log('selectedModelSecond', Object.create(selectedModel));
+
     // Creating a copy of the model
     const modifiedModel = Object.create(Object.getPrototypeOf(selectedModel));
+
     Object.assign(modifiedModel, selectedModel);
+
     modifiedModel.bindTools = (tools: any[], options: any) => {
       return selectedModel.bindTools?.(tools, {
         ...options,
@@ -377,29 +371,35 @@ export const useLLM = ({ onChange, onFinish }: TUseLLM) => {
         createdAt: moment().toISOString(),
       };
 
+      console.log('chat message hh', chatMessage);
       await addMessageToSession(sessionId, chatMessage);
       await generateTitleForSession(sessionId);
       await onChange?.(chatMessage);
       onFinish?.();
     } catch (err) {
+      onChange?.({
+        ...defaultChangeProps,
+        isLoading: false,
+        stop: true,
+        stopReason: 'error',
+      });
+      onFinish?.();
       console.error(err);
     }
   };
 
   const generateTitleForSession = async (sessionId: string) => {
     const session = await getSessionById(sessionId);
-    const modelKey = preferences.defaultModel;
-    const selectedModelKey = getModelByKey(modelKey);
+    const assistant = getAssistantByKey(preferences.defaultAssistant);
+    if (!assistant) {
+      return;
+    }
 
     console.log('generate title for session', session);
 
-    if (!selectedModelKey) {
-      throw new Error('Model not found');
-    }
+    const apiKey = apiKeys[assistant.model.baseModel];
 
-    const apiKey = apiKeys[selectedModelKey?.baseModel];
-
-    const selectedModel = await createInstance(selectedModelKey, apiKey);
+    const selectedModel = await createInstance(assistant.model, apiKey);
 
     const firstMessage = session?.messages?.[0];
 
@@ -426,8 +426,6 @@ export const useLLM = ({ onChange, onFinish }: TUseLLM) => {
       });
 
       const generation = await selectedModel.invoke(prompt, {});
-
-      console.log('title generation', generation);
 
       const newTitle = generation?.content?.toString() || session.title;
       await updateSessionMutation.mutate({

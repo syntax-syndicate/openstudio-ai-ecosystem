@@ -2,8 +2,11 @@
 import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { useSessionsContext } from '@/app/context/sessions/provider';
 import { useSettings } from '@/app/context/settings/context';
-import type { TChatMessage } from '@/app/hooks/use-chat-session';
-import { type TRunModel, useLLM } from '@/app/hooks/use-llm';
+import type {
+  TChatMessage,
+  TLLMInputProps,
+} from '@/app/hooks/use-chat-session';
+import { useLLM } from '@/app/hooks/use-llm';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { removeExtraSpaces } from '@/app/lib/helper';
 import {
@@ -23,7 +26,7 @@ import { createContext, useContext, useState } from 'react';
 export type TChatContext = {
   editor: ReturnType<typeof useEditor>;
   sendMessage: () => void;
-  handleRunModel: (props: TRunModel, clear?: () => void) => void;
+  handleRunModel: (props: TLLMInputProps, clear?: () => void) => void;
   openPromptsBotCombo: boolean;
   setOpenPromptsBotCombo: (value: boolean) => void;
   contextValue: string;
@@ -49,7 +52,7 @@ export type TChatProvider = {
 export const ChatProvider = ({ children }: TChatProvider) => {
   const { setCurrentSession, refetchSessions, currentSession } =
     useSessionsContext();
-  const { getModelByKey } = useModelList();
+  const { getModelByKey, getAssistantByKey } = useModelList();
   const { toast } = useToast();
   const [openPromptsBotCombo, setOpenPromptsBotCombo] = useState(false);
   const [contextValue, setContextValue] = useState('');
@@ -90,28 +93,26 @@ export const ChatProvider = ({ children }: TChatProvider) => {
     },
   });
 
-  const handleRunModel = async (props: TRunModel, clear?: () => void) => {
+  const handleRunModel = async (props: TLLMInputProps, clear?: () => void) => {
     if (!props?.input) {
       return;
     }
 
-    const selectedModel = getModelByKey(
-      props?.model || preferences.defaultModel
-    );
+    const assitantprops = getAssistantByKey(props?.assistant.key);
 
-    if (!selectedModel?.baseModel) {
-      throw new Error('Model not found');
+    if (!assitantprops) {
+      return;
     }
 
-    const apiKey = apiKeys[selectedModel?.baseModel];
+    const apiKey = apiKeys[assitantprops.model.baseModel];
 
-    if (!apiKey && selectedModel.baseModel !== 'ollama') {
+    if (!apiKey && assitantprops.model.baseModel !== 'ollama') {
       toast({
         title: 'Ahh!',
         description: 'API key is missing. Please check your settings.',
         variant: 'destructive',
       });
-      openSettings(selectedModel?.baseModel);
+      openSettings(assitantprops.model.baseModel);
       return;
     }
 
@@ -122,7 +123,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
       input: removeExtraSpaces(props?.input),
       context: removeExtraSpaces(props?.context),
       image: props?.image,
-      model: selectedModel?.key,
+      assistant: assitantprops.assistant,
       messageId: props?.messageId,
     });
     refetchSessions?.();
@@ -177,11 +178,16 @@ export const ChatProvider = ({ children }: TChatProvider) => {
     if (!editor || !currentSession?.id) {
       return;
     }
+    const props = getAssistantByKey(preferences.defaultAssistant);
+    if (!props) {
+      return;
+    }
     handleRunModel(
       {
         input: editor.getText(),
         context: contextValue,
         sessionId: currentSession?.id?.toString(),
+        assistant: props.assistant,
       },
       () => {
         editor.commands.clearContent();

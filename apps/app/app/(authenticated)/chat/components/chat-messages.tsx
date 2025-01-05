@@ -1,34 +1,16 @@
 import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble';
-import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
-import { GreetingBubble } from '@/app/(authenticated)/chat/components/greeting-bubble';
 import { useBots } from '@/app/context/bots/context';
 import { useSessionsContext } from '@/app/context/sessions/provider';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
-import type { TRunModel } from '@/app/hooks/use-llm';
-import type { TModelKey } from '@/app/hooks/use-model-list';
-import { Quotes, TrashSimple } from '@phosphor-icons/react';
-import { Button } from '@repo/design-system/components/ui/button';
-import { Type } from '@repo/design-system/components/ui/text';
-import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
-import moment from 'moment';
+import { Quotes } from '@phosphor-icons/react';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
-
-export type TRenderMessageProps = {
-  id: string;
-  humanMessage?: string;
-  props?: TRunModel;
-  model: TModelKey;
-  image?: string;
-  aiMessage?: string;
-  loading?: boolean;
-};
 
 export type TMessageListByDate = Record<string, TChatMessage[]>;
 
 export const ChatMessages = () => {
-  const { currentSession, refetchCurrentSession } = useSessionsContext();
-  const { updateSessionMutation } = useSessionsContext();
+  const { currentSession, updateSessionMutation, refetchCurrentSession } =
+    useSessionsContext();
   const chatContainer = useRef<HTMLDivElement>(null);
   const { open: openBot } = useBots();
 
@@ -45,18 +27,18 @@ export const ChatMessages = () => {
   const renderMessage = (message: TChatMessage, isLast: boolean) => {
     return (
       <div className="flex w-full flex-col items-end gap-1" key={message.id}>
-        {message.runModelProps?.context && (
+        {message.inputProps?.context && (
           <div className="ml-16 flex flex-row gap-2 rounded-2xl border border-transparent bg-zinc-50 p-2 pr-4 pl-3 text-sm text-zinc-600 hover:border-white/5 md:ml-32 md:text-base dark:bg-black/30 dark:text-zinc-100">
             <Quotes size={16} weight="bold" className="mt-2 flex-shrink-0" />
 
             <span className="pt-[0.35em] pb-[0.25em] leading-6">
-              {message.runModelProps?.context}
+              {message.inputProps?.context}
             </span>
           </div>
         )}
-        {message?.runModelProps?.image && (
+        {message?.inputProps?.image && (
           <Image
-            src={message?.runModelProps?.image}
+            src={message?.inputProps?.image}
             alt="uploaded image"
             className="h-[120px] min-w-[120px] rounded-2xl border border-black/10 object-cover shadow-sm dark:border-white/10"
             width={0}
@@ -75,8 +57,7 @@ export const ChatMessages = () => {
   };
 
   console.log('currentSession bot', currentSession);
-  const isFreshSession =
-    !currentSession?.messages?.length && !currentSession?.bot;
+  const isFreshSession = !currentSession?.messages?.length;
 
   return (
     <div
@@ -85,64 +66,7 @@ export const ChatMessages = () => {
       id="chat-container"
     >
       <div className="flex w-full flex-1 flex-col gap-24 p-2 md:w-[700px] lg:w-[720px]">
-        {currentSession?.bot && (
-          <div className="flex flex-col items-center gap-2">
-            <BotAvatar
-              name={currentSession.bot.name}
-              size="medium"
-              avatar={currentSession?.bot?.avatar}
-            />
-            <Type size="base" weight="medium" textColor="primary">
-              {currentSession.bot.name}
-            </Type>
-            <Type
-              size="sm"
-              className="text-center md:max-w-[400px]"
-              textColor="tertiary"
-            >
-              {currentSession.bot.description}
-            </Type>
-            {!currentSession?.messages?.length && (
-              <div className="flex flex-row gap-1">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    openBot('public');
-                  }}
-                >
-                  Change Bot
-                </Button>
-                <Tooltip content="Remove bot">
-                  <Button
-                    variant="outline"
-                    size="iconSm"
-                    onClick={() => {
-                      updateSessionMutation.mutate(
-                        {
-                          sessionId: currentSession.id,
-                          session: {
-                            bot: undefined,
-                            updatedAt: moment().toISOString(),
-                          },
-                        },
-                        {
-                          onSuccess: () => {
-                            refetchCurrentSession?.();
-                          },
-                        }
-                      );
-                    }}
-                  >
-                    <TrashSimple size={16} weight="bold" />
-                  </Button>
-                </Tooltip>
-              </div>
-            )}
-          </div>
-        )}
         <div className="flex w-full flex-col items-start gap-8">
-          {currentSession?.bot && <GreetingBubble bot={currentSession?.bot} />}
           {currentSession?.messages?.map((message, index) =>
             renderMessage(
               message,

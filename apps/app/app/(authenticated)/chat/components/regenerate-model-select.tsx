@@ -1,6 +1,5 @@
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
 import { ArrowClockwise } from '@phosphor-icons/react';
-import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   DropdownMenu,
@@ -18,7 +17,7 @@ export type TRegenerateModelSelect = {
 export const RegenerateWithModelSelect = ({
   onRegenerate,
 }: TRegenerateModelSelect) => {
-  const { models } = useModelList();
+  const { assistants, getAssistantByKey } = useModelList();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -33,17 +32,20 @@ export const RegenerateWithModelSelect = ({
           </DropdownMenuTrigger>
         </Tooltip>
         <DropdownMenuContent className="no-scrollbar h-[300px] min-w-[250px] overflow-y-auto">
-          {models.map((model) => (
-            <DropdownMenuItem
-              key={model.key}
-              onClick={() => {
-                onRegenerate(model.key);
-              }}
-            >
-              {model.icon('sm')} {model.name}{' '}
-              {model.isNew && <Badge>New</Badge>}
-            </DropdownMenuItem>
-          ))}
+          {assistants.map((assistant) => {
+            const assistantProps = getAssistantByKey(assistant.key);
+            return (
+              <DropdownMenuItem
+                key={assistant.key}
+                onClick={() => {
+                  onRegenerate(assistant.key);
+                }}
+              >
+                {assistantProps?.model.icon('sm')}{' '}
+                {assistantProps?.assistant.name}{' '}
+              </DropdownMenuItem>
+            );
+          })}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

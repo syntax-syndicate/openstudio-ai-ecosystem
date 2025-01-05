@@ -8,7 +8,7 @@ import { useChatContext } from '@/app/context/chat/provider';
 import { useFilters } from '@/app/context/filters/context';
 import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { useSessionsContext } from '@/app/context/sessions/provider';
-import type { TModelKey } from '@/app/hooks/use-model-list';
+import type { TAssistant } from '@/app/hooks/use-chat-session';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
@@ -59,18 +59,18 @@ export const ChatInput = () => {
   } = useChatContext();
 
   const { preferences } = usePreferenceContext();
-  const { models } = useModelList();
+  const { models, getAssistantByKey } = useModelList();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedModel, setSelectedModel] = useState<TModelKey>(
-    preferences.defaultModel
+  const [selectedModel, setSelectedModel] = useState<TAssistant['key']>(
+    preferences.defaultAssistant
   );
 
   useEffect(() => {
-    setSelectedModel(preferences.defaultModel);
+    setSelectedModel(preferences.defaultAssistant);
   }, [models, preferences]);
 
-  console.log('selectedModelinput', preferences.defaultModel);
+  console.log('selectedModelinput', preferences.defaultAssistant);
 
   useEffect(() => {
     if (editor?.isActive) {
@@ -90,16 +90,22 @@ export const ChatInput = () => {
     }
   }, [sessionId]);
 
-  const isFreshSession =
-    !currentSession?.messages?.length && !currentSession?.bot;
+  const isFreshSession = !currentSession?.messages?.length;
 
   useEffect(() => {
     if (text) {
       editor?.commands.clearContent();
       editor?.commands.setContent(text);
+
+      const props = getAssistantByKey(preferences.defaultAssistant);
+      if (!props) {
+        return;
+      }
+
       handleRunModel({
         input: text,
         sessionId: sessionId!.toString(),
+        assistant: props.assistant,
       });
 
       editor?.commands.clearContent();
