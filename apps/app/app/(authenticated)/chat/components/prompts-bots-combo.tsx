@@ -44,7 +44,7 @@ export const PromptsBotsCombo = ({
       <PopoverContent
         side="top"
         sideOffset={4}
-        className="min-w-[96vw] overflow-hidden rounded-2xl p-0 md:min-w-[700px]"
+        className="min-w-[96vw] overflow-hidden rounded-2xl p-0 md:min-w-[700px] lg:min-w-[720px]"
       >
         <CMDKCommand>
           <CommandInput

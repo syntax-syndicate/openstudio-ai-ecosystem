@@ -87,7 +87,7 @@ export const ChatMessages = () => {
       ref={chatContainer}
       id="chat-container"
     >
-      <div className="flex w-full flex-col gap-24 md:w-[700px] md:p-2 lg:w-[720px]">
+      <div className="flex w-full flex-col gap-24 md:w-[700px] p-2 lg:w-[720px]">
         {currentSession?.bot && (
           <div className="flex flex-col items-center gap-2">
             <BotAvatar
