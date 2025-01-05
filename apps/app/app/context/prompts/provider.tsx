@@ -52,9 +52,11 @@ export const PromptsProvider = ({ children }: TPromptsProvider) => {
   const localPromptsQuery = promptsQuery;
 
   const publicPromptsQuery = useQuery<{ prompts: TPrompt[] }>({
-    queryKey: ['prompts'],
+    queryKey: ['Prompts'],
     queryFn: async () => axios.get('/api/prompts').then((res) => res.data),
   });
+
+  console.log(publicPromptsQuery.data);
 
   const allPrompts = [
     ...(localPromptsQuery.data || []),

@@ -64,7 +64,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   };
 
   return (
-    <div className="flex flex-row mt-6 w-full">
+    <div className="mt-6 flex w-full flex-row">
       <div className="p-2 md:px-3 md:py-4">
         {currentSession?.bot ? (
           <BotAvatar
@@ -81,7 +81,7 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
         direction="col"
         gap="md"
         items="start"
-        className="w-full p-2 md:p-4 flex-1 md:rounded-2xl md:dark:hover:bg-white/5 md:hover:bg-zinc-50/50 overflow-hidden"
+        className="w-full flex-1 overflow-hidden p-2 md:rounded-2xl md:p-4 md:hover:bg-zinc-50/50 md:dark:hover:bg-white/5"
       >
         {toolUsed && (
           <Type

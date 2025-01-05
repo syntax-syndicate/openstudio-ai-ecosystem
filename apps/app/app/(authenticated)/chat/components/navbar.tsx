@@ -55,12 +55,12 @@ export const Navbar = () => {
     <div className="absolute top-0 right-0 left-0 z-50 flex flex-row items-center justify-between bg-gradient-to-b from-70% from-white to-transparent p-2 pb-6 md:p-3 dark:from-zinc-800">
       <div className="flex flex-row items-center gap-2">
         <HistorySidebar />
+        {renderNewSession()}
         {/* <ModelIcon type="chathub" size="md" />
         <p className="text-sm text-zinc-500 md:text-base">ChatHub</p>
         <Badge>Beta</Badge> */}
       </div>
       <div className="flex flex-row items-center gap-2">
-        {renderNewSession()}
         <DropdownMenu
           open={isOpen}
           onOpenChange={(open) => {
@@ -110,7 +110,7 @@ export const Navbar = () => {
               }}
             >
               <Book size={14} weight="bold" />
-              Prompts Library
+              Prompts
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -120,6 +120,13 @@ export const Navbar = () => {
               <GearSix size={14} weight="bold" />
               Settings
             </DropdownMenuItem>
+
+            <div className="my-1 h-[1px] w-full bg-black/10 dark:bg-white/10" />
+            <DropdownMenuItem onClick={() => {}}>About</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>Feedback</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>Support</DropdownMenuItem>
+            <div className="my-1 h-[1px] w-full bg-black/10 dark:bg-white/10" />
+
             <DropdownMenuItem
               onClick={() => {
                 setTheme(theme === 'light' ? 'dark' : 'light');
@@ -132,10 +139,6 @@ export const Navbar = () => {
               )}
               Switch to {theme === 'light' ? 'dark' : 'light'} mode
             </DropdownMenuItem>
-            <div className="my-1 h-[1px] w-full bg-black/10 dark:bg-white/10" />
-            <DropdownMenuItem onClick={() => {}}>About</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>Feedback</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>Support</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

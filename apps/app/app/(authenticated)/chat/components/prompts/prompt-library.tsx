@@ -1,6 +1,7 @@
 import { useChatContext } from '@/app/context/chat/provider';
 import type { TPrompt } from '@/app/hooks/use-prompts';
 import {
+  ArrowDown,
   BookBookmark,
   DotsThree,
   FolderSimple,
@@ -39,8 +40,8 @@ export const PromptLibrary = ({
   open,
   onPromptSelect,
   tab,
-  publicPrompts,
   localPrompts,
+  publicPrompts,
   onCreate,
   onTabChange,
   onEdit,
@@ -53,6 +54,7 @@ export const PromptLibrary = ({
       <div className="w-full p-1">
         <CommandInput placeholder="Search Prompts" />
       </div>
+
       <div className="relative flex h-full w-full flex-col border-zinc-500/20 border-t">
         <div className="flex w-full flex-row justify-between px-3 pt-3 pb-3">
           <div className="flex flex-row items-center gap-2">
@@ -65,6 +67,7 @@ export const PromptLibrary = ({
             >
               <BookBookmark size={16} weight="bold" /> Prompt Library
             </Button>
+
             <Button
               size="sm"
               variant={tab === 'local' ? 'secondary' : 'ghost'}
@@ -102,36 +105,39 @@ export const PromptLibrary = ({
                     {prompt.content}
                   </p>
                 </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="iconSm">
-                      <DotsThree size={24} weight="bold" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    className="min-w-[200px] text-sm md:text-base"
-                    align="end"
-                  >
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        onEdit(prompt);
-                        e.stopPropagation();
-                      }}
+                <ArrowDown size={16} weight="bold" />
+                {tab === 'local' && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="iconSm">
+                        <DotsThree size={24} weight="bold" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className="min-w-[200px] text-sm md:text-base"
+                      align="end"
                     >
-                      <Pencil size={14} weight="bold" />
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        onDelete(prompt);
-                        e.stopPropagation();
-                      }}
-                    >
-                      <TrashSimple size={14} weight="bold" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      <DropdownMenuItem
+                        onClick={(e) => {
+                          onEdit(prompt);
+                          e.stopPropagation();
+                        }}
+                      >
+                        <Pencil size={14} weight="bold" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={(e) => {
+                          onDelete(prompt);
+                          e.stopPropagation();
+                        }}
+                      >
+                        <TrashSimple size={14} weight="bold" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
             </CommandItem>
           ))}

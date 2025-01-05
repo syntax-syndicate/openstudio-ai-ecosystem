@@ -22,6 +22,7 @@ import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
 import { Footer } from '@/app/(authenticated)/chat/components/footer';
 import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
 import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
@@ -176,6 +177,7 @@ export const ChatInput = () => {
         isFreshSession && 'top-0'
       )}
     >
+      <ChatExamples onExampleClick={(prompt) => {}} show={false} />
       <div className="flex flex-row items-center gap-2">
         {renderScrollToBottom()}
         {renderReplyButton()}
