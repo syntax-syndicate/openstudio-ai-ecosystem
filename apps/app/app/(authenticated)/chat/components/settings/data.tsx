@@ -3,12 +3,13 @@ import { SettingsContainer } from '@/app/(authenticated)/chat/components/setting
 import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { useSessionsContext } from '@/app/context/sessions/provider';
 import { useSettings } from '@/app/context/settings/context';
+import type { TChatSession } from '@/app/hooks/use-chat-session';
 import { models } from '@/app/hooks/use-model-list';
 import {
   type TPreferences,
   defaultPreferences,
 } from '@/app/hooks/use-preferences';
-import { generateAndDownloadJson } from '@/app/lib/helper';
+import { generateAndDownloadJson, sortMessages } from '@/app/lib/helper';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';
@@ -17,6 +18,7 @@ import { PopOverConfirmProvider } from '@repo/design-system/components/ui/use-co
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import type { ChangeEvent } from 'react';
 import { z } from 'zod';
+
 const apiSchema = z.object({
   openai: z.string().optional(),
   gemini: z.string().optional(),
@@ -97,11 +99,45 @@ const importSchema = z.object({
   prompts: z.array(z.string()).optional(),
 });
 
+const mergeSessions = (
+  incomingSessions: TChatSession[],
+  existingSessions: TChatSession[]
+) => {
+  const updatedSessions = [...existingSessions];
+  incomingSessions.forEach((incomingSession) => {
+    const sessionIndex = existingSessions.findIndex(
+      (s) => s.id === incomingSession.id
+    );
+    if (sessionIndex > -1) {
+      // Merge messages from the same session
+      const currentSession = updatedSessions[sessionIndex];
+      const uniqueNewMessages = incomingSession.messages.filter(
+        (im) => !currentSession.messages.some((cm) => cm.id === im.id)
+      );
+      // Combine and sort messages
+      currentSession.messages = sortMessages(
+        [...currentSession.messages, ...uniqueNewMessages],
+        'createdAt'
+      );
+    } else {
+      // If session does not exist, add it directly
+      updatedSessions.push(incomingSession);
+    }
+  });
+  return updatedSessions;
+};
+
 export const Data = () => {
   const { dismiss } = useSettings();
   const { toast } = useToast();
 
-  const { sessions, addSessionsMutation } = useSessionsContext();
+  const {
+    sessions,
+    addSessionsMutation,
+    clearSessionsMutation,
+    createSession,
+  } = useSessionsContext();
+
   const {
     preferences,
     apiKeys,
@@ -109,7 +145,6 @@ export const Data = () => {
     updateApiKey,
     updateApiKeys,
   } = usePreferenceContext();
-  const { clearSessionsMutation, createSession } = useSessionsContext();
 
   function handleFileSelect(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
@@ -133,10 +168,19 @@ export const Data = () => {
           parsedData?.apiKeys && updateApiKeys(parsedData?.apiKeys);
           parsedData?.preferences &&
             updatePreferences(parsedData?.preferences as TPreferences);
-          !!parsedData?.sessions?.length &&
-            addSessionsMutation.mutate(
-              parsedData?.sessions?.filter((s) => !!s.messages.length)
-            );
+
+          const incomingSessions = parsedData?.sessions?.filter(
+            (s) => !!s.messages.length
+          );
+          const mergedSessions = mergeSessions(
+            incomingSessions || [],
+            sessions
+          );
+          clearSessionsMutation.mutate(undefined, {
+            onSuccess: () => {
+              addSessionsMutation.mutate(mergedSessions);
+            },
+          });
 
           toast({
             title: 'Data Imported',
@@ -255,7 +299,7 @@ export const Data = () => {
           </Flex>
           <div className="my-3 h-[1px] w-full bg-zinc-500/10" />
           <Flex items="center" justify="between">
-            <Type textColor="secondary">
+            <Type textColor="secondary" className="w-full">
               Clear all chat sessions and preferences
             </Type>
             <PopOverConfirmProvider
@@ -287,7 +331,9 @@ export const Data = () => {
 
         <SettingCard className="p-3">
           <Flex items="center" justify="between">
-            <Type textColor="secondary">Import Data</Type>
+            <Type textColor="secondary" className="w-full">
+              Import Data
+            </Type>
             <Input
               type="file"
               onChange={handleFileSelect}
@@ -308,7 +354,9 @@ export const Data = () => {
           <div className="my-3 h-[1px] w-full bg-zinc-500/10" />
 
           <Flex items="center" justify="between">
-            <Type textColor="secondary">Export Data</Type>
+            <Type textColor="secondary" className="w-full">
+              Export Data
+            </Type>
             <Button
               variant="outline"
               size="sm"

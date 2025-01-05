@@ -1,5 +1,4 @@
 import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
-import { useConfirm } from '@/app/context/confirm/provider';
 import { useSessionsContext } from '@/app/context/sessions/provider';
 import type { TChatSession } from '@/app/hooks/use-chat-session';
 import { useModelList } from '@/app/hooks/use-model-list';
@@ -42,8 +41,6 @@ export const HistoryItem = ({
       historyInputRef.current?.focus();
     }
   }, [isEditing]);
-
-  const { open: openConfirm, dismiss: dismissConfirm } = useConfirm();
 
   return (
     <div
@@ -145,7 +142,6 @@ export const HistoryItem = ({
                     onClick={(e) => {
                       removeSessionByIdMutation.mutate(session.id, {
                         onSuccess: () => {
-                          dismissConfirm();
                           createSession({
                             redirect: true,
                           });

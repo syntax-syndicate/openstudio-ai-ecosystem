@@ -1,5 +1,6 @@
 import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble';
 import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
+import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
 import { GreetingBubble } from '@/app/(authenticated)/chat/components/greeting-bubble';
 import { useBots } from '@/app/context/bots/context';
 import { useSessionsContext } from '@/app/context/sessions/provider';
@@ -80,6 +81,8 @@ export const ChatMessages = () => {
   };
 
   console.log('currentSession bot', currentSession);
+  const isFreshSession =
+    !currentSession?.messages?.length && !currentSession?.bot;
 
   return (
     <div
@@ -87,7 +90,8 @@ export const ChatMessages = () => {
       ref={chatContainer}
       id="chat-container"
     >
-      <div className="flex w-full flex-col gap-24 p-2 md:w-[700px] lg:w-[720px]">
+      <div className="flex w-full flex-1 flex-col gap-24 p-2 md:w-[700px] lg:w-[720px]">
+        {isFreshSession && <ChatExamples />}
         {currentSession?.bot && (
           <div className="flex flex-col items-center gap-2">
             <BotAvatar

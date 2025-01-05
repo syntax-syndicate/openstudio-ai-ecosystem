@@ -16,14 +16,6 @@ import {
 } from '@phosphor-icons/react';
 
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
-import { Badge } from '@repo/design-system/components/ui/badge';
-import { EditorContent } from '@tiptap/react';
-import { motion } from 'framer-motion';
-import { useParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-
-import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
-import { Footer } from '@/app/(authenticated)/chat/components/footer';
 import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
 import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
 import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
@@ -31,7 +23,12 @@ import { useChatContext } from '@/app/context/chat/provider';
 import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { useSessionsContext } from '@/app/context/sessions/provider';
 import { useModelList } from '@/app/hooks/use-model-list';
+import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
+import { EditorContent } from '@tiptap/react';
+import { motion } from 'framer-motion';
+import { useParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 export type TAttachment = {
   file?: File;
@@ -173,11 +170,9 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-1 bg-gradient-to-t from-70% from-white to-transparent px-2 pt-16 pb-2 transition-all duration-1000 ease-in-out md:justify-center md:px-4 dark:from-zinc-800',
-        isFreshSession && 'top-0'
+        'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-1 bg-gradient-to-t from-70% from-white to-transparent px-2 pt-16 pb-4 transition-all duration-1000 ease-in-out md:justify-center md:px-4 dark:from-zinc-800'
       )}
     >
-      <ChatExamples onExampleClick={(prompt) => {}} show={false} />
       <div className="flex flex-row items-center gap-2">
         {renderScrollToBottom()}
         {renderReplyButton()}
@@ -220,9 +215,6 @@ export const ChatInput = () => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       sendMessage();
                     }
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                    }
                   }}
                   className="no-scrollbar [&>*]:no-scrollbar wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-6 [&>*]:outline-none"
                 />
@@ -231,7 +223,7 @@ export const ChatInput = () => {
 
                 <Button
                   size="icon"
-                  variant={!!editor?.getText() ? 'secondary' : 'ghost'}
+                  variant={!!editor?.getText() ? 'default' : 'ghost'}
                   disabled={!editor?.getText()}
                   className="ml-1 h-8 min-w-8"
                   onClick={() => {
@@ -263,8 +255,6 @@ export const ChatInput = () => {
             </motion.div>
           </PromptsBotsCombo>
         )}
-
-        <Footer />
       </div>
     </div>
   );

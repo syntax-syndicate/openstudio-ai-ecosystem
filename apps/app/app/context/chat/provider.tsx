@@ -6,7 +6,10 @@ import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { type TRunModel, useLLM } from '@/app/hooks/use-llm';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { removeExtraSpaces } from '@/app/lib/helper';
-import { ShiftEnterToLineBreak } from '@/app/lib/tiptap-extensions';
+import {
+  DisableEnter,
+  ShiftEnterToLineBreak,
+} from '@/app/lib/tiptap-extensions';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { Document } from '@tiptap/extension-document';
 import { HardBreak } from '@tiptap/extension-hard-break';
@@ -134,6 +137,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         },
       }),
       HardBreak,
+      DisableEnter,
     ],
     content: ``,
     autofocus: true,
