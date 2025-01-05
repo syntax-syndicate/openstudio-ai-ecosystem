@@ -1,13 +1,11 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
 import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { useSettings } from '@/app/context/settings/context';
 import { defaultPreferences } from '@/app/hooks/use-preferences';
 import type { TToolKey } from '@/app/hooks/use-tools';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { ChatOllama } from '@langchain/community/chat_models/ollama';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { ChatOpenAI } from '@langchain/openai';
-import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { useQuery } from '@tanstack/react-query';
 import type { JSX } from 'react';
 import { useMemo } from 'react';
@@ -43,8 +41,6 @@ export type TModel = {
 };
 export const useModelList = () => {
   const { preferences } = usePreferenceContext();
-  const { toast } = useToast();
-  const { open: openSettings } = useSettings();
 
   const ollamaModelsQuery = useQuery({
     queryKey: ['ollama-models'],
@@ -60,15 +56,6 @@ export const useModelList = () => {
     const topK = preferences.topK || defaultPreferences.topK;
     const maxTokens = preferences.maxTokens || model.tokens;
 
-    if (!apiKey && model.baseModel !== 'ollama') {
-      toast({
-        title: 'Ahh!',
-        description: 'API key is missing. Please check your settings.',
-        variant: 'destructive',
-      });
-      openSettings(model?.baseModel);
-      return;
-    }
 
     switch (model.baseModel) {
       case 'openai':

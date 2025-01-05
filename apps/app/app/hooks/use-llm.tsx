@@ -348,8 +348,6 @@ export const useLLM = ({ onChange }: TUseLLM) => {
 
     const selectedModel = await createInstance(selectedModelKey, apiKey);
 
-    console.log('title session', session);
-
     const firstMessage = session?.messages?.[0];
 
     if (
