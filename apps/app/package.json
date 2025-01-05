@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 --turbopack",
-    "build": "next build",
+    "build": "NODE_OPTIONS=--max-old-space-size=6144 next build",
     "start": "next start",
     "analyze": "ANALYZE=true pnpm build",
     "test": "NODE_ENV=test vitest run",
