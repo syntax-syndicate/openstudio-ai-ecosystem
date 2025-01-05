@@ -5,17 +5,14 @@ import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
 import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
 import { cn } from '@repo/design-system/lib/utils';
-
 import {
   ArrowDown,
   ArrowElbowDownRight,
   ArrowUp,
   Command,
-  Quotes,
   Stop,
   X,
 } from '@phosphor-icons/react';
-
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
 import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
@@ -57,10 +54,11 @@ export const ChatInput = () => {
     isGenerating,
     stopGeneration,
   } = useChatContext();
-  const [contextValue, setContextValue] = useState<string>('');
+  const [contextValue, setContextValue] = useState<string>("");
 
   const { preferences } = usePreferenceContext();
   const { models } = useModelList();
+
   const { showPopup, selectedText, handleClearSelection } = useTextSelection();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [selectedModel, setSelectedModel] = useState<TModelKey>(
@@ -71,11 +69,11 @@ export const ChatInput = () => {
     setSelectedModel(preferences.defaultModel);
   }, [models, preferences]);
 
-  console.log('selectedModelinput', preferences.defaultModel);
+  console.log("selectedModelinput", preferences.defaultModel);
 
   useEffect(() => {
     if (editor?.isActive) {
-      editor.commands.focus('end');
+      editor.commands.focus("end");
     }
   }, [editor?.isActive]);
 
@@ -117,8 +115,8 @@ export const ChatInput = () => {
         >
           <Button
             onClick={scrollToBottom}
+            size="iconSm"
             variant="outline"
-            size="iconXS"
             rounded="full"
           >
             <ArrowDown size={16} weight="bold" />
@@ -128,45 +126,69 @@ export const ChatInput = () => {
     }
   };
 
-  const renderReplyButton = () => {
-    if (showPopup && !recording && !transcribing) {
+  const renderStopGeneration = () => {
+    if (isGenerating) {
       return (
         <motion.span
+          className="mb-2"
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0, opacity: 0 }}
         >
           <Button
+            rounded="full"
+            className="dark:bg-zinc-800 dark:border dark:text-white dark:border-white/10"
             onClick={() => {
-              setContextValue(selectedText);
-              handleClearSelection();
-              inputRef.current?.focus();
+              stopGeneration();
             }}
-            variant="secondary"
-            size="sm"
           >
-            <Quotes size={20} weight="bold" /> Reply
+            <Stop size={16} weight="fill" />
+            Stop generation
           </Button>
         </motion.span>
       );
     }
   };
 
+  // const renderReplyButton = () => {
+  //   if (showPopup && !recording && !transcribing) {
+  //     return (
+  //       <motion.span
+  //         initial={{ scale: 0, opacity: 0 }}
+  //         animate={{ scale: 1, opacity: 1 }}
+  //         exit={{ scale: 0, opacity: 0 }}
+  //       >
+  //         <Button
+  //           onClick={() => {
+  //             setContextValue(selectedText);
+  //             handleClearSelection();
+  //             inputRef.current?.focus();
+  //           }}
+  //           variant="secondary"
+  //           size="sm"
+  //         >
+  //           <Quotes size={20} weight="bold" /> Reply
+  //         </Button>
+  //       </motion.span>
+  //     );
+  //   }
+  // };
+
   const renderSelectedContext = () => {
     if (contextValue) {
       return (
-        <div className="flex h-10 w-[700px] flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300">
+        <div className="flex flex-row items-center bg-black/30 text-zinc-300 rounded-xl h-10 w-[700px] justify-start gap-2 pl-3 pr-1">
           <ArrowElbowDownRight size={16} weight="fill" />
-          <p className="ml-2 w-full overflow-hidden truncate text-sm md:text-base ">
+          <p className="w-full overflow-hidden truncate ml-2 text-sm md:text-base ">
             {contextValue}
           </p>
           <Button
-            size={'iconSm'}
+            size={"iconSm"}
             variant="ghost"
             onClick={() => {
-              setContextValue('');
+              setContextValue("");
             }}
-            className="ml-4 flex-shrink-0"
+            className="flex-shrink-0 ml-4"
           >
             <X size={16} weight="bold" />
           </Button>
@@ -178,84 +200,59 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 flex w-full flex-col items-center justify-end gap-1 px-2 pt-16 pb-4 md:justify-center md:px-4',
-        'left-0 bg-gradient-to-t from-70% from-white to-transparent transition-all duration-1000 ease-in-out dark:from-zinc-800'
+        "w-full flex flex-col items-center justify-end md:justify-center absolute bottom-0 px-2 md:px-4 pb-4 pt-16  right-0 gap-1",
+        "bg-gradient-to-t transition-all ease-in-out duration-1000 from-white dark:from-zinc-800 to-transparent from-70% left-0"
       )}
     >
       <div className="flex flex-row items-center gap-2">
         {renderScrollToBottom()}
-        {renderReplyButton()}
+        {/* {renderReplyButton()} */}
+        {renderStopGeneration()}
         {renderListeningIndicator()}
       </div>
-
-      <div className="flex w-full flex-col gap-1 md:w-[700px] lg:w-[720px]">
+      <div className="flex flex-col gap-1 w-full md:w-[700px] lg:w-[720px]">
         {renderSelectedContext()}
         {editor && (
           <PromptsBotsCombo
             open={openPromptsBotCombo}
             onBack={() => {
               editor?.commands.clearContent();
-              editor?.commands.focus('end');
+              editor?.commands.focus("end");
             }}
             onPromptSelect={(prompt) => {
               editor?.commands.setContent(prompt.content);
-              editor?.commands.insertContent('');
-              editor?.commands.focus('end');
+              editor?.commands.insertContent("");
+              editor?.commands.focus("end");
               setOpenPromptsBotCombo(false);
             }}
             onOpenChange={setOpenPromptsBotCombo}
             onBotSelect={(bot) => {
               editor?.commands?.clearContent();
-              editor?.commands.focus('end');
+              editor?.commands.focus("end");
             }}
           >
             <motion.div
               variants={slideUpVariant}
-              initial={'initial'}
-              animate={editor.isEditable ? 'animate' : 'initial'}
-              className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-2xl bg-zinc-50 dark:border-white/5 dark:bg-white/5"
+              initial={"initial"}
+              animate={editor.isEditable ? "animate" : "initial"}
+              className="flex flex-col items-start gap-0 bg-zinc-50 dark:bg-white/5 w-full dark:border-white/5 rounded-2xl overflow-hidden"
             >
-              <div className="flex w-full flex-row items-end gap-0 py-2 pr-2 pl-2 md:pl-3">
+              <div className="flex flex-row items-end pl-2 md:pl-3 pr-2 py-2 w-full gap-0">
                 <EditorContent
                   editor={editor}
                   autoFocus
                   onKeyDown={(e) => {
-                    console.log('keydown', e.key);
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    console.log("keydown", e.key);
+                    if (e.key === "Enter" && !e.shiftKey) {
                       sendMessage();
                     }
                   }}
-                  className="no-scrollbar [&>*]:no-scrollbar wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-6 [&>*]:outline-none"
+                  className="w-full min-h-8 text-sm md:text-base max-h-[120px] overflow-y-auto outline-none focus:outline-none p-1 [&>*]:outline-none no-scrollbar [&>*]:no-scrollbar [&>*]:leading-6 wysiwyg cursor-text"
                 />
 
                 {!isGenerating && renderRecordingControls()}
-
-                {isGenerating ? (
-                  <Button
-                    size="icon"
-                    className="ml-1 h-8 min-w-8"
-                    variant={isGenerating ? 'secondary' : 'ghost'}
-                    onClick={() => {
-                      stopGeneration();
-                    }}
-                  >
-                    <Stop size={16} weight="fill" />
-                  </Button>
-                ) : (
-                  <Button
-                    size="icon"
-                    variant={!!editor?.getText() ? 'secondary' : 'ghost'}
-                    disabled={!editor?.getText()}
-                    className="ml-1 h-8 min-w-8"
-                    onClick={() => {
-                      sendMessage();
-                    }}
-                  >
-                    <ArrowUp size={20} weight="bold" />
-                  </Button>
-                )}
               </div>
-              <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
+              <div className="flex flex-row items-center w-full justify-start gap-0 pt-1 pb-2 px-2">
                 <ModelSelect
                   selectedModel={selectedModel}
                   setSelectedModel={setSelectedModel}
@@ -273,6 +270,23 @@ export const ChatInput = () => {
                     <Command size={16} weight="bold" /> K
                   </Badge>
                 </Button>
+                {!isGenerating && (
+                  <Button
+                    size="iconSm"
+                    rounded="full"
+                    variant={!!editor?.getText() ? "default" : "secondary"}
+                    disabled={!editor?.getText()}
+                    className={cn(
+                      !!editor?.getText() &&
+                        "bg-zinc-800 dark:bg-emerald-500/20 text-white dark:text-emerald-400"
+                    )}
+                    onClick={() => {
+                      sendMessage();
+                    }}
+                  >
+                    <ArrowUp size={18} weight="bold" />
+                  </Button>
+                )}
               </div>
             </motion.div>
           </PromptsBotsCombo>

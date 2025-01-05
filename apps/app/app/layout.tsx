@@ -1,5 +1,5 @@
 import '@repo/design-system/styles/globals.css';
-import { inter } from '@/app/lib/fonts';
+import { interVar } from '@/app/lib/fonts';
 import { DesignSystemProvider } from '@repo/design-system';
 import { fonts } from '@repo/design-system/lib/fonts';
 import { cn } from '@repo/design-system/lib/utils';
@@ -13,7 +13,7 @@ type RootLayoutProperties = {
 const RootLayout = ({ children }: RootLayoutProperties) => (
   <html
     lang="en"
-    className={cn(fonts, inter.className, 'antialiased')}
+    className={cn(fonts, `${interVar.variable} font-sans`, 'antialiased')}
     suppressHydrationWarning
   >
     <body>

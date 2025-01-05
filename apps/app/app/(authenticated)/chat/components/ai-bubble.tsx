@@ -9,7 +9,7 @@ import { useMarkdown } from '@/app/hooks/use-mdx';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
 import { useTools } from '@/app/hooks/use-tools';
 import type { TToolKey } from '@/app/hooks/use-tools';
-import { Check, Copy, TrashSimple } from '@phosphor-icons/react';
+import { Check, Copy, Quotes, TrashSimple } from '@phosphor-icons/react';
 import {
   Alert,
   AlertDescription,
@@ -25,6 +25,7 @@ import {
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useRef, useState } from 'react';
+import * as Selection from "selection-popover";
 
 export type TAIMessageBubble = {
   chatMessage: TChatMessage;
@@ -154,9 +155,22 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
         )}
 
         {rawAI && (
-          <article className="prose dark:prose-invert w-full">
-            {renderMarkdown(rawAI, !!isLoading, id)}
-          </article>
+          <Selection.Root>
+            <Selection.Trigger asChild>
+              <article className="prose dark:prose-invert w-full prose-zinc prose-h3:font-medium prose-h3:text-lg prose-heading:font-medium prose-strong:font-medium prose-headings:text-lg">
+                {renderMarkdown(rawAI, !!isLoading, id)}
+              </article>
+            </Selection.Trigger>
+            <Selection.Portal
+              container={document?.getElementById("chat-container")}
+            >
+              <Selection.Content sticky="always" sideOffset={10}>
+                <Button size="sm">
+                  <Quotes size="16" weight="bold" /> Reply
+                </Button>
+              </Selection.Content>
+            </Selection.Portal>
+          </Selection.Root>
         )}
         {stop && stopReason && renderStopReason()}
 

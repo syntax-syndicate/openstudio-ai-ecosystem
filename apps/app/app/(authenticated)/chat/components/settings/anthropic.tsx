@@ -16,7 +16,7 @@ export const AnthropicSettings = () => {
   return (
     <SettingsContainer title="Anthropic Settings">
       <div className="flex flex-row items-end justify-between">
-        <p className="text-sm text-zinc-500 md:text-base">Anthropic API Key</p>
+        <p className="text-xs text-zinc-500 md:text-sm">Anthropic API Key</p>
       </div>
       <Input
         placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"

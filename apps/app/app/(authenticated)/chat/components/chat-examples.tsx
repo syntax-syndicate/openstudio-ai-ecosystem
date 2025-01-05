@@ -41,7 +41,7 @@ export const ChatExamples = () => {
                 editor?.commands?.focus('end');
               }}
             >
-              <p className="w-full font-medium text-sm text-zinc-800 md:text-base dark:text-white">
+              <p className="w-full font-medium tracking-[-0.02em] text-sm text-zinc-800 md:text-base dark:text-white">
                 {example.name}
               </p>
               <Button
