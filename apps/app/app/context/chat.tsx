@@ -50,8 +50,12 @@ export type TChatProvider = {
 };
 
 export const ChatProvider = ({ children }: TChatProvider) => {
-  const { setCurrentSession, refetchSessions, currentSession } =
-    useSessionsContext();
+  const {
+    setCurrentSession,
+    refetchSessions,
+    currentSession,
+    addMessageToSession,
+  } = useSessionsContext();
   const { getAssistantByKey } = useModelList();
   const { toast } = useToast();
   const [openPromptsBotCombo, setOpenPromptsBotCombo] = useState(false);
@@ -72,6 +76,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
           ...session,
           messages: session.messages.map((message) => {
             if (message.id === props.id) {
+              addMessageToSession(props.sessionId, props);
               return { message, ...props };
             }
             return message;
@@ -79,16 +84,17 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         };
       }
 
+      addMessageToSession(props.sessionId, props);
+
       return {
         ...session,
         messages: [...session.messages, props],
       };
     });
-    refetchSessions?.();
   };
   const { runModel, stopGeneration } = useLLM({
     onChange: appendToCurrentSession,
-    onFinish: () => {
+    onFinish: async () => {
       setIsGenerating(false);
     },
   });

@@ -2,7 +2,12 @@
 import { useSessionsContext } from '@/app/context/sessions';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { sortSessions } from '@/app/lib/helper';
-import { Moon, Plus, Sun, TrashSimple } from '@phosphor-icons/react';
+import {
+  CommentAdd01Icon,
+  Delete01Icon,
+  Moon02Icon,
+  Sun03Icon,
+} from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   CommandDialog,
@@ -76,7 +81,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
   const actions = [
     {
       name: 'New session',
-      icon: Plus,
+      icon: CommentAdd01Icon,
       action: () => {
         createSession({
           redirect: true,
@@ -86,7 +91,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
     },
     {
       name: `Switch to ${theme === 'light' ? 'dark' : 'light'} mode`,
-      icon: theme === 'light' ? Moon : Sun,
+      icon: theme === 'light' ? Moon02Icon : Sun03Icon,
       action: () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
         onClose();
@@ -94,7 +99,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
     },
     {
       name: 'Delete current session',
-      icon: TrashSimple,
+      icon: Delete01Icon,
       action: () => {
         onClose();
         toast({
@@ -132,9 +137,9 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
       <CommandDialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
         <CommandInput placeholder="Search..." />
 
-        <CommandList className="border-zinc-500/20 border-t">
+        <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Quick Actions">
+          <CommandGroup>
             {actions.map((action) => (
               <CommandItem
                 key={action.name}
@@ -144,8 +149,8 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
               >
                 <div className="flex h-6 w-6 items-center justify-center">
                   <action.icon
-                    size={16}
-                    weight="bold"
+                    size={18}
+                    strokeWidth="2"
                     className="flex-shrink-0"
                   />
                 </div>

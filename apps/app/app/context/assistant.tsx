@@ -140,8 +140,6 @@ export const AssistantsProvider = ({ children }: TAssistantsProvider) => {
               `w-full md:ml-[-200px] md:w-[400px]`
             )}
           >
-            <div className="mb-2 h-1 w-6 flex-shrink-0 rounded-full bg-white/50" />
-
             <Command className="relative rounded-2xl dark:border dark:border-white/10">
               <CommandInput
                 placeholder="Search..."
@@ -157,11 +155,11 @@ export const AssistantsProvider = ({ children }: TAssistantsProvider) => {
                       items="start"
                       justify="between"
                       gap="lg"
-                      className="w-full p-2"
+                      className="w-full px-3 py-2"
                     >
                       <Flex direction="col">
-                        <Type weight="medium" size="sm">
-                          Custom Assistants
+                        <Type weight="medium" size="base">
+                          Assistants
                         </Type>
                         <Type size="xs" textColor="tertiary">
                           Experience the advanced capabilities of AI with Custom
@@ -228,7 +226,7 @@ export const AssistantsProvider = ({ children }: TAssistantsProvider) => {
                 <CommandSeparator />
                 <CommandGroup>
                   <Flex direction="col" className="w-full p-2">
-                    <Type weight="medium" size="sm" className="p-2">
+                    <Type weight="medium" size="base" className="px-3 py-2">
                       Models
                     </Type>
                     {renderAssistants('base')}

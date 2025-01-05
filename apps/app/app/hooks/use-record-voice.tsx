@@ -1,7 +1,7 @@
 import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 import { usePreferenceContext, useSettingsContext } from '@/app/context';
 import { blobToBase64 } from '@/app/lib/record';
-import { Microphone, StopCircle } from '@phosphor-icons/react';
+import { RecordIcon, StopIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
@@ -124,7 +124,12 @@ export const useRecordVoice = () => {
               stopRecording();
             }}
           >
-            <StopCircle size={20} weight="fill" className="text-red-300" />
+            <StopIcon
+              size={18}
+              variant="solid"
+              strokeWidth="2"
+              className="text-red-300"
+            />
           </Button>
         </>
       );
@@ -133,7 +138,7 @@ export const useRecordVoice = () => {
     return (
       <Tooltip content="Record">
         <Button size="iconSm" variant="ghost" onClick={startVoiceRecording}>
-          <Microphone size={20} weight="bold" />
+          <RecordIcon size={18} variant="stroke" strokeWidth="2" />
         </Button>
       </Tooltip>
     );

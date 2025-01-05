@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@hugeicons/react": "0.8.0-beta.1",
     "@langchain/anthropic": "^0.3.11",
     "@langchain/community": "^0.3.21",
     "@langchain/core": "^0.3.27",
