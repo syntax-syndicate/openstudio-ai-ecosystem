@@ -49,7 +49,7 @@ export const BotLibrary = ({
         <CommandInput placeholder="Search Bots" />
       </div>
 
-      <div className="relative mt-60 flex h-full w-full flex-col border-zinc-500/20 border-t md:mt-0">
+      <div className="relative flex h-full w-full flex-col border-zinc-500/20 border-t">
         <div className="flex w-full flex-row justify-between px-3 pt-3 pb-3">
           <div className="flex flex-row items-center gap-2">
             <Button

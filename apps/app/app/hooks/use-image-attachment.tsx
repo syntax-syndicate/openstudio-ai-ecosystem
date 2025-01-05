@@ -59,7 +59,7 @@ export const useImageAttachment = () => {
   const renderAttachedImage = () => {
     if (attachment?.base64 && attachment?.file) {
       return (
-        <div className="flex h-10 w-full flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300 md:w-[700px]">
+        <div className="flex h-10 w-full flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300 md:w-[700px] lg:w-[720px]">
           <ArrowElbowDownRight size={20} weight="bold" />
           <p className="relative ml-2 flex w-full flex-row items-center gap-2 text-sm md:text-base">
             <Image

@@ -31,7 +31,7 @@ export type TModel = {
   name: string;
   key: TModelKey;
   isNew?: boolean;
-  icon: () => JSX.Element;
+  icon: (size: 'sm' | 'md' | 'lg') => JSX.Element;
   inputPrice?: number;
   outputPrice?: number;
   tokens: number;
@@ -55,7 +55,6 @@ export const useModelList = () => {
     const topP = preferences.topP || defaultPreferences.topP;
     const topK = preferences.topK || defaultPreferences.topK;
     const maxTokens = preferences.maxTokens || model.tokens;
-
 
     switch (model.baseModel) {
       case 'openai':
@@ -98,11 +97,11 @@ export const useModelList = () => {
         return new ChatOllama({
           model: model.key,
           baseUrl: preferences.ollamaBaseUrl,
+          numPredict: maxTokens,
           topK,
           topP,
           maxRetries: 2,
           temperature,
-          cache: true,
         });
       default:
         throw new Error('Invalid model');
@@ -117,7 +116,7 @@ export const useModelList = () => {
       outputPrice: 15,
       plugins: ['web_search', 'duckduckgo_search'],
       tokens: 128000,
-      icon: () => <ModelIcon size="md" type="gpt4" />,
+      icon: (size) => <ModelIcon size={size} type="gpt4" />,
       baseModel: 'openai',
       maxOutputTokens: 2048,
     },
@@ -129,7 +128,7 @@ export const useModelList = () => {
       plugins: ['web_search', 'duckduckgo_search'],
       inputPrice: 10,
       outputPrice: 30,
-      icon: () => <ModelIcon size="md" type="gpt4" />,
+      icon: (size) => <ModelIcon size={size} type="gpt4" />,
       baseModel: 'openai',
       maxOutputTokens: 4095,
     },
@@ -141,7 +140,7 @@ export const useModelList = () => {
       plugins: ['web_search', 'calculator'],
       inputPrice: 30,
       outputPrice: 60,
-      icon: () => <ModelIcon size="md" type="gpt4" />,
+      icon: (size) => <ModelIcon size={size} type="gpt4" />,
       baseModel: 'openai',
       maxOutputTokens: 4095,
     },
@@ -158,7 +157,7 @@ export const useModelList = () => {
         'read_website',
       ],
       tokens: 16385,
-      icon: () => <ModelIcon size="md" type="gpt3" />,
+      icon: (size) => <ModelIcon size={size} type="gpt3" />,
       baseModel: 'openai',
       maxOutputTokens: 4095,
     },
@@ -168,7 +167,7 @@ export const useModelList = () => {
       isNew: false,
       tokens: 16385,
       plugins: ['web_search', 'duckduckgo_search'],
-      icon: () => <ModelIcon size="md" type="gpt3" />,
+      icon: (size) => <ModelIcon size={size} type="gpt3" />,
       baseModel: 'openai',
       maxOutputTokens: 4095,
     },
@@ -180,7 +179,7 @@ export const useModelList = () => {
       outputPrice: 75,
       tokens: 200000,
       plugins: [],
-      icon: () => <ModelIcon size="md" type="anthropic" />,
+      icon: (size) => <ModelIcon size={size} type="anthropic" />,
       baseModel: 'anthropic',
       maxOutputTokens: 4095,
     },
@@ -192,7 +191,7 @@ export const useModelList = () => {
       outputPrice: 15,
       plugins: [],
       tokens: 200000,
-      icon: () => <ModelIcon size="md" type="anthropic" />,
+      icon: (size) => <ModelIcon size={size} type="anthropic" />,
       baseModel: 'anthropic',
       maxOutputTokens: 4095,
     },
@@ -204,7 +203,7 @@ export const useModelList = () => {
       outputPrice: 1.5,
       plugins: [],
       tokens: 200000,
-      icon: () => <ModelIcon size="md" type="anthropic" />,
+      icon: (size) => <ModelIcon size={size} type="anthropic" />,
       baseModel: 'anthropic',
       maxOutputTokens: 4095,
     },
@@ -216,7 +215,7 @@ export const useModelList = () => {
       outputPrice: 10.5,
       plugins: [],
       tokens: 200000,
-      icon: () => <ModelIcon size="md" type="gemini" />,
+      icon: (size) => <ModelIcon size={size} type="gemini" />,
       baseModel: 'gemini',
       maxOutputTokens: 4095,
     },
@@ -228,7 +227,7 @@ export const useModelList = () => {
       outputPrice: 1.05,
       plugins: [],
       tokens: 200000,
-      icon: () => <ModelIcon size="md" type="gemini" />,
+      icon: (size) => <ModelIcon size={size} type="gemini" />,
       baseModel: 'gemini',
       maxOutputTokens: 8190,
     },
@@ -240,7 +239,7 @@ export const useModelList = () => {
       outputPrice: 1.5,
       plugins: [],
       tokens: 200000,
-      icon: () => <ModelIcon size="md" type="gemini" />,
+      icon: (size) => <ModelIcon size={size} type="gemini" />,
       baseModel: 'gemini',
       maxOutputTokens: 4095,
     },
@@ -257,7 +256,7 @@ export const useModelList = () => {
           inputPrice: 0,
           outputPrice: 0,
           plugins: [],
-          icon: () => <ModelIcon size="md" type="ollama" />,
+          icon: (size) => <ModelIcon size={size} type="ollama" />,
           baseModel: 'ollama',
           maxOutputTokens: 2048,
         })

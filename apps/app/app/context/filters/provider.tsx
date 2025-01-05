@@ -160,7 +160,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                     avatar={session?.bot?.avatar}
                   />
                 ) : (
-                  getModelByKey(session.messages?.[0]?.model)?.icon()
+                  getModelByKey(session.messages?.[0]?.model)?.icon('sm')
                 )}
                 <span className="w-full truncate">{session.title}</span>
                 <span className="flex-shrink-0 pl-4 text-xs text-zinc-400 md:text-xs dark:text-zinc-700">

@@ -6,7 +6,6 @@ import { useSessionsContext } from '@/app/context/sessions/provider';
 import { useSettings } from '@/app/context/settings/context';
 import {
   Book,
-  Command,
   DotsThree,
   GearSix,
   Moon,
@@ -62,14 +61,6 @@ export const Navbar = () => {
       </div>
       <div className="flex flex-row items-center gap-2">
         {renderNewSession()}
-        <Button
-          variant="ghost"
-          size="iconSm"
-          onClick={openFilters}
-          className="flex md:hidden"
-        >
-          <Command size={20} weight="bold" />
-        </Button>
         <DropdownMenu
           open={isOpen}
           onOpenChange={(open) => {

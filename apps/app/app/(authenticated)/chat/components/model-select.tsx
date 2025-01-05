@@ -51,7 +51,7 @@ export const ModelSelect = ({
             className={cn('gap-2 pr-3 pl-1 text-xs md:text-sm', className)}
             size="sm"
           >
-            {activeModel?.icon()} {activeModel?.name}
+            {activeModel?.icon('sm')} {activeModel?.name}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
@@ -86,7 +86,7 @@ export const ModelSelect = ({
                     );
                   }}
                 >
-                  {model.icon()} {model.name}{' '}
+                  {model.icon('sm')} {model.name}{' '}
                   {model.isNew && <Badge>New</Badge>}
                 </DropdownMenuItem>
               </DropdownMenuSubTrigger>

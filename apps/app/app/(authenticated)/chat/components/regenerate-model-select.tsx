@@ -40,7 +40,8 @@ export const RegenerateWithModelSelect = ({
                 onRegenerate(model.key);
               }}
             >
-              {model.icon()} {model.name} {model.isNew && <Badge>New</Badge>}
+              {model.icon('sm')} {model.name}{' '}
+              {model.isNew && <Badge>New</Badge>}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

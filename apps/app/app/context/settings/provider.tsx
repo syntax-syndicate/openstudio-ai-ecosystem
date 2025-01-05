@@ -110,12 +110,12 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
           <div className="w-full border-zinc-500/20 border-b px-4 py-3">
             <p className="font-medium text-md">Settings</p>
           </div>
-          <div className="relative mt-60 flex h-full w-full flex-col md:mt-0 md:flex-row">
-            <div className="no-scrollbar absolute top-0 right-0 left-0 flex h-full w-full flex-row gap-1 overflow-x-auto border-zinc-500/10 border-r px-2 pt-2 pb-16 md:bottom-0 md:w-[250px] md:flex-col md:gap-0 md:overflow-y-auto">
+          <div className="relative mt-0 flex h-full w-full flex-col overflow-hidden md:mt-60 md:flex-row">
+            <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row gap-1 overflow-x-auto border-zinc-500/10 px-2 pt-2 pb-2 md:bottom-0 md:h-full md:w-[250px] md:flex-col md:gap-0 md:overflow-y-auto md:border-r md:pb-16">
               <Type
                 size="xxs"
                 textColor="tertiary"
-                className="p-2"
+                className="hidden p-2 md:flex"
                 weight="medium"
               >
                 GENERAL
@@ -144,7 +144,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
               <Type
                 size="xxs"
                 textColor="tertiary"
-                className="p-2"
+                className="hidden p-2 md:flex"
                 weight="medium"
               >
                 MODELS
@@ -172,7 +172,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
               <Type
                 size="xxs"
                 textColor="tertiary"
-                className="p-2"
+                className="hidden p-2 md:flex"
                 weight="medium"
               >
                 PLUGINS
@@ -198,7 +198,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 </Button>
               ))}
             </div>
-            <div className="no-scrollbar h-full w-full overflow-y-auto pb-16 md:ml-[250px]">
+            <div className="no-scrollbar mt-16 h-full w-full overflow-y-auto pb-16 md:mt-6 md:ml-[250px]">
               {selectedMenuItem?.component}
             </div>
           </div>
