@@ -1,4 +1,4 @@
-import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { Button } from '@repo/design-system/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 

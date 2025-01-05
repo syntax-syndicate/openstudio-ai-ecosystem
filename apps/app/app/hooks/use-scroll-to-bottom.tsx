@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const useScrollToBottom = () => {
+export const useScrollToBottom = () => {
   const [showButton, setShowButton] = useState(false);
   useEffect(() => {
     const chatContainer = document?.getElementById('chat-container');
@@ -37,4 +37,3 @@ const useScrollToBottom = () => {
     scrollToBottom,
   };
 };
-export default useScrollToBottom;

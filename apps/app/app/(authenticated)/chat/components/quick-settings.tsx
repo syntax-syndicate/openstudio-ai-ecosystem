@@ -1,5 +1,5 @@
 import { ModelInfo } from '@/app/(authenticated)/chat/components/model-info';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
+import { usePreferenceContext } from '@/app/context/preferences';
 import { useModelList } from '@/app/hooks/use-model-list';
 import {
   type TPreferences,

@@ -1,6 +1,6 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
+import { usePreferenceContext } from '@/app/context/preferences';
 import {
   type TPreferences,
   defaultPreferences,

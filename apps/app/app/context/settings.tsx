@@ -1,6 +1,5 @@
 'use client';
-
-import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { AnthropicSettings } from '@/app/(authenticated)/chat/components/settings/anthropic';
 import { CommonSettings } from '@/app/(authenticated)/chat/components/settings/common';
 import { Data } from '@/app/(authenticated)/chat/components/settings/data';
@@ -9,7 +8,6 @@ import { OllamaSettings } from '@/app/(authenticated)/chat/components/settings/o
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/openai';
 import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
 import { VoiceInput } from '@/app/(authenticated)/chat/components/settings/voice-input';
-import { SettingsContext } from '@/app/context/settings/context';
 import { Database, GearSix, Microphone } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
@@ -19,6 +17,24 @@ import {
 import { Type } from '@repo/design-system/components/ui/text';
 import { cn } from '@repo/design-system/lib/utils';
 import { useState } from 'react';
+
+import { createContext, useContext } from 'react';
+
+export type TSettingsContext = {
+  open: (menu?: string) => void;
+  dismiss: () => void;
+};
+export const SettingsContext = createContext<undefined | TSettingsContext>(
+  undefined
+);
+
+export const useSettingsContext = () => {
+  const context = useContext(SettingsContext);
+  if (context === undefined) {
+    throw new Error('useSettings must be used within a SettingssProvider');
+  }
+  return context;
+};
 
 export type TSettingsProvider = {
   children: React.ReactNode;

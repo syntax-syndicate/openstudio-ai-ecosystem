@@ -1,15 +1,21 @@
-import { RegenerateWithModelSelect } from '@/app/(authenticated)/chat/components/regenerate-model-select';
-import { useChatContext } from '@/app/context/chat/provider';
-import { useSessionsContext } from '@/app/context/sessions/provider';
-import { useSettings } from '@/app/context/settings/context';
-import type { TChatMessage } from '@/app/hooks/use-chat-session';
-import { useClipboard } from '@/app/hooks/use-clipboard';
-import { useMarkdown } from '@/app/hooks/use-mdx';
-import { useModelList } from '@/app/hooks/use-model-list';
-import { useTextSelection } from '@/app/hooks/use-text-selection';
-import { useTools } from '@/app/hooks/use-tools';
-import type { TToolKey } from '@/app/hooks/use-tools';
 import { Check, Copy, Quotes, TrashSimple } from '@phosphor-icons/react';
+import { useRef, useState } from 'react';
+import * as Selection from 'selection-popover';
+
+import {
+  useChatContext,
+  useSessionsContext,
+  useSettingsContext,
+} from '@/app/context';
+import type { TChatMessage } from '@/app/hooks';
+
+import {
+  useClipboard,
+  useMarkdown,
+  useModelList,
+  useTextSelection,
+  useTools,
+} from '@/app/hooks';
 import {
   Alert,
   AlertDescription,
@@ -24,15 +30,14 @@ import {
 } from '@repo/design-system/components/ui/popover';
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
-import { useRef, useState } from 'react';
-import * as Selection from 'selection-popover';
+import { RegenerateWithModelSelect } from '../regenerate-model-select';
 
-export type TAIMessageBubble = {
+export type TAIMessage = {
   chatMessage: TChatMessage;
   isLast: boolean;
 };
 
-export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
+export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
   const {
     id,
     rawAI,
@@ -45,16 +50,13 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   } = chatMessage;
 
   const { getToolInfoByKey } = useTools();
-
-  const toolUsed = toolName
-    ? getToolInfoByKey(toolName as TToolKey)
-    : undefined;
+  const toolUsed = toolName ? getToolInfoByKey(toolName) : undefined;
   const messageRef = useRef<HTMLDivElement>(null);
   const { showCopied, copy } = useClipboard();
   const { getModelByKey, getAssistantByKey } = useModelList();
-  const { renderMarkdown, links } = useMarkdown();
-  const { open: openSettings } = useSettings();
-  const { removeMessage, currentSession } = useSessionsContext();
+  const { renderMarkdown } = useMarkdown();
+  const { open: openSettings } = useSettingsContext();
+  const { removeMessage } = useSessionsContext();
   const { handleRunModel, setContextValue, editor } = useChatContext();
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { selectedText } = useTextSelection();
@@ -62,60 +64,50 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   const modelForMessage = getModelByKey(inputProps.assistant.baseModel);
 
   const handleCopyContent = () => {
-    messageRef?.current && rawAI && copy(rawAI);
+    if (messageRef.current && rawAI) {
+      copy(rawAI);
+    }
   };
 
   const renderStopReason = () => {
-    if (stopReason === 'error') {
-      return (
-        <Alert variant="destructive">
-          <AlertDescription>
-            Something went wrong. please make sure your api is working properly{' '}
-            <Button
-              variant="link"
-              size="link"
-              onClick={() => {
-                openSettings();
-              }}
-            >
-              Check API Key
-            </Button>
-          </AlertDescription>
-        </Alert>
-      );
-    }
-    if (stopReason === 'cancel') {
-      return (
-        <Type size="sm" textColor="tertiary" className="italic">
-          Chat session ended
-        </Type>
-      );
-    }
-    if (stopReason === 'apikey') {
-      return (
-        <Alert variant="destructive">
-          <AlertDescription>
-            Invalid API Key{' '}
-            <Button
-              variant="link"
-              size="link"
-              onClick={() => {
-                openSettings();
-              }}
-            >
-              Check API Key
-            </Button>
-          </AlertDescription>
-        </Alert>
-      );
-    }
-    if (stopReason === 'recursion') {
-      return (
-        <Alert variant="destructive">
-          {' '}
-          <AlertDescription>Recursion detected</AlertDescription>
-        </Alert>
-      );
+    switch (stopReason) {
+      case 'error':
+        return (
+          <Alert variant="destructive">
+            <AlertDescription>
+              Something went wrong. Please make sure your API is working
+              properly{' '}
+              <Button variant="link" size="link" onClick={() => openSettings()}>
+                Check API Key
+              </Button>
+            </AlertDescription>
+          </Alert>
+        );
+      case 'cancel':
+        return (
+          <Type size="sm" textColor="tertiary" className="italic">
+            Chat session ended
+          </Type>
+        );
+      case 'apikey':
+        return (
+          <Alert variant="destructive">
+            <AlertDescription>
+              Invalid API Key{' '}
+              <Button variant="link" size="link" onClick={() => openSettings()}>
+                Check API Key
+              </Button>
+            </AlertDescription>
+          </Alert>
+        );
+      case 'recursion':
+        return (
+          <Alert variant="destructive">
+            <AlertDescription>Recursion detected</AlertDescription>
+          </Alert>
+        );
+      default:
+        return null;
     }
   };
 
@@ -136,22 +128,16 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
             textColor="tertiary"
           >
             {isToolRunning ? <Spinner /> : toolUsed.smallIcon()}
-            {isToolRunning ? (
-              <Type size="sm" textColor="tertiary">
-                {toolUsed.loadingMessage}
-              </Type>
-            ) : (
-              <Type size="sm" textColor="tertiary">
-                {toolUsed.resultMessage}
-              </Type>
-            )}
+            <Type size="sm" textColor="tertiary">
+              {isToolRunning ? toolUsed.loadingMessage : toolUsed.resultMessage}
+            </Type>
           </Type>
         )}
 
         {rawAI && (
           <Selection.Root>
             <Selection.Trigger asChild>
-              <article className="prose dark:prose-invert prose-zinc w-full prose-h3:font-medium prose-heading:font-medium prose-strong:font-medium prose-h3:text-lg prose-headings:text-lg prose-th:text-sm">
+              <article className="prose dark:prose-invert prose-zinc w-full prose-h3:font-medium prose-h4:font-medium prose-h5:font-medium prose-h6:font-medium prose-heading:font-medium prose-strong:font-medium prose-h3:text-lg prose-h4:text-base prose-h5:text-base prose-h6:text-base prose-headings:text-lg prose-th:text-sm">
                 {renderMarkdown(rawAI, !!isLoading, id)}
               </article>
             </Selection.Trigger>
@@ -180,16 +166,14 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
         <Flex
           justify="between"
           items="center"
-          className="w-full pt-1 opacity-70 transition-opacity hover:opacity-100 "
+          className="w-full pt-1 opacity-70 transition-opacity hover:opacity-100"
         >
           {isLoading && !isToolRunning && (
             <Flex gap="sm">
               <Spinner />
-              {
-                <Type size="sm" textColor="tertiary">
-                  {!!rawAI?.length ? 'Typing ...' : 'Thinking ...'}
-                </Type>
-              }
+              <Type size="sm" textColor="tertiary">
+                {!!rawAI?.length ? 'Typing ...' : 'Thinking ...'}
+              </Type>
             </Flex>
           )}
           {!isLoading && !isToolRunning && (
@@ -241,17 +225,13 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
                     <div className="flex flex-row gap-1">
                       <Button
                         variant="destructive"
-                        onClick={() => {
-                          removeMessage(id);
-                        }}
+                        onClick={() => removeMessage(id)}
                       >
                         Delete Message
                       </Button>
                       <Button
                         variant="ghost"
-                        onClick={() => {
-                          setOpenDeleteConfirm(false);
-                        }}
+                        onClick={() => setOpenDeleteConfirm(false)}
                       >
                         Cancel
                       </Button>

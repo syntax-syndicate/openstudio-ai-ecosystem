@@ -1,5 +1,5 @@
-import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import { usePreferenceContext } from '@/app/context/preferences';
 import { useAssistants } from '@/app/hooks/use-bots';
 import type { TAssistant } from '@/app/hooks/use-chat-session';
 import { defaultPreferences } from '@/app/hooks/use-preferences';

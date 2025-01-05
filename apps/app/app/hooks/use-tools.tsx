@@ -1,6 +1,6 @@
-import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { useSettings } from '@/app/context/settings/context';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import { usePreferenceContext } from '@/app/context';
+import { useSettingsContext } from '@/app/context';
 import type { TPreferences } from '@/app/hooks/use-preferences';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { Globe } from '@phosphor-icons/react';
@@ -170,7 +170,7 @@ export type TTool = {
 
 export const useTools = () => {
   const { preferences, updatePreferences } = usePreferenceContext();
-  const { open } = useSettings();
+  const { open } = useSettingsContext();
 
   const tools: TTool[] = [
     // {

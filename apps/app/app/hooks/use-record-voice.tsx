@@ -1,6 +1,5 @@
 import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { useSettings } from '@/app/context/settings/context';
+import { usePreferenceContext, useSettingsContext } from '@/app/context';
 import { blobToBase64 } from '@/app/lib/record';
 import { Microphone, StopCircle } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -19,7 +18,7 @@ export const useRecordVoice = () => {
   const [recording, setRecording] = useState<boolean>(false);
   const [transcribing, setIsTranscribing] = useState<boolean>(false);
   const { preferences } = usePreferenceContext();
-  const { open: openSettings } = useSettings();
+  const { open: openSettings } = useSettingsContext();
   const chunks = useRef<Blob[]>([]);
 
   const startRecording = async (): Promise<void> => {

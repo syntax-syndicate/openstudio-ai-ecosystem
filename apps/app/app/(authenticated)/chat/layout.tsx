@@ -1,14 +1,16 @@
-import { MainLayout } from '@/app/(authenticated)/chat/components/main-layout';
+import { MainLayout } from '@/app/(authenticated)/chat/components/layout/main-layout';
 import { Header } from '@/app/(authenticated)/components/header';
-import { AssistantsProvider } from '@/app/context/assistants/provider';
-import { ChatProvider } from '@/app/context/chat/provider';
-import { ConfirmProvider } from '@/app/context/confirm/provider';
-import { FiltersProvider } from '@/app/context/filters/provider';
-import { PreferenceProvider } from '@/app/context/preferences/provider';
-import { PromptsProvider } from '@/app/context/prompts/provider';
-import { ReactQueryProvider } from '@/app/context/react-query/provider';
-import { SessionsProvider } from '@/app/context/sessions/provider';
-import { SettingsProvider } from '@/app/context/settings/provider';
+import {
+  AssistantsProvider,
+  ChatProvider,
+  ConfirmProvider,
+  FiltersProvider,
+  PreferenceProvider,
+  PromptsProvider,
+  ReactQueryProvider,
+  SessionsProvider,
+  SettingsProvider,
+} from '@/app/context'; // Consolidated context imports
 import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
 import { ThemeProvider } from '@repo/design-system/providers/theme';
 

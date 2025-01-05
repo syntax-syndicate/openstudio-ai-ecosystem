@@ -1,6 +1,6 @@
 'use client';
-import { ModelIcon } from '@/app/(authenticated)/chat/components/icons/model-icon';
-import { useSessionsContext } from '@/app/context/sessions/provider';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import { useSessionsContext } from '@/app/context/sessions';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 import { useEffect } from 'react';
 

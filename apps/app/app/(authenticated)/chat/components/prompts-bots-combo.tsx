@@ -1,4 +1,4 @@
-import { usePrompts } from '@/app/context/prompts/context';
+import { usePromptsContext } from '@/app/context';
 import type { TPrompt } from '@/app/hooks/use-prompts';
 import { Plus } from '@phosphor-icons/react';
 import {
@@ -31,7 +31,7 @@ export const PromptsBotsCombo = ({
   onPromptSelect,
 }: TPromptsBotsCombo) => {
   const [commandInput, setCommandInput] = useState('');
-  const { open: openPrompts, allPrompts } = usePrompts();
+  const { open: openPrompts, allPrompts } = usePromptsContext();
 
   return (
     <Popover open={open} onOpenChange={onOpenChange}>

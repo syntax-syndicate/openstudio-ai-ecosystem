@@ -1,7 +1,7 @@
 'use client';
 import { CreatePrompt } from '@/app/(authenticated)/chat/components/prompts/create-prompt';
 import { PromptLibrary } from '@/app/(authenticated)/chat/components/prompts/prompt-library';
-import { PromptsContext } from '@/app/context/prompts/context';
+import { useChatContext } from '@/app/context';
 import { type TPrompt, usePrompts } from '@/app/hooks/use-prompts';
 import {
   Dialog,
@@ -9,8 +9,24 @@ import {
 } from '@repo/design-system/components/ui/dialog';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useState } from 'react';
-import { useChatContext } from '../chat/provider';
+import { createContext, useContext, useState } from 'react';
+
+export type TPromptsContext = {
+  open: (action?: 'public' | 'local' | 'create') => void;
+  dismiss: () => void;
+  allPrompts: TPrompt[];
+};
+export const PromptsContext = createContext<undefined | TPromptsContext>(
+  undefined
+);
+
+export const usePromptsContext = () => {
+  const context = useContext(PromptsContext);
+  if (context === undefined) {
+    throw new Error('usePrompts must be used within a PromptssProvider');
+  }
+  return context;
+};
 
 export type TPromptsProvider = {
   children: React.ReactNode;
@@ -57,7 +73,6 @@ export const PromptsProvider = ({ children }: TPromptsProvider) => {
   });
 
   console.log(publicPromptsQuery.data);
-
   const allPrompts = [
     ...(localPromptsQuery.data || []),
     ...(publicPromptsQuery.data?.prompts || []),

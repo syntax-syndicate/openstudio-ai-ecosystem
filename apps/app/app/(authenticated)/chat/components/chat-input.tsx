@@ -1,18 +1,3 @@
-import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
-import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greeting';
-import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
-import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
-import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
-import { useAssistantContext } from '@/app/context/assistants/provider';
-import { useChatContext } from '@/app/context/chat/provider';
-import { useFilters } from '@/app/context/filters/context';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { useSessionsContext } from '@/app/context/sessions/provider';
-import type { TAssistant } from '@/app/hooks/use-chat-session';
-import { useModelList } from '@/app/hooks/use-model-list';
-import { useRecordVoice } from '@/app/hooks/use-record-voice';
-import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
-import { slideUpVariant } from '@/app/lib/framer-motion';
 import {
   ArrowDown,
   ArrowElbowDownRight,
@@ -20,12 +5,32 @@ import {
   Stop,
   X,
 } from '@phosphor-icons/react';
-import { Button } from '@repo/design-system/components/ui/button';
-import { cn } from '@repo/design-system/lib/utils';
 import { EditorContent } from '@tiptap/react';
 import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
+import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greeting';
+import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
+import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
+import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
+import {
+  useAssistantContext,
+  useChatContext,
+  usePreferenceContext,
+  useSessionsContext,
+} from '@/app/context';
+import {
+  defaultPreferences,
+  useModelList,
+  useRecordVoice,
+  useScrollToBottom,
+} from '@/app/hooks';
+import type { TAssistant } from '@/app/hooks/use-chat-session';
+import { slideUpVariant } from '@/app/lib/framer-motion';
+import { Button } from '@repo/design-system/components/ui/button';
+import { cn } from '@repo/design-system/lib/utils';
 
 export type TAttachment = {
   file?: File;
@@ -34,7 +39,6 @@ export type TAttachment = {
 
 export const ChatInput = () => {
   const { sessionId } = useParams();
-  const { open: openFilters } = useFilters();
   const { showButton, scrollToBottom } = useScrollToBottom();
   const {
     renderListeningIndicator,
@@ -57,31 +61,30 @@ export const ChatInput = () => {
     stopGeneration,
   } = useChatContext();
 
-  const { preferences } = usePreferenceContext();
+  const { preferences, updatePreferences } = usePreferenceContext();
   const { models, getAssistantByKey } = useModelList();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedModel, setSelectedModel] = useState<TAssistant['key']>(
-    preferences.defaultAssistant
-  );
+  const [selectedAssistantKey, setSelectedAssistantKey] = useState<
+    TAssistant['key']
+  >(preferences.defaultAssistant);
 
   useEffect(() => {
-    setSelectedModel(preferences.defaultAssistant);
+    const assistantProps = getAssistantByKey(preferences.defaultAssistant);
+    if (assistantProps?.model) {
+      setSelectedAssistantKey(preferences.defaultAssistant);
+    } else {
+      updatePreferences({
+        defaultAssistant: defaultPreferences.defaultAssistant,
+      });
+    }
   }, [models, preferences]);
-
-  console.log('selectedModelinput', preferences.defaultAssistant);
 
   useEffect(() => {
     if (editor?.isActive) {
       editor.commands.focus('end');
     }
   }, [editor?.isActive]);
-
-  // useEffect(() => {
-  //   if (currentSession?.bot?.deafultBaseModel) {
-  //     setSelectedModel(currentSession.bot.deafultBaseModel);
-  //   }
-  // }, [currentSession]);
 
   useEffect(() => {
     if (sessionId) {
@@ -95,12 +98,10 @@ export const ChatInput = () => {
     if (text) {
       editor?.commands.clearContent();
       editor?.commands.setContent(text);
-
       const props = getAssistantByKey(preferences.defaultAssistant);
       if (!props) {
         return;
       }
-
       handleRunModel({
         input: text,
         sessionId: sessionId!.toString(),
@@ -156,7 +157,6 @@ export const ChatInput = () => {
     }
   };
 
-  // const renderReplyButton = () => {
   //   if (showPopup && !recording && !transcribing) {
   //     return (
   //       <motion.span
@@ -214,7 +214,6 @@ export const ChatInput = () => {
       {isFreshSession && <ChatGreeting />}
       <div className="flex flex-row items-center gap-2">
         {renderScrollToBottom()}
-        {/* {renderReplyButton()} */}
         {renderStopGeneration()}
         {renderListeningIndicator()}
       </div>
@@ -266,9 +265,10 @@ export const ChatInput = () => {
                   {selectedAssistant?.model?.icon('sm')}
                   {selectedAssistant?.assistant.name}
                 </Button>
-                <PluginSelect selectedModel={selectedModel} />
+                <PluginSelect selectedAssistantKey={selectedAssistantKey} />
                 <QuickSettings />
                 <div className="flex-1"></div>
+
                 {!isGenerating && (
                   <Button
                     size="iconSm"
@@ -277,7 +277,7 @@ export const ChatInput = () => {
                     disabled={!editor?.getText()}
                     className={cn(
                       !!editor?.getText() &&
-                        'bg-zinc-800 text-white dark:bg-emerald-500/20 dark:text-emerald-400'
+                        'bg-zinc-800 text-white dark:bg-emerald-500/20 dark:text-emerald-400 dark:outline-emerald-400'
                     )}
                     onClick={() => {
                       sendMessage();

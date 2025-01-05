@@ -1,4 +1,4 @@
-import { usePreferenceContext } from '@/app/context/preferences/provider';
+import { usePreferenceContext } from '@/app/context';
 import type { TAssistant } from '@/app/hooks/use-chat-session';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { defaultPreferences } from '@/app/hooks/use-preferences';
@@ -33,6 +33,7 @@ export const AssistantItem = ({
   const assistantProps = getAssistantByKey(assistant.key);
   const model = assistantProps?.model;
   const [open, setOpen] = useState(false);
+
   return (
     <CommandItem
       value={assistant.name}
@@ -78,6 +79,7 @@ export const AssistantItem = ({
               <DropdownMenuItem
                 onClick={(e) => {
                   onEdit(assistant);
+
                   e.stopPropagation();
                 }}
               >

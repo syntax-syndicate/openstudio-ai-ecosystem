@@ -1,5 +1,5 @@
-import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
+import { usePreferenceContext } from '@/app/context/preferences';
+import { useModelList } from '@/app/hooks/use-model-list';
 import { type TToolKey, useTools } from '@/app/hooks/use-tools';
 import { Plug } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
@@ -14,12 +14,13 @@ import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content'
 import { useEffect, useState } from 'react';
 
 export type TPluginSelect = {
-  selectedModel: TModelKey;
+  selectedAssistantKey: string;
 };
-export const PluginSelect = ({ selectedModel }: TPluginSelect) => {
+
+export const PluginSelect = ({ selectedAssistantKey }: TPluginSelect) => {
   const [isOpen, setIsOpen] = useState(false);
   const { tools } = useTools();
-  const { getModelByKey } = useModelList();
+  const { getAssistantByKey } = useModelList();
   const { preferences, updatePreferences } = usePreferenceContext();
   const availableTools = tools.filter((tool) => tool.showInMenu);
   const availableToolsKey = availableTools.map((tool) => tool.key);
@@ -32,9 +33,9 @@ export const PluginSelect = ({ selectedModel }: TPluginSelect) => {
     );
   }, [isOpen, preferences]);
 
-  const model = getModelByKey(selectedModel);
+  const assistantProps = getAssistantByKey(selectedAssistantKey);
 
-  if (!model?.plugins?.length) {
+  if (!assistantProps?.model?.plugins?.length) {
     return null;
   }
 

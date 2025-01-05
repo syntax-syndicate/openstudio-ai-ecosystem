@@ -15,7 +15,7 @@ export type codeBlockProps = {
 
 export const CodeBlock = ({ lang, code }: codeBlockProps) => {
   const ref = useRef<HTMLElement>(null);
-  const { copiedText, copy, showCopied } = useClipboard();
+  const { copy, showCopied } = useClipboard();
   const language = lang && hljs.getLanguage(lang) ? lang : 'plaintext';
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useChatContext } from '@/app/context/chat/provider';
+import { useChatContext } from '@/app/context/chat';
 import type { TPrompt } from '@/app/hooks/use-prompts';
 import {
   ArrowDown,

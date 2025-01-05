@@ -1,9 +1,9 @@
 'use client';
 
 import { ChatInput } from '@/app/(authenticated)/chat/components/chat-input';
-import { ChatMessages } from '@/app/(authenticated)/chat/components/chat-messages';
-import { Navbar } from '@/app/(authenticated)/chat/components/navbar';
-import { useSessionsContext } from '@/app/context/sessions/provider';
+import { Navbar } from '@/app/(authenticated)/chat/components/layout/navbar';
+import { ChatMessages } from '@/app/(authenticated)/chat/components/messages/chat-messages';
+import { useSessionsContext } from '@/app/context/sessions';
 import Spinner from '@repo/design-system/components/ui/loading-spinner';
 
 const ChatSessionPage = () => {

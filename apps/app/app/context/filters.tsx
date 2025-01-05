@@ -1,11 +1,8 @@
 'use client';
-
-import { FiltersContext } from '@/app/context/filters/context';
-import { useSessionsContext } from '@/app/context/sessions/provider';
+import { useSessionsContext } from '@/app/context/sessions';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { sortSessions } from '@/app/lib/helper';
-import { Plus, TrashSimple } from '@phosphor-icons/react';
-import { Moon, Sun } from '@phosphor-icons/react';
+import { Moon, Plus, Sun, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   CommandDialog,
@@ -21,6 +18,24 @@ import moment from 'moment';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+import { createContext, useContext } from 'react';
+
+export type TFilterContext = {
+  open: () => void;
+  dismiss: () => void;
+};
+export const FiltersContext = createContext<undefined | TFilterContext>(
+  undefined
+);
+
+export const useFilterContext = () => {
+  const context = useContext(FiltersContext);
+  if (context === undefined) {
+    throw new Error('useFilters must be used within a FiltersProvider');
+  }
+  return context;
+};
 
 export type TFiltersProvider = {
   children: React.ReactNode;
@@ -116,9 +131,10 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
 
       <CommandDialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
         <CommandInput placeholder="Search..." />
+
         <CommandList className="border-zinc-500/20 border-t">
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="QuickActions">
+          <CommandGroup heading="Quick Actions">
             {actions.map((action) => (
               <CommandItem
                 key={action.name}
@@ -158,6 +174,7 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
                   }}
                 >
                   {assistantProps?.model.icon('sm')}
+
                   <span className="w-full truncate">{session.title}</span>
                   <span className="flex-shrink-0 pl-4 text-xs text-zinc-400 md:text-xs dark:text-zinc-700">
                     {moment(session.createdAt).fromNow(true)}

@@ -1,4 +1,4 @@
-import { usePreferenceContext } from '@/app/context/preferences/provider';
+import { usePreferenceContext } from '@/app/context/preferences';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Input } from '@repo/design-system/components/ui/input';
 import { useToast } from '@repo/design-system/components/ui/use-toast';

@@ -1,8 +1,8 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { useSessionsContext } from '@/app/context/sessions/provider';
-import { useSettings } from '@/app/context/settings/context';
+import { useSettingsContext } from '@/app/context';
+import { usePreferenceContext } from '@/app/context/preferences';
+import { useSessionsContext } from '@/app/context/sessions';
 import type { TChatSession } from '@/app/hooks/use-chat-session';
 import {
   type TPreferences,
@@ -132,7 +132,7 @@ const mergeSessions = (
 };
 
 export const Data = () => {
-  const { dismiss } = useSettings();
+  const { dismiss } = useSettingsContext();
   const { toast } = useToast();
 
   const {

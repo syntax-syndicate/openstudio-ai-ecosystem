@@ -3,8 +3,8 @@ import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import type { LLMResult } from '@langchain/core/outputs';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 
-import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { useSessionsContext } from '@/app/context/sessions/provider';
+import { usePreferenceContext } from '@/app/context/preferences';
+import { useSessionsContext } from '@/app/context/sessions';
 import type {
   TAssistant,
   TChatMessage,

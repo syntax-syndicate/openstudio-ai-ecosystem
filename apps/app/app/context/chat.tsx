@@ -1,7 +1,7 @@
 'use client';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { useSessionsContext } from '@/app/context/sessions/provider';
-import { useSettings } from '@/app/context/settings/context';
+import { usePreferenceContext } from '@/app/context/preferences';
+import { useSessionsContext } from '@/app/context/sessions';
+import { useSettingsContext } from '@/app/context/settings';
 import type {
   TChatMessage,
   TLLMInputProps,
@@ -52,11 +52,11 @@ export type TChatProvider = {
 export const ChatProvider = ({ children }: TChatProvider) => {
   const { setCurrentSession, refetchSessions, currentSession } =
     useSessionsContext();
-  const { getModelByKey, getAssistantByKey } = useModelList();
+  const { getAssistantByKey } = useModelList();
   const { toast } = useToast();
   const [openPromptsBotCombo, setOpenPromptsBotCombo] = useState(false);
   const [contextValue, setContextValue] = useState('');
-  const { open: openSettings } = useSettings();
+  const { open: openSettings } = useSettingsContext();
   const { preferences, apiKeys } = usePreferenceContext();
   const [isGenerating, setIsGenerating] = useState(false);
 
