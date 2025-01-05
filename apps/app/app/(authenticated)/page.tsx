@@ -1,7 +1,6 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import { SparklesIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
-import { ArrowRight } from 'lucide-react';
-
 import Link from 'next/link';
 
 export default function HomePage() {
@@ -19,7 +18,8 @@ export default function HomePage() {
 
       <Link href="/chat">
         <Button size="lg" className="gap-2">
-          Go to Chat <ArrowRight />
+          Go to Chat{' '}
+          <SparklesIcon size={24} color={'#bd10e0'} variant={'stroke'} />
         </Button>
       </Link>
     </div>
