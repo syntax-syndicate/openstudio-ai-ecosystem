@@ -1,3 +1,5 @@
+import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
+import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greeting';
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
 import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
@@ -176,7 +178,7 @@ export const ChatInput = () => {
   const renderSelectedContext = () => {
     if (contextValue) {
       return (
-        <div className="flex w-full flex-row items-start justify-start gap-2 rounded-xl border border-zinc-100 bg-white py-2 pr-2 pl-2 text-zinc-700 md:w-[700px] lg:w-[720px] dark:border-white/10 dark:bg-zinc-800 dark:text-zinc-200">
+        <div className="flex w-full flex-row items-start justify-start gap-2 rounded-xl border border-zinc-100 bg-white py-2 pr-2 pl-2 text-zinc-700 ring-1 ring-zinc-100 md:w-[700px] lg:w-[720px] dark:border-white/10 dark:bg-zinc-800 dark:text-zinc-200 dark:ring-zinc-700">
           <ArrowElbowDownRight size={16} weight="bold" className="mt-1" />
           <p className="ml-2 line-clamp-2 w-full overflow-hidden text-sm md:text-base">
             {contextValue}
@@ -199,17 +201,19 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 flex w-full flex-col items-center justify-end gap-1 px-2 pt-16 pb-4 md:justify-center md:px-4',
-        'left-0 bg-gradient-to-t from-70% from-white to-transparent transition-all duration-1000 ease-in-out dark:from-zinc-800'
+        'absolute right-0 bottom-0 flex w-full flex-col items-center justify-end gap-2 px-2 pt-16 pb-4 md:justify-center md:px-4',
+        'left-0 bg-gradient-to-t from-70% from-white to-transparent transition-all duration-1000 ease-in-out dark:from-zinc-800',
+        isFreshSession && 'top-0'
       )}
     >
+      {isFreshSession && <ChatGreeting />}
       <div className="flex flex-row items-center gap-2">
         {renderScrollToBottom()}
         {/* {renderReplyButton()} */}
         {renderStopGeneration()}
         {renderListeningIndicator()}
       </div>
-      <div className="flex w-full flex-col gap-1 md:w-[700px] lg:w-[720px]">
+      <div className="flex w-full flex-col gap-3 md:w-[700px] lg:w-[720px]">
         {renderSelectedContext()}
         {editor && (
           <PromptsBotsCombo
@@ -234,7 +238,7 @@ export const ChatInput = () => {
               variants={slideUpVariant}
               initial={'initial'}
               animate={editor.isEditable ? 'animate' : 'initial'}
-              className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-2xl bg-zinc-50 dark:border-white/5 dark:bg-white/5"
+              className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-2xl bg-zinc-50 ring-zinc-100 ring-offset-2 focus-within:ring-2 dark:border-white/5 dark:bg-white/5 dark:ring-zinc-700 dark:ring-offset-zinc-800"
             >
               <div className="flex w-full flex-row items-end gap-0 py-2 pr-2 pl-2 md:pl-3">
                 <EditorContent
@@ -291,6 +295,7 @@ export const ChatInput = () => {
           </PromptsBotsCombo>
         )}
       </div>
+      {isFreshSession && <ChatExamples />}
     </div>
   );
 };

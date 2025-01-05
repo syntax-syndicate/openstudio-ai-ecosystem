@@ -54,7 +54,6 @@ export const Navbar = () => {
   return (
     <div className="absolute top-0 right-0 left-0 z-50 flex flex-row items-center justify-between bg-gradient-to-b from-70% from-white to-transparent p-2 pb-6 md:p-3 dark:from-zinc-800">
       <div className="flex flex-row items-center gap-2">
-        <HistorySidebar />
         {renderNewSession()}
         {/* <ModelIcon type="chathub" size="md" />
         <p className="text-sm text-zinc-500 md:text-base">ChatHub</p>
@@ -141,6 +140,7 @@ export const Navbar = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <HistorySidebar />
       </div>
     </div>
   );

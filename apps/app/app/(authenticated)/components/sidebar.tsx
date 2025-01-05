@@ -42,7 +42,7 @@ const data = {
   navMain: [
     {
       title: 'Chat',
-      url: '/chat/1',
+      url: '/chat',
       icon: SquareTerminalIcon,
       isActive: true,
       items: [

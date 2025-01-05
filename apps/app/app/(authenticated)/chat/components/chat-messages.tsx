@@ -1,6 +1,5 @@
 import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble';
 import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
-import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
 import { GreetingBubble } from '@/app/(authenticated)/chat/components/greeting-bubble';
 import { useBots } from '@/app/context/bots/context';
 import { useSessionsContext } from '@/app/context/sessions/provider';
@@ -86,7 +85,6 @@ export const ChatMessages = () => {
       id="chat-container"
     >
       <div className="flex w-full flex-1 flex-col gap-24 p-2 md:w-[700px] lg:w-[720px]">
-        {isFreshSession && <ChatExamples />}
         {currentSession?.bot && (
           <div className="flex flex-col items-center gap-2">
             <BotAvatar
@@ -98,7 +96,7 @@ export const ChatMessages = () => {
               {currentSession.bot.name}
             </Type>
             <Type
-              size="xs"
+              size="sm"
               className="text-center md:max-w-[400px]"
               textColor="tertiary"
             >

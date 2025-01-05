@@ -6,6 +6,15 @@ import type { NextConfig } from 'next';
 
 let nextConfig: NextConfig = {
   ...config,
+  async rewrites() {
+    return [
+      // Wildcard path matching
+      {
+        source: '/',
+        destination: '/chat/new',
+      },
+    ];
+  },
   webpack: (config, { isServer }) => {
     // Existing webpack config from config object
     const existingWebpack =
