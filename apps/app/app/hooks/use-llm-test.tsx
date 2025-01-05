@@ -23,7 +23,7 @@ export const useLLMTest = () => {
 
       const selectedModel = await createInstance(selectedModelKey, apiKey);
 
-      const data = await selectedModel
+      const data = await selectedModel!
         .withListeners({
           onError: (error) => {
             console.error('error', error);

@@ -346,10 +346,6 @@ export const useLLM = ({ onChange }: TUseLLM) => {
 
     const apiKey = apiKeys[selectedModelKey?.baseModel];
 
-    if (!apiKey || selectedModelKey?.baseModel !== 'ollama') {
-      throw new Error('API key not found');
-    }
-
     const selectedModel = await createInstance(selectedModelKey, apiKey);
 
     console.log('title session', session);
@@ -378,7 +374,7 @@ export const useLLM = ({ onChange }: TUseLLM) => {
         message: [new HumanMessage(firstMessage.rawHuman)],
       });
 
-      const generation = await selectedModel.invoke(prompt, {});
+      const generation = await selectedModel!.invoke(prompt, {});
 
       console.log('title generation', generation);
 
