@@ -52,5 +52,6 @@ export async function POST(req: NextRequest) {
       charset: 'utf-8',
       'Content-Type': headersObject['content-type'],
     },
+    status: res.status,
   });
 }
