@@ -7,7 +7,7 @@ import { useSessionsContext } from '@/app/context/sessions/provider';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import type { TRunModel } from '@/app/hooks/use-llm';
 import type { TModelKey } from '@/app/hooks/use-model-list';
-import { ArrowElbowDownRight, TrashSimple } from '@phosphor-icons/react';
+import { Quotes, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
@@ -47,12 +47,8 @@ export const ChatMessages = () => {
     return (
       <div className="flex w-full flex-col items-end gap-1" key={message.id}>
         {message.runModelProps?.context && (
-          <div className="flex flex-row gap-2 rounded-2xl border border-transparent bg-zinc-50 p-2 pr-4 pl-3 text-sm text-zinc-600 hover:border-white/5 md:text-base dark:bg-black/30 dark:text-zinc-100">
-            <ArrowElbowDownRight
-              size={20}
-              weight="bold"
-              className="flex-shrink-0"
-            />
+          <div className="ml-16 flex flex-row gap-2 rounded-2xl border border-transparent bg-zinc-50 p-2 pr-4 pl-3 text-sm text-zinc-600 hover:border-white/5 md:ml-32 md:text-base dark:bg-black/30 dark:text-zinc-100">
+            <Quotes size={16} weight="bold" className="mt-2 flex-shrink-0" />
 
             <span className="pt-[0.35em] pb-[0.25em] leading-6">
               {message.runModelProps?.context}

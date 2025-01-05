@@ -11,12 +11,11 @@ import {
 import { type ReactNode, useState } from 'react';
 import type { JSX } from 'react/jsx-runtime';
 
-
 export const REVEAL_ANIMATION_VARIANTS = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 1, ease: "easeInOut", delay: 0.1 },
+    transition: { duration: 1, ease: 'easeInOut', delay: 0.1 },
   },
 };
 
@@ -37,8 +36,8 @@ export const useMarkdown = () => {
         text: (children) => (
           <motion.span
             variants={REVEAL_ANIMATION_VARIANTS}
-            animate={"visible"}
-            initial={animate ? "hidden" : "visible"}
+            animate={'visible'}
+            initial={animate ? 'hidden' : 'visible'}
           >
             {children}
           </motion.span>
@@ -61,22 +60,22 @@ export const useMarkdown = () => {
                 </HoverCardTrigger>
                 <HoverCardContent
                   sideOffset={12}
-                  className="p-3 rounded-xl flex max-w-[500px] flex-col items-start bg-zinc-700 hover:bg-zinc-800 cursor-pointer"
+                  className="flex max-w-[500px] cursor-pointer flex-col items-start rounded-xl bg-zinc-700 p-3 hover:bg-zinc-800"
                   onClick={() => {
-                    window.open(href, "_blank");
+                    window.open(href, '_blank');
                   }}
                 >
-                  <p className="flex flex-row font-normal text-xs items-center gap-2 text-zinc-200 dark:text-zinc-200 leading-7w-full whitespace-pre-wrap overflow-hidden">
+                  <p className="flex flex-row items-center gap-2 overflow-hidden whitespace-pre-wrap font-normal text-xs text-zinc-200 leading-7w-full dark:text-zinc-200">
                     <Link
                       size={16}
                       weight="bold"
-                      className="text-white flex-shrink-0"
+                      className="flex-shrink-0 text-white"
                     />
                     {href}
                     <ArrowUpRight
                       size={16}
                       weight="bold"
-                      className="text-white flex-shrink-0"
+                      className="flex-shrink-0 text-white"
                     />
                   </p>
                 </HoverCardContent>
@@ -99,12 +98,12 @@ export const useMarkdown = () => {
         ),
         strong: (children) => <strong>{children}</strong>,
         code: (code, lang) => (
-          <div className="my-4 w-full flex-shrink-0 not-prose">
+          <div className="not-prose my-4 w-full flex-shrink-0">
             <CodeBlock lang={lang} code={code?.toString()} />
           </div>
         ),
         codespan: (code) => (
-          <span className="px-2 py-1 text-sm md:text-base rounded-md dark:text-white bg-zinc-50 text-zinc-800 dark:bg-white/10 font-medium">
+          <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-sm text-zinc-800 md:text-base dark:bg-white/10 dark:text-white">
             {code}
           </span>
         ),

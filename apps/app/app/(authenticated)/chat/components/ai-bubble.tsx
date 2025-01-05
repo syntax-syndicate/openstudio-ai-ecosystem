@@ -7,6 +7,7 @@ import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { useMarkdown } from '@/app/hooks/use-mdx';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
+import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { useTools } from '@/app/hooks/use-tools';
 import type { TToolKey } from '@/app/hooks/use-tools';
 import { Check, Copy, Quotes, TrashSimple } from '@phosphor-icons/react';
@@ -25,7 +26,7 @@ import {
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useRef, useState } from 'react';
-import * as Selection from "selection-popover";
+import * as Selection from 'selection-popover';
 
 export type TAIMessageBubble = {
   chatMessage: TChatMessage;
@@ -55,9 +56,10 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
   const { renderMarkdown, links } = useMarkdown();
   const { open: openSettings } = useSettings();
 
-  const { handleRunModel } = useChatContext();
+  const { handleRunModel, setContextValue, editor } = useChatContext();
   const { currentSession, removeMessage } = useSessionsContext();
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+  const { selectedText } = useTextSelection();
 
   const modelForMessage = getModelByKey(model);
 
@@ -157,17 +159,26 @@ export const AIMessageBubble = ({ chatMessage, isLast }: TAIMessageBubble) => {
         {rawAI && (
           <Selection.Root>
             <Selection.Trigger asChild>
-              <article className="prose dark:prose-invert w-full prose-zinc prose-h3:font-medium prose-h3:text-lg prose-heading:font-medium prose-strong:font-medium prose-headings:text-lg">
+              <article className="prose dark:prose-invert prose-zinc w-full prose-h3:font-medium prose-heading:font-medium prose-strong:font-medium prose-h3:text-lg prose-headings:text-lg">
                 {renderMarkdown(rawAI, !!isLoading, id)}
               </article>
             </Selection.Trigger>
             <Selection.Portal
-              container={document?.getElementById("chat-container")}
+              container={document?.getElementById('chat-container')}
             >
               <Selection.Content sticky="always" sideOffset={10}>
-                <Button size="sm">
-                  <Quotes size="16" weight="bold" /> Reply
-                </Button>
+                {selectedText && (
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setContextValue(selectedText);
+                      editor?.commands.clearContent();
+                      editor?.commands.focus('end');
+                    }}
+                  >
+                    <Quotes size="16" weight="bold" /> Reply
+                  </Button>
+                )}
               </Selection.Content>
             </Selection.Portal>
           </Selection.Root>

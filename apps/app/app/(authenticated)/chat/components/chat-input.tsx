@@ -1,10 +1,16 @@
+import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
+import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
+import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
+import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
+import { useChatContext } from '@/app/context/chat/provider';
 import { useFilters } from '@/app/context/filters/context';
+import { usePreferenceContext } from '@/app/context/preferences/provider';
+import { useSessionsContext } from '@/app/context/sessions/provider';
 import type { TModelKey } from '@/app/hooks/use-model-list';
+import { useModelList } from '@/app/hooks/use-model-list';
 import { useRecordVoice } from '@/app/hooks/use-record-voice';
 import useScrollToBottom from '@/app/hooks/use-scroll-to-bottom';
-import { useTextSelection } from '@/app/hooks/use-text-selection';
 import { slideUpVariant } from '@/app/lib/framer-motion';
-import { cn } from '@repo/design-system/lib/utils';
 import {
   ArrowDown,
   ArrowElbowDownRight,
@@ -13,16 +19,9 @@ import {
   Stop,
   X,
 } from '@phosphor-icons/react';
-import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
-import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
-import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
-import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
-import { useChatContext } from '@/app/context/chat/provider';
-import { usePreferenceContext } from '@/app/context/preferences/provider';
-import { useSessionsContext } from '@/app/context/sessions/provider';
-import { useModelList } from '@/app/hooks/use-model-list';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
+import { cn } from '@repo/design-system/lib/utils';
 import { EditorContent } from '@tiptap/react';
 import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
@@ -52,14 +51,14 @@ export const ChatInput = () => {
     setOpenPromptsBotCombo,
     sendMessage,
     isGenerating,
+    contextValue,
+    setContextValue,
     stopGeneration,
   } = useChatContext();
-  const [contextValue, setContextValue] = useState<string>("");
 
   const { preferences } = usePreferenceContext();
   const { models } = useModelList();
 
-  const { showPopup, selectedText, handleClearSelection } = useTextSelection();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [selectedModel, setSelectedModel] = useState<TModelKey>(
     preferences.defaultModel
@@ -69,11 +68,11 @@ export const ChatInput = () => {
     setSelectedModel(preferences.defaultModel);
   }, [models, preferences]);
 
-  console.log("selectedModelinput", preferences.defaultModel);
+  console.log('selectedModelinput', preferences.defaultModel);
 
   useEffect(() => {
     if (editor?.isActive) {
-      editor.commands.focus("end");
+      editor.commands.focus('end');
     }
   }, [editor?.isActive]);
 
@@ -106,7 +105,7 @@ export const ChatInput = () => {
   }, [text]);
 
   const renderScrollToBottom = () => {
-    if (showButton && !showPopup && !recording && !transcribing) {
+    if (showButton && !recording && !transcribing) {
       return (
         <motion.span
           initial={{ scale: 0, opacity: 0 }}
@@ -137,7 +136,7 @@ export const ChatInput = () => {
         >
           <Button
             rounded="full"
-            className="dark:bg-zinc-800 dark:border dark:text-white dark:border-white/10"
+            className="dark:border dark:border-white/10 dark:bg-zinc-800 dark:text-white"
             onClick={() => {
               stopGeneration();
             }}
@@ -177,20 +176,20 @@ export const ChatInput = () => {
   const renderSelectedContext = () => {
     if (contextValue) {
       return (
-        <div className="flex flex-row items-center bg-black/30 text-zinc-300 rounded-xl h-10 w-[700px] justify-start gap-2 pl-3 pr-1">
-          <ArrowElbowDownRight size={16} weight="fill" />
-          <p className="w-full overflow-hidden truncate ml-2 text-sm md:text-base ">
+        <div className="flex w-full flex-row items-start justify-start gap-2 rounded-xl border border-zinc-100 bg-white py-2 pr-2 pl-2 text-zinc-700 md:w-[700px] lg:w-[720px] dark:border-white/10 dark:bg-zinc-800 dark:text-zinc-200">
+          <ArrowElbowDownRight size={16} weight="bold" className="mt-1" />
+          <p className="ml-2 line-clamp-2 w-full overflow-hidden text-sm md:text-base">
             {contextValue}
           </p>
           <Button
-            size={"iconSm"}
+            size={'iconXS'}
             variant="ghost"
             onClick={() => {
-              setContextValue("");
+              setContextValue('');
             }}
-            className="flex-shrink-0 ml-4"
+            className="ml-4 flex-shrink-0"
           >
-            <X size={16} weight="bold" />
+            <X size={14} weight="bold" />
           </Button>
         </div>
       );
@@ -200,8 +199,8 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        "w-full flex flex-col items-center justify-end md:justify-center absolute bottom-0 px-2 md:px-4 pb-4 pt-16  right-0 gap-1",
-        "bg-gradient-to-t transition-all ease-in-out duration-1000 from-white dark:from-zinc-800 to-transparent from-70% left-0"
+        'absolute right-0 bottom-0 flex w-full flex-col items-center justify-end gap-1 px-2 pt-16 pb-4 md:justify-center md:px-4',
+        'left-0 bg-gradient-to-t from-70% from-white to-transparent transition-all duration-1000 ease-in-out dark:from-zinc-800'
       )}
     >
       <div className="flex flex-row items-center gap-2">
@@ -210,49 +209,49 @@ export const ChatInput = () => {
         {renderStopGeneration()}
         {renderListeningIndicator()}
       </div>
-      <div className="flex flex-col gap-1 w-full md:w-[700px] lg:w-[720px]">
+      <div className="flex w-full flex-col gap-1 md:w-[700px] lg:w-[720px]">
         {renderSelectedContext()}
         {editor && (
           <PromptsBotsCombo
             open={openPromptsBotCombo}
             onBack={() => {
               editor?.commands.clearContent();
-              editor?.commands.focus("end");
+              editor?.commands.focus('end');
             }}
             onPromptSelect={(prompt) => {
               editor?.commands.setContent(prompt.content);
-              editor?.commands.insertContent("");
-              editor?.commands.focus("end");
+              editor?.commands.insertContent('');
+              editor?.commands.focus('end');
               setOpenPromptsBotCombo(false);
             }}
             onOpenChange={setOpenPromptsBotCombo}
             onBotSelect={(bot) => {
               editor?.commands?.clearContent();
-              editor?.commands.focus("end");
+              editor?.commands.focus('end');
             }}
           >
             <motion.div
               variants={slideUpVariant}
-              initial={"initial"}
-              animate={editor.isEditable ? "animate" : "initial"}
-              className="flex flex-col items-start gap-0 bg-zinc-50 dark:bg-white/5 w-full dark:border-white/5 rounded-2xl overflow-hidden"
+              initial={'initial'}
+              animate={editor.isEditable ? 'animate' : 'initial'}
+              className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-2xl bg-zinc-50 dark:border-white/5 dark:bg-white/5"
             >
-              <div className="flex flex-row items-end pl-2 md:pl-3 pr-2 py-2 w-full gap-0">
+              <div className="flex w-full flex-row items-end gap-0 py-2 pr-2 pl-2 md:pl-3">
                 <EditorContent
                   editor={editor}
                   autoFocus
                   onKeyDown={(e) => {
-                    console.log("keydown", e.key);
-                    if (e.key === "Enter" && !e.shiftKey) {
+                    console.log('keydown', e.key);
+                    if (e.key === 'Enter' && !e.shiftKey) {
                       sendMessage();
                     }
                   }}
-                  className="w-full min-h-8 text-sm md:text-base max-h-[120px] overflow-y-auto outline-none focus:outline-none p-1 [&>*]:outline-none no-scrollbar [&>*]:no-scrollbar [&>*]:leading-6 wysiwyg cursor-text"
+                  className="no-scrollbar [&>*]:no-scrollbar wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-6 [&>*]:outline-none"
                 />
 
                 {!isGenerating && renderRecordingControls()}
               </div>
-              <div className="flex flex-row items-center w-full justify-start gap-0 pt-1 pb-2 px-2">
+              <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
                 <ModelSelect
                   selectedModel={selectedModel}
                   setSelectedModel={setSelectedModel}
@@ -274,11 +273,11 @@ export const ChatInput = () => {
                   <Button
                     size="iconSm"
                     rounded="full"
-                    variant={!!editor?.getText() ? "default" : "secondary"}
+                    variant={!!editor?.getText() ? 'default' : 'secondary'}
                     disabled={!editor?.getText()}
                     className={cn(
                       !!editor?.getText() &&
-                        "bg-zinc-800 dark:bg-emerald-500/20 text-white dark:text-emerald-400"
+                        'bg-zinc-800 text-white dark:bg-emerald-500/20 dark:text-emerald-400'
                     )}
                     onClick={() => {
                       sendMessage();

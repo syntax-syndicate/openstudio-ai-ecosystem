@@ -42,7 +42,9 @@ export const OllamaSettings = () => {
   return (
     <SettingsContainer title="Ollama Settings">
       <div className="flex flex-row items-end justify-between">
-        <p className="text-xs text-zinc-500 md:text-sm">Ollama local server URL</p>
+        <p className="text-xs text-zinc-500 md:text-sm">
+          Ollama local server URL
+        </p>
       </div>
       <Input
         placeholder="http://localhost:11434"

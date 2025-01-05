@@ -32,7 +32,7 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
       )}
     >
       <div className="flex w-full items-center justify-between border-zinc-50 border-b p-1 dark:border-white/5">
-        <p className="text-xs px-2 text-zinc-500">{language}</p>
+        <p className="px-2 text-xs text-zinc-500">{language}</p>
         <Tooltip content={showCopied ? 'Copied!' : 'Copy'}>
           <Button
             className="!text-xs"
