@@ -5,6 +5,7 @@ import { AnthropicSettings } from '@/app/(authenticated)/chat/components/setting
 import { CommonSettings } from '@/app/(authenticated)/chat/components/settings/common';
 import { Data } from '@/app/(authenticated)/chat/components/settings/data';
 import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/gemini';
+import { OllamaSettings } from '@/app/(authenticated)/chat/components/settings/ollama';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/openai';
 import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
 import { VoiceInput } from '@/app/(authenticated)/chat/components/settings/voice-input';
@@ -80,6 +81,12 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       icon: () => <ModelIcon size="md" type="gemini" />,
 
       component: <GeminiSettings />,
+    },
+    {
+      name: 'Ollama',
+      key: 'ollama',
+      icon: () => <ModelIcon size="md" type="ollama" />,
+      component: <OllamaSettings />,
     },
   ];
   const pluginsMenu: TSettingMenuItem[] = [

@@ -30,6 +30,7 @@ import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-setti
 import { useChatContext } from '@/app/context/chat/provider';
 import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { useSessionsContext } from '@/app/context/sessions/provider';
+import { useModelList } from '@/app/hooks/use-model-list';
 import { Button } from '@repo/design-system/components/ui/button';
 
 export type TAttachment = {
@@ -59,7 +60,7 @@ export const ChatInput = () => {
   const [contextValue, setContextValue] = useState<string>('');
 
   const { preferences } = usePreferenceContext();
-
+  const { models } = useModelList();
   const { showPopup, selectedText, handleClearSelection } = useTextSelection();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [selectedModel, setSelectedModel] = useState<TModelKey>(
@@ -67,16 +68,22 @@ export const ChatInput = () => {
   );
 
   useEffect(() => {
+    setSelectedModel(preferences.defaultModel);
+  }, [models]);
+
+  console.log('selectedModelinput', preferences.defaultModel);
+
+  useEffect(() => {
     if (editor?.isActive) {
       editor.commands.focus('end');
     }
   }, [editor?.isActive]);
 
-  useEffect(() => {
-    if (currentSession?.bot?.deafultBaseModel) {
-      setSelectedModel(currentSession.bot.deafultBaseModel);
-    }
-  }, [currentSession]);
+  // useEffect(() => {
+  //   if (currentSession?.bot?.deafultBaseModel) {
+  //     setSelectedModel(currentSession.bot.deafultBaseModel);
+  //   }
+  // }, [currentSession]);
 
   useEffect(() => {
     if (sessionId) {

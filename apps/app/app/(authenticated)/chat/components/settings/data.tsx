@@ -1,19 +1,22 @@
+import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { usePreferenceContext } from '@/app/context/preferences/provider';
 import { useSessionsContext } from '@/app/context/sessions/provider';
 import { useSettings } from '@/app/context/settings/context';
 import { models } from '@/app/hooks/use-model-list';
-import type { TPreferences } from '@/app/hooks/use-preferences';
+import {
+  type TPreferences,
+  defaultPreferences,
+} from '@/app/hooks/use-preferences';
 import { generateAndDownloadJson } from '@/app/lib/helper';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';
 import { Type } from '@repo/design-system/components/ui/text';
+import { PopOverConfirmProvider } from '@repo/design-system/components/ui/use-confirmation-popover';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import type { ChangeEvent } from 'react';
 import { z } from 'zod';
-import { SettingCard } from './setting-card';
-
 const apiSchema = z.object({
   openai: z.string().optional(),
   gemini: z.string().optional(),
@@ -156,37 +159,69 @@ export const Data = () => {
     }
   }
 
-  const clearAllData = async () => {
-    toast({
-      title: 'Clear All Data?',
-      description: 'This action cannot be undone.',
-      variant: 'destructive',
-      action: (
-        <Button
-          size="sm"
-          variant="default"
-          onClick={() => {
-            clearSessionsMutation.mutate(undefined, {
-              onSuccess: () => {
-                toast({
-                  title: 'Data Cleared',
-                  description: 'All chat data has been cleared',
-                  variant: 'default',
-                });
-                createSession({
-                  redirect: true,
-                });
-                dismiss();
-                dismiss();
-              },
-            });
-          }}
-        >
-          Clear All
-        </Button>
-      ),
-    });
-  };
+  // const clearAllData = async () => {
+  //   toast({
+  //     title: "Clear All Data?",
+  //     description: "This action cannot be undone.",
+  //     variant: "destructive",
+  //     action: (
+  //       <Button
+  //         size="sm"
+  //         variant="default"
+  //         onClick={() => {
+  //           clearSessionsMutation.mutate(undefined, {
+  //             onSuccess: () => {
+  //               toast({
+  //                 title: "Data Cleared",
+  //                 description: "All chat data has been cleared",
+  //                 variant: "default",
+  //               });
+  //               createSession({
+  //                 redirect: true,
+  //               });
+  //               dismiss();
+  //               dismiss();
+  //             },
+  //           });
+  //         }}
+  //       >
+  //         Clear All
+  //       </Button>
+  //     ),
+  //   });
+  // };
+
+  // const clearAllData = async () => {
+  //   toast({
+  //     title: "Clear All Data?",
+  //     description: "This action cannot be undone.",
+  //     variant: "destructive",
+  //     action: (
+  //       <Button
+  //         size="sm"
+  //         variant="default"
+  //         onClick={() => {
+  //           clearSessionsMutation.mutate(undefined, {
+  //             onSuccess: () => {
+  //               toast({
+  //                 title: "Data Cleared",
+  //                 description: "All chat data has been cleared",
+  //                 variant: "default",
+  //               });
+  //               createSession({
+  //                 redirect: true,
+  //               });
+  //               dismiss();
+  //               dismiss();
+  //             },
+  //           });
+  //         }}
+  //       >
+  //         Clear All
+  //       </Button>
+  //     ),
+  //   });
+  // };
 
   return (
     <SettingsContainer title="Manage your Data">
@@ -194,18 +229,59 @@ export const Data = () => {
         <SettingCard className="p-3">
           <Flex items="center" justify="between">
             <Type textColor="secondary">Clear all chat sessions</Type>
-            <Button variant="destructive" size="sm" onClick={clearAllData}>
-              Clear all
-            </Button>
+            <PopOverConfirmProvider
+              title="Are you sure you want to clear all chat sessions? This action cannot be undone."
+              confimBtnText="Clear All"
+              onConfirm={() => {
+                clearSessionsMutation.mutate(undefined, {
+                  onSuccess: () => {
+                    toast({
+                      title: 'Data Cleared',
+                      description: 'All chat data has been cleared',
+                      variant: 'default',
+                    });
+                    createSession({
+                      redirect: true,
+                    });
+                    dismiss();
+                  },
+                });
+              }}
+            >
+              <Button variant="destructive" size="sm">
+                Clear All
+              </Button>
+            </PopOverConfirmProvider>
           </Flex>
           <div className="my-3 h-[1px] w-full bg-zinc-500/10" />
           <Flex items="center" justify="between">
             <Type textColor="secondary">
-              Delete all data and reset all settings
+              Clear all chat sessions and preferences
             </Type>
-            <Button variant="destructive" size="sm" onClick={clearAllData}>
-              Reset
-            </Button>
+            <PopOverConfirmProvider
+              title="Are you sure you want to reset all chat sessions and preferences? This action cannot be undone."
+              confimBtnText="Reset All"
+              onConfirm={() => {
+                clearSessionsMutation.mutate(undefined, {
+                  onSuccess: () => {
+                    updatePreferences(defaultPreferences);
+                    toast({
+                      title: 'Reset successful',
+                      description: 'All chat data has been reseted',
+                      variant: 'default',
+                    });
+                    createSession({
+                      redirect: true,
+                    });
+                    dismiss();
+                  },
+                });
+              }}
+            >
+              <Button variant="destructive" size="sm">
+                Reset All
+              </Button>
+            </PopOverConfirmProvider>
           </Flex>
         </SettingCard>
 

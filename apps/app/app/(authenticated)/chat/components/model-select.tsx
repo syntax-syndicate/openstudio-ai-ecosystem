@@ -40,6 +40,8 @@ export const ModelSelect = ({
 
   const activeModel = getModelByKey(selectedModel);
 
+  console.log('activeModel', activeModel, selectedModel);
+
   return (
     <>
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>

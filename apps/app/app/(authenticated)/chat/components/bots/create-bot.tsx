@@ -3,6 +3,7 @@ import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select'
 import type { TBot } from '@/app/hooks/use-bots';
 import { convertFileToBase64 } from '@/app/lib/helper';
 import { ArrowLeft, Plus } from '@phosphor-icons/react';
+import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { ComingSoon } from '@repo/design-system/components/ui/coming-soon';
 import { FormLabel } from '@repo/design-system/components/ui/form-label';
@@ -62,6 +63,7 @@ export const CreateBot = ({ open, onOpenChange, onCreateBot }: TCreateBot) => {
           <ArrowLeft size={16} weight="bold" />
         </Button>
         <p className="font-medium text-base">Create New Bot</p>
+        <Badge>Beta</Badge>
       </div>
       <div className="no-scrollbar flex h-full w-full flex-col items-start gap-8 overflow-y-auto p-4 pb-[100px]">
         <div className="flex w-full flex-col gap-2">
@@ -174,7 +176,6 @@ export const CreateBot = ({ open, onOpenChange, onCreateBot }: TCreateBot) => {
       </div>
       <div className="absolute right-0 bottom-0 left-0 flex w-full flex-row items-center gap-3 border-zinc-500/20 border-t bg-white px-2 py-2 dark:bg-zinc-800">
         <Button
-          size="sm"
           variant="default"
           onClick={() => {
             formik.handleSubmit();
@@ -183,7 +184,6 @@ export const CreateBot = ({ open, onOpenChange, onCreateBot }: TCreateBot) => {
           Save
         </Button>
         <Button
-          size="sm"
           variant="ghost"
           onClick={() => {
             onOpenChange(false);

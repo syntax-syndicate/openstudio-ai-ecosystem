@@ -12,10 +12,10 @@ export const BotAvatar = ({ name, size, avatar }: TBotAvatar) => {
   return (
     <div
       className={cn(
-        'flex flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border border-transparent dark:border-white/10',
-        size === 'small' && 'rounded-lg',
-        size === 'medium' && 'rounded-xl',
-        size === 'large' && 'rounded-2xl'
+        'flex flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-transparent dark:border-white/10'
+        // size === "small" && "rounded-lg",
+        // size === "medium" && "rounded-xl",
+        // size === "large" && "rounded-2xl"
       )}
     >
       {avatar ? (
@@ -46,15 +46,7 @@ export const BotAvatar = ({ name, size, avatar }: TBotAvatar) => {
           square
           name={name}
           variant="beam"
-          colors={[
-            '#ABECE9',
-            '#F2FF00',
-            '#FF9F15',
-            '#FB797B',
-            '#9D7342',
-            '#3B8C91',
-            '#272C2C',
-          ]}
+          colors={['#0DB2AC', '#F5DD7E', '#FC8D4D', '#FC694D', '#FABA32']}
         />
       )}
     </div>

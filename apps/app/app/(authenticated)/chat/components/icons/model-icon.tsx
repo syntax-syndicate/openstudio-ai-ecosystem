@@ -12,7 +12,8 @@ export type TModelIcon = {
     | 'websearch'
     | 'calculator'
     | 'duckduckgo_search'
-    | 'website_reader';
+    | 'website_reader'
+    | 'ollama';
   size: 'sm' | 'md' | 'lg';
 };
 
@@ -28,6 +29,7 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
     calculator: '/icons/calculator.svg',
     duckduckgo_search: '/icons/duckduckgo.svg',
     website_reader: '/icons/website_reader.svg',
+    ollama: '/icons/ollama.svg',
   };
   return (
     <Image
