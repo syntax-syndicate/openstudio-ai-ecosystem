@@ -1,7 +1,4 @@
-import { BotAvatar } from '@/app/(authenticated)/chat/components/bot-avatar';
-import { useBots } from '@/app/context/bots/context';
 import { usePrompts } from '@/app/context/prompts/context';
-import type { TBot } from '@/app/hooks/use-bots';
 import type { TPrompt } from '@/app/hooks/use-prompts';
 import { Plus } from '@phosphor-icons/react';
 import {
@@ -24,7 +21,6 @@ export type TPromptsBotsCombo = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onPromptSelect: (prompt: TPrompt) => void;
-  onBotSelect?: (prompt: TBot) => void;
   onBack: () => void;
 };
 export const PromptsBotsCombo = ({
@@ -32,12 +28,11 @@ export const PromptsBotsCombo = ({
   children,
   onOpenChange,
   onBack,
-  onBotSelect,
   onPromptSelect,
 }: TPromptsBotsCombo) => {
   const [commandInput, setCommandInput] = useState('');
   const { open: openPrompts, allPrompts } = usePrompts();
-  const { open: openBot, allBots, assignBot } = useBots();
+
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverAnchor className="w-full">{children}</PopoverAnchor>
@@ -72,14 +67,6 @@ export const PromptsBotsCombo = ({
               <Plus size={14} weight="bold" className="flex-shrink-0" /> Create
               New Prompt
             </CommandItem>
-            <CommandItem
-              onSelect={() => {
-                openBot('create');
-              }}
-            >
-              <Plus size={14} weight="bold" className="flex-shrink-0" /> Create
-              New Bot
-            </CommandItem>
             {!!allPrompts?.length && (
               <CommandGroup heading="Prompts">
                 {allPrompts?.map((prompt, index) => (
@@ -90,27 +77,6 @@ export const PromptsBotsCombo = ({
                     }}
                   >
                     {prompt.name}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            )}
-            {!!allBots?.length && (
-              <CommandGroup heading="Bots">
-                {allBots?.map((bot, index) => (
-                  <CommandItem
-                    key={index}
-                    onSelect={() => {
-                      assignBot(bot);
-                      onBotSelect && onBotSelect(bot);
-                      onOpenChange(false);
-                    }}
-                  >
-                    <BotAvatar
-                      name={bot.name}
-                      size="small"
-                      avatar={bot?.avatar}
-                    />{' '}
-                    {bot.name}
                   </CommandItem>
                 ))}
               </CommandGroup>

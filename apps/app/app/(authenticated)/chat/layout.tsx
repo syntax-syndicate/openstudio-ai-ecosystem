@@ -1,6 +1,6 @@
 import { MainLayout } from '@/app/(authenticated)/chat/components/main-layout';
 import { Header } from '@/app/(authenticated)/components/header';
-import { BotsProvider } from '@/app/context/bots/provider';
+import { AssistantsProvider } from '@/app/context/assistants/provider';
 import { ChatProvider } from '@/app/context/chat/provider';
 import { ConfirmProvider } from '@/app/context/confirm/provider';
 import { FiltersProvider } from '@/app/context/filters/provider';
@@ -43,11 +43,11 @@ export default function ChatLayout({
                   <SettingsProvider>
                     <ChatProvider>
                       <FiltersProvider>
-                        <BotsProvider>
+                        <AssistantsProvider>
                           <PromptsProvider>
                             <MainLayout>{children}</MainLayout>
                           </PromptsProvider>
-                        </BotsProvider>
+                        </AssistantsProvider>
                       </FiltersProvider>
                     </ChatProvider>
                   </SettingsProvider>

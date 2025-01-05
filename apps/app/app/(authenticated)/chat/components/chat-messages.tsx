@@ -1,5 +1,4 @@
 import { AIMessageBubble } from '@/app/(authenticated)/chat/components/ai-bubble';
-import { useBots } from '@/app/context/bots/context';
 import { useSessionsContext } from '@/app/context/sessions/provider';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import { Quotes } from '@phosphor-icons/react';
@@ -12,7 +11,6 @@ export const ChatMessages = () => {
   const { currentSession, updateSessionMutation, refetchCurrentSession } =
     useSessionsContext();
   const chatContainer = useRef<HTMLDivElement>(null);
-  const { open: openBot } = useBots();
 
   useEffect(() => {
     scrollToBottom();

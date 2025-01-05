@@ -1,9 +1,9 @@
 import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
 import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greeting';
-import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
 import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
 import { PromptsBotsCombo } from '@/app/(authenticated)/chat/components/prompts-bots-combo';
 import { QuickSettings } from '@/app/(authenticated)/chat/components/quick-settings';
+import { useAssistantContext } from '@/app/context/assistants/provider';
 import { useChatContext } from '@/app/context/chat/provider';
 import { useFilters } from '@/app/context/filters/context';
 import { usePreferenceContext } from '@/app/context/preferences/provider';
@@ -17,11 +17,9 @@ import {
   ArrowDown,
   ArrowElbowDownRight,
   ArrowUp,
-  Command,
   Stop,
   X,
 } from '@phosphor-icons/react';
-import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { cn } from '@repo/design-system/lib/utils';
 import { EditorContent } from '@tiptap/react';
@@ -46,6 +44,7 @@ export const ChatInput = () => {
     transcribing,
   } = useRecordVoice();
   const { currentSession } = useSessionsContext();
+  const { selectedAssistant, open: openAssistants } = useAssistantContext();
   const {
     editor,
     handleRunModel,
@@ -235,10 +234,6 @@ export const ChatInput = () => {
               setOpenPromptsBotCombo(false);
             }}
             onOpenChange={setOpenPromptsBotCombo}
-            onBotSelect={(bot) => {
-              editor?.commands?.clearContent();
-              editor?.commands.focus('end');
-            }}
           >
             <motion.div
               variants={slideUpVariant}
@@ -262,23 +257,18 @@ export const ChatInput = () => {
                 {!isGenerating && renderRecordingControls()}
               </div>
               <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
-                <ModelSelect
-                  selectedModel={selectedModel}
-                  setSelectedModel={setSelectedModel}
-                />
+                <Button
+                  variant={'ghost'}
+                  onClick={openAssistants}
+                  className={cn('gap-2 pr-3 pl-1 text-xs md:text-sm')}
+                  size="sm"
+                >
+                  {selectedAssistant?.model?.icon('sm')}
+                  {selectedAssistant?.assistant.name}
+                </Button>
                 <PluginSelect selectedModel={selectedModel} />
                 <QuickSettings />
                 <div className="flex-1"></div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={openFilters}
-                  className="px-1.5"
-                >
-                  <Badge className="flex">
-                    <Command size={16} weight="bold" /> K
-                  </Badge>
-                </Button>
                 {!isGenerating && (
                   <Button
                     size="iconSm"

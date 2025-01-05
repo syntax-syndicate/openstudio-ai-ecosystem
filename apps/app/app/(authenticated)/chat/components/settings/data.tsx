@@ -54,6 +54,7 @@ const runModelPropsSchema = z.object({
     name: z.string(),
     baseModel: z.string(),
     systemPrompt: z.string(),
+    type: z.string().refine((val) => ['custom', 'base'].includes(val)),
   }),
 });
 
@@ -99,7 +100,6 @@ const importSchema = z.object({
   apiKeys: apiSchema.optional(),
   preferences: preferencesSchema.optional(),
   sessions: sessionSchema.array().optional(),
-  bots: botSchema.array().optional(),
   prompts: z.array(z.string()).optional(),
 });
 
@@ -177,7 +177,7 @@ export const Data = () => {
             (s) => !!s.messages.length
           );
           const mergedSessions = mergeSessions(
-            incomingSessions || [],
+            (incomingSessions as any) || [],
             sessions
           );
           clearSessionsMutation.mutate(undefined, {

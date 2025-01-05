@@ -1,5 +1,5 @@
 'use client';
-import type { TBot } from '@/app/hooks/use-bots';
+
 import {
   type TChatMessage,
   type TChatSession,
@@ -13,7 +13,7 @@ export type TSessionsContext = {
   sessions: TChatSession[];
   isAllSessionLoading: boolean;
   isCurrentSessionLoading: boolean;
-  createSession: (props: { bot?: TBot; redirect?: boolean }) => void;
+  createSession: (props: { redirect?: boolean }) => void;
   currentSession?: TChatSession;
   setCurrentSession?: React.Dispatch<
     React.SetStateAction<TChatSession | undefined>
@@ -73,8 +73,9 @@ export const SessionsProvider = ({ children }: TSessionsProvider) => {
       createSession({ redirect: true });
     }
   }, [currentSessionQuery?.error]);
-  const createSession = async (props: { bot?: TBot; redirect?: boolean }) => {
-    const { bot, redirect } = props;
+
+  const createSession = async (props: { redirect?: boolean }) => {
+    const { redirect } = props;
     await createNewSessionMutation.mutateAsync(undefined, {
       onSuccess: (data) => {
         console.log('new session', data);

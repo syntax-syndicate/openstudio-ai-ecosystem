@@ -1,5 +1,4 @@
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
-import { useBots } from '@/app/context/bots/context';
 import { useFilters } from '@/app/context/filters/context';
 import { usePrompts } from '@/app/context/prompts/context';
 import { useSessionsContext } from '@/app/context/sessions/provider';
@@ -10,7 +9,6 @@ import {
   GearSix,
   Moon,
   Plus,
-  Robot,
   Sun,
 } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -30,7 +28,6 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { open: openFilters } = useFilters();
   const { open: openPrompts } = usePrompts();
-  const { open: openBots } = useBots();
   const { createSession } = useSessionsContext();
   const renderNewSession = () => {
     return (
@@ -95,14 +92,6 @@ export const Navbar = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
           <DropdownMenuContent className="mr-2 min-w-[250px] text-sm md:text-base">
-            <DropdownMenuItem
-              onClick={() => {
-                openBots();
-              }}
-            >
-              <Robot size={14} weight="bold" />
-              Bots
-            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 openPrompts();
