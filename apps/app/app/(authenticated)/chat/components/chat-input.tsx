@@ -12,6 +12,7 @@ import {
   ArrowUp,
   Command,
   Quotes,
+  Stop,
   X,
 } from '@phosphor-icons/react';
 
@@ -53,6 +54,8 @@ export const ChatInput = () => {
     openPromptsBotCombo,
     setOpenPromptsBotCombo,
     sendMessage,
+    isGenerating,
+    stopGeneration,
   } = useChatContext();
   const [contextValue, setContextValue] = useState<string>('');
 
@@ -219,19 +222,32 @@ export const ChatInput = () => {
                   className="no-scrollbar [&>*]:no-scrollbar wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-6 [&>*]:outline-none"
                 />
 
-                {renderRecordingControls()}
+                {!isGenerating && renderRecordingControls()}
 
-                <Button
-                  size="icon"
-                  variant={!!editor?.getText() ? 'default' : 'ghost'}
-                  disabled={!editor?.getText()}
-                  className="ml-1 h-8 min-w-8"
-                  onClick={() => {
-                    sendMessage();
-                  }}
-                >
-                  <ArrowUp size={20} weight="bold" />
-                </Button>
+                {isGenerating ? (
+                  <Button
+                    size="icon"
+                    className="ml-1 h-8 min-w-8"
+                    variant={isGenerating ? 'secondary' : 'ghost'}
+                    onClick={() => {
+                      stopGeneration();
+                    }}
+                  >
+                    <Stop size={16} weight="fill" />
+                  </Button>
+                ) : (
+                  <Button
+                    size="icon"
+                    variant={!!editor?.getText() ? 'secondary' : 'ghost'}
+                    disabled={!editor?.getText()}
+                    className="ml-1 h-8 min-w-8"
+                    onClick={() => {
+                      sendMessage();
+                    }}
+                  >
+                    <ArrowUp size={20} weight="bold" />
+                  </Button>
+                )}
               </div>
               <div className="flex w-full flex-row items-center justify-start gap-0 px-2 pt-1 pb-2">
                 <ModelSelect

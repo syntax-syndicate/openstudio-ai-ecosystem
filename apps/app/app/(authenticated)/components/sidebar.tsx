@@ -19,6 +19,7 @@ import {
 import { cn } from '@repo/design-system/lib/utils';
 import {
   AnchorIcon,
+  BotIcon,
   FrameIcon,
   LifeBuoyIcon,
   MapIcon,
@@ -58,6 +59,11 @@ const data = {
         //   url: '#',
         // },
       ],
+    },
+    {
+      title: 'Playground',
+      url: '/playground',
+      icon: BotIcon,
     },
     // {
     //   title: 'Models',

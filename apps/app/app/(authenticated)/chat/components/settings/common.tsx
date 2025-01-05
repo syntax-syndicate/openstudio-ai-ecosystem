@@ -66,7 +66,7 @@ export const CommonSettings = () => {
   return (
     <SettingsContainer title="Model Settings">
       <Flex direction="col" gap="sm" className="w-full" items="start">
-        <Flex className="py-1 w-full" items="end" justify="between">
+        <Flex className="w-full py-1" items="end" justify="between">
           <Type
             size="xs"
             textColor="secondary"
@@ -74,7 +74,7 @@ export const CommonSettings = () => {
           >
             System Default Prompt <Info weight="regular" size={14} />
           </Type>
-         <Button
+          <Button
             variant="outline"
             size="sm"
             onClick={() => {

@@ -7,7 +7,6 @@ import { useSessionsContext } from '@/app/context/sessions/provider';
 import type { TChatMessage } from '@/app/hooks/use-chat-session';
 import type { TRunModel } from '@/app/hooks/use-llm';
 import type { TModelKey } from '@/app/hooks/use-model-list';
-import { removeExtraSpaces } from '@/app/lib/helper';
 import { ArrowElbowDownRight, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Type } from '@repo/design-system/components/ui/text';
@@ -70,9 +69,9 @@ export const ChatMessages = () => {
             height={0}
           />
         )}
-        <div className="ml-16 flex flex-row gap-2 rounded-2xl bg-zinc-50 px-3 py-2 text-sm text-zinc-600 md:text-base dark:bg-black/30 dark:text-zinc-100">
+        <div className="ml-16 flex flex-row gap-2 rounded-2xl bg-zinc-50 px-3 py-2 text-sm text-zinc-600 md:ml-32 md:text-base dark:bg-black/30 dark:text-zinc-100">
           <span className="whitespace-pre-wrap pt-[0.20em] pb-[0.15em] leading-6">
-            {removeExtraSpaces(message.rawHuman)}
+            {message.rawHuman}
           </span>
         </div>
         <AIMessageBubble chatMessage={message} isLast={isLast} />

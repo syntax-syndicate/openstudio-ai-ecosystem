@@ -17,6 +17,7 @@ import {
 } from '@langchain/core/prompts';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import moment from 'moment';
+import { useState } from 'react';
 import { v4 } from 'uuid';
 
 export type TRunModel = {
@@ -30,19 +31,21 @@ export type TRunModel = {
 
 export type TUseLLM = {
   onChange?: (props: TChatMessage) => void;
+  onFinish?: () => void;
 };
 
-export const useLLM = ({ onChange }: TUseLLM) => {
+export const useLLM = ({ onChange, onFinish }: TUseLLM) => {
   const { addMessageToSession, getSessionById, updateSessionMutation } =
     useSessionsContext();
   const { apiKeys, preferences } = usePreferenceContext();
   const { createInstance, getModelByKey } = useModelList();
-  const abortController = new AbortController();
   const { toast } = useToast();
   const { getToolByKey } = useTools();
+  const [abortController, setAbortController] = useState<AbortController>();
 
   const stopGeneration = () => {
-    abortController?.abort();
+    console.log('stop generation');
+    abortController?.abort('cancel');
   };
 
   const preparePrompt = async ({
@@ -107,6 +110,8 @@ export const useLLM = ({ onChange }: TUseLLM) => {
 
   const runModel = async (props: TRunModel) => {
     const { sessionId, messageId, input, context, image, model } = props;
+    const currentAbortController = new AbortController();
+    setAbortController(currentAbortController);
 
     const selectedSession = await getSessionById(sessionId);
     console.log('run model', props);
@@ -151,8 +156,8 @@ export const useLLM = ({ onChange }: TUseLLM) => {
       onChange?.({
         ...defaultChangeProps,
         isLoading: false,
-        hasError: true,
-        errorMesssage: 'API key not found',
+        stop: true,
+        stopReason: 'apikey',
       });
       return;
     }
@@ -165,7 +170,11 @@ export const useLLM = ({ onChange }: TUseLLM) => {
       bot: selectedSession?.bot,
     });
 
-    const selectedModel = await createInstance(selectedModelKey, apiKey);
+    const selectedModel = (await createInstance(selectedModelKey, apiKey)).bind(
+      {
+        signal: currentAbortController?.signal,
+      }
+    );
 
     const previousAllowedChatHistory = chatHistory
       .slice(0, messageLimit)
@@ -215,41 +224,32 @@ export const useLLM = ({ onChange }: TUseLLM) => {
         ? agentExecutor
         : chainWithoutTools;
 
-    const stream: any = await executor.invoke(
-      {
-        chat_history: previousAllowedChatHistory || [],
-        context,
-        input,
-      },
-      {
-        callbacks: [
-          {
-            handleLLMStart: async (llm: Serialized, prompts: string[]) => {
-              console.log('llm start');
+    try {
+      const stream: any = await executor.invoke(
+        {
+          chat_history: previousAllowedChatHistory || [],
+          context,
+          input,
+        },
+        {
+          callbacks: [
+            {
+              handleLLMStart: async (llm: Serialized, prompts: string[]) => {
+                console.log('llm start');
 
-              onChange?.({
-                ...defaultChangeProps,
-                rawAI: streamedMessage,
-                isLoading: true,
-                isToolRunning: false,
-                hasError: false,
-                toolName,
-                errorMesssage: undefined,
-                createdAt: moment().toISOString(),
-              });
-            },
+                onChange?.({
+                  ...defaultChangeProps,
+                  rawAI: streamedMessage,
+                  isLoading: true,
+                  isToolRunning: false,
+                  toolName,
+                  stop: false,
+                  stopReason: undefined,
+                  createdAt: moment().toISOString(),
+                });
+              },
 
-            handleToolStart(
-              tool,
-              input,
-              runId,
-              parentRunId,
-              tags,
-              metadata,
-              name
-            ) {
-              console.log(
-                'tool start',
+              handleToolStart(
                 tool,
                 input,
                 runId,
@@ -257,82 +257,121 @@ export const useLLM = ({ onChange }: TUseLLM) => {
                 tags,
                 metadata,
                 name
-              );
-              toolName = name;
-              onChange?.({
-                ...defaultChangeProps,
-                toolName: name,
-                isToolRunning: true,
-              });
-            },
-            handleToolEnd(output, runId, parentRunId, tags) {
-              onChange?.({
-                ...defaultChangeProps,
-                isToolRunning: false,
-                toolName,
-                toolResult: output,
-              });
-            },
-            handleAgentAction(action, runId, parentRunId, tags) {
-              console.log('agent action', action);
-            },
+              ) {
+                console.log(
+                  'tool start',
+                  tool,
+                  input,
+                  runId,
+                  parentRunId,
+                  tags,
+                  metadata,
+                  name
+                );
+                toolName = name;
+                onChange?.({
+                  ...defaultChangeProps,
+                  toolName: name,
+                  isToolRunning: true,
+                });
+              },
+              handleToolEnd(output, runId, parentRunId, tags) {
+                onChange?.({
+                  ...defaultChangeProps,
+                  isToolRunning: false,
+                  toolName,
+                  toolResult: output,
+                });
+              },
+              handleAgentAction(action, runId, parentRunId, tags) {
+                console.log('agent action', action);
+              },
 
-            handleLLMEnd: async (output: LLMResult) => {
-              console.log('llm end', output);
+              handleLLMEnd: async (output: LLMResult) => {
+                console.log('llm end', output);
+              },
+              handleLLMNewToken: async (token: string) => {
+                console.log('token', token);
+
+                streamedMessage += token;
+                onChange?.({
+                  ...defaultChangeProps,
+                  isLoading: true,
+                  rawAI: streamedMessage,
+                  toolName,
+                  stop: false,
+                  stopReason: undefined,
+                });
+              },
+              handleChainEnd: async (output: LLMResult) => {
+                console.log('chain end', output);
+              },
+
+              handleLLMError: async (err: Error) => {
+                console.error(err);
+                if (!currentAbortController?.signal.aborted) {
+                  toast({
+                    title: 'Error',
+                    description: 'Something went wrong',
+                    variant: 'destructive',
+                  });
+                }
+
+                const chatMessage: TChatMessage = {
+                  ...defaultChangeProps,
+                  isLoading: false,
+                  rawHuman: input,
+                  toolName,
+                  isToolRunning: false,
+                  rawAI: streamedMessage,
+                  stop: true,
+                  stopReason: currentAbortController?.signal.aborted
+                    ? 'cancel'
+                    : 'error',
+                };
+                if (!!streamedMessage?.length) {
+                  await addMessageToSession(sessionId, chatMessage);
+                }
+                onChange?.(chatMessage);
+                onFinish?.();
+              },
             },
-            handleLLMNewToken: async (token: string) => {
-              console.log('token', token);
+          ],
+        }
+      );
 
-              streamedMessage += token;
-              onChange?.({
-                ...defaultChangeProps,
-                isLoading: true,
-                rawAI: streamedMessage,
-                toolName,
-                hasError: false,
-                errorMesssage: undefined,
-              });
-            },
-            handleChainEnd: async (output: LLMResult) => {
-              console.log('chain end', output);
-            },
+      // abortController.signal.addEventListener(
+      //   "abort",
+      //   () => {
+      //     console.log("abort", stream);
+      //     void stream?.cancel?.("abort");
+      //   },
+      //   {
+      //     once: true,
+      //   }
+      // );
 
-            handleLLMError: async (err: Error) => {
-              console.error(err);
-              toast({
-                title: 'Error',
-                description: 'Something went wrong',
-                variant: 'destructive',
-              });
-              onChange?.({
-                ...defaultChangeProps,
-                isLoading: false,
-                hasError: true,
-                errorMesssage: 'Something went wrong',
-              });
-            },
-          },
-        ],
-      }
-    );
+      console.log('stream', stream);
 
-    console.log('stream', stream);
+      const chatMessage: TChatMessage = {
+        ...defaultChangeProps,
+        rawHuman: input,
+        rawAI: stream?.content || stream?.output,
+        isToolRunning: false,
+        toolName,
+        isLoading: false,
+        stop: false,
+        stopReason: undefined,
+        createdAt: moment().toISOString(),
+      };
 
-    const chatMessage: TChatMessage = {
-      ...defaultChangeProps,
-      rawHuman: input,
-      rawAI: stream?.content || stream?.output,
-      isToolRunning: false,
-      toolName,
-      isLoading: false,
-      hasError: false,
-      createdAt: moment().toISOString(),
-    };
-
-    console.log('saving', chatMessage);
-    await addMessageToSession(sessionId, chatMessage);
-    await generateTitleForSession(sessionId);
-    await onChange?.(chatMessage);
+      await addMessageToSession(sessionId, chatMessage);
+      await generateTitleForSession(sessionId);
+      await onChange?.(chatMessage);
+      onFinish?.();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const generateTitleForSession = async (sessionId: string) => {
@@ -340,7 +379,7 @@ export const useLLM = ({ onChange }: TUseLLM) => {
     const modelKey = preferences.defaultModel;
     const selectedModelKey = getModelByKey(modelKey);
 
-    console.log("generate title for session", session);
+    console.log('generate title for session', session);
 
     if (!selectedModelKey) {
       throw new Error('Model not found');
@@ -374,7 +413,7 @@ export const useLLM = ({ onChange }: TUseLLM) => {
         message: [new HumanMessage(firstMessage.rawHuman)],
       });
 
-      const generation = await selectedModel!.invoke(prompt, {});
+      const generation = await selectedModel.invoke(prompt, {});
 
       console.log('title generation', generation);
 
