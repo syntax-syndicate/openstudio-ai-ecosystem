@@ -76,7 +76,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
   const [currentMessage, setCurrentMessage] = useState<TChatMessage>();
   const [currentTools, setCurrentTools] = useState<TToolResponse[]>([]);
   const { getSessionById, updateSessionMutation } = useSessionsContext();
-  const { apiKeys, preferences } = usePreferenceContext();
+  const { apiKeys, preferences, updatePreferences } = usePreferenceContext();
   const { createInstance, getModelByKey } = useModelList();
   const { toast } = useToast();
   const { getToolByKey } = useTools();
@@ -153,7 +153,9 @@ export const ChatProvider = ({ children }: TChatProvider) => {
 
     const system: BaseMessagePromptTemplateLike = [
       'system',
-      `${systemPrompt} ${
+      `${systemPrompt}\n Things to remember: \n ${preferences.memories.join(
+        '\n'
+      )}\n ${
         hasPreviousMessages
           ? `You can also refer to these previous conversations`
           : ``
@@ -259,6 +261,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         })
         ?.map((p) =>
           getToolByKey(p)?.tool({
+            updatePreferences,
             preferences,
             apiKeys,
             sendToolResponse: (arg: TToolResponse) => {

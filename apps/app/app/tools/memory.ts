@@ -15,7 +15,7 @@ const memoryParser = StructuredOutputParser.fromZodSchema(
 );
 
 const memoryTool = (args: TToolArg) => {
-  const { apiKeys, sendToolResponse, preferences } = args;
+  const { apiKeys, sendToolResponse, preferences, updatePreferences } = args;
   const memorySchema = z.object({
     memory: z
       .string()
@@ -48,10 +48,15 @@ const memoryTool = (args: TToolArg) => {
           existing_memory: existingMemories?.join('\n'),
           format_instructions: memoryParser.getFormatInstructions(),
         });
-        if (!response) {
+        if (!response?.memories?.length) {
           runManager?.handleToolError('Error performing Duckduck go search');
-          throw new Error('Invalid response');
+          return question;
         }
+
+        updatePreferences({
+          memories: response.memories,
+        });
+
         console.log('tool updated', response);
         sendToolResponse({
           toolName: 'memory',
@@ -60,8 +65,7 @@ const memoryTool = (args: TToolArg) => {
           },
           toolResponse: response,
         });
-        const searchPrompt = question;
-        return searchPrompt;
+        return question;
       } catch (error) {
         return 'Error performing search. Must not use duckduckgo_search tool now. Ask user to check API keys.';
       }

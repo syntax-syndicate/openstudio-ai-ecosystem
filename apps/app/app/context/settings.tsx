@@ -1,10 +1,12 @@
 'use client';
 import { CommonSettings } from '@/app/(authenticated)/chat/components/settings/common';
 import { Data } from '@/app/(authenticated)/chat/components/settings/data';
+import { MemorySettings } from '@/app/(authenticated)/chat/components/settings/memory';
 import { ModelSettings } from '@/app/(authenticated)/chat/components/settings/models';
 import { PulginSettings } from '@/app/(authenticated)/chat/components/settings/plugins';
 import { VoiceInput } from '@/app/(authenticated)/chat/components/settings/voice-input';
 import {
+  BrainIcon,
   DashboardCircleIcon,
   Database02Icon,
   Settings03Icon,
@@ -75,6 +77,12 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       icon: () => <DashboardCircleIcon size={18} strokeWidth="2" />,
       key: 'plugins',
       component: <PulginSettings />,
+    },
+    {
+      name: 'Memory',
+      icon: () => <BrainIcon size={18} strokeWidth="2" />,
+      key: 'memory',
+      component: <MemorySettings />,
     },
     {
       name: 'Voice Input',
