@@ -18,7 +18,7 @@ export const ChatMessages = () => {
     scrollToBottom();
   }, [currentSession?.messages?.length]);
   function isUserNearBottom() {
-    var scrollThreshold = 200;
+    var scrollThreshold = 50;
     if (chatContainer.current) {
       // Adjust this value as needed
       return (
