@@ -1,7 +1,7 @@
 import { useSessionsContext } from '@/app/context/sessions';
 import type { TChatSession } from '@/app/hooks/use-chat-session';
 import { useModelList } from '@/app/hooks/use-model-list';
-import { Delete01Icon, Edit02Icon } from '@hugeicons/react';
+import { PencilSimple, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';
@@ -118,7 +118,7 @@ export const HistoryItem = ({
               e.stopPropagation();
             }}
           >
-            <Edit02Icon size={14} variant="stroke" strokeWidth="2" />
+            <PencilSimple size={14} weight="bold" />
           </Button>
           <Tooltip content="Delete">
             <Popover
@@ -134,7 +134,7 @@ export const HistoryItem = ({
                     e.stopPropagation();
                   }}
                 >
-                  <Delete01Icon size={14} variant="stroke" strokeWidth="2" />
+                  <TrashSimple size={14} weight="bold" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="z-[1000]" side="bottom">
