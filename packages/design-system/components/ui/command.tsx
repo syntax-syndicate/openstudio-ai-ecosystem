@@ -4,9 +4,8 @@ import * as React from "react"
 import { type DialogProps } from "@radix-ui/react-dialog"
 import { Command as CommandPrimitive } from "cmdk"
 import { cn } from "@repo/design-system/lib/utils"
-import { Dialog, DialogContent } from "@repo/design-system/components/ui/dialog"
-// @ts-ignore
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { Dialog, DialogContent, DialogOverlay } from "@repo/design-system/components/ui/dialog"
+import { Search01Icon } from "@hugeicons/react";
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -40,15 +39,15 @@ const CommandInput = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-    <MagnifyingGlass
+    <Search01Icon
       size={24}
-      weight="bold"
+      strokeWidth={2}
       className="mr-2 h-4 w-4 shrink-0 opacity-50"
     />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        "flex h-10 w-full rounded-md bg-transparent py-3 text-sm md:text-base outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+        "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
@@ -122,7 +121,7 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer gap-2 text-zinc-800 dark:text-zinc-100 items-center rounded-xl !px-2 !py-1.5 min-h-10 text-xs md:text-sm outline-none aria-selected:bg-zinc-100 dark:aria-selected:bg-zinc-900/50 aria-selected:text-zinc-800 aria-disabled:opacity-50 aria-disabled:pointer-events-none dark:aria-selected:text-zinc-100",
+      "relative flex cursor-pointer font-medium gap-2 text-zinc-800 dark:text-zinc-100 items-center rounded-xl !px-3 !py-2 min-h-12 text-xs md:text-sm outline-none aria-selected:bg-zinc-100 dark:aria-selected:bg-zinc-900/50 aria-selected:text-zinc-800 aria-disabled:opacity-50 aria-disabled:pointer-events-none dark:aria-selected:text-zinc-100",
       className
     )}
     {...props}

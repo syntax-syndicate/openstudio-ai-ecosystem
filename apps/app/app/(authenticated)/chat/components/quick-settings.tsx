@@ -5,7 +5,8 @@ import {
   type TPreferences,
   defaultPreferences,
 } from '@/app/hooks/use-preferences';
-import { ArrowClockwise, Info, SlidersHorizontal } from '@phosphor-icons/react';
+import { Settings03Icon } from '@hugeicons/react';
+import { ArrowClockwise, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import {
@@ -45,7 +46,7 @@ export const QuickSettings = () => {
       <Tooltip content="Configure Model">
         <PopoverTrigger asChild>
           <Button variant="ghost" size="iconSm">
-            <SlidersHorizontal size={16} weight="bold" />
+            <Settings03Icon size={16} variant="stroke" strokeWidth="2" />
           </Button>
         </PopoverTrigger>
       </Tooltip>

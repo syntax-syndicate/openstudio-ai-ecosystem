@@ -1,9 +1,8 @@
-import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { usePreferenceContext } from '@/app/context/preferences';
 import { useLLMTest } from '@/app/hooks/use-llm-test';
-
 import { ArrowRight, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';
 import { useEffect, useState } from 'react';
 
@@ -15,7 +14,7 @@ export const OpenAISettings = () => {
     setKey(apiKeys.openai || '');
   }, [apiKeys.openai]);
   return (
-    <SettingsContainer title="OpenAI Settings">
+    <Flex direction="col" gap="sm">
       <div className="flex flex-row items-end justify-between">
         <p className="text-xs text-zinc-500 md:text-sm">Open AI API Key</p>
       </div>
@@ -66,6 +65,6 @@ export const OpenAISettings = () => {
           else.
         </p>
       </div>
-    </SettingsContainer>
+    </Flex>
   );
 };

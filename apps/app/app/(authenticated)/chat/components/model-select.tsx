@@ -1,3 +1,4 @@
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -72,7 +73,11 @@ export const ModelSelect = ({
                     setIsOpen(false);
                   }}
                 >
-                  {model?.icon('sm')} {assistant.name}{' '}
+                  {assistant.type === 'base' ? (
+                    model?.icon('sm')
+                  ) : (
+                    <ModelIcon type="custom" size="sm" />
+                  )}
                   {model?.isNew && <Badge>New</Badge>}
                 </DropdownMenuItem>
               );

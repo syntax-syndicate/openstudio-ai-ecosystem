@@ -1,19 +1,23 @@
+import { SparklesIcon } from '@hugeicons/react';
 import { cn } from '@repo/design-system/lib/utils';
 import Image from 'next/image';
 
+export type ModelIconType =
+  | 'gpt3'
+  | 'gpt4'
+  | 'anthropic'
+  | 'gemini'
+  | 'openai'
+  | 'chathub'
+  | 'websearch'
+  | 'calculator'
+  | 'duckduckgo_search'
+  | 'website_reader'
+  | 'ollama'
+  | 'custom';
+
 export type TModelIcon = {
-  type:
-    | 'gpt3'
-    | 'gpt4'
-    | 'anthropic'
-    | 'gemini'
-    | 'openai'
-    | 'chathub'
-    | 'websearch'
-    | 'calculator'
-    | 'duckduckgo_search'
-    | 'website_reader'
-    | 'ollama';
+  type: ModelIconType;
   size: 'sm' | 'md' | 'lg';
 };
 
@@ -31,6 +35,22 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
     website_reader: '/icons/website_reader.svg',
     ollama: '/icons/ollama.svg',
   };
+
+  if (type === 'custom') {
+    return (
+      <div
+        className={cn(
+          'flex h-6 min-w-6 items-center justify-center rounded-lg bg-teal-500 text-white',
+          size === 'sm' && 'h-6 min-w-6',
+          size === 'md' && 'h-8 min-w-8',
+          size === 'lg' && 'h-10 min-w-10'
+        )}
+      >
+        <SparklesIcon size={16} strokeWidth={1.5} variant="solid" />
+      </div>
+    );
+  }
+
   return (
     <Image
       src={iconSrc[type]}
