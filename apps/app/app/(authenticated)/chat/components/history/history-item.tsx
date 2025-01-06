@@ -97,7 +97,12 @@ export const HistoryItem = ({
         <>
           {modelProps?.icon?.('sm')}
           <Flex direction="col" items="start" className="w-full">
-            <Type className="line-clamp-1" size="sm" textColor="primary">
+            <Type
+              className="line-clamp-1"
+              size="sm"
+              textColor="primary"
+              weight="medium"
+            >
               {session.title}
             </Type>
             <Type className="line-clamp-1" size="xs" textColor="tertiary">

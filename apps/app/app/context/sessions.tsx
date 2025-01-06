@@ -20,6 +20,8 @@ export type TSessionsContext = {
   >;
   removeMessage: (messageId: string) => void;
   refetchSessions?: () => void;
+  isGenerating: boolean;
+  setGenerating: (value: boolean) => void;
   refetchCurrentSession?: () => void;
   addMessageToSession: (sessionId: string, message: TChatMessage) => void;
   getSessionById: (id: string) => Promise<TChatSession | undefined>;
@@ -46,6 +48,7 @@ export type TSessionsProvider = {
 export const SessionsProvider = ({ children }: TSessionsProvider) => {
   const { sessionId } = useParams();
   const [sessions, setSessions] = useState<TChatSession[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [currentSession, setCurrentSession] = useState<
     TChatSession | undefined
   >();
@@ -128,6 +131,8 @@ export const SessionsProvider = ({ children }: TSessionsProvider) => {
         refetchSessions: sessionsQuery.refetch,
         refetchCurrentSession: currentSessionQuery.refetch,
         addMessageToSession,
+        isGenerating,
+        setGenerating: setIsGenerating,
         getSessionById,
         ...props,
       }}

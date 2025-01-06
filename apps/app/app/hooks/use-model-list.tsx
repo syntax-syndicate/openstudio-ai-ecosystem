@@ -121,7 +121,7 @@ export const useModelList = () => {
       isNew: true,
       inputPrice: 5,
       outputPrice: 15,
-      plugins: ['web_search', 'duckduckgo_search'],
+      plugins: ['web_search'],
       icon: (size) => <ModelIcon size={size} type="gpt4" />,
       baseModel: 'openai',
       maxOutputTokens: 2048,
@@ -131,7 +131,7 @@ export const useModelList = () => {
       key: 'gpt-4-turbo',
       tokens: 128000,
       isNew: false,
-      plugins: ['web_search', 'duckduckgo_search'],
+      plugins: ['web_search'],
       inputPrice: 10,
       outputPrice: 30,
       icon: (size) => <ModelIcon size={size} type="gpt4" />,
@@ -143,7 +143,7 @@ export const useModelList = () => {
       key: 'gpt-4',
       tokens: 128000,
       isNew: false,
-      plugins: ['web_search', 'duckduckgo_search'],
+      plugins: ['web_search'],
       inputPrice: 30,
       outputPrice: 60,
       icon: (size) => <ModelIcon size={size} type="gpt4" />,
@@ -156,12 +156,7 @@ export const useModelList = () => {
       isNew: false,
       inputPrice: 0.5,
       outputPrice: 1.5,
-      plugins: [
-        'web_search',
-        'calculator',
-        'read_website',
-        'duckduckgo_search',
-      ],
+      plugins: ['web_search'],
       tokens: 16385,
       icon: (size) => <ModelIcon size={size} type="gpt3" />,
       baseModel: 'openai',
@@ -172,7 +167,7 @@ export const useModelList = () => {
       key: 'gpt-3.5-turbo-0125',
       isNew: false,
       tokens: 16385,
-      plugins: ['web_search', 'duckduckgo_search'],
+      plugins: ['web_search'],
       icon: (size) => <ModelIcon size={size} type="gpt3" />,
       baseModel: 'openai',
       maxOutputTokens: 4095,
@@ -321,6 +316,16 @@ export const useModelList = () => {
       model,
     };
   };
+
+  const getAssistantIcon = (assistantKey: string) => {
+    const assistant = getAssistantByKey(assistantKey);
+    return assistant?.assistant.type === 'base' ? (
+      assistant?.model?.icon('sm')
+    ) : (
+      <ModelIcon type="custom" size="sm" />
+    );
+  };
+
   return {
     models: allModels,
     createInstance,
@@ -328,6 +333,7 @@ export const useModelList = () => {
     getTestModelKey,
     assistants,
     getAssistantByKey,
+    getAssistantIcon,
     ...assistantsProps,
   };
 };

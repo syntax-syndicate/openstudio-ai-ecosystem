@@ -132,9 +132,9 @@ export const FiltersProvider = ({ children }: TFiltersProvider) => {
       <CommandDialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
         <CommandInput placeholder="Search..." />
 
-        <CommandList className="border-zinc-500/20 border-t">
+        <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Quick Actions">
+          <CommandGroup>
             {actions.map((action) => (
               <CommandItem
                 key={action.name}

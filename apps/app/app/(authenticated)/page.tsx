@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { Sparkle } from '@phosphor-icons/react';
@@ -20,7 +20,7 @@ export default function HomePage() {
 
       <Link href="/chat">
         <Button size="lg" className="gap-2">
-          Go to Chat{' '} <Sparkle size={32} />
+          Go to Chat <Sparkle size={32} />
         </Button>
       </Link>
     </div>

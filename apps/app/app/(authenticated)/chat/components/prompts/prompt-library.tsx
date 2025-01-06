@@ -1,18 +1,11 @@
-import { useChatContext } from '@/app/context/chat';
-import type { TPrompt } from '@/app/hooks/use-prompts';
-import {
-  ArrowDown,
-  BookBookmark,
-  DotsThree,
-  FolderSimple,
-  Pencil,
-  Plus,
-  TrashSimple,
-} from '@phosphor-icons/react';
+import { useChatContext } from '@/app/context';
+import type { TPrompt } from '@/app/hooks';
+import { DotsThree, Note, Pencil, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Command,
   CommandEmpty,
+  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
@@ -55,57 +48,35 @@ export const PromptLibrary = ({
         <CommandInput placeholder="Search Prompts" />
       </div>
 
-      <div className="relative flex h-full w-full flex-col border-zinc-500/20 border-t">
-        <div className="flex w-full flex-row justify-between px-3 pt-3 pb-3">
-          <div className="flex flex-row items-center gap-2">
-            <Button
-              size="sm"
-              variant={tab === 'public' ? 'secondary' : 'ghost'}
-              onClick={() => {
-                onTabChange('public');
-              }}
-            >
-              <BookBookmark size={16} weight="bold" /> Prompt Library
-            </Button>
-
-            <Button
-              size="sm"
-              variant={tab === 'local' ? 'secondary' : 'ghost'}
-              onClick={() => {
-                onTabChange('local');
-              }}
-            >
-              <FolderSimple size={16} weight="bold" /> Your prompts
-            </Button>
-          </div>
-          <Button size="sm" onClick={onCreate}>
-            <Plus size={16} weight="bold" /> Create Prompt
-          </Button>
-        </div>
+      <div className="relative flex h-full w-full flex-col">
         <CommandEmpty className="flex w-full flex-col items-center justify-center gap-2 p-4 text-sm text-zinc-500">
-          No prompts found{' '}
+          No prompts found
           <Button variant="outline" size="sm" onClick={onCreate}>
             Create new prompt
           </Button>
         </CommandEmpty>
-        <CommandList className="px-2 py-2">
-          {(tab === 'local' ? localPrompts : publicPrompts)?.map((prompt) => (
-            <CommandItem
-              value={prompt.name}
-              key={prompt.id}
-              className="w-full"
-              onSelect={() => {
-                onPromptSelect(prompt);
-              }}
-            >
-              <div className="flex w-full flex-row items-center justify-start gap-2 overflow-hidden px-2">
-                <div className="flex w-full flex-col items-start gap-0 py-2">
-                  <p className="font-medium text-base">{prompt.name}</p>
-                  <p className="line-clamp-1 w-full text-xs text-zinc-500">
-                    {prompt.content}
-                  </p>
-                </div>
-                <ArrowDown size={16} weight="bold" />
+
+        <CommandList className="px-2 pb-2">
+          <CommandItem
+            value={'Create prompt'}
+            className="w-full"
+            onSelect={onCreate}
+          >
+            <Pencil size={18} weight="bold" />
+            Create Prompt
+          </CommandItem>
+          <CommandGroup heading="Prompts Collections">
+            {[...localPrompts, ...publicPrompts]?.map((prompt) => (
+              <CommandItem
+                value={prompt.name}
+                key={prompt.id}
+                className="w-full"
+                onSelect={() => {
+                  onPromptSelect(prompt);
+                }}
+              >
+                <Note size={20} weight="bold" />
+                {prompt.name}
                 {tab === 'local' && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -138,9 +109,9 @@ export const PromptLibrary = ({
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
-              </div>
-            </CommandItem>
-          ))}
+              </CommandItem>
+            ))}
+          </CommandGroup>
         </CommandList>
       </div>
     </Command>
