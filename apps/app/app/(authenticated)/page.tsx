@@ -1,3 +1,5 @@
+"use client";
+
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { Sparkle } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
