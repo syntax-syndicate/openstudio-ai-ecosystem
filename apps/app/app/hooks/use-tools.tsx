@@ -3,12 +3,8 @@ import { dalleTool } from '@/app/tools/dalle';
 import { duckduckGoTool } from '@/app/tools/duckduckgo';
 import { googleSearchTool } from '@/app/tools/google';
 import { memoryTool } from '@/app/tools/memory';
-import {
-  BrainIcon,
-  GlobalSearchIcon,
-  Image01Icon,
-} from '@hugeicons/react';
-import type { FC, ReactNode, RefAttributes } from 'react';
+import { BrainIcon, GlobalSearchIcon, Image01Icon } from '@hugeicons/react';
+import type { ReactNode } from 'react';
 import type { TApiKeys, TPreferences, TToolResponse } from '.';
 
 export const toolKeys = ['calculator', 'web_search'];
