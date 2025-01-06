@@ -7,6 +7,8 @@ import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/m
 import { OllamaSettings } from '@/app/(authenticated)/chat/components/settings/models/ollama';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/models/openai';
 import { usePreferenceContext } from '@/app/context/preferences';
+import { useSettingsContext } from '@/app/context/settings';
+import type { TBaseModel } from '@/app/hooks';
 import { AlertCircleIcon, CheckmarkCircle02Icon } from '@hugeicons/react';
 import {
   Accordion,
@@ -16,8 +18,18 @@ import {
 } from '@repo/design-system/components/ui/accordion';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { cn } from '@repo/design-system/lib/utils';
+import { useEffect, useState } from 'react';
+
 export const ModelSettings = () => {
+  const { selected } = useSettingsContext();
   const { apiKeys } = usePreferenceContext();
+  const [selectedModel, setSelectedModel] = useState<TBaseModel>('openai');
+  useEffect(() => {
+    if (selected.startsWith('models/')) {
+      const model = selected?.split('/')?.[1];
+      setSelectedModel(model as TBaseModel);
+    }
+  }, [selected]);
   const modelSettingsData = [
     {
       value: 'openai',
@@ -50,7 +62,15 @@ export const ModelSettings = () => {
   ];
   return (
     <Flex direction="col" gap="lg" className="p-2">
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion
+        type="single"
+        value={selectedModel}
+        collapsible
+        className="w-full"
+        onValueChange={(value) => {
+          setSelectedModel(value as TBaseModel);
+        }}
+      >
         {modelSettingsData.map((model) => (
           <AccordionItem key={model.value} value={model.value}>
             <AccordionTrigger>

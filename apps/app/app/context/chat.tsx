@@ -13,6 +13,7 @@ import {
 } from '@/app/lib/tiptap-extensions';
 import type { Serialized } from '@langchain/core/load/serializable';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
+import { XMLOutputParser } from '@langchain/core/output_parsers';
 import type { LLMResult } from '@langchain/core/outputs';
 import {
   type BaseMessagePromptTemplateLike,
@@ -298,6 +299,8 @@ export const ChatProvider = ({ children }: TChatProvider) => {
 
     let agentExecutor: AgentExecutor | undefined;
 
+    const parser = new XMLOutputParser();
+
     // Creating a copy of the model
     const modifiedModel = Object.create(Object.getPrototypeOf(selectedModel));
 
@@ -500,7 +503,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         description: 'API key is missing. Please check your settings.',
         variant: 'destructive',
       });
-      openSettings(assitantprops.model.baseModel);
+      openSettings(`models/${assitantprops.model.baseModel}`);
       return;
     }
 

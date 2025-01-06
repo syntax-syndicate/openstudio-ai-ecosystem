@@ -88,7 +88,7 @@ export const useTools = () => {
         return true;
       },
       validationFailedAction: () => {
-        open('web-search');
+        open('plugins/web-search');
       },
       loadingMessage:
         preferences?.defaultWebSearchEngine === 'google'
@@ -111,9 +111,7 @@ export const useTools = () => {
       validate: async () => {
         return true;
       },
-      validationFailedAction: () => {
-        open('web-search');
-      },
+      validationFailedAction: () => {},
       renderUI: ({ image }) => {
         return (
           <img
@@ -138,9 +136,7 @@ export const useTools = () => {
       validate: async () => {
         return true;
       },
-      validationFailedAction: () => {
-        open('web-search');
-      },
+      validationFailedAction: () => {},
       renderUI: ({ image }) => {
         return (
           <img
