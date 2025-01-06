@@ -1,5 +1,5 @@
 import { useChatContext } from '@/app/context';
-import { ArrowRight } from '@phosphor-icons/react';
+import { ArrowRight02Icon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import { motion } from 'framer-motion';
@@ -64,7 +64,7 @@ export const ChatExamples = () => {
                 editor?.commands?.focus('end');
               }}
             >
-              <ArrowRight size={16} weight="bold" />
+              <ArrowRight02Icon size={18} variant="solid" strokeWidth="2" />
               <p className="w-full font-medium text-sm text-zinc-800 hover:underline hover:decoration-zinc-500 hover:underline-offset-4 md:text-base dark:text-white">
                 {example.name}
               </p>
