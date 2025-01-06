@@ -1,10 +1,10 @@
 import {
-  Check,
-  Copy,
-  Quotes,
-  ThumbsDown,
-  TrashSimple,
-} from '@phosphor-icons/react';
+  Copy01Icon,
+  Delete01Icon,
+  ThumbsDownIcon,
+  Tick01Icon,
+} from '@hugeicons/react';
+import { Quotes } from '@phosphor-icons/react';
 import { useRef, useState } from 'react';
 import * as Selection from 'selection-popover';
 
@@ -199,9 +199,9 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
                   onClick={handleCopyContent}
                 >
                   {showCopied ? (
-                    <Check size={18} weight="bold" />
+                    <Tick01Icon size={18} variant="stroke" strokeWidth="2" />
                   ) : (
-                    <Copy size={18} weight="bold" />
+                    <Copy01Icon size={18} variant="stroke" strokeWidth="2" />
                   )}
                 </Button>
               </Tooltip>
@@ -212,7 +212,7 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
                   rounded="lg"
                   onClick={handleCopyContent}
                 >
-                  <ThumbsDown size={18} weight="bold" />
+                  <ThumbsDownIcon size={18} variant="stroke" strokeWidth="2" />
                 </Button>
               </Tooltip>
 
@@ -223,7 +223,7 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
                 >
                   <PopoverTrigger asChild>
                     <Button variant="ghost" size="iconSm" rounded="lg">
-                      <TrashSimple size={18} weight="bold" />
+                      <Delete01Icon size={18} variant="stroke" strokeWidth="2" />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent>

@@ -3,9 +3,10 @@ import { useSettingsContext } from '@/app/context';
 import { dalleTool } from '@/app/tools/dalle';
 import { duckduckGoTool } from '@/app/tools/duckduckgo';
 import { googleSearchTool } from '@/app/tools/google';
-import { Globe, Image } from '@phosphor-icons/react';
+import { GlobalSearchIcon, Image01Icon } from '@hugeicons/react';
 import type { ReactNode } from 'react';
 import type { TApiKeys, TPreferences } from '.';
+import { Globe } from '@phosphor-icons/react';
 
 export const toolKeys = ['calculator', 'web_search'];
 
@@ -76,7 +77,7 @@ export const useTools = () => {
         preferences?.defaultWebSearchEngine === 'google'
           ? 'Results from Google search'
           : 'Result from DuckDuckGo search',
-      icon: Globe,
+      icon: GlobalSearchIcon,
       smallIcon: () => <Globe size={16} weight="bold" />,
     },
     {
@@ -94,7 +95,7 @@ export const useTools = () => {
       },
       loadingMessage: 'Generating Image',
       resultMessage: 'Generated Image',
-      icon: Image,
+      icon: Image01Icon,
       smallIcon: () => <Globe size={16} weight="bold" />,
     },
   ];

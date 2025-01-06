@@ -1,7 +1,8 @@
 import { HistoryItem } from '@/app/(authenticated)/chat/components/history/history-item';
 import { useSessionsContext } from '@/app/context';
 import { sortSessions } from '@/app/lib/helper';
-import { ClockCounterClockwise, SidebarSimple, X } from '@phosphor-icons/react';
+import { ClockCounterClockwise, X } from '@phosphor-icons/react';
+import { SidebarLeftIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
@@ -18,7 +19,7 @@ export const HistorySidebar = () => {
       <Tooltip content="Chat History" side="left" sideOffset={4}>
         <Drawer.Trigger asChild>
           <Button variant="ghost" size="iconSm">
-            <SidebarSimple size={20} weight="bold" />
+            <SidebarLeftIcon size={20} variant="stroke" strokeWidth="2" />
           </Button>
         </Drawer.Trigger>
       </Tooltip>

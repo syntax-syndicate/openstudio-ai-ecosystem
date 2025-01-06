@@ -1,6 +1,7 @@
 import { useChatContext } from '@/app/context';
 import type { TPrompt } from '@/app/hooks';
-import { DotsThree, Note, Pencil, TrashSimple } from '@phosphor-icons/react';
+import { Delete01Icon, Edit02Icon, NoteIcon } from '@hugeicons/react';
+import { DotsThree, Pencil, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Command,
@@ -62,7 +63,7 @@ export const PromptLibrary = ({
             className="w-full"
             onSelect={onCreate}
           >
-            <Pencil size={18} weight="bold" />
+            <Edit02Icon size={18} variant="stroke" strokeWidth="2" />
             Create Prompt
           </CommandItem>
           <CommandGroup heading="Prompts Collections">
@@ -75,7 +76,7 @@ export const PromptLibrary = ({
                   onPromptSelect(prompt);
                 }}
               >
-                <Note size={20} weight="bold" />
+                <NoteIcon size={20} variant="stroke" strokeWidth="2" />
                 {prompt.name}
                 {tab === 'local' && (
                   <DropdownMenu>
@@ -94,7 +95,7 @@ export const PromptLibrary = ({
                           e.stopPropagation();
                         }}
                       >
-                        <Pencil size={14} weight="bold" />
+                        <Edit02Icon size={14} variant="stroke" strokeWidth="2" />
                         Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem
@@ -103,7 +104,7 @@ export const PromptLibrary = ({
                           e.stopPropagation();
                         }}
                       >
-                        <TrashSimple size={14} weight="bold" />
+                        <Delete01Icon size={14} variant="stroke" strokeWidth="2" />
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>

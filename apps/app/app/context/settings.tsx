@@ -4,14 +4,19 @@ import { Data } from '@/app/(authenticated)/chat/components/settings/data';
 import { ModelSettings } from '@/app/(authenticated)/chat/components/settings/models';
 import { PulginSettings } from '@/app/(authenticated)/chat/components/settings/plugins';
 import { VoiceInput } from '@/app/(authenticated)/chat/components/settings/voice-input';
-import { Database, GearSix, Microphone, Plug } from '@phosphor-icons/react';
+import {
+  DashboardCircleIcon,
+  Database02Icon,
+  Settings03Icon,
+  SparklesIcon,
+  VoiceIcon,
+} from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Dialog,
   DialogContent,
 } from '@repo/design-system/components/ui/dialog';
 import { cn } from '@repo/design-system/lib/utils';
-import { SparklesIcon } from 'lucide-react';
 import { useState } from 'react';
 import { createContext, useContext } from 'react';
 
@@ -55,7 +60,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
   const settingMenu: TSettingMenuItem[] = [
     {
       name: 'Common',
-      icon: () => <GearSix size={16} weight="bold" />,
+      icon: () => <Settings03Icon size={18} strokeWidth="2" />,
       key: 'common',
       component: <CommonSettings />,
     },
@@ -67,19 +72,19 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
     },
     {
       name: 'Plugins',
-      icon: () => <Plug size={18} weight="bold" />,
+      icon: () => <DashboardCircleIcon size={18} strokeWidth="2" />,
       key: 'plugins',
       component: <PulginSettings />,
     },
     {
       name: 'Voice Input',
-      icon: () => <Microphone size={18} weight="bold" />,
+      icon: () => <VoiceIcon size={18} strokeWidth="2" />,
       key: 'voice-input',
       component: <VoiceInput />,
     },
     {
       name: 'Data',
-      icon: () => <Database size={18} weight="bold" />,
+      icon: () => <Database02Icon size={18} strokeWidth="2" />,
       key: 'Your Data',
       component: <Data />,
     },

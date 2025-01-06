@@ -5,13 +5,13 @@ import {
   useSettingsContext,
 } from '@/app/context';
 import {
-  Book,
-  DotsThree,
-  GearSix,
-  Moon,
-  Plus,
-  Sun,
-} from '@phosphor-icons/react';
+  Moon02Icon,
+  MoreHorizontalIcon,
+  NoteIcon,
+  PlusSignIcon,
+  Settings03Icon,
+  Sun01Icon,
+} from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   DropdownMenu,
@@ -44,7 +44,7 @@ export const Navbar = () => {
             });
           }}
         >
-          <Plus size={20} weight="bold" />{' '}
+          <PlusSignIcon size={20} variant="stroke" strokeWidth="2" />{' '}
         </Button>
       </Tooltip>
     );
@@ -67,7 +67,7 @@ export const Navbar = () => {
             openPrompts();
           }}
         >
-          <Book size={20} weight="bold" />
+          <NoteIcon size={20} variant="stroke" strokeWidth="2" />
         </Button>
       </Tooltip>
       <Tooltip content="Preferences" side="left" sideOffset={4}>
@@ -78,7 +78,7 @@ export const Navbar = () => {
             openSettings();
           }}
         >
-          <GearSix size={20} weight="bold" />
+          <Settings03Icon size={20} variant="stroke" strokeWidth="2" />
         </Button>
       </Tooltip>
       <DropdownMenu
@@ -91,7 +91,7 @@ export const Navbar = () => {
         <Tooltip content="More" side="left" sideOffset={4}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="iconSm">
-              <DotsThree size={20} weight="bold" />
+              <MoreHorizontalIcon size={20} variant="stroke" strokeWidth="2" />
             </Button>
           </DropdownMenuTrigger>
         </Tooltip>
@@ -112,9 +112,9 @@ export const Navbar = () => {
             }}
           >
             {theme === 'light' ? (
-              <Moon size={18} weight="bold" />
+              <Moon02Icon size={18} variant="stroke" strokeWidth="2" />
             ) : (
-              <Sun size={18} weight="bold" />
+              <Sun01Icon size={18} variant="stroke" strokeWidth="2" />
             )}
             Switch to {theme === 'light' ? 'dark' : 'light'} mode
           </DropdownMenuItem>
@@ -134,9 +134,9 @@ export const Navbar = () => {
           }}
         >
           {theme === 'light' ? (
-            <Moon size={20} weight="bold" />
+            <Moon02Icon size={20} variant="stroke" strokeWidth="2" />
           ) : (
-            <Sun size={20} weight="bold" />
+            <Sun01Icon size={20} variant="stroke" strokeWidth="2" />
           )}
         </Button>
       </Tooltip>

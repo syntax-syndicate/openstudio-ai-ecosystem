@@ -1,4 +1,4 @@
-import { Sparkle } from '@phosphor-icons/react';
+import { SparklesIcon } from '@hugeicons/react';
 import { cn } from '@repo/design-system/lib/utils';
 import Image from 'next/image';
 
@@ -46,7 +46,7 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
           size === 'lg' && 'h-10 min-w-10'
         )}
       >
-        <Sparkle size={16} weight="bold" />
+        <SparklesIcon size={16} strokeWidth={1.5} variant="solid" />
       </div>
     );
   }

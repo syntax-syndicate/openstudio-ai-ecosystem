@@ -1,6 +1,6 @@
 import type { TAssistant } from '@/app/hooks';
 import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
-import { ArrowClockwise, Sparkle } from '@phosphor-icons/react';
+import { ArrowDown01Icon, SparklesIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   DropdownMenu,
@@ -32,9 +32,9 @@ export const RegenerateWithModelSelect = ({
           <DropdownMenuTrigger asChild>
             {
               <Button variant="ghost" size="sm" rounded="lg">
-                <Sparkle size={16} weight="bold" />
+                <SparklesIcon size={18} variant="stroke" strokeWidth="2" />
                 {messageAssistantProps?.model?.name}
-                <ArrowClockwise size={16} weight="bold" />
+                <ArrowDown01Icon size={16} variant="stroke" strokeWidth="2" />
               </Button>
             }
           </DropdownMenuTrigger>

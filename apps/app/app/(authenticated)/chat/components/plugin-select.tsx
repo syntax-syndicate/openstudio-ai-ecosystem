@@ -1,7 +1,7 @@
 import { usePreferenceContext } from '@/app/context/preferences';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { type TToolKey, useTools } from '@/app/hooks/use-tools';
-import { Plug } from '@phosphor-icons/react';
+import { ConnectIcon } from '@hugeicons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -47,7 +47,7 @@ export const PluginSelect = ({ selectedAssistantKey }: TPluginSelect) => {
         <Tooltip content="Plugins">
           <PopoverTrigger asChild>
             <Button variant="ghost" size="sm">
-              <Plug size={16} weight="bold" />
+              <ConnectIcon size={16} variant="stroke" strokeWidth="2" />
               <Badge>{selectedPlugins.length}</Badge>
             </Button>
           </PopoverTrigger>

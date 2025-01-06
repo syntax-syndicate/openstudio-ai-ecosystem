@@ -1,7 +1,6 @@
 import { useClipboard } from '@/app/hooks/use-clipboard';
 import { ibmPlex } from '@/app/lib/fonts';
-import { Check } from '@phosphor-icons/react';
-import { Copy } from '@phosphor-icons/react';
+import { Copy01Icon, Tick01Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
@@ -43,9 +42,9 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
             }}
           >
             {showCopied ? (
-              <Check size={14} weight="bold" />
+              <Tick01Icon size={14} variant="stroke" strokeWidth="2" />
             ) : (
-              <Copy size={14} weight="bold" />
+              <Copy01Icon size={14} variant="stroke" strokeWidth="2" />
             )}{' '}
             Copy Code
           </Button>
