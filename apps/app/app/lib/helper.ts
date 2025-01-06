@@ -25,7 +25,10 @@ export const sortSessions = (
   return sessions.sort((a, b) => moment(b[sortBy]).diff(moment(a[sortBy])));
 };
 
-export const sortMessages = (messages: TChatMessage[], sortBy: 'createdAt') => {
+export const sortMessages = (
+  messages: Partial<TChatMessage>[],
+  sortBy: 'createdAt'
+) => {
   return messages.sort((a, b) => moment(a[sortBy]).diff(moment(b[sortBy])));
 };
 
@@ -60,4 +63,21 @@ export function generateAndDownloadJson(data: any, filename: string) {
   a.click();
   URL.revokeObjectURL(url);
   document.body.removeChild(a);
+}
+
+export async function imageUrlToBase64(imageUrl: string): Promise<string> {
+  const response = await fetch(imageUrl);
+  const blob = await response.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      const base64Url = `data:${response.headers.get('Content-Type')};base64,${
+        base64String.split(',')[1]
+      }`;
+      resolve(base64Url);
+    };
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(blob);
+  });
 }

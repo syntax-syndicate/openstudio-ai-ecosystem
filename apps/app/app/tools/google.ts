@@ -4,7 +4,7 @@ import axios from 'axios';
 import { z } from 'zod';
 
 const googleSearchTool = (args: TToolArg) => {
-  const { preferences, toolResponse } = args;
+  const { preferences, sendToolResponse } = args;
   const webSearchSchema = z.object({
     input: z.string(),
   });
@@ -31,7 +31,7 @@ const googleSearchTool = (args: TToolArg) => {
           snippet: item.snippet,
           url: item.link,
         }));
-        const searchInfo = googleSearchResult
+        const searchResult = googleSearchResult
           ?.map(
             (r: any, index: number) =>
               `${index + 1}. Title: """${r.title}""" \n URL: """${
@@ -39,13 +39,14 @@ const googleSearchTool = (args: TToolArg) => {
               }"""\n snippet: """${r.snippet}""" `
           )
           ?.join('\n\n');
-        const searchPrompt = `Information: \n\n ${searchInfo} \n\n Based on snippet please answer the given question with proper citations. Must Remove XML tags if any. Question: ${input}`;
-        toolResponse({
+        const searchPrompt = `Information: \n\n ${searchResult} \n\n Based on snippet please answer the given question with proper citations. Must Remove XML tags if any. Question: ${input}`;
+        sendToolResponse({
           toolName: 'web_search',
           toolArgs: {
             input,
           },
-          toolResult: searchInfo,
+          toolRenderArgs: { searchResult },
+          toolResponse: searchResult,
         });
         return searchPrompt;
       } catch (error) {

@@ -1,8 +1,8 @@
 import { HistoryItem } from '@/app/(authenticated)/chat/components/history/history-item';
 import { useSessionsContext } from '@/app/context';
 import { sortSessions } from '@/app/lib/helper';
-import { ClockCounterClockwise, X } from '@phosphor-icons/react';
 import { SidebarLeftIcon } from '@hugeicons/react';
+import { ClockCounterClockwise, X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
