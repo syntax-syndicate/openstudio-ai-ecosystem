@@ -1,5 +1,6 @@
 import type { TAttachment } from '@/app/(authenticated)/chat/components/chat-input';
-import { ArrowElbowDownRight, Paperclip, X } from '@phosphor-icons/react';
+import { ImageUpload01Icon } from '@hugeicons/react';
+import { X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import Image from 'next/image';
@@ -59,25 +60,21 @@ export const useImageAttachment = () => {
   const renderAttachedImage = () => {
     if (attachment?.base64 && attachment?.file) {
       return (
-        <div className="flex h-10 w-full flex-row items-center justify-start gap-2 rounded-xl bg-black/30 pr-1 pl-3 text-zinc-300 md:w-[700px] lg:w-[720px]">
-          <ArrowElbowDownRight size={20} weight="bold" />
-          <p className="relative ml-2 flex w-full flex-row items-center gap-2 text-sm md:text-base">
-            <Image
-              src={attachment.base64}
-              alt="uploaded image"
-              className="tanslate-y-[50%] absolute h-[60px] min-w-[60px] rotate-6 rounded-xl border border-white/5 object-cover shadow-md"
-              width={0}
-              height={0}
-            />
-            <span className="ml-[70px]">{attachment?.file?.name}</span>
-          </p>
+        <div className="relative h-[60px] min-w-[60px] rounded-xl border border-white/5 shadow-md">
+          <Image
+            src={attachment.base64}
+            alt="uploaded image"
+            className="h-full w-full overflow-hidden rounded-xl object-cover"
+            width={0}
+            height={0}
+          />
           <Button
-            size={'iconSm'}
-            variant="ghost"
+            size={'iconXS'}
+            variant="default"
             onClick={() => {}}
-            className="ml-4 flex-shrink-0"
+            className="absolute top-[-4px] right-[-4px] z-10 h-4 w-4 flex-shrink-0"
           >
-            <X size={16} weight="bold" />
+            <X size={12} weight="bold" />
           </Button>
         </div>
       );
@@ -98,7 +95,7 @@ export const useImageAttachment = () => {
           onClick={handleFileSelect}
           className="px-1.5"
         >
-          <Paperclip size={16} weight="bold" /> Attach
+          <ImageUpload01Icon size={18} strokeWidth={1.5} />
         </Button>
       </>
     );
