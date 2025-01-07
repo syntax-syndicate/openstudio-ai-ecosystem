@@ -70,6 +70,8 @@ export const Navbar = () => {
           <NoteIcon size={20} variant="stroke" strokeWidth="2" />
         </Button>
       </Tooltip>
+
+      <Flex className="flex-1" />
       <Tooltip content="Preferences" side="left" sideOffset={4}>
         <Button
           size="iconSm"
@@ -91,7 +93,7 @@ export const Navbar = () => {
         <Tooltip content="More" side="left" sideOffset={4}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="iconSm">
-              <MoreHorizontalIcon size={20} variant="solid" />
+              <MoreHorizontalIcon size={20} variant="stroke" strokeWidth="2" />
             </Button>
           </DropdownMenuTrigger>
         </Tooltip>
@@ -120,26 +122,6 @@ export const Navbar = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Flex className="flex-1" />
-      <Tooltip
-        content={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        side="left"
-        sideOffset={4}
-      >
-        <Button
-          size="iconSm"
-          variant="ghost"
-          onClick={() => {
-            setTheme(theme === 'light' ? 'dark' : 'light');
-          }}
-        >
-          {theme === 'light' ? (
-            <Moon02Icon size={20} variant="stroke" strokeWidth="2" />
-          ) : (
-            <Sun01Icon size={20} variant="stroke" strokeWidth="2" />
-          )}
-        </Button>
-      </Tooltip>
     </div>
   );
 };

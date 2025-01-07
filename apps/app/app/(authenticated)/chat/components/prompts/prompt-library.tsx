@@ -1,7 +1,7 @@
 import { useChatContext } from '@/app/context';
 import type { TPrompt } from '@/app/hooks';
-import { Edit02Icon, NoteIcon } from '@hugeicons/react';
-import { DotsThree, Pencil, TrashSimple } from '@phosphor-icons/react';
+import { Delete01Icon, Edit02Icon, NoteIcon } from '@hugeicons/react';
+import { DotsThree } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Command,
@@ -95,7 +95,11 @@ export const PromptLibrary = ({
                           e.stopPropagation();
                         }}
                       >
-                        <Pencil size={14} weight="bold" />
+                        <Edit02Icon
+                          size={14}
+                          variant="stroke"
+                          strokeWidth="2"
+                        />
                         Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem
@@ -104,7 +108,11 @@ export const PromptLibrary = ({
                           e.stopPropagation();
                         }}
                       >
-                        <TrashSimple size={14} weight="bold" />
+                        <Delete01Icon
+                          size={14}
+                          variant="stroke"
+                          strokeWidth="2"
+                        />
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>

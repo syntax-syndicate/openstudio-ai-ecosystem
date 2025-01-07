@@ -3,7 +3,6 @@ export * from '@/app/hooks/use-chat-session';
 export * from '@/app/hooks/use-clipboard';
 export * from '@/app/hooks/use-editor-extensions';
 export * from '@/app/hooks/use-image-attachment';
-export * from '@/app/hooks/use-llm';
 export * from '@/app/hooks/use-llm-test';
 export * from '@/app/hooks/use-mdx';
 export * from '@/app/hooks/use-model-list';

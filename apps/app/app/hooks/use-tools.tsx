@@ -2,23 +2,20 @@ import { usePreferenceContext, useSettingsContext } from '@/app/context';
 import { dalleTool } from '@/app/tools/dalle';
 import { duckduckGoTool } from '@/app/tools/duckduckgo';
 import { googleSearchTool } from '@/app/tools/google';
-import { GlobalSearchIcon, Image01Icon } from '@hugeicons/react';
-import { Globe } from '@phosphor-icons/react';
+import { memoryTool } from '@/app/tools/memory';
+import { BrainIcon, GlobalSearchIcon, Image01Icon } from '@hugeicons/react';
 import type { ReactNode } from 'react';
-import type { TApiKeys, TPreferences } from '.';
+import type { TApiKeys, TPreferences, TToolResponse } from '.';
 
 export const toolKeys = ['calculator', 'web_search'];
 
-export type TToolResponseArgs = {
-  toolName: string;
-  toolArgs: any;
-  toolResult: any;
-};
-
 export type TToolArg = {
+  updatePreferences: ReturnType<
+    typeof usePreferenceContext
+  >['updatePreferences'];
   preferences: TPreferences;
   apiKeys: TApiKeys;
-  toolResponse: (response: TToolResponseArgs) => void;
+  sendToolResponse: (response: TToolResponse) => void;
 };
 
 export type TToolKey = (typeof toolKeys)[number];
@@ -35,9 +32,34 @@ export type TTool = {
   validate?: () => Promise<boolean>;
   validationFailedAction?: () => void;
   tool: (args: TToolArg) => any;
-  //TODO: should be type of HugeiconsProps
+  //TODO: add hugeiconsprops type
   icon: any;
-  smallIcon: () => ReactNode;
+  smallIcon: any;
+};
+
+interface DataEntry {
+  label: string;
+  name: string;
+  values: number;
+}
+interface GroupedData {
+  [key: string]: DataEntry[];
+}
+const getLabels = (data: DataEntry[]): string[] => {
+  return data.reduce((acc: string[], entry: DataEntry) => {
+    if (!acc.includes(entry.label)) {
+      return [...acc, entry.label];
+    }
+    return acc;
+  }, []);
+};
+const getData = (data: DataEntry[], labels: string[]): string[] => {
+  return data.reduce((acc: string[], entry: DataEntry) => {
+    if (!acc.includes(entry.name)) {
+      return [...acc, entry.name];
+    }
+    return acc;
+  }, []);
 };
 
 export const useTools = () => {
@@ -66,7 +88,7 @@ export const useTools = () => {
         return true;
       },
       validationFailedAction: () => {
-        open('web-search');
+        open('plugins/web-search');
       },
       loadingMessage:
         preferences?.defaultWebSearchEngine === 'google'
@@ -77,26 +99,76 @@ export const useTools = () => {
           ? 'Results from Google search'
           : 'Result from DuckDuckGo search',
       icon: GlobalSearchIcon,
-      smallIcon: () => <Globe size={16} weight="bold" />,
+      smallIcon: GlobalSearchIcon,
     },
     {
-      key: 'image',
+      key: 'image_generation',
       description: 'Generate images',
       tool: dalleTool,
-      name: 'Dalle',
+      name: 'Image Generation',
       isBeta: true,
       showInMenu: true,
       validate: async () => {
         return true;
       },
-      validationFailedAction: () => {
-        open('web-search');
+      validationFailedAction: () => {},
+      renderUI: ({ image }) => {
+        return (
+          <img
+            src={image}
+            alt=""
+            className="h-[400px] w-[400px] rounded-2xl border"
+          />
+        );
       },
-      loadingMessage: 'Generating Image',
+      loadingMessage: 'Generating Image ...',
       resultMessage: 'Generated Image',
       icon: Image01Icon,
-      smallIcon: () => <Globe size={16} weight="bold" />,
+      smallIcon: Image01Icon,
     },
+    {
+      key: 'memory',
+      description: 'AI will remeber things about you',
+      tool: memoryTool,
+      name: 'Memory',
+      isBeta: true,
+      showInMenu: true,
+      validate: async () => {
+        return true;
+      },
+      validationFailedAction: () => {},
+      renderUI: ({ image }) => {
+        return (
+          <img
+            src={image}
+            alt=""
+            className="h-[400px] w-[400px] rounded-2xl border"
+          />
+        );
+      },
+      loadingMessage: 'Saving to the memory...',
+      resultMessage: 'Updated memory',
+      icon: BrainIcon,
+      smallIcon: BrainIcon,
+    },
+    // {
+    //   key: "chart",
+    //   description: "Genrate Chart",
+    //   tool: chartTool,
+    //   name: "Chart",
+    //   isBeta: true,
+    //   showInMenu: true,
+    //   validate: async () => {
+    //     return true;
+    //   },
+    //   validationFailedAction: () => {
+    //     open("web-search");
+    //   },
+    //   loadingMessage: "Generating chart...",
+    //   resultMessage: "Generated Chart",
+    //   icon: PieChartIcon,
+    //   smallIcon: PieChartIcon,
+    // },
   ];
 
   const getToolByKey = (key: TToolKey) => {

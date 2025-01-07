@@ -3,12 +3,11 @@ import { SettingsContainer } from '@/app/(authenticated)/chat/components/setting
 import { useSettingsContext } from '@/app/context';
 import { usePreferenceContext } from '@/app/context/preferences';
 import { useSessionsContext } from '@/app/context/sessions';
-import type { TChatSession } from '@/app/hooks/use-chat-session';
 import {
   type TPreferences,
   defaultPreferences,
 } from '@/app/hooks/use-preferences';
-import { generateAndDownloadJson, sortMessages } from '@/app/lib/helper';
+import { generateAndDownloadJson } from '@/app/lib/helper';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';
@@ -27,6 +26,7 @@ const apiSchema = z.object({
 const preferencesSchema = z.object({
   defaultAssistant: z.string(),
   systemPrompt: z.string().optional(),
+  memories: z.array(z.string()).optional(),
   messageLimit: z.number().int().positive().optional(),
   temperature: z.number().optional(),
   defaultPlugins: z.array(z.string()).optional(),
@@ -60,7 +60,6 @@ const runModelPropsSchema = z.object({
 
 const chatMessageSchema = z.object({
   id: z.string(),
-  model: z.string(),
   image: z.string().optional(),
   rawHuman: z.string().optional(),
   rawAI: z.string().optional(),
@@ -103,33 +102,37 @@ const importSchema = z.object({
   prompts: z.array(z.string()).optional(),
 });
 
-const mergeSessions = (
-  incomingSessions: TChatSession[],
-  existingSessions: TChatSession[]
-) => {
-  const updatedSessions = [...existingSessions];
-  incomingSessions.forEach((incomingSession) => {
-    const sessionIndex = existingSessions.findIndex(
-      (s) => s.id === incomingSession.id
-    );
-    if (sessionIndex > -1) {
-      // Merge messages from the same session
-      const currentSession = updatedSessions[sessionIndex];
-      const uniqueNewMessages = incomingSession.messages.filter(
-        (im) => !currentSession.messages.some((cm) => cm.id === im.id)
-      );
-      // Combine and sort messages
-      currentSession.messages = sortMessages(
-        [...currentSession.messages, ...uniqueNewMessages],
-        'createdAt'
-      );
-    } else {
-      // If session does not exist, add it directly
-      updatedSessions.push(incomingSession);
-    }
-  });
-  return updatedSessions;
-};
+// const mergeSessions = (
+//   incomingSessions: TChatSession[],
+//   existingSessions: TChatSession[]
+// ) => {
+//   const updatedSessions = [...existingSessions];
+
+//   incomingSessions.forEach((incomingSession) => {
+//     const sessionIndex = existingSessions.findIndex(
+//       (s) => s.id === incomingSession.id
+//     );
+
+//     if (sessionIndex > -1) {
+//       // Merge messages from the same session
+//       const currentSession = updatedSessions[sessionIndex];
+//       const uniqueNewMessages = incomingSession.messages.filter(
+//         (im) => !currentSession.messages.some((cm) => cm.id === im.id)
+//       );
+
+//       // Combine and sort messages
+//       currentSession.messages = sortMessages(
+//         [...currentSession.messages, ...uniqueNewMessages],
+//         "createdAt"
+//       );
+//     } else {
+//       // If session does not exist, add it directly
+//       updatedSessions.push(incomingSession);
+//     }
+//   });
+
+//   return updatedSessions;
+// };
 
 export const Data = () => {
   const { dismiss } = useSettingsContext();
@@ -176,15 +179,16 @@ export const Data = () => {
           const incomingSessions = parsedData?.sessions?.filter(
             (s) => !!s.messages.length
           );
-          const mergedSessions = mergeSessions(
-            (incomingSessions as any) || [],
-            sessions
-          );
-          clearSessionsMutation.mutate(undefined, {
-            onSuccess: () => {
-              addSessionsMutation.mutate(mergedSessions);
-            },
-          });
+
+          // const mergedSessions = mergeSessions(
+          //   (incomingSessions as any) || [],
+          //   sessions
+          // );
+          // clearSessionsMutation.mutate(undefined, {
+          //   onSuccess: () => {
+          //     addSessionsMutation.mutate(mergedSessions);
+          //   },
+          // });
 
           toast({
             title: 'Data Imported',
@@ -357,10 +361,8 @@ export const Data = () => {
           </Flex>
           <div className="my-3 h-[1px] w-full bg-zinc-500/10" />
 
-          <Flex items="center" justify="between">
-            <Type textColor="secondary" className="w-full">
-              Export Data
-            </Type>
+          <Flex items="center" justify="between" className="w-full">
+            <Type textColor="secondary">Export Data</Type>
             <Button
               variant="outline"
               size="sm"

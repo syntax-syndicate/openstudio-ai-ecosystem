@@ -4,7 +4,7 @@ import { DallEAPIWrapper } from '@langchain/openai';
 import { z } from 'zod';
 
 const dalleTool = (args: TToolArg) => {
-  const { apiKeys, toolResponse } = args;
+  const { apiKeys, sendToolResponse } = args;
   const imageGenerationSchema = z.object({
     imageDescription: z.string(),
   });
@@ -19,19 +19,22 @@ const dalleTool = (args: TToolArg) => {
           model: 'dall-e-3', // Default
           apiKey: apiKeys.openai, // Default
         });
-        const result = await tool.invoke('a painting of a cat');
+        const result = await tool.invoke(imageDescription);
         if (!result) {
           runManager?.handleToolError('Error performing Duckduck go search');
           throw new Error('Invalid response');
         }
-        toolResponse({
+        sendToolResponse({
           toolName: 'image_generation',
           toolArgs: {
             imageDescription,
           },
-          toolResult: result,
+          toolRenderArgs: {
+            image: result,
+          },
+          toolResponse: result,
         });
-        const searchPrompt = `${imageDescription}`;
+        const searchPrompt = '';
         return searchPrompt;
       } catch (error) {
         return 'Error performing search. Must not use duckduckgo_search tool now. Ask user to check API keys.';
@@ -39,5 +42,4 @@ const dalleTool = (args: TToolArg) => {
     },
   });
 };
-
 export { dalleTool };

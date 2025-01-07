@@ -2,6 +2,7 @@ import { usePreferenceContext } from '@/app/context';
 import type { TAssistant } from '@/app/hooks/use-chat-session';
 import { useModelList } from '@/app/hooks/use-model-list';
 import { defaultPreferences } from '@/app/hooks/use-preferences';
+import { ConnectIcon } from '@hugeicons/react';
 import { DotsThree, Pencil, TrashSimple } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -54,6 +55,9 @@ export const AssistantItem = ({
         {getAssistantIcon(assistant.key)}
         {assistant.name} {model?.isNew && <Badge>New</Badge>}
         <div className="flex flex-1"></div>
+        {!!model?.plugins?.length && (
+          <ConnectIcon size={16} strokeWidth={2} className="text-zinc-500" />
+        )}
         {assistant.type === 'custom' && (
           <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger

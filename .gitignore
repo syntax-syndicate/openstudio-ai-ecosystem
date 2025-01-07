@@ -21,6 +21,9 @@ coverage
 # Turbo
 .turbo
 
+# # Hugeicons
+# .npmrc
+
 # Vercel
 .vercel
 

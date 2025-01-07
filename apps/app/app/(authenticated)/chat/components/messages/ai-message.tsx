@@ -1,3 +1,9 @@
+import {
+  Copy01Icon,
+  Delete01Icon,
+  ThumbsDownIcon,
+  Tick01Icon,
+} from '@hugeicons/react';
 import { Quotes } from '@phosphor-icons/react';
 import { useRef, useState } from 'react';
 import * as Selection from 'selection-popover';
@@ -11,18 +17,13 @@ import type { TChatMessage } from '@/app/hooks';
 
 import { RegenerateWithModelSelect } from '@/app/(authenticated)/chat/components/regenerate-model-select';
 import {
+  type TToolResponse,
   useClipboard,
   useMarkdown,
   useModelList,
   useTextSelection,
   useTools,
 } from '@/app/hooks';
-import {
-  Copy01Icon,
-  Delete01Icon,
-  ThumbsDownIcon,
-  Tick01Icon,
-} from '@hugeicons/react';
 import {
   Alert,
   AlertDescription,
@@ -44,20 +45,10 @@ export type TAIMessage = {
 };
 
 export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
-  const {
-    id,
-    rawAI,
-    isLoading,
-    stop,
-    stopReason,
-    isToolRunning,
-    toolName,
-    toolMeta,
-    inputProps,
-  } = chatMessage;
+  const { id, rawAI, isLoading, stop, stopReason, tools, inputProps } =
+    chatMessage;
 
   const { getToolInfoByKey } = useTools();
-  const toolUsed = toolName ? getToolInfoByKey(toolName) : undefined;
   const messageRef = useRef<HTMLDivElement>(null);
   const { showCopied, copy } = useClipboard();
   const { getModelByKey, getAssistantByKey, getAssistantIcon } = useModelList();
@@ -67,6 +58,47 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
   const { handleRunModel, setContextValue, editor } = useChatContext();
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { selectedText } = useTextSelection();
+
+  const isToolRunning = !!tools?.filter((t) => !!t?.toolLoading)?.length;
+
+  const renderTool = (tool: TToolResponse) => {
+    const toolUsed = tool?.toolName
+      ? getToolInfoByKey(tool?.toolName)
+      : undefined;
+
+    if (!toolUsed) {
+      return null;
+    }
+
+    const Icon = toolUsed.smallIcon;
+
+    return (
+      <>
+        {toolUsed && (
+          <Type
+            size="xs"
+            className="flex flex-row items-center gap-2"
+            textColor="tertiary"
+          >
+            {tool?.toolLoading ? (
+              <Spinner />
+            ) : (
+              <Icon size={20} strokeWidth={1.5} />
+            )}
+            <Type size="sm" textColor="tertiary">
+              {tool?.toolLoading
+                ? toolUsed.loadingMessage
+                : toolUsed.resultMessage}
+            </Type>
+          </Type>
+        )}
+
+        {toolUsed &&
+          tool?.toolRenderArgs &&
+          toolUsed?.renderUI?.(tool?.toolRenderArgs)}
+      </>
+    );
+  };
 
   const modelForMessage = getModelByKey(inputProps.assistant.baseModel);
 
@@ -132,20 +164,7 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
         items="start"
         className="w-full flex-1 overflow-hidden p-2"
       >
-        {toolUsed && (
-          <Type
-            size="xs"
-            className="flex flex-row items-center gap-2"
-            textColor="tertiary"
-          >
-            {isToolRunning ? <Spinner /> : toolUsed.smallIcon()}
-            <Type size="sm" textColor="tertiary">
-              {isToolRunning ? toolUsed.loadingMessage : toolUsed.resultMessage}
-            </Type>
-          </Type>
-        )}
-
-        {toolUsed && toolMeta && toolUsed?.renderUI?.(toolMeta)}
+        {tools?.map(renderTool)}
 
         {rawAI && (
           <Selection.Root>
@@ -189,7 +208,7 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
               </Type>
             </Flex>
           )}
-          {!isLoading && !isToolRunning && (
+          {!isLoading && (
             <div className="flex flex-row gap-1">
               <Tooltip content="Copy">
                 <Button

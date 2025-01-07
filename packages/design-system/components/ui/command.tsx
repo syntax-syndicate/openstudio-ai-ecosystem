@@ -5,6 +5,7 @@ import { type DialogProps } from "@radix-ui/react-dialog"
 import { Command as CommandPrimitive } from "cmdk"
 import { cn } from "@repo/design-system/lib/utils"
 import { Dialog, DialogContent, DialogOverlay } from "@repo/design-system/components/ui/dialog"
+// @ts-ignore
 import { Search01Icon } from "@hugeicons/react";
 
 const Command = React.forwardRef<
@@ -42,7 +43,7 @@ const CommandInput = React.forwardRef<
   <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
     <Search01Icon
       size={24}
-      strokeWidth={2}
+      strokeWidth="2"
       className="mr-2 h-4 w-4 shrink-0 opacity-50"
     />
     <CommandPrimitive.Input
