@@ -84,8 +84,6 @@ export const useLLMTest = () => {
       });
     }
     setIsCheckingApiKey(false);
-
-    return <></>;
   };
 
   return { testLLM, checkApiKey, isCheckingApiKey };
