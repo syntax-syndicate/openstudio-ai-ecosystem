@@ -1,4 +1,3 @@
-import { ModelInfo } from '@/app/(authenticated)/chat/components/model-info';
 import { defaultPreferences } from '@/config';
 import { usePreferenceContext } from '@/context/preferences';
 import { useModelList } from '@/hooks/use-model-list';
@@ -49,11 +48,6 @@ export const QuickSettings = () => {
         </PopoverTrigger>
       </Tooltip>
       <PopoverContent className="roundex-2xl mr-8 w-[300px] p-0 dark:bg-zinc-700">
-        {assistant && (
-          <div className="border-black/10 border-b p-2 dark:border-white/10">
-            <ModelInfo model={assistant.model} showDetails={false} />
-          </div>
-        )}
         <Flex direction="col" className="w-full px-3 py-1">
           <Flex items="center" justify="between" className="w-full">
             <Tooltip content="Temprature">

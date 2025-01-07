@@ -122,12 +122,9 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
       {children}
 
       <Dialog open={isSettingOpen} onOpenChange={setIsSettingOpen}>
-        <DialogContent className="flex max-h-[80dvh] w-[96dvw] flex-col gap-0 overflow-hidden rounded-2xl border border-white/5 p-0 md:h-[600px] md:min-w-[800px]">
-          <div className="w-full border-zinc-500/20 border-b px-4 py-3">
-            <p className="font-medium text-md">Settings</p>
-          </div>
+        <DialogContent className="flex max-h-[80dvh] w-[96dvw] flex-col gap-0 overflow-hidden rounded-2xl border border-white/5 p-0 md:h-[700px] md:min-w-[900px]">
           <div className="relative flex h-full w-full flex-col overflow-hidden md:flex-row">
-            <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row gap-1 overflow-x-auto border-zinc-500/10 px-2 pt-2 pb-2 md:bottom-0 md:h-full md:w-[220px] md:flex-col md:gap-1 md:overflow-y-auto md:pb-16">
+            <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row gap-1 overflow-x-auto border-zinc-500/10 bg-zinc-900/30 p-4 md:bottom-0 md:h-full md:w-[240px] md:flex-col md:gap-1 md:overflow-y-auto md:pb-16">
               {settingMenu.map((menu) => (
                 <Button
                   variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}
@@ -150,7 +147,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 </Button>
               ))}
             </div>
-            <div className="no-scrollbar mt-12 h-full w-full overflow-y-auto pb-16 md:mt-0 md:ml-[220px]">
+            <div className="no-scrollbar mt-12 h-full w-full overflow-y-auto p-4 pb-16 md:mt-0 md:ml-[240px]">
               {selectedMenuItem?.component}
             </div>
           </div>

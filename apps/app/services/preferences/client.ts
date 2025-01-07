@@ -1,4 +1,4 @@
-import { configs } from '@/config';
+import { defaultPreferences } from '@/config';
 import type { TApiKeys, TPreferences } from '@/types';
 import { get, set } from 'idb-keyval';
 
@@ -18,7 +18,7 @@ class PreferenceService {
     return newPreferences;
   }
   async resetToDefaults(): Promise<void> {
-    await set('preferences', configs.defaultPreferences);
+    await set('preferences', defaultPreferences);
   }
   async setApiKey(key: string, value: string): Promise<void> {
     const keys = await this.getApiKeys();

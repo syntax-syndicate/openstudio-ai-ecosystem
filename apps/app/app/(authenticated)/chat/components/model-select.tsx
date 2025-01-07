@@ -29,8 +29,13 @@ export const ModelSelect: FC<TModelSelect> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { getModelByKey, models, assistants, getAssistantByKey } =
-    useModelList();
+  const {
+    getModelByKey,
+    models,
+    assistants,
+    getAssistantByKey,
+    getAssistantIcon,
+  } = useModelList();
 
   const activeAssistant = getAssistantByKey(selectedModel);
 
@@ -43,8 +48,8 @@ export const ModelSelect: FC<TModelSelect> = ({
             className={cn('gap-2 pr-3 pl-1 text-xs md:text-sm', className)}
             size="sm"
           >
-            {activeAssistant?.model?.icon('sm')}{' '}
-            {activeAssistant?.assistant.name}
+            {activeAssistant?.assistant &&
+              getAssistantIcon(activeAssistant?.assistant.key, 'sm')}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
@@ -75,7 +80,7 @@ export const ModelSelect: FC<TModelSelect> = ({
                   }}
                 >
                   {assistant.type === 'base' ? (
-                    model?.icon('sm')
+                    getAssistantIcon(assistant.key, 'sm')
                   ) : (
                     <ModelIcon type="custom" size="sm" />
                   )}
