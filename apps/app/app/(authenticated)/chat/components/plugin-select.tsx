@@ -1,6 +1,7 @@
-import { usePreferenceContext } from '@/app/context/preferences';
-import { useModelList } from '@/app/hooks/use-model-list';
-import { type TToolKey, useTools } from '@/app/hooks/use-tools';
+import { usePreferenceContext } from '@/context/preferences';
+import { useModelList } from '@/hooks/use-model-list';
+import { useTools } from '@/hooks/use-tools';
+import type { TToolKey } from '@/types';
 import { ConnectIcon } from '@hugeicons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -13,13 +14,13 @@ import {
 import { Switch } from '@repo/design-system/components/ui/switch';
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
-import { useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 
 export type TPluginSelect = {
   selectedAssistantKey: string;
 };
 
-export const PluginSelect = ({ selectedAssistantKey }: TPluginSelect) => {
+export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { tools } = useTools();
   const { getAssistantByKey } = useModelList();

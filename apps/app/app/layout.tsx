@@ -1,5 +1,5 @@
 import '@repo/design-system/styles/globals.css';
-import { interVar } from '@/app/lib/fonts';
+import { interVar } from '@/lib/fonts';
 import { DesignSystemProvider } from '@repo/design-system';
 import { fonts } from '@repo/design-system/lib/fonts';
 import { cn } from '@repo/design-system/lib/utils';

@@ -1,10 +1,8 @@
 import { ModelInfo } from '@/app/(authenticated)/chat/components/model-info';
-import { usePreferenceContext } from '@/app/context/preferences';
-import { useModelList } from '@/app/hooks/use-model-list';
-import {
-  type TPreferences,
-  defaultPreferences,
-} from '@/app/hooks/use-preferences';
+import { defaultPreferences } from '@/config';
+import { usePreferenceContext } from '@/context/preferences';
+import { useModelList } from '@/hooks/use-model-list';
+import type { TPreferences } from '@/types';
 import { Settings03Icon } from '@hugeicons/react';
 import { ArrowClockwise, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';

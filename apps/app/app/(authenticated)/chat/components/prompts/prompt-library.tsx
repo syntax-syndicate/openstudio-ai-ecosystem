@@ -1,7 +1,6 @@
-import { useChatContext } from '@/app/context';
-import type { TPrompt } from '@/app/hooks';
-import { Delete01Icon, Edit02Icon, NoteIcon } from '@hugeicons/react';
-import { DotsThree } from '@phosphor-icons/react';
+import type { TPrompt } from '@/hooks/use-prompts';
+import { Edit02Icon, NoteIcon } from '@hugeicons/react';
+import { DotsThree, Pencil, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Command,
@@ -19,30 +18,22 @@ import {
 } from '@repo/design-system/components/ui/dropdown-menu';
 
 export type TPromptLibrary = {
-  open: boolean;
   onPromptSelect: (prompt: TPrompt) => void;
-  tab: 'public' | 'local';
   publicPrompts: TPrompt[];
   localPrompts: TPrompt[];
   onEdit: (prompt: TPrompt) => void;
   onDelete: (prompt: TPrompt) => void;
-  onTabChange: (tab: 'public' | 'local') => void;
   onCreate: () => void;
 };
 
 export const PromptLibrary = ({
-  open,
   onPromptSelect,
-  tab,
   localPrompts,
   publicPrompts,
   onCreate,
-  onTabChange,
   onEdit,
   onDelete,
 }: TPromptLibrary) => {
-  const { editor } = useChatContext();
-
   return (
     <Command>
       <div className="w-full p-1">
@@ -66,58 +57,59 @@ export const PromptLibrary = ({
             <Edit02Icon size={18} variant="stroke" strokeWidth="2" />
             Create Prompt
           </CommandItem>
-          <CommandGroup heading="Prompts Collections">
-            {[...localPrompts, ...publicPrompts]?.map((prompt) => (
+          <CommandGroup heading="Local Prompts">
+            {localPrompts.map((prompt) => (
               <CommandItem
                 value={prompt.name}
                 key={prompt.id}
                 className="w-full"
-                onSelect={() => {
-                  onPromptSelect(prompt);
-                }}
+                onSelect={() => onPromptSelect(prompt)}
               >
                 <NoteIcon size={20} variant="stroke" strokeWidth="2" />
                 {prompt.name}
-                {tab === 'local' && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="iconSm">
-                        <DotsThree size={24} weight="bold" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="min-w-[200px] text-sm md:text-base"
-                      align="end"
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="iconSm">
+                      <DotsThree size={24} weight="bold" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="min-w-[200px] text-sm md:text-base"
+                    align="end"
+                  >
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        onEdit(prompt);
+                        e.stopPropagation();
+                      }}
                     >
-                      <DropdownMenuItem
-                        onClick={(e) => {
-                          onEdit(prompt);
-                          e.stopPropagation();
-                        }}
-                      >
-                        <Edit02Icon
-                          size={14}
-                          variant="stroke"
-                          strokeWidth="2"
-                        />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={(e) => {
-                          onDelete(prompt);
-                          e.stopPropagation();
-                        }}
-                      >
-                        <Delete01Icon
-                          size={14}
-                          variant="stroke"
-                          strokeWidth="2"
-                        />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
+                      <Pencil size={14} weight="bold" />
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        onDelete(prompt);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <TrashSimple size={14} weight="bold" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandGroup heading="Public Prompts">
+            {publicPrompts.map((prompt) => (
+              <CommandItem
+                value={prompt.name}
+                key={prompt.id}
+                className="w-full"
+                onSelect={() => onPromptSelect(prompt)}
+              >
+                <NoteIcon size={20} variant="stroke" strokeWidth="2" />
+                {prompt.name}
               </CommandItem>
             ))}
           </CommandGroup>

@@ -1,5 +1,5 @@
-import { useClipboard } from '@/app/hooks/use-clipboard';
-import { ibmPlex } from '@/app/lib/fonts';
+import { useClipboard } from '@/hooks/use-clipboard';
+import { ibmPlex } from '@/lib/fonts';
 import { Copy01Icon, Tick01Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';

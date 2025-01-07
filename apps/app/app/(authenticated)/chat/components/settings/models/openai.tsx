@@ -1,5 +1,5 @@
-import { usePreferenceContext } from '@/app/context/preferences';
-import { useLLMTest } from '@/app/hooks/use-llm-test';
+import { usePreferenceContext } from '@/context/preferences';
+import { useLLMTest } from '@/hooks/use-llm-test';
 
 import { ArrowRight, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';

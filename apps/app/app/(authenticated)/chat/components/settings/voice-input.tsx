@@ -1,6 +1,6 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { usePreferenceContext } from '@/app/context/preferences';
+import { usePreferenceContext } from '@/context/preferences';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Switch } from '@repo/design-system/components/ui/switch';
 import { Type } from '@repo/design-system/components/ui/text';

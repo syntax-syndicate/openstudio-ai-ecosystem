@@ -1,5 +1,5 @@
-import type { TAssistant } from '@/app/hooks';
-import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
+import { useModelList } from '@/hooks/use-model-list';
+import type { TAssistant, TModelKey } from '@/types';
 import { ArrowDown01Icon, SparklesIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {

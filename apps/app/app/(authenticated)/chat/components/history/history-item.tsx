@@ -1,6 +1,6 @@
-import { useSessionsContext } from '@/app/context/sessions';
-import type { TChatSession } from '@/app/hooks/use-chat-session';
-import { useModelList } from '@/app/hooks/use-model-list';
+import { useSessions } from '@/context';
+import { useModelList } from '@/hooks/use-model-list';
+import type { TChatSession } from '@/types';
 import { Delete01Icon, Edit02Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -14,7 +14,7 @@ import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
 import moment from 'moment';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export const HistoryItem = ({
@@ -24,12 +24,9 @@ export const HistoryItem = ({
   session: TChatSession;
   dismiss: () => void;
 }) => {
-  const {
-    currentSession,
-    updateSessionMutation,
-    removeSessionByIdMutation,
-    createSession,
-  } = useSessionsContext();
+  const { sessionId } = useParams();
+  const { updateSessionMutation, removeSessionMutation, createSession } =
+    useSessions();
   const { getModelByKey, getAssistantByKey } = useModelList();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(session.title);
@@ -37,26 +34,28 @@ export const HistoryItem = ({
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const historyInputRef = useRef<HTMLInputElement>(null);
 
-  const assistantProps = getAssistantByKey(
-    session.messages?.[0]?.inputProps?.assistant?.key
-  );
-
-  const modelProps = getModelByKey(
-    session.messages?.[0]?.inputProps?.assistant?.baseModel
-  );
-
   useEffect(() => {
     if (isEditing) {
       historyInputRef.current?.focus();
     }
   }, [isEditing]);
 
+  const handleDelete = () => {
+    removeSessionMutation.mutate(session.id, {
+      onSuccess: () => {
+        createSession({
+          redirect: true,
+        });
+      },
+    });
+  };
+
   return (
     <div
       key={session.id}
       className={cn(
-        'group flex w-full cursor-pointer flex-row items-start gap-2 rounded-xl p-2 hover:bg-black/10 hover:dark:bg-black/30',
-        currentSession?.id === session.id || isEditing
+        'group flex w-full cursor-pointer flex-row items-start gap-2 rounded-xl py-2 pr-2 pl-3 hover:bg-black/10 hover:dark:bg-black/30',
+        sessionId?.toString() === session.id || isEditing
           ? 'bg-black/10 dark:bg-black/30'
           : ''
       )}
@@ -95,8 +94,7 @@ export const HistoryItem = ({
         />
       ) : (
         <>
-          {modelProps?.icon?.('sm')}
-          <Flex direction="col" items="start" className="w-full">
+          <Flex direction="col" items="start" className="w-full" gap="none">
             <Type
               className="line-clamp-1"
               size="sm"
@@ -151,7 +149,7 @@ export const HistoryItem = ({
                     variant="destructive"
                     size="sm"
                     onClick={(e) => {
-                      removeSessionByIdMutation.mutate(session.id, {
+                      removeSessionMutation.mutate(session.id, {
                         onSuccess: () => {
                           createSession({
                             redirect: true,

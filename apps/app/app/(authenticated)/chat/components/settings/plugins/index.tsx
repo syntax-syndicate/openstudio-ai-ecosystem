@@ -1,6 +1,6 @@
 import { ImageGenerationPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/image-generation';
 import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
-import { usePreferenceContext } from '@/app/context';
+import { usePreferenceContext } from '@/context';
 import { GlobalSearchIcon, Image01Icon } from '@hugeicons/react';
 import {
   Accordion,

@@ -1,6 +1,6 @@
 import { HistoryItem } from '@/app/(authenticated)/chat/components/history/history-item';
-import { useSessionsContext } from '@/app/context';
-import { sortSessions } from '@/app/lib/helper';
+import { useSessions } from '@/context';
+import { sortSessions } from '@/lib/helper';
 import { SidebarLeftIcon } from '@hugeicons/react';
 import { ClockCounterClockwise, X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { Drawer } from 'vaul';
 
 export const HistorySidebar = () => {
-  const { sessions, createSession, currentSession } = useSessionsContext();
+  const { sessions } = useSessions();
   const [open, setOpen] = useState(false);
 
   return (

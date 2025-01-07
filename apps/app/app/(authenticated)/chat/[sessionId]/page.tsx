@@ -3,11 +3,11 @@
 import { ChatInput } from '@/app/(authenticated)/chat/components/chat-input';
 import { Navbar } from '@/app/(authenticated)/chat/components/layout/navbar';
 import { ChatMessages } from '@/app/(authenticated)/chat/components/messages/chat-messages';
-import { useSessionsContext } from '@/app/context/sessions';
-import Spinner from '@repo/design-system/components/ui/loading-spinner';
+import { useSessions } from '@/context/sessions';
+import { Spinner } from '@repo/design-system/components/ui/loading-spinner';
 
 const ChatSessionPage = () => {
-  const { isCurrentSessionLoading, isAllSessionLoading } = useSessionsContext();
+  const { isAllSessionLoading } = useSessions();
 
   const renderLoader = () => {
     return (
@@ -16,10 +16,10 @@ const ChatSessionPage = () => {
       </div>
     );
   };
-  const isLoading = isCurrentSessionLoading || isAllSessionLoading;
+  const isLoading = isAllSessionLoading;
 
   return (
-    <div className="relative flex h-[100%] w-full flex-row overflow-hidden rounded-xl bg-white dark:bg-zinc-800">
+    <div className="relative flex h-[100%] w-full flex-row overflow-hidden bg-white dark:bg-zinc-800">
       <Navbar />
       {isLoading && renderLoader()}
       {!isLoading && (

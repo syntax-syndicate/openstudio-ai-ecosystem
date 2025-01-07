@@ -1,9 +1,5 @@
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
-import {
-  usePromptsContext,
-  useSessionsContext,
-  useSettingsContext,
-} from '@/app/context';
+import { usePromptsContext, useSessions, useSettingsContext } from '@/context';
 import {
   Moon02Icon,
   MoreHorizontalIcon,
@@ -29,7 +25,7 @@ export const Navbar = () => {
   const { open: openSettings } = useSettingsContext();
   const { open: openPrompts } = usePromptsContext();
   const [isOpen, setIsOpen] = useState(false);
-  const { createSession } = useSessionsContext();
+  const { createSession } = useSessions();
 
   const renderNewSession = () => {
     return (

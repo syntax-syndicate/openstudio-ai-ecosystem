@@ -1,5 +1,6 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
-import { type TModelKey, useModelList } from '@/app/hooks/use-model-list';
+import { useModelList } from '@/hooks/use-model-list';
+import type { TModelKey } from '@/types';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
@@ -9,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
 import { cn } from '@repo/design-system/lib/utils';
-import { useState } from 'react';
+import { type FC, useState } from 'react';
 
 export type TModelSelect = {
   selectedModel: TModelKey;
@@ -19,13 +20,13 @@ export type TModelSelect = {
   className?: string;
 };
 
-export const ModelSelect = ({
+export const ModelSelect: FC<TModelSelect> = ({
   selectedModel,
   variant,
   fullWidth,
   setSelectedModel,
   className,
-}: TModelSelect) => {
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { getModelByKey, models, assistants, getAssistantByKey } =

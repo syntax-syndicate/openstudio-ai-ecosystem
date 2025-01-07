@@ -1,13 +1,10 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { useSettingsContext } from '@/app/context';
-import { usePreferenceContext } from '@/app/context/preferences';
-import { useSessionsContext } from '@/app/context/sessions';
-import {
-  type TPreferences,
-  defaultPreferences,
-} from '@/app/hooks/use-preferences';
-import { generateAndDownloadJson } from '@/app/lib/helper';
+import { defaultPreferences } from '@/config';
+import { useSessions, useSettingsContext } from '@/context';
+import { usePreferenceContext } from '@/context/preferences';
+import { generateAndDownloadJson } from '@/lib/helper';
+import type { TPreferences } from '@/types';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';
@@ -143,7 +140,7 @@ export const Data = () => {
     addSessionsMutation,
     clearSessionsMutation,
     createSession,
-  } = useSessionsContext();
+  } = useSessions();
 
   const {
     preferences,

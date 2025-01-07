@@ -1,8 +1,8 @@
-import type { TModel } from '@/app/hooks/use-model-list';
-import { formatNumber } from '@/app/lib/helper';
+import { formatNumber } from '@/lib/helper';
+import type { TModelItem } from '@/types';
 
 export type TModelInfo = {
-  model: TModel;
+  model: TModelItem;
   showDetails?: boolean;
 };
 

@@ -1,5 +1,5 @@
 import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
-import type { TAssistant } from '@/app/hooks/use-chat-session';
+import type { TAssistant } from '@/types';
 import { Plus } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';

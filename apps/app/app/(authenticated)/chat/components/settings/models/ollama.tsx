@@ -1,4 +1,4 @@
-import { usePreferenceContext } from '@/app/context/preferences';
+import { usePreferenceContext } from '@/context/preferences';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';

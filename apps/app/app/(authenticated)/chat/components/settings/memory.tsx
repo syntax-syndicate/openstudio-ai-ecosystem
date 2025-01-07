@@ -1,6 +1,6 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { usePreferenceContext } from '@/app/context/preferences';
+import { usePreferenceContext } from '@/context/preferences';
 import { Delete01Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Type } from '@repo/design-system/components/ui/text';

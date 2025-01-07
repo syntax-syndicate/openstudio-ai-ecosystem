@@ -1,7 +1,7 @@
-import { usePreferenceContext } from '@/app/context';
-import type { TAssistant } from '@/app/hooks/use-chat-session';
-import { useModelList } from '@/app/hooks/use-model-list';
-import { defaultPreferences } from '@/app/hooks/use-preferences';
+import { defaultPreferences } from '@/config';
+import { usePreferenceContext } from '@/context';
+import { useModelList } from '@/hooks/use-model-list';
+import type { TAssistant } from '@/types';
 import { ConnectIcon } from '@hugeicons/react';
 import { DotsThree, Pencil, TrashSimple } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';

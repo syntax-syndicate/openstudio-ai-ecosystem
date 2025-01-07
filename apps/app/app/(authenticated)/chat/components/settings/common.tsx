@@ -1,10 +1,8 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { usePreferenceContext } from '@/app/context/preferences';
-import {
-  type TPreferences,
-  defaultPreferences,
-} from '@/app/hooks/use-preferences';
+import { defaultPreferences } from '@/config';
+import { usePreferenceContext } from '@/context/preferences';
+import type { TPreferences } from '@/types';
 import { ArrowClockwise, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';

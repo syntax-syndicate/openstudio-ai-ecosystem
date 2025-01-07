@@ -3,14 +3,13 @@ import { Header } from '@/app/(authenticated)/components/header';
 import {
   AssistantsProvider,
   ChatProvider,
-  ConfirmProvider,
-  FiltersProvider,
+  CommandsProvider,
   PreferenceProvider,
   PromptsProvider,
   ReactQueryProvider,
   SessionsProvider,
   SettingsProvider,
-} from '@/app/context'; // Consolidated context imports
+} from '@/context'; // Consolidated context imports
 import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
 import { ThemeProvider } from '@repo/design-system/providers/theme';
 
@@ -39,23 +38,21 @@ export default function ChatLayout({
       >
         <ReactQueryProvider>
           <TooltipProvider>
-            <ConfirmProvider>
-              <PreferenceProvider>
-                <SessionsProvider>
-                  <SettingsProvider>
-                    <ChatProvider>
-                      <FiltersProvider>
-                        <AssistantsProvider>
-                          <PromptsProvider>
-                            <MainLayout>{children}</MainLayout>
-                          </PromptsProvider>
-                        </AssistantsProvider>
-                      </FiltersProvider>
-                    </ChatProvider>
-                  </SettingsProvider>
-                </SessionsProvider>
-              </PreferenceProvider>
-            </ConfirmProvider>
+            <PreferenceProvider>
+              <SessionsProvider>
+                <SettingsProvider>
+                  <ChatProvider>
+                    <CommandsProvider>
+                      <AssistantsProvider>
+                        <PromptsProvider>
+                          <MainLayout>{children}</MainLayout>
+                        </PromptsProvider>
+                      </AssistantsProvider>
+                    </CommandsProvider>
+                  </ChatProvider>
+                </SettingsProvider>
+              </SessionsProvider>
+            </PreferenceProvider>
           </TooltipProvider>
         </ReactQueryProvider>
       </ThemeProvider>

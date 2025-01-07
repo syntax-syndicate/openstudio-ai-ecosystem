@@ -1,5 +1,5 @@
-import { usePromptsContext } from '@/app/context';
-import type { TPrompt } from '@/app/hooks/use-prompts';
+import { usePromptsContext } from '@/context';
+import type { TPrompt } from '@/hooks/use-prompts';
 import { Plus } from '@phosphor-icons/react';
 import {
   Command as CMDKCommand,

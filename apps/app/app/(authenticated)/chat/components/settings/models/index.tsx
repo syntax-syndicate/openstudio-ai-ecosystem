@@ -6,9 +6,9 @@ import { AnthropicSettings } from '@/app/(authenticated)/chat/components/setting
 import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/models/gemini';
 import { OllamaSettings } from '@/app/(authenticated)/chat/components/settings/models/ollama';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/models/openai';
-import { usePreferenceContext } from '@/app/context/preferences';
-import { useSettingsContext } from '@/app/context/settings';
-import type { TBaseModel } from '@/app/hooks';
+import { usePreferenceContext } from '@/context/preferences';
+import { useSettingsContext } from '@/context/settings';
+import type { TBaseModel } from '@/types';
 import { AlertCircleIcon, CheckmarkCircle02Icon } from '@hugeicons/react';
 import {
   Accordion,

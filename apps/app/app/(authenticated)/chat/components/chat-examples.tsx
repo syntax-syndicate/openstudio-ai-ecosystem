@@ -1,4 +1,4 @@
-import { useChatContext } from '@/app/context';
+import { useChatContext } from '@/context';
 import { ArrowRight02Icon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 
 export type TChatExamples = {};
 export const ChatExamples = () => {
-  const { editor } = useChatContext();
+  const { store } = useChatContext();
+  const editor = store((state) => state.editor);
 
   const allPrompts = [
     {
