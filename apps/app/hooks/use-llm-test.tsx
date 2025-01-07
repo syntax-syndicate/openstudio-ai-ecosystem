@@ -1,11 +1,11 @@
 import { useModelList } from '@/hooks/use-model-list';
 import type { TBaseModel } from '@/types';
-import { Button } from '@repo/design-system/components/ui/button';
 import { useToast } from '@repo/design-system/hooks/use-toast';
 import { useState } from 'react';
+
 export const useLLMTest = () => {
   const { getTestModelKey, getModelByKey, createInstance } = useModelList();
-  const [isTestRunning, setIsTestRunning] = useState(false);
+  const [isCheckingApiKey, setIsCheckingApiKey] = useState(false);
   const { toast } = useToast();
   const testLLM = async (model: TBaseModel, apiKey?: string) => {
     try {
@@ -23,7 +23,7 @@ export const useLLMTest = () => {
 
       const selectedModel = await createInstance(selectedModelKey, apiKey);
 
-      const data = await selectedModel!
+      const data = await selectedModel
         .withListeners({
           onError: (error) => {
             console.error('error', error);
@@ -55,38 +55,38 @@ export const useLLMTest = () => {
     }
   };
 
-  const renderSaveApiKeyButton = (
-    model: TBaseModel,
-    key: string,
-    onValidated: () => void
-  ) => {
-    return (
-      <Button
-        size="sm"
-        onClick={async () => {
-          setIsTestRunning(true);
-          const isWorking = await testLLM(model, key);
-          if (isWorking) {
-            onValidated();
-            toast({
-              title: 'API Key saved successfully',
-              description: 'Model is working as expected',
-              variant: 'default',
-            });
-          } else {
-            toast({
-              title: 'API Key Invalid',
-              description: 'Please check your API key and try again.',
-              variant: 'destructive',
-            });
-          }
-          setIsTestRunning(false);
-        }}
-      >
-        {isTestRunning ? 'Validating...' : 'Save API Key'}
-      </Button>
-    );
+  const checkApiKey = async ({
+    model,
+    key,
+    onValidated,
+    onError,
+  }: {
+    model: TBaseModel;
+    key: string;
+    onValidated: () => void;
+    onError: () => void;
+  }) => {
+    setIsCheckingApiKey(true);
+    const isWorking = await testLLM(model, key);
+    if (isWorking) {
+      onValidated();
+      toast({
+        title: 'API Key saved successfully',
+        description: 'Model is working as expected',
+        variant: 'default',
+      });
+    } else {
+      onError();
+      toast({
+        title: 'API Key Invalid',
+        description: 'Please check your API key and try again.',
+        variant: 'destructive',
+      });
+    }
+    setIsCheckingApiKey(false);
+
+    return <></>;
   };
 
-  return { testLLM, renderSaveApiKeyButton };
+  return { testLLM, checkApiKey, isCheckingApiKey };
 };

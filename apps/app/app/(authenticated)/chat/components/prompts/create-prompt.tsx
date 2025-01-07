@@ -130,7 +130,7 @@ export const CreatePrompt = ({
           className="no-scrollbar [&>*]:no-scrollbar w-full cursor-text p-3 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-7 [&>*]:outline-none"
         />
         <p className="flex flex-row items-center gap-2 px-3 py-2 text-xs text-zinc-500">
-          Use <Badge>{`{{{{ input }}}}`}</Badge> for user input
+          Use <Badge>{`{{ input }}`}</Badge> for user input
         </p>
       </div>
       <div className="absolute right-0 bottom-0 left-0 flex w-full flex-row items-center gap-3 border-zinc-500/20 border-t bg-white px-2 py-2 dark:bg-zinc-800">

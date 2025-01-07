@@ -2,13 +2,15 @@ import { usePreferenceContext } from '@/context/preferences';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';
-import { useToast } from '@repo/design-system/components/ui/use-toast';
+import { useToast } from '@repo/design-system/hooks/use-toast';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export const OllamaSettings = () => {
   const [url, setURL] = useState<string>('');
   const { preferences, updatePreferences } = usePreferenceContext();
   const { toast } = useToast();
+
   useEffect(() => {
     setURL(preferences.ollamaBaseUrl);
   }, [preferences]);
@@ -16,6 +18,7 @@ export const OllamaSettings = () => {
   const handleURLChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setURL(e.target.value);
   };
+
   const verifyAndSaveURL = async () => {
     try {
       const response = await fetch(url + '/api/tags');
@@ -41,11 +44,17 @@ export const OllamaSettings = () => {
 
   return (
     <Flex direction="col" gap="sm">
-      <div className="flex flex-row items-end justify-between">
+      <Flex items="center" gap="sm">
         <p className="text-xs text-zinc-500 md:text-sm">
           Ollama local server URL
         </p>
-      </div>
+        <Link
+          href="https://aistudio.google.com/app/apikey"
+          className="font-medium text-blue-400"
+        >
+          (Configuration guide)
+        </Link>
+      </Flex>
       <Input
         placeholder="http://localhost:11434"
         value={url}
@@ -53,11 +62,10 @@ export const OllamaSettings = () => {
         onChange={handleURLChange}
       />
       <div className="flex flex-row items-center gap-2">
-        <Button size="sm" onClick={verifyAndSaveURL}>
-          Save & Check Connection
+        <Button size="sm" variant="outline" onClick={verifyAndSaveURL}>
+          Check Connection
         </Button>
       </div>
-      {/* TODO: Add FAQ Section with q and a here you can use Type Component */}
     </Flex>
   );
 };

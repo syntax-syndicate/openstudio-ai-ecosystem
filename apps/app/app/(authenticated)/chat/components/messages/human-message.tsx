@@ -1,7 +1,5 @@
 import type { TChatMessage } from '@/types';
-import { Edit02Icon } from '@hugeicons/react';
 import { Quotes } from '@phosphor-icons/react';
-import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import Image from 'next/image';
 
@@ -36,11 +34,6 @@ export const HumanMessage = ({ chatMessage, isLast }: THumanMessage) => {
         </div>
       )}
       <Flex className="ml-16 md:ml-32" gap="xs" items="center">
-        {isLast && (
-          <Button variant="ghost" size="iconSm">
-            <Edit02Icon size={16} strokeWidth={2} />
-          </Button>
-        )}
         <div className="flex flex-row gap-2 rounded-2xl bg-zinc-50 px-3 py-2 text-sm text-zinc-600 md:text-base dark:bg-black/30 dark:text-zinc-100">
           <span className="whitespace-pre-wrap pt-[0.20em] pb-[0.15em] leading-6">
             {rawHuman}

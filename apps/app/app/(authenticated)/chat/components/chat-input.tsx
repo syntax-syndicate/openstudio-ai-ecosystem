@@ -47,8 +47,6 @@ export const ChatInput = () => {
   const { selectedAssistant, open: openAssistants } = useAssistants();
   const { invokeModel } = useLLMRunner();
 
-  console.log('sssss', session);
-
   const { editor } = useChatEditor();
 
   const { preferences, updatePreferences } = usePreferenceContext();
@@ -187,25 +185,11 @@ export const ChatInput = () => {
       <div className="flex w-full flex-col gap-3 md:w-[700px] lg:w-[720px]">
         {renderSelectedContext()}
         {editor && (
-          // <PromptsBotsCombo
-          //   open={openPromptsBotCombo}
-          //   onBack={() => {
-          //     editor?.commands.clearContent();
-          //     editor?.commands.focus("end");
-          //   }}
-          //   onPromptSelect={(prompt) => {
-          //     editor?.commands.setContent(prompt.content);
-          //     editor?.commands.insertContent("");
-          //     editor?.commands.focus("end");
-          //     setOpenPromptsBotCombo(false);
-          //   }}
-          //   onOpenChange={setOpenPromptsBotCombo}
-          // >
           <motion.div
             variants={slideUpVariant}
             initial={'initial'}
             animate={editor.isEditable ? 'animate' : 'initial'}
-            className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-2xl bg-zinc-50 ring-zinc-100 ring-offset-2 focus-within:ring-2 dark:border-white/5 dark:bg-white/5 dark:ring-zinc-700 dark:ring-offset-zinc-800"
+            className="flex w-full flex-col items-start gap-0 overflow-hidden rounded-2xl border bg-zinc-50 dark:border-white/5 dark:bg-white/5"
           >
             <div className="flex w-full flex-col items-start justify-start">
               {attachment && (
@@ -218,7 +202,6 @@ export const ChatInput = () => {
                   editor={editor}
                   autoFocus
                   onKeyDown={(e) => {
-                    console.log('keydown', e.key);
                     if (e.key === 'Enter' && !e.shiftKey) {
                       sendMessage(editor.getText());
                     }
@@ -269,7 +252,6 @@ export const ChatInput = () => {
               )}
             </div>
           </motion.div>
-          // </PromptsBotsCombo>
         )}
       </div>
       {isFreshSession && <ChatExamples />}

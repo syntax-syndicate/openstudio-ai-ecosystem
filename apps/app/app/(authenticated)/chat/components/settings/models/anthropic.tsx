@@ -1,23 +1,34 @@
+import { ApiKeyInfo } from '@/app/(authenticated)/chat/components/settings/models/api-key-info';
 import { usePreferenceContext } from '@/context/preferences';
 import { useLLMTest } from '@/hooks/use-llm-test';
-import { ArrowRight, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export const AnthropicSettings = () => {
   const [key, setKey] = useState<string>('');
   const { apiKeys, updateApiKey } = usePreferenceContext();
-  const { renderSaveApiKeyButton } = useLLMTest();
+  const { checkApiKey, isCheckingApiKey } = useLLMTest();
+
   useEffect(() => {
     setKey(apiKeys.anthropic || '');
   }, [apiKeys.anthropic]);
+
   return (
     <Flex direction="col" gap="sm">
-      <div className="flex flex-row items-end justify-between">
-        <p className="text-xs text-zinc-500 md:text-sm">Anthropic API Key</p>
-      </div>
+      <Flex items="center" gap="sm">
+        <p className="font-medium text-xs text-zinc-300 md:text-sm">
+          Anthropic API Key
+        </p>
+        <Link
+          href="https://console.anthropic.com/settings/keys"
+          className="font-medium text-blue-400"
+        >
+          (Get API key here)
+        </Link>
+      </Flex>
       <Input
         placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
         value={key}
@@ -27,44 +38,43 @@ export const AnthropicSettings = () => {
           setKey(e.target.value);
         }}
       />
-      <div className="flex flex-row items-center gap-2">
-        {key &&
-          key !== apiKeys?.anthropic &&
-          renderSaveApiKeyButton('anthropic', key, () => {
-            updateApiKey('anthropic', key);
-          })}
+
+      <div className="flex flex-row items-center gap-1">
+        {!apiKeys.anthropic && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              checkApiKey({
+                model: 'anthropic',
+                key,
+                onValidated: () => {
+                  updateApiKey('anthropic', key);
+                },
+                onError: () => {
+                  setKey('');
+                },
+              });
+            }}
+          >
+            {isCheckingApiKey ? 'Checking...' : 'Save Key'}
+          </Button>
+        )}
+
         {apiKeys?.anthropic && (
           <Button
-            variant="outline"
             size="sm"
+            variant="secondary"
             onClick={() => {
               setKey('');
               updateApiKey('anthropic', '');
             }}
           >
-            Remove API Key
+            Remove Key
           </Button>
         )}
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => {
-            window.open(
-              'https://console.anthropic.com/settings/keys',
-              '_blank'
-            );
-          }}
-        >
-          Get your API key here <ArrowRight size={16} weight="bold" />
-        </Button>
       </div>
-      <div className="flex flex-row items-start gap-1 py-2 text-zinc-500">
-        <Info size={16} weight="bold" />
-        <p className=" text-xs">
-          Your API Key is stored locally on your browser and never sent anywhere
-          else.
-        </p>
-      </div>
+      <ApiKeyInfo />
     </Flex>
   );
 };

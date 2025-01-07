@@ -22,11 +22,12 @@ export const useModelList = () => {
   });
 
   const createInstance = async (model: TModelItem, apiKey?: string) => {
-    const temperature =
-      preferences.temperature || defaultPreferences.temperature;
-    const topP = preferences.topP || defaultPreferences.topP;
-    const topK = preferences.topK || defaultPreferences.topK;
-    const maxTokens = preferences.maxTokens || model.tokens;
+    const {
+      temperature = defaultPreferences.temperature,
+      topP = defaultPreferences.topP,
+      topK = defaultPreferences.topK,
+      maxTokens = model.tokens,
+    } = preferences;
 
     switch (model.baseModel) {
       case 'openai':
@@ -43,9 +44,9 @@ export const useModelList = () => {
         return new ChatAnthropic({
           model: model.key,
           streaming: true,
-          // anthropicApiUrl: `${window.location.origin}/api/anthropic/`,
-          anthropicApiUrl:
-            'https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/anthropic',
+          anthropicApiUrl: `${window.location.origin}/api/anthropic/`,
+          // anthropicApiUrl:
+          //   'https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/anthropic',
           apiKey,
           maxTokens,
           temperature,
@@ -262,6 +263,8 @@ export const useModelList = () => {
         return 'gemini-pro';
       case 'ollama':
         return 'phi3:latest';
+      default:
+        throw new Error('Invalid base model');
     }
   };
 
@@ -311,7 +314,9 @@ export const useModelList = () => {
     createInstance,
     getModelByKey,
     getTestModelKey,
-    assistants,
+    assistants: assistants.filter((a) =>
+      allModels.some((m) => m.key === a.baseModel)
+    ),
     getAssistantByKey,
     getAssistantIcon,
     ...assistantQueries,
