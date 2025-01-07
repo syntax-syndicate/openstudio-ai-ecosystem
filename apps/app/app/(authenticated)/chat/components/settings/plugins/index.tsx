@@ -1,5 +1,6 @@
 import { ImageGenerationPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/image-generation';
 import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
+import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { usePreferenceContext } from '@/context';
 import { GlobalSearchIcon, Image01Icon } from '@hugeicons/react';
 import {
@@ -27,7 +28,7 @@ export const PulginSettings = () => {
     },
   ];
   return (
-    <Flex direction="col" gap="lg" className="p-2">
+    <SettingsContainer title="Plugins">
       <Accordion type="single" collapsible className="w-full">
         {pluginSettingsData.map((plugin) => {
           const Icon = plugin.icon;
@@ -46,6 +47,6 @@ export const PulginSettings = () => {
           );
         })}
       </Accordion>
-    </Flex>
+    </SettingsContainer>
   );
 };

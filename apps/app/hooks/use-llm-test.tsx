@@ -1,10 +1,12 @@
+import { getTestModelKey } from '@/helper/models';
 import { useModelList } from '@/hooks/use-model-list';
+import { modelService } from '@/services/models';
 import type { TBaseModel } from '@/types';
 import { useToast } from '@repo/design-system/hooks/use-toast';
 import { useState } from 'react';
 
 export const useLLMTest = () => {
-  const { getTestModelKey, getModelByKey, createInstance } = useModelList();
+  const { getModelByKey } = useModelList();
   const [isCheckingApiKey, setIsCheckingApiKey] = useState(false);
   const { toast } = useToast();
   const testLLM = async (model: TBaseModel, apiKey?: string) => {
@@ -21,7 +23,10 @@ export const useLLMTest = () => {
         return false;
       }
 
-      const selectedModel = await createInstance(selectedModelKey, apiKey);
+      const selectedModel = await modelService.createInstance({
+        model: selectedModelKey,
+        apiKey,
+      });
 
       const data = await selectedModel
         .withListeners({

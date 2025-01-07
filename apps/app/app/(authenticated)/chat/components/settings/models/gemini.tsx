@@ -1,9 +1,9 @@
 import { ApiKeyInfo } from '@/app/(authenticated)/chat/components/settings/models/api-key-info';
+import ApiKeyInput from '@/app/(authenticated)/chat/components/settings/models/api-key-input';
 import { usePreferenceContext } from '@/context/preferences';
 import { useLLMTest } from '@/hooks/use-llm-test';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import { Input } from '@repo/design-system/components/ui/input';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -29,14 +29,12 @@ export const GeminiSettings = () => {
           (Get API key here)
         </Link>
       </Flex>
-      <Input
-        placeholder="xxxxxxxxxxxxxxxxxxxxxxxx"
-        type="password"
-        autoComplete="off"
+      <ApiKeyInput
         value={key}
-        onChange={(e) => {
-          setKey(e.target.value);
-        }}
+        setValue={setKey}
+        isDisabled={!!apiKeys.gemini}
+        placeholder="xxxxxxxxxxxxxxxxxxxxxxxx"
+        isLocked={!!apiKeys.gemini}
       />
 
       <div className="flex flex-row items-center gap-1">

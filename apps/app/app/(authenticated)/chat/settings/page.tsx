@@ -45,7 +45,7 @@ export default function SettingsPage() {
       component: <CommonSettings />,
     },
     {
-      name: 'Models',
+      name: 'LLMs',
       icon: () => <SparklesIcon size={18} strokeWidth="2" />,
       key: 'models',
       component: <ModelSettings />,
@@ -82,7 +82,7 @@ export default function SettingsPage() {
     <div className="flex h-screen w-full flex-col gap-0 overflow-hidden bg-zinc-800 p-0">
       <div className="relative flex h-screen w-full flex-col overflow-hidden md:flex-row">
         <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row items-end gap-1 overflow-x-auto border-zinc-500/10 bg-zinc-900/50 px-2 pt-2 pb-2 md:bottom-0 md:h-full md:w-[420px] md:flex-col md:gap-0 md:overflow-y-auto md:pb-16">
-          <div className="flex w-[200px] flex-col gap-1">
+          <div className="flex w-[200px] flex-col gap-1 p-4">
             {settingMenu.map((menu) => (
               <Button
                 variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}

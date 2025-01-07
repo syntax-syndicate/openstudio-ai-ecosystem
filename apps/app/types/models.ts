@@ -1,4 +1,5 @@
-import type { JSX } from 'react';
+import type { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import type { ComponentProps } from 'react';
 import type { TToolKey } from './tools';
 
 export type TBaseModel = 'openai' | 'anthropic' | 'gemini' | 'ollama';
@@ -22,7 +23,7 @@ export type TModelItem = {
   name: string;
   key: TModelKey;
   isNew?: boolean;
-  icon: (size: 'sm' | 'md' | 'lg') => JSX.Element;
+  icon: ComponentProps<typeof ModelIcon>['type'];
   vision?: boolean;
   tokens: number;
   plugins: TToolKey[];

@@ -6,6 +6,7 @@ import { AnthropicSettings } from '@/app/(authenticated)/chat/components/setting
 import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/models/gemini';
 import { OllamaSettings } from '@/app/(authenticated)/chat/components/settings/models/ollama';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/models/openai';
+import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { usePreferenceContext } from '@/context/preferences';
 import { useSettingsContext } from '@/context/settings';
 import type { TBaseModel } from '@/types';
@@ -76,7 +77,7 @@ export const ModelSettings = () => {
     },
   ];
   return (
-    <Flex direction="col" gap="sm" className="p-4">
+    <SettingsContainer title="Providers">
       <Accordion
         type="single"
         value={selectedModel}
@@ -121,6 +122,6 @@ export const ModelSettings = () => {
           </AccordionItem>
         ))}
       </Accordion>
-    </Flex>
+    </SettingsContainer>
   );
 };

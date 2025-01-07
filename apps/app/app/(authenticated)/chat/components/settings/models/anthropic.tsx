@@ -1,9 +1,9 @@
 import { ApiKeyInfo } from '@/app/(authenticated)/chat/components/settings/models/api-key-info';
+import ApiKeyInput from '@/app/(authenticated)/chat/components/settings/models/api-key-input';
 import { usePreferenceContext } from '@/context/preferences';
 import { useLLMTest } from '@/hooks/use-llm-test';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import { Input } from '@repo/design-system/components/ui/input';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -29,14 +29,12 @@ export const AnthropicSettings = () => {
           (Get API key here)
         </Link>
       </Flex>
-      <Input
-        placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
+      <ApiKeyInput
         value={key}
-        type="password"
-        autoComplete="off"
-        onChange={(e) => {
-          setKey(e.target.value);
-        }}
+        setValue={setKey}
+        isDisabled={!!apiKeys.anthropic}
+        placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
+        isLocked={!!apiKeys.anthropic}
       />
 
       <div className="flex flex-row items-center gap-1">
