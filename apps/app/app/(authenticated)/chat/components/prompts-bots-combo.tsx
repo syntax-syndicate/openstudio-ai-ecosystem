@@ -61,7 +61,7 @@ export const PromptsBotsCombo = ({
           <CommandList className="max-h-[160px] p-2">
             <CommandItem
               onSelect={() => {
-                openPrompts('create');
+                openPrompts(true);
               }}
             >
               <Plus size={14} weight="bold" className="flex-shrink-0" /> Create
