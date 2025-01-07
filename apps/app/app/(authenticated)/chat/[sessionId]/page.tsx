@@ -1,7 +1,7 @@
 'use client';
 
 import { ChatInput } from '@/app/(authenticated)/chat/components/chat-input';
-import { Navbar } from '@/app/(authenticated)/chat/components/layout/navbar';
+import { Sidebar } from '@/app/(authenticated)/chat/components/layout/sidebar';
 import { ChatMessages } from '@/app/(authenticated)/chat/components/messages/chat-messages';
 import { useSessions } from '@/context/sessions';
 import { Spinner } from '@repo/design-system/components/ui/loading-spinner';
@@ -20,7 +20,7 @@ const ChatSessionPage = () => {
 
   return (
     <div className="relative flex h-[100%] w-full flex-row overflow-hidden bg-white dark:bg-zinc-800">
-      <Navbar />
+      <Sidebar />
       {isLoading && renderLoader()}
       {!isLoading && (
         <>
