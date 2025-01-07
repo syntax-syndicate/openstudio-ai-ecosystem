@@ -1,10 +1,9 @@
 import { defaultPreferences } from '@/config';
-import { useChatContext, usePreferenceContext } from '@/context';
+import { useChatContext, usePreferenceContext, useSessions } from '@/context';
 import { constructPrompt } from '@/helper/promptUtil';
 import { sortMessages } from '@/lib/helper';
 import { modelService } from '@/services/models';
 import { messagesService, sessionsService } from '@/services/sessions/client';
-import { useChatSessionQueries } from '@/services/sessions/queries';
 import type { TLLMRunConfig } from '@/types';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import type { LLMResult } from '@langchain/core/outputs';
@@ -12,7 +11,7 @@ import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from '@langchain/core/prompts';
-import { useToast } from '@repo/design-system/hooks/use-toast';
+import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import moment from 'moment';
 import { v4 } from 'uuid';
@@ -27,10 +26,12 @@ export const useLLMRunner = () => {
   const resetState = store((state) => state.resetState);
   const setAbortController = store((state) => state.setAbortController);
   const { getAssistantByKey, getModelByKey } = useModelList();
-  const { preferences, apiKeys, updatePreferences } = usePreferenceContext();
+  const { preferences, apiKeys, updatePreferences, injectPresetValues } =
+    usePreferenceContext();
   const { getToolByKey } = useTools();
   const { toast } = useToast();
-  const { updateSessionMutation } = useChatSessionQueries();
+  const { updateSessionMutation } = useSessions();
+
   const invokeModel = async (config: TLLMRunConfig) => {
     resetState();
     setIsGenerating(true);
@@ -41,12 +42,14 @@ export const useLLMRunner = () => {
     const modelKey = assistant.baseModel;
     const session = await sessionsService.getSessionById(sessionId);
     const messages = await messagesService.getMessages(sessionId);
+
     const allPreviousMessages =
       messages?.filter((m) => m.id !== messageId) || [];
     const chatHistory = sortMessages(allPreviousMessages, 'createdAt');
     const plugins = preferences.defaultPlugins || [];
     const messageLimit =
       preferences.messageLimit || defaultPreferences.messageLimit;
+
     setCurrentMessage({
       runConfig: config,
       id: newMessageId,
@@ -56,11 +59,14 @@ export const useLLMRunner = () => {
       createdAt: moment().toISOString(),
       isLoading: true,
     });
+
     const selectedModelKey = getModelByKey(modelKey);
     if (!selectedModelKey) {
       throw new Error('Model not found');
     }
-    const apiKey = apiKeys[selectedModelKey?.baseModel];
+
+    const apiKey = apiKeys[selectedModelKey?.provider];
+
     if (!apiKey) {
       updateCurrentMessage({
         isLoading: false,
@@ -69,13 +75,15 @@ export const useLLMRunner = () => {
       });
       return;
     }
+
     const prompt = await constructPrompt({
       context,
       image,
       memories: preferences.memories,
       hasMessages: allPreviousMessages.length > 0,
-      systemPrompt: assistant.systemPrompt,
+      systemPrompt: injectPresetValues(assistant.systemPrompt),
     });
+
     const availableTools =
       selectedModelKey?.plugins
         ?.filter((p) => plugins.includes(p))
@@ -88,11 +96,13 @@ export const useLLMRunner = () => {
           })
         )
         ?.filter((t): t is any => !!t) || [];
+
     const selectedModel = await modelService.createInstance({
       model: selectedModelKey,
       preferences,
       apiKey,
     });
+
     const previousAllowedChatHistory = chatHistory
       .slice(0, messageLimit)
       .reduce((acc: (HumanMessage | AIMessage)[], { rawAI, rawHuman }) => {
@@ -102,15 +112,19 @@ export const useLLMRunner = () => {
           return acc;
         }
       }, []);
+
     let agentExecutor: AgentExecutor | undefined;
+
     const modifiedModel = Object.create(Object.getPrototypeOf(selectedModel));
     Object.assign(modifiedModel, selectedModel);
+
     modifiedModel.bindTools = (tools: any[], options: any) => {
       return selectedModel?.bindTools?.(tools, {
         ...options,
         signal: currentAbortController?.signal,
       });
     };
+
     if (availableTools?.length) {
       const agentWithTool = await createToolCallingAgent({
         llm: modifiedModel as any,
@@ -118,6 +132,7 @@ export const useLLMRunner = () => {
         prompt: prompt as any,
         streamRunnable: true,
       });
+
       agentExecutor = new AgentExecutor({
         agent: agentWithTool as any,
         tools: availableTools,
@@ -128,11 +143,14 @@ export const useLLMRunner = () => {
         signal: currentAbortController?.signal,
       }) as any
     );
+
     let streamedMessage = '';
+
     const executor =
       availableTools?.length && agentExecutor
         ? agentExecutor
         : chainWithoutTools;
+
     try {
       const stream: any = await executor.invoke(
         {
@@ -163,6 +181,7 @@ export const useLLMRunner = () => {
                   metadata,
                   name
                 );
+
                 console.log('handleToolStart', name);
                 name && addTool({ toolName: name, toolLoading: true });
               },
@@ -190,6 +209,7 @@ export const useLLMRunner = () => {
                     variant: 'destructive',
                   });
                 }
+
                 updateCurrentMessage({
                   isLoading: false,
                   rawHuman: input,
@@ -204,6 +224,7 @@ export const useLLMRunner = () => {
           ],
         }
       );
+
       updateCurrentMessage({
         rawHuman: input,
         rawAI: stream?.content || stream?.output,
@@ -211,6 +232,7 @@ export const useLLMRunner = () => {
         stop: true,
         stopReason: 'finish',
       });
+      generateTitleForSession(sessionId);
     } catch (err) {
       updateCurrentMessage({
         isLoading: false,
@@ -219,6 +241,7 @@ export const useLLMRunner = () => {
       console.error(err);
     }
   };
+
   const generateTitleForSession = async (sessionId: string) => {
     const session = await sessionsService.getSessionById(sessionId);
     const messages = await messagesService.getMessages(sessionId);
@@ -226,13 +249,17 @@ export const useLLMRunner = () => {
     if (!assistant) {
       return;
     }
-    const apiKey = apiKeys[assistant.model.baseModel];
+
+    const apiKey = apiKeys[assistant.model.provider];
+
     const selectedModel = await modelService.createInstance({
       model: assistant.model,
       preferences,
       apiKey,
     });
+
     const firstMessage = messages?.[0];
+
     if (
       !firstMessage ||
       !firstMessage.rawAI ||
@@ -241,18 +268,22 @@ export const useLLMRunner = () => {
     ) {
       return;
     }
+
     const template = ChatPromptTemplate.fromMessages([
       new MessagesPlaceholder('message'),
       [
         'user',
-        'Make this prompt clear and consise? You must strictly answer with only the title, no other text is allowed.\n\nAnswer in English.',
+        'Generate a concise and clear title for this chat session. Respond with only the title and no additional text. Answer in English.',
       ],
     ]);
+
     try {
       const prompt = await template.formatMessages({
         message: [new HumanMessage(firstMessage.rawHuman)],
       });
-      const generation = await selectedModel.invoke(prompt, {});
+
+      const generation = await selectedModel.invoke(prompt as any, {});
+
       const newTitle =
         generation?.content?.toString() || session?.title || 'Untitled';
       await updateSessionMutation.mutate({
@@ -266,6 +297,7 @@ export const useLLMRunner = () => {
       return firstMessage.rawHuman;
     }
   };
+
   return {
     invokeModel,
     generateTitleForSession,

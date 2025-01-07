@@ -52,7 +52,7 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
         <AISelectionProvider onSelect={handleSelection}>
           <Mdx message={rawAI} animate={!!isLoading} messageId={id} />
         </AISelectionProvider>
-        {stop && <AIMessageError stopReason={stopReason} />}
+        {stop && <AIMessageError stopReason={stopReason} message={message} />}
         <AIMessageActions message={message} canRegenerate={message && isLast} />
       </Flex>
     </div>

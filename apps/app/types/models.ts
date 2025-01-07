@@ -23,10 +23,9 @@ export type TModelItem = {
   key: TModelKey;
   isNew?: boolean;
   icon: (size: 'sm' | 'md' | 'lg') => JSX.Element;
-  inputPrice?: number;
-  outputPrice?: number;
+  vision?: boolean;
   tokens: number;
   plugins: TToolKey[];
-  baseModel: TBaseModel;
+  provider: TBaseModel;
   maxOutputTokens: number;
 };

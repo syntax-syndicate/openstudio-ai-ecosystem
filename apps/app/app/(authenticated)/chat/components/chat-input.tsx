@@ -4,6 +4,7 @@ import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-selec
 import { defaultPreferences } from '@/config';
 import { useAssistants, useChatContext, usePreferenceContext } from '@/context';
 import {
+  useAttachment,
   useImageAttachment,
   useModelList,
   useRecordVoice,
@@ -44,6 +45,7 @@ export const ChatInput = () => {
   } = useRecordVoice();
   const { renderFileUpload, renderAttachedImage, attachment, clearAttachment } =
     useImageAttachment();
+  const { renderAttachedPdf, renderPdfFileUpload } = useAttachment();
   const { selectedAssistant, open: openAssistants } = useAssistants();
   const { invokeModel } = useLLMRunner();
 

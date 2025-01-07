@@ -1,6 +1,6 @@
-import { useSettingsContext, TSettingRoutes } from '@/context';
+import { type TSettingRoutes, useSettingsContext } from '@/context';
 import { useModelList } from '@/hooks';
-import { TChatMessage } from '@/types';
+import type { TChatMessage } from '@/types';
 import { Alert02Icon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
@@ -15,7 +15,7 @@ type TAIMessageError = {
 export const AIMessageError: FC<TAIMessageError> = ({
   stopReason,
   errorMessage,
-  message
+  message,
 }) => {
   const { open: openSettings } = useSettingsContext();
 
@@ -35,7 +35,7 @@ export const AIMessageError: FC<TAIMessageError> = ({
           <span
             className="ml-1 cursor-pointer underline"
             onClick={() =>
-              openSettings(`models/${model?.baseModel}` as TSettingRoutes)
+              openSettings(`models/${model?.provider}` as TSettingRoutes)
             }
           >
             Check your API Key

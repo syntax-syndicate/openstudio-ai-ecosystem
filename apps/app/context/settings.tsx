@@ -127,7 +127,7 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
             <p className="font-medium text-md">Settings</p>
           </div>
           <div className="relative flex h-full w-full flex-col overflow-hidden md:flex-row">
-            <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row gap-1 overflow-x-auto border-zinc-500/10 px-2 pt-2 pb-2 md:bottom-0 md:h-full md:w-[220px] md:flex-col md:gap-0 md:overflow-y-auto md:pb-16">
+            <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row gap-1 overflow-x-auto border-zinc-500/10 px-2 pt-2 pb-2 md:bottom-0 md:h-full md:w-[220px] md:flex-col md:gap-1 md:overflow-y-auto md:pb-16">
               {settingMenu.map((menu) => (
                 <Button
                   variant={selectedMenu === menu.key ? 'secondary' : 'ghost'}

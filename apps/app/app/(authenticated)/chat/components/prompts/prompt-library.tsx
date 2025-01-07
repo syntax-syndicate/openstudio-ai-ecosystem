@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
+import { Flex } from '@repo/design-system/components/ui/flex';
 
 export type TPromptLibrary = {
   onPromptSelect: (prompt: TPrompt) => void;
@@ -67,6 +68,7 @@ export const PromptLibrary = ({
               >
                 <NoteIcon size={20} variant="stroke" strokeWidth="2" />
                 {prompt.name}
+                <Flex className="flex-1" />
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="iconSm">

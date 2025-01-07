@@ -3,6 +3,7 @@
 import { defaultPreferences } from '@/config';
 import { usePreferences } from '@/hooks/use-preferences';
 import type { TApiKeys, TBaseModel, TPreferences } from '@/types';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { createContext, useContext } from 'react';
 
@@ -15,6 +16,7 @@ export type TPreferenceContext = {
   apiKeys: TApiKeys;
   updateApiKey: (key: TBaseModel, value: string) => void;
   updateApiKeys: (newApiKeys: TApiKeys) => void;
+  injectPresetValues: (prompt: string) => string;
 };
 export const PreferenceContext = createContext<undefined | TPreferenceContext>(
   undefined
@@ -51,6 +53,12 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
     apiKeysQuery.data && setApiKeys(apiKeysQuery.data);
   }, [apiKeysQuery.data]);
 
+  const presetValues = {
+    '{{local_date}}': moment().format('YYYY-MM-DD'),
+    '{{local_time}}': moment().format('HH:mm:ss'),
+    '{{local_datetime}}': moment().format('YYYY-MM-DD HH:mm:ss'),
+  };
+
   const updatePreferences = async (
     newPreferences: Partial<TPreferences>,
     onSuccess?: (preference: TPreferences) => void
@@ -76,10 +84,18 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
     setApiKeys(newApiKeys);
   };
 
+  const injectPresetValues = (prompt: string) => {
+    return prompt.replace(
+      /{{.*?}}/g,
+      (match) => presetValues?.[match as keyof typeof presetValues] || match
+    );
+  };
+
   return (
     <PreferenceContext.Provider
       value={{
         preferences,
+        injectPresetValues,
         updatePreferences,
         apiKeys,
         updateApiKey,

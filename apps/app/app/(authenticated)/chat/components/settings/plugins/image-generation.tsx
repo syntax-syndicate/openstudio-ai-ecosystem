@@ -1,32 +1,26 @@
-import { Button } from "@repo/design-system/components/ui/button";
+import { usePreferenceContext } from '@/context/preferences';
+import type { TPreferences } from '@/types';
+import { CaretDown } from '@phosphor-icons/react';
+import { Button } from '@repo/design-system/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/design-system/components/ui/dropdown-menu";
-import { Flex } from "@repo/design-system/components/ui/flex";
-import { Type } from "@repo/design-system/components/ui/text";
-import { usePreferenceContext } from "@/context/preferences";
-import { TPreferences } from "@/types";
-import { CaretDown } from "@phosphor-icons/react";
+} from '@repo/design-system/components/ui/dropdown-menu';
+import { Flex } from '@repo/design-system/components/ui/flex';
+import { Type } from '@repo/design-system/components/ui/text';
 
 export const ImageGenerationPlugin = () => {
   const { preferences, updatePreferences } = usePreferenceContext();
 
   const dalleImageQualities = {
-    standard: "Standard",
-    hd: "HD",
+    standard: 'Standard',
+    hd: 'HD',
   };
-  const dalleImageSizes = [
-    "1024x1024",
-    "512x512",
-    "256x256",
-    "1792x1024",
-    "1024x1792",
-  ];
+  const dalleImageSizes = ['1024x1024', '1792x1024', '1024x1792'];
   return (
-    <Flex direction="col" gap="sm" className="border-t pt-2 border-white/10">
+    <Flex direction="col" gap="sm" className="border-white/10 border-t pt-2">
       <Flex className="w-full" justify="between" items="center">
         <Type size="sm" textColor="secondary">
           Image Quality
@@ -34,7 +28,7 @@ export const ImageGenerationPlugin = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="secondary">
-              {preferences.dalleImageQuality}{" "}
+              {preferences.dalleImageQuality}{' '}
               <CaretDown size={12} weight="bold" />
             </Button>
           </DropdownMenuTrigger>
@@ -44,13 +38,13 @@ export const ImageGenerationPlugin = () => {
                 onClick={() => {
                   updatePreferences({
                     dalleImageQuality:
-                      quality as TPreferences["dalleImageQuality"],
+                      quality as TPreferences['dalleImageQuality'],
                   });
                 }}
               >
                 {
                   dalleImageQualities[
-                    quality as TPreferences["dalleImageQuality"]
+                    quality as TPreferences['dalleImageQuality']
                   ]
                 }
               </DropdownMenuItem>
@@ -75,7 +69,7 @@ export const ImageGenerationPlugin = () => {
               <DropdownMenuItem
                 onClick={() => {
                   updatePreferences({
-                    dalleImageSize: size as TPreferences["dalleImageSize"],
+                    dalleImageSize: size as TPreferences['dalleImageSize'],
                   });
                 }}
               >

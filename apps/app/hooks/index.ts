@@ -10,3 +10,4 @@ export * from '@/hooks/use-record-voice';
 export * from '@/hooks/use-scroll-to-bottom';
 export * from '@/hooks/use-text-selection';
 export * from '@/hooks/use-tools';
+export * from '@/hooks/use-attachment';

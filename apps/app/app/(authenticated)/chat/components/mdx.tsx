@@ -6,6 +6,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@repo/design-system/components/ui/hover-card';
+import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
 import type { FC, JSX, ReactNode } from 'react';
@@ -14,8 +15,9 @@ export type TMdx = {
   message?: string;
   animate: boolean;
   messageId?: string;
+  size?: 'sm' | 'base';
 };
-const Mdx: FC<TMdx> = ({ message, animate, messageId }) => {
+const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
   if (!message || !messageId) {
     return null;
   }
@@ -89,8 +91,17 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId }) => {
       {code}
     </span>
   );
+
+  const articleClass = cn(
+    'prose dark:prose-invert prose-zinc w-full prose-h3:font-medium prose-h4:font-medium prose-h5:font-medium prose-h6:font-medium prose-heading:font-medium prose-strong:font-medium prose-h3:text-lg prose-h4:text-base prose-h5:text-base prose-h6:text-base prose-headings:text-lg prose-th:text-sm',
+    {
+      'prose-sm': size === 'sm',
+      'prose-base': size === 'base',
+    }
+  );
+
   return (
-    <article className="prose dark:prose-invert prose-zinc w-full prose-h3:font-medium prose-h4:font-medium prose-h5:font-medium prose-h6:font-medium prose-heading:font-medium prose-strong:font-medium prose-h3:text-lg prose-h4:text-base prose-h5:text-base prose-h6:text-base prose-headings:text-lg prose-th:text-sm">
+    <article className={articleClass}>
       <Markdown
         renderer={{
           text: (text) => (

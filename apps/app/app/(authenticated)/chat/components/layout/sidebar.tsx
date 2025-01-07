@@ -39,7 +39,7 @@ export const Sidebar = () => {
             });
           }}
         >
-          <PlusSignIcon size={20} variant="solid" />{' '}
+          <PlusSignIcon size={20} strokeWidth={2} />{' '}
         </Button>
       </Tooltip>
     );
@@ -65,7 +65,7 @@ export const Sidebar = () => {
             openPrompts();
           }}
         >
-          <NoteIcon size={20} variant="solid" />
+          <NoteIcon size={20} strokeWidth={2} />
         </Button>
       </Tooltip>
       <Flex className="flex-1" />
@@ -77,7 +77,7 @@ export const Sidebar = () => {
             openSettings();
           }}
         >
-          <Settings03Icon size={20} variant="solid" />
+          <Settings03Icon size={20} strokeWidth={2} />
         </Button>
       </Tooltip>
       <DropdownMenu

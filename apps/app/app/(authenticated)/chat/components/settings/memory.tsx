@@ -13,7 +13,7 @@ export const MemorySettings = () => {
         <Type size="sm" className="flex-1">
           {memory}
         </Type>
-         <Button
+        <Button
           variant="ghost"
           size="iconXS"
           onClick={() => {
