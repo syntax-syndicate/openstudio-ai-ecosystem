@@ -44,7 +44,7 @@ export const ChatInput = () => {
     transcribing,
   } = useRecordVoice();
   const { currentSession } = useSessionsContext();
-  const { renderFileUpload, renderAttachedImage, attachment } =
+  const { renderFileUpload, renderAttachedImage, attachment, clearAttachment } =
     useImageAttachment();
   const { selectedAssistant, open: openAssistants } = useAssistantContext();
   const {
@@ -106,6 +106,7 @@ export const ChatInput = () => {
         sessionId: sessionId!.toString(),
         assistant: props.assistant,
       });
+      clearAttachment();
 
       editor?.commands.clearContent();
     }
@@ -253,7 +254,8 @@ export const ChatInput = () => {
                     onKeyDown={(e) => {
                       console.log('keydown', e.key);
                       if (e.key === 'Enter' && !e.shiftKey) {
-                        sendMessage();
+                        sendMessage(attachment?.base64);
+                        clearAttachment();
                       }
                     }}
                     className="no-scrollbar [&>*]:no-scrollbar wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-6 [&>*]:outline-none"
@@ -290,6 +292,7 @@ export const ChatInput = () => {
                     )}
                     onClick={() => {
                       sendMessage(attachment?.base64);
+                      clearAttachment();
                     }}
                   >
                     <Navigation03Icon
