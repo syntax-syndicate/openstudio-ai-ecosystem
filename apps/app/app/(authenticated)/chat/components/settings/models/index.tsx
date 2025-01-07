@@ -82,7 +82,7 @@ export const ModelSettings = () => {
               <div
                 className={cn(
                   '!rotate-0 px-2',
-                  model.connected ? 'text-emerald-600' : 'text-zinc-500'
+                  model.connected ? 'text-emerald-400' : 'text-zinc-500'
                 )}
               >
                 {model.connected ? (

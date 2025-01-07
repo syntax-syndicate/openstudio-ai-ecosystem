@@ -1,9 +1,7 @@
 import { useSettingsContext } from '@/context';
-import {
-  Alert,
-  AlertDescription,
-  Button,
-} from '@repo/design-system/components/ui';
+import { Alert02Icon } from '@hugeicons/react';
+import { Flex } from '@repo/design-system/components/ui/flex';
+import { Type } from '@repo/design-system/components/ui/text';
 import type { FC } from 'react';
 
 type TAIMessageError = {
@@ -17,22 +15,31 @@ export const AIMessageError: FC<TAIMessageError> = ({
 }) => {
   const { open: openSettings } = useSettingsContext();
 
-  if (stopReason === 'finish') {
+  if (['finish', 'cancel', undefined].includes(stopReason)) {
     return <></>;
   }
 
-  return (
-    <Alert variant="destructive">
-      <AlertDescription>
-        {stopReason === 'cancel' && 'Cancelled generation'}
+  const renderErrorMessage = (stopReason?: string) => {
+    if (stopReason === 'apikey') {
+      return (
+        <Type textColor="secondary">
+          API Key is invalid or expired.
+          <span
+            className="ml-1 cursor-pointer underline"
+            onClick={() => openSettings()}
+          >
+            Check your API Key
+          </span>
+        </Type>
+      );
+    }
+    return <Type textColor="secondary">An unexpected error occurred.</Type>;
+  };
 
-        {stopReason === 'apikey' && (
-          <Button variant="link" size="link" onClick={() => openSettings()}>
-            Check API Key
-          </Button>
-        )}
-        {stopReason === 'error' && 'An unexpected error occurred.'}
-      </AlertDescription>
-    </Alert>
+  return (
+    <Flex className="p-1 text-sm text-zinc-500" gap="sm" items="center">
+      <Alert02Icon size={16} strokeWidth={1.5} />
+      {renderErrorMessage(stopReason)}
+    </Flex>
   );
 };
