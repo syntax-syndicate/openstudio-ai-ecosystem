@@ -4,7 +4,7 @@ import { DallEAPIWrapper } from '@langchain/openai';
 import { z } from 'zod';
 
 const dalleTool = (args: TToolArg) => {
-  const { apiKeys, sendToolResponse } = args;
+  const { apiKeys, sendToolResponse, preferences } = args;
   const imageGenerationSchema = z.object({
     imageDescription: z.string(),
   });
@@ -18,6 +18,8 @@ const dalleTool = (args: TToolArg) => {
           n: 1, // Default
           model: 'dall-e-3', // Default
           apiKey: apiKeys.openai, // Default
+          quality: preferences.dalleImageQuality,
+          size: preferences.dalleImageSize,
         });
         const result = await tool.invoke(imageDescription);
         if (!result) {

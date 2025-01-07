@@ -13,7 +13,15 @@ export const MemorySettings = () => {
         <Type size="sm" className="flex-1">
           {memory}
         </Type>
-        <Button variant="ghost" size="iconXS">
+         <Button
+          variant="ghost"
+          size="iconXS"
+          onClick={() => {
+            updatePreferences({
+              memories: preferences?.memories?.filter((m) => m !== memory),
+            });
+          }}
+        >
           <Delete01Icon size={16} strokeWidth={1.2} />
         </Button>
       </SettingCard>
