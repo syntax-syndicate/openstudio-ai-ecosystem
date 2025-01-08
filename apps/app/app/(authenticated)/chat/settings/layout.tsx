@@ -32,22 +32,22 @@ export default function SettingsPage({
     {
       name: 'Common',
       icon: Settings03Icon,
-      route: '/settings/common',
+      route: '/chat/settings/common',
     },
     {
       name: 'LLMs',
       icon: SparklesIcon,
-      route: '/settings/llms',
+      route: '/chat/settings/llms',
     },
     {
       name: 'Plugins',
       icon: DashboardCircleIcon,
-      route: '/settings/plugins',
+      route: '/chat/settings/plugins',
     },
     {
       name: 'Memory',
       icon: BrainIcon,
-      route: '/settings/memory',
+      route: '/chat/settings/memory',
     },
     {
       name: 'Voice Input',
@@ -57,13 +57,13 @@ export default function SettingsPage({
     {
       name: 'Data',
       icon: Database02Icon,
-      route: '/settings/data',
+      route: '/chat/settings/data',
     },
   ];
   useEffect(() => {
     console.log(pathname);
-    if (pathname === '/settings') {
-      push('/settings/common');
+    if (pathname === '/chat/settings') {
+      push('/chat/settings/common');
     }
   }, [pathname]);
   const renderMenuItem = (menu: TSettingMenu) => {

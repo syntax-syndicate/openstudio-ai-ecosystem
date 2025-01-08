@@ -34,7 +34,7 @@ export const AIMessageError: FC<TAIMessageError> = ({
           API Key is invalid or expired.
           <span
             className="ml-1 cursor-pointer underline"
-            onClick={() => push(`/settings/llms/${model?.provider}`)}
+            onClick={() => push(`/chat/settings/llms/${model?.provider}`)}
           >
             Check your API Key
           </span>
