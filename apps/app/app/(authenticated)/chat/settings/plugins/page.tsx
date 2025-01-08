@@ -1,7 +1,7 @@
+'use client';
 import { ImageGenerationPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/image-generation';
 import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { usePreferenceContext } from '@/context';
 import { GlobalSearchIcon, Image01Icon } from '@hugeicons/react';
 import {
   Accordion,
@@ -11,8 +11,7 @@ import {
 } from '@repo/design-system/components/ui/accordion';
 import { Flex } from '@repo/design-system/components/ui/flex';
 
-export const PulginSettings = () => {
-  const { apiKeys } = usePreferenceContext();
+export default function PluginsSettings() {
   const pluginSettingsData = [
     {
       value: 'websearch',
@@ -49,4 +48,4 @@ export const PulginSettings = () => {
       </Accordion>
     </SettingsContainer>
   );
-};
+}

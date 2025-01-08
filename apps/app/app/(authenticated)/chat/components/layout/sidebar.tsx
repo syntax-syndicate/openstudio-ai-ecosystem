@@ -1,5 +1,5 @@
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
-import { usePromptsContext, useSessions, useSettingsContext } from '@/context';
+import { usePromptsContext, useSessions } from '@/context';
 import {
   Moon02Icon,
   MoreHorizontalIcon,
@@ -18,11 +18,12 @@ import {
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export const Sidebar = () => {
   const { theme, setTheme } = useTheme();
-  const { open: openSettings } = useSettingsContext();
+  const { push } = useRouter();
   const { open: openPrompts } = usePromptsContext();
   const [isOpen, setIsOpen] = useState(false);
   const { createSession } = useSessions();
@@ -50,7 +51,7 @@ export const Sidebar = () => {
     { label: 'Support', onClick: () => {} },
   ];
   return (
-    <div className="absolute top-0 bottom-0 left-0 z-[50] flex flex-col items-center justify-center gap-3 border-zinc-50 border-r pb-6 md:p-3 dark:border-white/5">
+    <div className="absolute top-0 bottom-0 left-0 z-[50] flex flex-col items-center justify-center gap-3 border-zinc-900/5 border-r pb-6 md:p-3 dark:border-white/5">
       <div className="flex flex-row items-center gap-2">
         {renderNewSession()}
       </div>
@@ -74,7 +75,7 @@ export const Sidebar = () => {
           size="iconSm"
           variant="ghost"
           onClick={() => {
-            openSettings();
+            push('/chat/settings');
           }}
         >
           <Settings03Icon size={20} strokeWidth={2} />

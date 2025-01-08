@@ -1,3 +1,5 @@
+'use client';
+
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { usePreferenceContext } from '@/context/preferences';
@@ -5,7 +7,7 @@ import { Delete01Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Type } from '@repo/design-system/components/ui/text';
 
-export const MemorySettings = () => {
+export default function MemorySettings() {
   const { updatePreferences, preferences } = usePreferenceContext();
   const renderMemory = (memory: string) => {
     return (
@@ -32,4 +34,4 @@ export const MemorySettings = () => {
       {preferences?.memories?.map(renderMemory)}
     </SettingsContainer>
   );
-};
+}

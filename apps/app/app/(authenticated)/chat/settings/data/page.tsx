@@ -1,7 +1,9 @@
+'use client';
+
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { defaultPreferences } from '@/config';
-import { useSessions, useSettingsContext } from '@/context';
+import { useSessions } from '@/context';
 import { usePreferenceContext } from '@/context/preferences';
 import { generateAndDownloadJson } from '@/lib/helper';
 import type { TPreferences } from '@/types';
@@ -131,8 +133,7 @@ const importSchema = z.object({
 //   return updatedSessions;
 // };
 
-export const Data = () => {
-  const { dismiss } = useSettingsContext();
+export default function DataSettings() {
   const { toast } = useToast();
 
   const {
@@ -294,7 +295,7 @@ export const Data = () => {
                     createSession({
                       redirect: true,
                     });
-                    dismiss();
+                    // dismiss();
                   },
                 });
               }}
@@ -324,7 +325,7 @@ export const Data = () => {
                     createSession({
                       redirect: true,
                     });
-                    dismiss();
+                    // dismiss();
                   },
                 });
               }}
@@ -385,4 +386,4 @@ export const Data = () => {
       </Flex>
     </SettingsContainer>
   );
-};
+}

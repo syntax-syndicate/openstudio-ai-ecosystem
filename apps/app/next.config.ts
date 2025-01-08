@@ -13,6 +13,14 @@ let nextConfig: NextConfig = {
         source: '/',
         destination: '/chat/new',
       },
+      {
+        source: '/chat/settings/llms',
+        destination: '/chat/settings/llms/openai',
+      },
+      {
+        source: '/chat/settings',
+        destination: '/chat/settings/common',
+      },
     ];
   },
   webpack: (config, { isServer }) => {

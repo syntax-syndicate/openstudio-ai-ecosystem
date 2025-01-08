@@ -1,8 +1,9 @@
 import type { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import type { providers } from '@/config/models';
+import type { TToolKey } from '@/types/tools';
 import type { ComponentProps } from 'react';
-import type { TToolKey } from './tools';
 
-export type TBaseModel = 'openai' | 'anthropic' | 'gemini' | 'ollama';
+export type TProvider = (typeof providers)[number];
 export const models = [
   'gpt-4o',
   'gpt-4',
@@ -27,6 +28,6 @@ export type TModelItem = {
   vision?: boolean;
   tokens: number;
   plugins: TToolKey[];
-  provider: TBaseModel;
+  provider: TProvider;
   maxOutputTokens: number;
 };

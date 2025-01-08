@@ -1,5 +1,4 @@
 import { MainLayout } from '@/app/(authenticated)/chat/components/layout/main-layout';
-import { Header } from '@/app/(authenticated)/components/header';
 import {
   AssistantsProvider,
   ChatProvider,
@@ -8,7 +7,6 @@ import {
   PromptsProvider,
   ReactQueryProvider,
   SessionsProvider,
-  SettingsProvider,
 } from '@/context'; // Consolidated context imports
 import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
 import { ThemeProvider } from '@repo/design-system/providers/theme';
@@ -29,7 +27,7 @@ export default function ChatLayout({
 }) {
   return (
     <>
-      <Header pages={['Conversation']} page="Chat Sessions"></Header>
+      {/* <Header pages={['']} page=""></Header> */}
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -40,17 +38,15 @@ export default function ChatLayout({
           <TooltipProvider>
             <PreferenceProvider>
               <SessionsProvider>
-                <SettingsProvider>
-                  <ChatProvider>
-                    <CommandsProvider>
-                      <AssistantsProvider>
-                        <PromptsProvider>
-                          <MainLayout>{children}</MainLayout>
-                        </PromptsProvider>
-                      </AssistantsProvider>
-                    </CommandsProvider>
-                  </ChatProvider>
-                </SettingsProvider>
+                <ChatProvider>
+                  <CommandsProvider>
+                    <AssistantsProvider>
+                      <PromptsProvider>
+                        <MainLayout>{children}</MainLayout>
+                      </PromptsProvider>
+                    </AssistantsProvider>
+                  </CommandsProvider>
+                </ChatProvider>
               </SessionsProvider>
             </PreferenceProvider>
           </TooltipProvider>

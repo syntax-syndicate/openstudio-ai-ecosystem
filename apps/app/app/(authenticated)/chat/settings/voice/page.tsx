@@ -1,3 +1,5 @@
+'use client';
+
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { usePreferenceContext } from '@/context/preferences';
@@ -5,7 +7,7 @@ import { Flex } from '@repo/design-system/components/ui/flex';
 import { Switch } from '@repo/design-system/components/ui/switch';
 import { Type } from '@repo/design-system/components/ui/text';
 
-export const VoiceInput = () => {
+export default function VoiceSettings() {
   const { updatePreferences, preferences } = usePreferenceContext();
 
   return (
@@ -32,4 +34,4 @@ export const VoiceInput = () => {
       </SettingCard>
     </SettingsContainer>
   );
-};
+}

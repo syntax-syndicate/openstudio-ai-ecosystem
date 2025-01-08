@@ -1,3 +1,5 @@
+'use client';
+
 import {
   ModelIcon,
   type ModelIconType,
@@ -7,9 +9,9 @@ import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/m
 import { OllamaSettings } from '@/app/(authenticated)/chat/components/settings/models/ollama';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/models/openai';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
+import { providers } from '@/config/models';
 import { usePreferenceContext } from '@/context/preferences';
-import { useSettingsContext } from '@/context/settings';
-import type { TBaseModel } from '@/types';
+import type { TProvider } from '@/types';
 import { AlertCircleIcon, CheckmarkCircle02Icon } from '@hugeicons/react';
 import {
   Accordion,
@@ -19,14 +21,17 @@ import {
 } from '@repo/design-system/components/ui/accordion';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { cn } from '@repo/design-system/lib/utils';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export const ModelSettings = () => {
-  const { selected } = useSettingsContext();
-  const { apiKeys, preferences, updatePreferences } = usePreferenceContext();
-  const [selectedModel, setSelectedModel] = useState<TBaseModel>('openai');
-
+export default function LLMsSettings() {
+  const { provider } = useParams();
+  const { push } = useRouter();
+  const { apiKeys, preferences } = usePreferenceContext();
+  const [selectedModel, setSelectedModel] = useState<TProvider>('openai');
   const [ollamaConnected, setOllamaConnected] = useState(false);
+
   const checkOllamaConnection = async () => {
     try {
       const url = preferences.ollamaBaseUrl;
@@ -36,16 +41,19 @@ export const ModelSettings = () => {
       setOllamaConnected(false);
     }
   };
+
   useEffect(() => {
     checkOllamaConnection();
   }, [preferences.ollamaBaseUrl]);
 
   useEffect(() => {
-    if (selected.startsWith('models/')) {
-      const model = selected?.split('/')?.[1];
-      setSelectedModel(model as TBaseModel);
+    if (providers.includes(provider as TProvider)) {
+      setSelectedModel(provider as TProvider);
+    } else {
+      push('settings/llms/openai');
     }
-  }, [selected]);
+  }, [provider]);
+
   const modelSettingsData = [
     {
       value: 'openai',
@@ -59,6 +67,7 @@ export const ModelSettings = () => {
       label: 'Anthropic',
       iconType: 'anthropic',
       connected: !!apiKeys.anthropic,
+
       settingsComponent: AnthropicSettings,
     },
     {
@@ -66,6 +75,7 @@ export const ModelSettings = () => {
       label: 'Gemini',
       iconType: 'gemini',
       connected: !!apiKeys.gemini,
+
       settingsComponent: GeminiSettings,
     },
     {
@@ -84,7 +94,7 @@ export const ModelSettings = () => {
         collapsible
         className="w-full"
         onValueChange={(value) => {
-          setSelectedModel(value as TBaseModel);
+          setSelectedModel(value as TProvider);
         }}
       >
         {modelSettingsData.map((model) => (
@@ -124,4 +134,4 @@ export const ModelSettings = () => {
       </Accordion>
     </SettingsContainer>
   );
-};
+}
