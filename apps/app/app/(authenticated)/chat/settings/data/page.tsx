@@ -5,7 +5,7 @@ import { SettingsContainer } from '@/app/(authenticated)/chat/components/setting
 import { defaultPreferences } from '@/config';
 import { useSessions } from '@/context';
 import { usePreferenceContext } from '@/context/preferences';
-import { generateAndDownloadJson } from '@/lib/helper';
+import { generateAndDownloadJson } from '@/helper/utils';
 import type { TPreferences } from '@/types';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
