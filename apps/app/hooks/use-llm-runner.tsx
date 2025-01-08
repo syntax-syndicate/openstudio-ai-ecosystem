@@ -2,7 +2,7 @@ import { defaultPreferences } from '@/config';
 import { useChatContext, usePreferenceContext, useSessions } from '@/context';
 import { injectPresetValues } from '@/helper/preset-prompt-values';
 import { constructPrompt } from '@/helper/promptUtil';
-import { sortMessages } from '@/lib/helper';
+import { sortMessages } from '@/helper/utils';
 import { modelService } from '@/services/models';
 import { messagesService, sessionsService } from '@/services/sessions/client';
 import type { TLLMRunConfig } from '@/types';
@@ -16,7 +16,7 @@ import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import moment from 'moment';
 import { v4 } from 'uuid';
-import { useModelList, useTools } from '.';
+import { useAssistantUtils, useTools } from '.';
 
 export const useLLMRunner = () => {
   const { store } = useChatContext();
@@ -26,7 +26,7 @@ export const useLLMRunner = () => {
   const addTool = store((state) => state.addTool);
   const resetState = store((state) => state.resetState);
   const setAbortController = store((state) => state.setAbortController);
-  const { getAssistantByKey, getModelByKey } = useModelList();
+  const { getAssistantByKey, getModelByKey } = useAssistantUtils();
   const { preferences, apiKeys, updatePreferences } = usePreferenceContext();
   const { getToolByKey } = useTools();
   const { toast } = useToast();

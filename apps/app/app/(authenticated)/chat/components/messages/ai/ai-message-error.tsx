@@ -1,4 +1,4 @@
-import { useModelList } from '@/hooks';
+import { useAssistantUtils } from '@/hooks';
 import type { TChatMessage } from '@/types';
 import { Alert02Icon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -19,7 +19,7 @@ export const AIMessageError: FC<TAIMessageError> = ({
 }) => {
   const { push } = useRouter();
 
-  const { getModelByKey } = useModelList();
+  const { getModelByKey } = useAssistantUtils();
 
   if (['finish', 'cancel', undefined].includes(stopReason)) {
     return <></>;

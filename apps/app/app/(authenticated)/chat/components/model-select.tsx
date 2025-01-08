@@ -1,5 +1,5 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
-import { useModelList } from '@/hooks/use-model-list';
+import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import type { TModelKey } from '@/types';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -35,7 +35,7 @@ export const ModelSelect: FC<TModelSelect> = ({
     assistants,
     getAssistantByKey,
     getAssistantIcon,
-  } = useModelList();
+  } = useAssistantUtils();
 
   const activeAssistant = getAssistantByKey(selectedModel);
 

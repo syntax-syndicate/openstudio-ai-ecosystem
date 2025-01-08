@@ -1,6 +1,6 @@
 import { RegenerateWithModelSelect } from '@/app/(authenticated)/chat/components/regenerate-model-select';
 import { useChatContext, useSessions } from '@/context';
-import { useClipboard, useModelList } from '@/hooks';
+import { useAssistantUtils, useClipboard } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TChatMessage } from '@/types';
 import { Copy01Icon, Delete01Icon, Tick01Icon } from '@hugeicons/react';
@@ -23,7 +23,7 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
   const { refetch, store } = useChatContext();
   const messages = store((state) => state.messages);
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
-  const { getAssistantByKey } = useModelList();
+  const { getAssistantByKey } = useAssistantUtils();
   const { invokeModel } = useLLMRunner();
   const { removeMessageByIdMutation } = useSessions();
 

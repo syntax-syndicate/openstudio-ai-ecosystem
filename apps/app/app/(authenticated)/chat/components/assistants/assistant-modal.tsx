@@ -2,7 +2,7 @@ import { AssistantItem } from '@/app/(authenticated)/chat/components/assistants/
 import { CreateAssistant } from '@/app/(authenticated)/chat/components/assistants/create-assistant';
 import { defaultPreferences } from '@/config';
 import { usePreferenceContext } from '@/context';
-import { useModelList } from '@/hooks';
+import { useAssistantUtils } from '@/hooks';
 import type { TAssistant, TAssistantType } from '@/types';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
@@ -37,7 +37,7 @@ export const AssistantModal: FC<TAssitantModal> = ({
     createAssistantMutation,
     deleteAssistantMutation,
     updateAssistantMutation,
-  } = useModelList();
+  } = useAssistantUtils();
   const searchRef = useRef<HTMLInputElement>(null);
   const [openCreateAssistant, setOpenCreateAssistant] = useState(false);
   const [updateAssistant, setUpdateAssistant] = useState<TAssistant>();

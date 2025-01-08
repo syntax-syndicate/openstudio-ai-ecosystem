@@ -1,5 +1,5 @@
 'use client';
-import { sortSessions } from '@/lib/helper';
+import { sortSessions } from '@/helper/utils';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   CommandDialog,

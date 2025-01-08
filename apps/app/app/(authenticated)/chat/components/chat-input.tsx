@@ -3,16 +3,16 @@ import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greetin
 import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
 import { defaultPreferences } from '@/config';
 import { useAssistants, useChatContext, usePreferenceContext } from '@/context';
+import { slideUpVariant } from '@/helper/animations';
 import {
+  useAssistantUtils,
   useAttachment,
   useImageAttachment,
-  useModelList,
   useRecordVoice,
   useScrollToBottom,
 } from '@/hooks';
 import { useChatEditor } from '@/hooks/use-editor';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
-import { slideUpVariant } from '@/lib/framer-motion';
 import type { TAssistant } from '@/types';
 import { ArrowDown02Icon, Navigation03Icon } from '@hugeicons/react';
 import { ArrowElbowDownRight, Stop, X } from '@phosphor-icons/react';
@@ -43,8 +43,12 @@ export const ChatInput = () => {
     text,
     transcribing,
   } = useRecordVoice();
-  const { renderFileUpload, renderAttachedImage, attachment, clearAttachment } =
-    useImageAttachment();
+  const {
+    renderImageUpload,
+    renderAttachedImage,
+    attachment,
+    clearAttachment,
+  } = useImageAttachment();
   const { renderAttachedPdf, renderPdfFileUpload } = useAttachment();
   const { selectedAssistant, open: openAssistants } = useAssistants();
   const { invokeModel } = useLLMRunner();
@@ -52,7 +56,7 @@ export const ChatInput = () => {
   const { editor } = useChatEditor();
 
   const { preferences, updatePreferences } = usePreferenceContext();
-  const { models, getAssistantByKey, getAssistantIcon } = useModelList();
+  const { models, getAssistantByKey, getAssistantIcon } = useAssistantUtils();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [selectedAssistantKey, setSelectedAssistantKey] = useState<
@@ -228,7 +232,7 @@ export const ChatInput = () => {
               </Button>
 
               <PluginSelect selectedAssistantKey={selectedAssistantKey} />
-              {renderFileUpload()}
+              {renderImageUpload()}
               <div className="flex-1"></div>
 
               {!isGenerating && (

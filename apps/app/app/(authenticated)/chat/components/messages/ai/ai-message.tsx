@@ -6,7 +6,7 @@ import { AIMessageError } from '@/app/(authenticated)/chat/components/messages/a
 import { AISelectionProvider } from '@/app/(authenticated)/chat/components/messages/ai/ai-selection-provider';
 import { AIToolMessage } from '@/app/(authenticated)/chat/components/messages/ai/ai-tool-message';
 import { useChatContext } from '@/context';
-import { useModelList } from '@/hooks';
+import { useAssistantUtils } from '@/hooks';
 import type { TChatMessage } from '@/types';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
@@ -23,7 +23,7 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
   const editor = store((state) => state.editor);
   const setContextValue = store((state) => state.setContext);
   const messageRef = useRef<HTMLDivElement>(null);
-  const { getAssistantIcon } = useModelList();
+  const { getAssistantIcon } = useAssistantUtils();
 
   const handleSelection = (value: string) => {
     setContextValue(value);

@@ -2,6 +2,7 @@ import type { TAttachment } from '@/app/(authenticated)/chat/components/chat-inp
 import { ImageAdd01Icon } from '@hugeicons/react';
 import { X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import Image from 'next/image';
 import { type ChangeEvent, useState } from 'react';
@@ -85,7 +86,8 @@ export const useImageAttachment = () => {
       );
     }
   };
-  const renderFileUpload = () => {
+
+  const renderImageUpload = () => {
     return (
       <>
         <input
@@ -94,14 +96,16 @@ export const useImageAttachment = () => {
           className="hidden"
           onChange={handleImageUpload}
         />
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleFileSelect}
-          className="px-1.5"
-        >
-          <ImageAdd01Icon size={18} strokeWidth={1.5} />
-        </Button>
+        <Tooltip content="Attach an image">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleFileSelect}
+            className="px-1.5"
+          >
+            <ImageAdd01Icon size={18} strokeWidth={1.5} />
+          </Button>
+        </Tooltip>
       </>
     );
   };
@@ -111,6 +115,6 @@ export const useImageAttachment = () => {
     handleFileSelect,
     clearAttachment,
     renderAttachedImage,
-    renderFileUpload,
+    renderImageUpload,
   };
 };

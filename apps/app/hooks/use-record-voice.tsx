@@ -1,6 +1,6 @@
 import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 import { usePreferenceContext } from '@/context';
-import { blobToBase64 } from '@/lib/record';
+import { blobToBase64 } from '@/helper/record';
 import { RecordIcon, StopIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
