@@ -9,6 +9,7 @@ ChatHub is a modern AI conversation platform. This lightweight yet powerful appl
 - TypeScript
 - Tailwind CSS
 - Zustand
+- React Query
 - LangChain
 - Shadcn UI
 - Tiptap Editor
