@@ -1,5 +1,6 @@
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
 import { usePromptsContext, useSessions } from '@/context';
+import { FolderLibraryIcon } from '@hugeicons/react';
 import {
   Button,
   DropdownMenu,
@@ -27,6 +28,7 @@ export const Sidebar = () => {
   const { open: openPrompts } = usePromptsContext();
   const [isOpen, setIsOpen] = useState(false);
   const { createSession } = useSessions();
+
   const renderNewSession = () => {
     return (
       <Tooltip content="New Session" side="left" sideOffset={4}>
@@ -40,24 +42,30 @@ export const Sidebar = () => {
             });
           }}
         >
-          <PlusSignIcon size={20} strokeWidth={2} />{' '}
+          <PlusSignIcon size={20} strokeWidth={2} />
         </Button>
       </Tooltip>
     );
   };
+
   const menuItems = [
     { label: 'About', onClick: () => {} },
     { label: 'Feedback', onClick: () => {} },
     { label: 'Support', onClick: () => {} },
   ];
-  return (
-    <div className="absolute top-0 bottom-0 left-0 z-[50] flex flex-col items-center justify-center gap-3 border-zinc-500/5 border-r pb-6 md:p-3 dark:border-zinc-500/5">
-      <div className="flex flex-row items-center gap-2">
-        {renderNewSession()}
-      </div>
-      <div className="flex flex-col items-center gap-2">
-        <HistorySidebar />
-      </div>
+
+  const renderSpaces = () => {
+    return (
+      <Tooltip content="Spaces (coming soon)" side="left" sideOffset={4}>
+        <Button size="iconSm" variant="ghost">
+          <FolderLibraryIcon size={20} strokeWidth={2} />
+        </Button>
+      </Tooltip>
+    );
+  };
+
+  const renderPrompts = () => {
+    return (
       <Tooltip content="Prompts" side="left" sideOffset={4}>
         <Button
           size="iconSm"
@@ -69,18 +77,39 @@ export const Sidebar = () => {
           <NoteIcon size={20} strokeWidth={2} />
         </Button>
       </Tooltip>
-      <Flex className="flex-1" />
-      <Tooltip content="Preferences" side="left" sideOffset={4}>
+    );
+  };
+
+  const renderSettings = () => {
+    return (
+      <Tooltip content="Settings" side="left" sideOffset={4}>
         <Button
           size="iconSm"
           variant="ghost"
           onClick={() => {
-            push('/chat/settings');
+            push('/settings');
           }}
         >
           <Settings03Icon size={20} strokeWidth={2} />
         </Button>
       </Tooltip>
+    );
+  };
+
+  return (
+    <div className="absolute top-0 bottom-0 left-0 z-[50] flex flex-col items-center justify-center gap-3 border-zinc-500/5 border-r pb-6 md:p-3 dark:border-zinc-500/5">
+      <div className="flex flex-row items-center gap-2">
+        {renderNewSession()}
+      </div>
+
+      <div className="flex flex-col items-center gap-2">
+        <HistorySidebar />
+      </div>
+      {renderPrompts()}
+      {renderSpaces()}
+
+      <Flex className="flex-1" />
+      {renderSettings()}
       <DropdownMenu
         open={isOpen}
         onOpenChange={(open: boolean) => {
@@ -107,6 +136,7 @@ export const Sidebar = () => {
             </DropdownMenuItem>
           ))}
           <div className="my-1 h-[1px] w-full bg-black/10 dark:bg-white/10" />
+
           <DropdownMenuItem
             onClick={() => {
               setTheme(theme === 'light' ? 'dark' : 'light');

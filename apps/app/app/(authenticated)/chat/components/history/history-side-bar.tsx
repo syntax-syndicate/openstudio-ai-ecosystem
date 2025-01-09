@@ -1,10 +1,11 @@
 import { HistoryItem } from '@/app/(authenticated)/chat/components/history/history-item';
 import { useSessions } from '@/context/sessions';
 import { sortSessions } from '@/helper/utils';
-import { ClockCounterClockwise, X } from '@phosphor-icons/react';
+import { MessageMultiple01Icon } from '@hugeicons/react';
+import { X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import { SidebarLeftIcon } from '@repo/design-system/components/ui/icons';
+import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
@@ -18,7 +19,7 @@ export const HistorySidebar = () => {
       <Tooltip content="Chat History" side="left" sideOffset={4}>
         <Drawer.Trigger asChild>
           <Button variant="ghost" size="iconSm">
-            <SidebarLeftIcon size={20} strokeWidth={2} />
+            <MessageMultiple01Icon size={20} strokeWidth={2} />
           </Button>
         </Drawer.Trigger>
       </Tooltip>
@@ -36,9 +37,15 @@ export const HistorySidebar = () => {
                 items="center"
                 className="w-ful w-full border-zinc-500/10 border-b py-2 pr-2 pl-3"
               >
-                <Flex className="text-sm text-zinc-500" items="center" gap="sm">
-                  <ClockCounterClockwise size={18} weight="bold" /> Recent
-                  History
+                <Flex items="center" gap="sm">
+                  <MessageMultiple01Icon
+                    size={20}
+                    strokeWidth={2}
+                    className="text-zinc-500"
+                  />
+                  <Type size="sm" weight="medium" textColor="secondary">
+                    Recent History
+                  </Type>
                 </Flex>
 
                 <Button
