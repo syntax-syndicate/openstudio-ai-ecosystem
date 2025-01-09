@@ -1,5 +1,5 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
-import { configs, defaultPreferences } from '@/config';
+import { defaultPreferences } from '@/config';
 import { models } from '@/config/models';
 import { usePreferenceContext } from '@/context';
 import { useAssistantsQueries } from '@/services/assistants';
@@ -11,7 +11,7 @@ export const useAssistantUtils = () => {
   const { preferences } = usePreferenceContext();
 
   const ollamaModelsQuery = assistantQueries.useOllamaModelsQuery(
-    `${preferences.ollamaBaseUrl}${configs.ollamaTagsEndpoint}`
+    preferences.ollamaBaseUrl,
   );
 
   const allModels: TModelItem[] = useMemo(
