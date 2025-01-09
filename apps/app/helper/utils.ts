@@ -1,6 +1,6 @@
 import type { TChatMessage, TChatSession } from '@/types';
 import moment from 'moment';
-import { v4 } from 'uuid';
+import { customAlphabet } from 'nanoid';
 
 export const getRelativeDate = (date: string | Date) => {
   const today = moment().startOf('day');
@@ -66,18 +66,8 @@ export const convertFileToBase64 = (
 };
 
 export function generateShortUUID() {
-  const uuid = v4();
-  const base64UUID = uuidToBase64(uuid);
-  return base64UUID;
-}
-
-function uuidToBase64(uuid: string) {
-  const bytes = uuid
-    .replace(/-/g, '')
-    .match(/.{1,2}/g)
-    ?.map((byte) => Number.parseInt(byte, 16));
-  const base64 = btoa(String.fromCharCode(...(bytes || [])));
-  return base64.replace(/=+$/, '');
+  const nanoid = customAlphabet('1234567890abcdef', 12);
+  return nanoid();
 }
 
 export function generateAndDownloadJson(data: any, filename: string) {
