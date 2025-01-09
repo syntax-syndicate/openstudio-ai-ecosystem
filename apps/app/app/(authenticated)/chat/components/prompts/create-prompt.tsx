@@ -1,4 +1,4 @@
-import { type TPrompt, usePrompts } from '@/hooks/use-prompts';
+import type { TPrompt } from '@/hooks/use-prompts';
 import { ArrowLeft } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -28,7 +28,6 @@ export const CreatePrompt = ({
   onUpdatePrompt,
 }: TCreatePrompt) => {
   const [promptTitle, setPromptTitle] = useState(prompt?.name);
-  const { setPrompt, getPrompts } = usePrompts();
   const promptTitleRef = useRef<HTMLInputElement | null>(null);
   const [rawPrompt, setRawPrompt] = useState('');
 
@@ -47,7 +46,7 @@ export const CreatePrompt = ({
         },
       }),
     ],
-    content: prompt?.content || ``,
+    content: prompt?.content || '',
     autofocus: true,
 
     onTransaction(props) {
@@ -93,8 +92,8 @@ export const CreatePrompt = ({
     } else {
       onCreatePrompt({ name: promptTitle, content });
     }
-    clearPrompt();
 
+    clearPrompt();
     onOpenChange(false);
   };
 
