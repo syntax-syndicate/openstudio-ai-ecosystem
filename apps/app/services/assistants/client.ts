@@ -1,6 +1,6 @@
+import { generateShortUUID } from '@/helper/utils';
 import type { TAssistant } from '@/types';
 import { get, set } from 'idb-keyval';
-import { v4 } from 'uuid';
 
 class AssistantService {
   key = 'assistants';
@@ -9,7 +9,10 @@ class AssistantService {
   }
   async createAssistant(assistant: Omit<TAssistant, 'key'>) {
     const assistants = await this.getAssistants();
-    const newAssistants = [...assistants, { ...assistant, key: v4() }];
+    const newAssistants = [
+      ...assistants,
+      { ...assistant, key: generateShortUUID() },
+    ];
     await set(this.key, newAssistants);
   }
   async deleteAssistant(key: string) {

@@ -3,9 +3,13 @@ import { useChatContext, useSessions } from '@/context';
 import { useAssistantUtils, useClipboard } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TChatMessage } from '@/types';
-import { Copy01Icon, Delete01Icon, Tick01Icon } from '@hugeicons/react';
 import { Button, Spinner } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import {
+  Copy01Icon,
+  Delete01Icon,
+  Tick01Icon,
+} from '@repo/design-system/components/ui/icons';
 import { ConfirmPopover } from '@repo/design-system/components/ui/popover-confirm';
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';

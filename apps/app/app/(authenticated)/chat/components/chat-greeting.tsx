@@ -1,4 +1,4 @@
-import { WavingHand02Icon } from '@hugeicons/react';
+import { WavingHand02Icon } from '@repo/design-system/components/ui/icons';
 import { motion } from 'framer-motion';
 
 export const ChatGreeting = () => {

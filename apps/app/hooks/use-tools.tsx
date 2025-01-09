@@ -5,11 +5,15 @@ import { duckduckGoTool } from '@/tools/duckduckgo';
 import { googleSearchTool } from '@/tools/google';
 import { memoryTool } from '@/tools/memory';
 import type { TToolConfig, TToolKey } from '@/types';
-import { BrainIcon, GlobalSearchIcon, Image01Icon } from '@hugeicons/react';
+import {
+  BrainIcon,
+  GlobalSearchIcon,
+  Image01Icon,
+} from '@repo/design-system/components/ui/icons';
 import { useRouter } from 'next/navigation';
 
 export const useTools = () => {
-  const { preferences, apiKeys } = usePreferenceContext();
+  const { preferences } = usePreferenceContext();
   const { push } = useRouter();
 
   const tools: TToolConfig[] = [

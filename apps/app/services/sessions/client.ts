@@ -1,8 +1,7 @@
-import { sortSessions } from '@/helper/utils';
+import { generateShortUUID, sortSessions } from '@/helper/utils';
 import type { TChatMessage, TChatSession } from '@/types';
 import { del, get, set } from 'idb-keyval';
 import moment from 'moment';
-import { v4 } from 'uuid';
 
 class SessionsService {
   private messagesService: MessagesService;
@@ -54,7 +53,7 @@ class SessionsService {
       return latestSession;
     }
     const newSession: TChatSession = {
-      id: v4(),
+      id: generateShortUUID(),
       title: 'Untitled',
       createdAt: moment().toISOString(),
     };

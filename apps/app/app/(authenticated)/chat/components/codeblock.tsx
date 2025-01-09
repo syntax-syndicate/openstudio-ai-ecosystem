@@ -1,7 +1,10 @@
 import { useClipboard } from '@/hooks/use-clipboard';
 import { ibmPlex } from '@/lib/fonts';
-import { Copy01Icon, Tick01Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import {
+  Copy01Icon,
+  Tick01Icon,
+} from '@repo/design-system/components/ui/icons';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
 import hljs from 'highlight.js';

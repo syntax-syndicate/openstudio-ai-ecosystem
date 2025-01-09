@@ -12,7 +12,6 @@ import { SettingsContainer } from '@/app/(authenticated)/chat/components/setting
 import { providers } from '@/config/models';
 import { usePreferenceContext } from '@/context/preferences';
 import type { TProvider } from '@/types';
-import { AlertCircleIcon, CheckmarkCircle02Icon } from '@hugeicons/react';
 import {
   Accordion,
   AccordionContent,
@@ -20,6 +19,10 @@ import {
   AccordionTrigger,
 } from '@repo/design-system/components/ui/accordion';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import {
+  AlertCircleIcon,
+  CheckmarkCircle02Icon,
+} from '@repo/design-system/components/ui/icons';
 import { cn } from '@repo/design-system/lib/utils';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';

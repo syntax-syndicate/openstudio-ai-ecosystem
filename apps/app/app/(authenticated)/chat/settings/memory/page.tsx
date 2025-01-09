@@ -3,8 +3,8 @@
 import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
 import { usePreferenceContext } from '@/context/preferences';
-import { Delete01Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import { Delete01Icon } from '@repo/design-system/components/ui/icons';
 import { Type } from '@repo/design-system/components/ui/text';
 
 export default function MemorySettings() {

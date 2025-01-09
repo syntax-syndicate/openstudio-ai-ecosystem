@@ -1,8 +1,11 @@
 import { useSessions } from '@/context';
 import type { TChatSession } from '@/types';
-import { Delete01Icon, Edit02Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import {
+  Delete01Icon,
+  Edit02Icon,
+} from '@repo/design-system/components/ui/icons';
 import { Input } from '@repo/design-system/components/ui/input';
 import {
   Popover,

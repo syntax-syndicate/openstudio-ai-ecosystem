@@ -1,6 +1,10 @@
-import { SquareLock02Icon, ViewIcon, ViewOffIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import {
+  SquareLock02Icon,
+  ViewIcon,
+  ViewOffIcon,
+} from '@repo/design-system/components/ui/icons';
 import { Input } from '@repo/design-system/components/ui/input';
 import { type FC, useState } from 'react';
 

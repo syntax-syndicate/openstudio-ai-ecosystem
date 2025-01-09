@@ -1,5 +1,4 @@
 import type { TPrompt } from '@/hooks/use-prompts';
-import { Edit02Icon, NoteIcon } from '@hugeicons/react';
 import { DotsThree, Pencil, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
@@ -17,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { Edit02Icon, NoteIcon } from '@repo/design-system/components/ui/icons';
 
 export type TPromptLibrary = {
   onPromptSelect: (prompt: TPrompt) => void;

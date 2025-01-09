@@ -2,7 +2,7 @@ import { defaultPreferences } from '@/config';
 import { useChatContext, usePreferenceContext, useSessions } from '@/context';
 import { injectPresetValues } from '@/helper/preset-prompt-values';
 import { constructPrompt } from '@/helper/promptUtil';
-import { sortMessages } from '@/helper/utils';
+import { generateShortUUID, sortMessages } from '@/helper/utils';
 import { modelService } from '@/services/models';
 import { messagesService, sessionsService } from '@/services/sessions/client';
 import type { TLLMRunConfig } from '@/types';
@@ -15,7 +15,6 @@ import {
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import moment from 'moment';
-import { v4 } from 'uuid';
 import { useAssistantUtils, useTools } from '.';
 
 export const useLLMRunner = () => {
@@ -38,7 +37,7 @@ export const useLLMRunner = () => {
     const currentAbortController = new AbortController();
     setAbortController(currentAbortController);
     const { sessionId, messageId, input, context, image, assistant } = config;
-    const newMessageId = messageId || v4();
+    const newMessageId = messageId || generateShortUUID();
     const modelKey = assistant.baseModel;
     const session = await sessionsService.getSessionById(sessionId);
     const messages = await messagesService.getMessages(sessionId);
@@ -232,7 +231,6 @@ export const useLLMRunner = () => {
         stop: true,
         stopReason: 'finish',
       });
-      generateTitleForSession(sessionId);
     } catch (err) {
       updateCurrentMessage({
         isLoading: false,

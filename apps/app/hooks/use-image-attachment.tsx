@@ -1,7 +1,7 @@
 import type { TAttachment } from '@/app/(authenticated)/chat/components/chat-input';
-import { ImageAdd01Icon } from '@hugeicons/react';
 import { X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import { ImageAdd01Icon } from '@repo/design-system/components/ui/icons';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import Image from 'next/image';

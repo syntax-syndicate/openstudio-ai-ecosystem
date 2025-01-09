@@ -1,8 +1,8 @@
 import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 import { usePreferenceContext } from '@/context';
 import { blobToBase64 } from '@/helper/record';
-import { RecordIcon, StopIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import { RecordIcon, StopIcon } from '@repo/design-system/components/ui/icons';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { useRouter } from 'next/navigation';

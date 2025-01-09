@@ -2,7 +2,6 @@
 import { ImageGenerationPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/image-generation';
 import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
-import { GlobalSearchIcon, Image01Icon } from '@hugeicons/react';
 import {
   Accordion,
   AccordionContent,
@@ -10,6 +9,10 @@ import {
   AccordionTrigger,
 } from '@repo/design-system/components/ui/accordion';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import {
+  GlobalSearchIcon,
+  Image01Icon,
+} from '@repo/design-system/components/ui/icons';
 
 export default function PluginsSettings() {
   const pluginSettingsData = [

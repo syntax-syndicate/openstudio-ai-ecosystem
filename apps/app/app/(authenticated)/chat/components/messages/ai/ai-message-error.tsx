@@ -1,7 +1,7 @@
 import { useAssistantUtils } from '@/hooks';
 import type { TChatMessage } from '@/types';
-import { Alert02Icon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { Alert02Icon } from '@repo/design-system/components/ui/icons';
 import { Type } from '@repo/design-system/components/ui/text';
 import { useRouter } from 'next/navigation';
 import type { FC } from 'react';

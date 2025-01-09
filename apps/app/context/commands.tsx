@@ -21,7 +21,7 @@ import {
   Delete01Icon,
   Moon02Icon,
   Sun03Icon,
-} from '@hugeicons/react';
+} from '@repo/design-system/components/ui/icons';
 import { createContext, useContext } from 'react';
 import { useSessions } from './sessions';
 

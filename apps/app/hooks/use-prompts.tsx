@@ -1,7 +1,7 @@
+import { generateShortUUID } from '@/helper/utils';
 import { useQuery } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 import { get, set } from 'idb-keyval';
-import { v4 } from 'uuid';
 
 export type TPrompt = {
   id: string;
@@ -15,7 +15,7 @@ export const usePrompts = () => {
   };
   const setPrompt = async (prompt: Omit<TPrompt, 'id'>): Promise<TPrompt[]> => {
     const prompts = await getPrompts();
-    const newPrompts = [...prompts, { id: v4(), ...prompt }];
+    const newPrompts = [...prompts, { id: generateShortUUID(), ...prompt }];
     await set('prompts', newPrompts);
     return newPrompts;
   };

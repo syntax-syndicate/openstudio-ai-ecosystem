@@ -1,6 +1,5 @@
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import type { TAssistant, TModelKey } from '@/types';
-import { ArrowDown01Icon, SparklesIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   DropdownMenu,
@@ -8,6 +7,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
+import {
+  ArrowDown01Icon,
+  SparklesIcon,
+} from '@repo/design-system/components/ui/icons';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useState } from 'react';
 

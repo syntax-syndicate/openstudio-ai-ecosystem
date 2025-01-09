@@ -23,6 +23,8 @@ export const useChatSessionQueries = () => {
       message: TChatMessage;
     }) => {
       await messagesService.addMessage(parentId, message);
+      const newMessages = await messagesService.getMessages(parentId);
+      return newMessages;
     },
     onSuccess: () => {
       sessionsQuery.refetch();

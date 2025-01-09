@@ -1,6 +1,6 @@
-import { Alert02Icon } from '@hugeicons/react';
 import { Alert, AlertDescription } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { Alert02Icon } from '@repo/design-system/components/ui/icons';
 import { useState } from 'react';
 export type TGeneratedImage = {
   image: string;

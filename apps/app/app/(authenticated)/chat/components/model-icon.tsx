@@ -1,4 +1,4 @@
-import { SparklesIcon } from '@hugeicons/react';
+import { SparklesIcon } from '@repo/design-system/components/ui/icons';
 import { cn } from '@repo/design-system/lib/utils';
 import Image from 'next/image';
 

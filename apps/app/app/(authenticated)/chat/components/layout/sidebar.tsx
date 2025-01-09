@@ -1,14 +1,6 @@
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
 import { usePromptsContext, useSessions } from '@/context';
 import {
-  Moon02Icon,
-  MoreHorizontalIcon,
-  NoteIcon,
-  PlusSignIcon,
-  Settings03Icon,
-  Sun01Icon,
-} from '@hugeicons/react';
-import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +8,14 @@ import {
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import {
+  Moon02Icon,
+  MoreHorizontalIcon,
+  NoteIcon,
+  PlusSignIcon,
+  Settings03Icon,
+  Sun01Icon,
+} from '@repo/design-system/components/ui/icons';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
@@ -51,7 +51,7 @@ export const Sidebar = () => {
     { label: 'Support', onClick: () => {} },
   ];
   return (
-    <div className="absolute top-0 bottom-0 left-0 z-[50] flex flex-col items-center justify-center gap-3 border-zinc-900/5 border-r pb-6 md:p-3 dark:border-white/5">
+    <div className="absolute top-0 bottom-0 left-0 z-[50] flex flex-col items-center justify-center gap-3 border-zinc-500/5 border-r pb-6 md:p-3 dark:border-zinc-500/5">
       <div className="flex flex-row items-center gap-2">
         {renderNewSession()}
       </div>
@@ -83,7 +83,7 @@ export const Sidebar = () => {
       </Tooltip>
       <DropdownMenu
         open={isOpen}
-        onOpenChange={(open) => {
+        onOpenChange={(open: boolean) => {
           document.body.style.pointerEvents = 'auto';
           setIsOpen(open);
         }}

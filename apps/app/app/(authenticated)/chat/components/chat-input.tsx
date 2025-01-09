@@ -14,9 +14,12 @@ import {
 import { useChatEditor } from '@/hooks/use-editor';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TAssistant } from '@/types';
-import { ArrowDown02Icon, Navigation03Icon } from '@hugeicons/react';
 import { ArrowElbowDownRight, Stop, X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import {
+  ArrowDown02Icon,
+  Navigation03Icon,
+} from '@repo/design-system/components/ui/icons';
 import { cn } from '@repo/design-system/lib/utils';
 import { EditorContent } from '@tiptap/react';
 import { motion } from 'framer-motion';

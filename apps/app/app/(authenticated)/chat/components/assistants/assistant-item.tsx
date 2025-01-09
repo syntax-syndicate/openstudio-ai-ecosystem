@@ -3,7 +3,6 @@ import { usePreferenceContext } from '@/context';
 import { formatNumber } from '@/helper/utils';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import type { TAssistant } from '@/types';
-import { PuzzleIcon, ViewIcon } from '@hugeicons/react';
 import { DotsThree, Pencil, TrashSimple } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -15,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { PuzzleIcon, ViewIcon } from '@repo/design-system/components/ui/icons';
 import { Type } from '@repo/design-system/components/ui/text';
 import { useState } from 'react';
 
@@ -81,7 +81,7 @@ export const AssistantItem = ({
               <Button
                 variant="ghost"
                 size="iconSm"
-                onClick={(e) => {
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   setOpen(true);
                 }}
               >
@@ -93,7 +93,7 @@ export const AssistantItem = ({
               align="end"
             >
               <DropdownMenuItem
-                onClick={(e) => {
+                onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                   onEdit(assistant);
 
                   e.stopPropagation();

@@ -2,10 +2,10 @@ import { usePreferenceContext } from '@/context/preferences';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import { useTools } from '@/hooks/use-tools';
 import type { TToolKey } from '@/types';
-import { ElectricPlugsIcon } from '@hugeicons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { ElectricPlugsIcon } from '@repo/design-system/components/ui/icons';
 import {
   Popover,
   PopoverContent,
