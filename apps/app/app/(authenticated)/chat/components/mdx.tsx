@@ -35,7 +35,7 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
       return (
         <HoverCard>
           <HoverCardTrigger>
-            <a href={href} data-message-id={messageId}>
+            <a href={href} target="_blank" data-message-id={messageId}>
               {text}
             </a>
           </HoverCardTrigger>
@@ -46,7 +46,7 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
               window.open(href, '_blank');
             }}
           >
-            <p className="flex w-full flex-row items-center gap-2 overflow-hidden whitespace-pre-wrap font-normal text-xs text-zinc-200 leading-7 dark:text-zinc-200">
+            <p className="flex w-full flex-row items-center gap-2 overflow-hidden whitespace-pre-wrap text-xs font-normal leading-7 text-zinc-200 dark:text-zinc-200">
               <Link
                 size={16}
                 weight="bold"
@@ -87,13 +87,13 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
     </div>
   );
   const renderCodespan = (code: string) => (
-    <span className="rounded-md bg-zinc-50 px-2 py-1 font-medium text-sm text-zinc-800 md:text-base dark:bg-white/10 dark:text-white">
+    <span className="rounded-md bg-zinc-50 px-2 py-1 text-sm font-medium text-zinc-800 dark:bg-white/10 dark:text-white md:text-base">
       {code}
     </span>
   );
 
   const articleClass = cn(
-    'prose dark:prose-invert prose-zinc w-full prose-h3:font-medium prose-h4:font-medium prose-h5:font-medium prose-h6:font-medium prose-heading:font-medium prose-strong:font-medium prose-h3:text-lg prose-h4:text-base prose-h5:text-base prose-h6:text-base prose-headings:text-lg prose-th:text-sm',
+    "prose dark:prose-invert pb-8 w-full prose-zinc prose-h3:font-medium prose-h4:font-medium prose-h5:font-medium prose-h6:font-medium prose-h3:text-lg prose-h4:text-base prose-h5:text-base prose-h6:text-base prose-heading:font-medium prose-strong:font-medium prose-headings:text-lg prose-th:text-sm",
     {
       'prose-sm': size === 'sm',
       'prose-base': size === 'base',
@@ -101,7 +101,7 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
   );
 
   return (
-    <article className={articleClass}>
+    <article className={articleClass} id={`message-${messageId}`}>
       <Markdown
         renderer={{
           text: (text) => (

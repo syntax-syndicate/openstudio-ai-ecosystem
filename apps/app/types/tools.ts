@@ -1,5 +1,5 @@
 import type { usePreferenceContext } from '@/context';
-import type { TApiKeys, TPreferences } from '@/types';
+import type { TApiKeys, TModelItem, TPreferences } from '@/types';
 import type { ReactNode } from 'react';
 
 export const toolKeys = ['calculator', 'web_search'];
@@ -35,6 +35,7 @@ export type TToolArg = {
   >['updatePreferences'];
   preferences: TPreferences;
   apiKeys: TApiKeys;
+  model: TModelItem;
   sendToolResponse: (response: TToolResponse) => void;
 };
 export type TToolKey = (typeof toolKeys)[number];

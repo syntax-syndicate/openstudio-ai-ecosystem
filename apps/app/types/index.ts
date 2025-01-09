@@ -4,3 +4,4 @@ export * from '@/types/models';
 export * from '@/types/preferences';
 export * from '@/types/sessions';
 export * from '@/types/tools';
+export * from '@/types/documents';

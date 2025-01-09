@@ -41,7 +41,7 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
       <Flex
         ref={messageRef}
         direction="col"
-        gap="md"
+        gap="none"
         items="start"
         className="w-full flex-1 overflow-hidden p-2"
       >

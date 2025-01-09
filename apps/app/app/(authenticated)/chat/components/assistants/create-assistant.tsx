@@ -1,18 +1,20 @@
-import { ModelSelect } from '@/app/(authenticated)/chat/components/model-select';
-import type { TAssistant } from '@/types';
-import { Plus } from '@phosphor-icons/react';
-import { Badge } from '@repo/design-system/components/ui/badge';
-import { Button } from '@repo/design-system/components/ui/button';
-import { ComingSoon } from '@repo/design-system/components/ui/coming-soon';
-import { FormLabel } from '@repo/design-system/components/ui/form-label';
-import { Input } from '@repo/design-system/components/ui/input';
-import { Textarea } from '@repo/design-system/components/ui/textarea';
-import { useFormik } from 'formik';
-import { useEffect, useRef } from 'react';
+import { Badge } from "@repo/design-system/components/ui/badge";
+import { Button } from "@repo/design-system/components/ui/button";
+import { ComingSoon } from "@repo/design-system/components/ui/coming-soon";
+import { FormLabel } from "@repo/design-system/components/ui/form-label";
+import { Input } from "@repo/design-system/components/ui/input";
+import { Textarea } from "@repo/design-system/components/ui/textarea";
+import { useImageAttachment } from "@/hooks";
+import { TAssistant } from "@/types";
+import { Plus } from "@phosphor-icons/react";
+import { useFormik } from "formik";
+import { useEffect, useRef } from "react";
+import { ModelSelect } from "@/app/(authenticated)/chat/components/model-select";
+import { Flex } from "@repo/design-system/components/ui/flex";
 
 export type TCreateAssistant = {
   assistant?: TAssistant;
-  onCreateAssistant: (assistant: Omit<TAssistant, 'key'>) => void;
+  onCreateAssistant: (assistant: Omit<TAssistant, "key">) => void;
   onUpdateAssistant: (assistant: TAssistant) => void;
   onCancel: () => void;
 };
@@ -25,12 +27,18 @@ export const CreateAssistant = ({
 }: TCreateAssistant) => {
   const botTitleRef = useRef<HTMLInputElement | null>(null);
 
-  const formik = useFormik<Omit<TAssistant, 'key'>>({
+  const { attachment, renderImageUpload, renderAttachedImage, setAttachment } =
+    useImageAttachment({
+      id: "assistant-icon-upload",
+    });
+
+  const formik = useFormik<Omit<TAssistant, "key">>({
     initialValues: {
-      name: assistant?.name || '',
-      systemPrompt: assistant?.systemPrompt || '',
-      baseModel: assistant?.baseModel || 'gpt-3.5-turbo',
-      type: 'custom',
+      name: assistant?.name || "",
+      systemPrompt: assistant?.systemPrompt || "",
+      iconURL: assistant?.iconURL || "",
+      baseModel: assistant?.baseModel || "gpt-3.5-turbo",
+      type: "custom",
     },
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -48,15 +56,27 @@ export const CreateAssistant = ({
     botTitleRef?.current?.focus();
   }, [open]);
 
+  useEffect(() => {
+    setAttachment({
+      base64: assistant?.iconURL,
+    });
+  }, [assistant]);
+
+  useEffect(() => {
+    if (attachment) {
+      formik.setFieldValue("iconURL", attachment.base64);
+    }
+  }, [attachment]);
+
   const clearAssistant = () => {
     formik.resetForm();
   };
 
   return (
     <div className="relative flex h-full w-full flex-col items-start overflow-hidden rounded-2xl bg-white dark:border dark:border-white/10 dark:bg-zinc-800">
-      <div className="flex w-full flex-row items-center gap-3 border-zinc-500/20 border-b px-4 py-3">
-        <p className="font-medium text-base">
-          {assistant?.key ? 'Edit Assistant' : 'Add New Assistant'}
+      <div className="flex w-full flex-row items-center gap-3 border-b border-zinc-500/20 px-4 py-3">
+        <p className="text-base font-medium">
+          {assistant?.key ? "Edit Assistant" : "Add New Assistant"}
         </p>
         <Badge>Beta</Badge>
       </div>
@@ -69,7 +89,7 @@ export const CreateAssistant = ({
             className="h-10 w-full justify-start p-2"
             selectedModel={formik.values.baseModel}
             setSelectedModel={(model) => {
-              formik.setFieldValue('baseModel', model);
+              formik.setFieldValue("baseModel", model);
             }}
           />
         </div>
@@ -86,6 +106,16 @@ export const CreateAssistant = ({
             className="w-full"
           />
         </div>
+
+        <Flex direction="col" gap="sm">
+          <FormLabel label="Icon" isOptional />
+          <Flex direction="row" gap="sm" items="center">
+            {renderAttachedImage()}
+            {renderImageUpload({
+              label: "Upload Icon",
+            })}
+          </Flex>
+        </Flex>
 
         <div className="flex w-full flex-col gap-2">
           <FormLabel label="System Prompt">
@@ -112,7 +142,7 @@ export const CreateAssistant = ({
           </Button>
         </div>
       </div>
-      <div className="flex w-full flex-row items-center justify-between gap-1 border-zinc-500/20 border-t p-2">
+      <div className="flex w-full flex-row items-center justify-between gap-1 border-t border-zinc-500/20 p-2">
         <Button variant="ghost" onClick={onCancel}>
           Back
         </Button>

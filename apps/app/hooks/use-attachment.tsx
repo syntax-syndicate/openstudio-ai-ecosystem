@@ -4,8 +4,10 @@ import { Button } from '@repo/design-system/components/ui/button';
 import { Pdf01Icon } from '@repo/design-system/components/ui/icons';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { type ChangeEvent, useState } from 'react';
+import { usePreferenceContext } from "@/context";
 
 export const useAttachment = () => {
+  const { apiKeys } = usePreferenceContext();
   const [attachment, setAttachment] = useState<TAttachment>();
   const { toast } = useToast();
   const clearAttachment = () => {
@@ -27,26 +29,7 @@ export const useAttachment = () => {
         ...prev,
         file,
       }));
-      const worker = new Worker(
-        new URL('../worker/worker.ts', import.meta.url)
-      );
-      worker.postMessage(file);
-      worker.onmessage = (event) => {
-        const { content, error } = event.data;
-        console.log(content, error);
-        if (error) {
-          toast({
-            title: 'Error',
-            description: error,
-            variant: 'destructive',
-          });
-        } else {
-          setAttachment((prev) => ({
-            ...prev,
-            base64: content,
-          }));
-        }
-      };
+      
     }
   };
   const handleFileSelect = () => {
@@ -61,7 +44,7 @@ export const useAttachment = () => {
             size={'iconXS'}
             variant="default"
             onClick={clearAttachment}
-            className="absolute top-[-4px] right-[-4px] z-10 h-4 w-4 flex-shrink-0"
+            className="absolute right-[-4px] top-[-4px] z-10 h-4 w-4 flex-shrink-0"
           >
             <X size={12} weight="bold" />
           </Button>
