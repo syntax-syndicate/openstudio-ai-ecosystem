@@ -1,10 +1,10 @@
+import { modelService } from '@/services/models';
 import type { TToolArg } from '@/types';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { RunnableSequence } from '@langchain/core/runnables';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { z } from 'zod';
-import { modelService } from '@/services/models';
 
 const memoryParser = StructuredOutputParser.fromZodSchema(
   z.object({
@@ -15,7 +15,8 @@ const memoryParser = StructuredOutputParser.fromZodSchema(
 );
 
 const memoryTool = (args: TToolArg) => {
-  const { apiKeys, sendToolResponse, preferences, updatePreferences, model } = args;
+  const { apiKeys, sendToolResponse, preferences, updatePreferences, model } =
+    args;
   const memorySchema = z.object({
     memory: z
       .array(z.string().describe('key information'))

@@ -1,8 +1,7 @@
-import { Button } from "@repo/design-system/components/ui";
-import { FC } from "react";
-import { Type } from "@repo/design-system/components/ui/text";
-import { Flex } from "@repo/design-system/components/ui/flex";
-
+import { Button } from '@repo/design-system/components/ui';
+import { Flex } from '@repo/design-system/components/ui/flex';
+import { Type } from '@repo/design-system/components/ui/text';
+import type { FC } from 'react';
 
 export type AssistantHeaderProps = {
   openCreateAssistant: boolean;

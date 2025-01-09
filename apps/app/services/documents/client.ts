@@ -1,13 +1,13 @@
-import { generateShortUUID } from "@/helper/utils";
-import { TDocument } from "@/types";
-import { get, set } from "idb-keyval";
+import { generateShortUUID } from '@/helper/utils';
+import type { TDocument } from '@/types';
+import { get, set } from 'idb-keyval';
 
 class DocumentService {
-  key = "documents";
+  key = 'documents';
   async getDocuments(): Promise<TDocument[]> {
     return (await get(this.key)) || [];
   }
-  async createDocument(document: Omit<TDocument, "id">): Promise<TDocument> {
+  async createDocument(document: Omit<TDocument, 'id'>): Promise<TDocument> {
     const documents = await this.getDocuments();
     const newDocument = { ...document, id: generateShortUUID() };
     const newDocuments = [...documents, newDocument];
@@ -21,11 +21,11 @@ class DocumentService {
   }
   async updateDocument(
     documentKey: string,
-    newDocument: Omit<Partial<TDocument>, "id">,
+    newDocument: Omit<Partial<TDocument>, 'id'>
   ) {
     const documents = await this.getDocuments();
     const newDocuments = documents.map((document) =>
-      document.id === documentKey ? { ...document, ...newDocument } : document,
+      document.id === documentKey ? { ...document, ...newDocument } : document
     );
     await set(this.key, newDocuments);
   }

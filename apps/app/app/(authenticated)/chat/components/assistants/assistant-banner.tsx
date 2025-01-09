@@ -1,8 +1,8 @@
-import { Button } from "@repo/design-system/components/ui";
-import {Flex} from "@repo/design-system/components/ui/flex";
-import {Type} from "@repo/design-system/components/ui/text";
-import { Add01Icon, SparklesIcon } from "@hugeicons/react";
-import { FC } from "react";
+import { Add01Icon, SparklesIcon } from '@hugeicons/react';
+import { Button } from '@repo/design-system/components/ui';
+import { Flex } from '@repo/design-system/components/ui/flex';
+import { Type } from '@repo/design-system/components/ui/text';
+import type { FC } from 'react';
 
 export type AssistantBannerProps = {
   openCreateAssistant: boolean;
@@ -39,7 +39,7 @@ export const AssistantBanner: FC<AssistantBannerProps> = ({
           setOpenCreateAssistant(true);
         }}
       >
-        <Add01Icon size={16} /> Create your own assistant{" "}
+        <Add01Icon size={16} /> Create your own assistant{' '}
       </Button>
     </Flex>
   );

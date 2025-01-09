@@ -43,7 +43,7 @@ export const AssistantItem = ({
         defaultAssistant: assistant.key,
         maxTokens: defaultPreferences.maxTokens,
       },
-      () => onSelect(assistant),
+      () => onSelect(assistant)
     );
   };
 
@@ -60,11 +60,11 @@ export const AssistantItem = ({
       onSelect={handleSelect}
     >
       <Flex gap="sm" items="center" key={assistant.key} className="w-full">
-        {getAssistantIcon(assistant.key, "sm")}
+        {getAssistantIcon(assistant.key, 'sm')}
         {assistant.name}
-        {model?.isNew && assistant.type !== "custom" && <Badge>New</Badge>}
+        {model?.isNew && assistant.type !== 'custom' && <Badge>New</Badge>}
         <div className="flex flex-1"></div>
-        {assistant.type !== "custom" && (
+        {assistant.type !== 'custom' && (
           <Flex gap="md" items="center">
             {!!model?.vision && (
               <ViewIcon size={16} strokeWidth={1.5} className="text-zinc-500" />
@@ -83,7 +83,7 @@ export const AssistantItem = ({
             )}
           </Flex>
         )}
-        {assistant.type === "custom" && (
+        {assistant.type === 'custom' && (
           <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger
               asChild

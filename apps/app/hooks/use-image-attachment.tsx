@@ -1,12 +1,12 @@
-import { TAttachment } from "@/app/(authenticated)/chat/components/chat-input";
-import { Tooltip } from "@repo/design-system/components/ui/tooltip-with-content";
-import { Button } from "@repo/design-system/components/ui/button";
-import { ImageAdd01Icon } from "@repo/design-system/components/ui/icons";
-import { useToast } from "@repo/design-system/components/ui/use-toast";
-import { X } from "@phosphor-icons/react";
-import Image from "next/image";
-import { ChangeEvent, useState } from "react";
-import Resizer from "react-image-file-resizer";
+import type { TAttachment } from '@/app/(authenticated)/chat/components/chat-input';
+import { X } from '@phosphor-icons/react';
+import { Button } from '@repo/design-system/components/ui/button';
+import { ImageAdd01Icon } from '@repo/design-system/components/ui/icons';
+import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
+import { useToast } from '@repo/design-system/components/ui/use-toast';
+import Image from 'next/image';
+import { type ChangeEvent, useState } from 'react';
+import Resizer from 'react-image-file-resizer';
 
 export type TRenderImageUpload = {
   showIcon?: boolean;
@@ -28,13 +28,13 @@ export const useImageAttachment = ({ id }: TUseImageAttachment) => {
         file,
         1000,
         1000,
-        "JPEG",
+        'JPEG',
         100,
         0,
         (uri) => {
           resolve(uri);
         },
-        "file",
+        'file'
       );
     });
 
@@ -47,19 +47,19 @@ export const useImageAttachment = ({ id }: TUseImageAttachment) => {
 
     const reader = new FileReader();
 
-    const fileTypes = ["image/jpeg", "image/png", "image/gif"];
+    const fileTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (file && !fileTypes.includes(file?.type)) {
       toast({
-        title: "Invalid format",
-        description: "Please select a valid image (JPEG, PNG, GIF).",
-        variant: "destructive",
+        title: 'Invalid format',
+        description: 'Please select a valid image (JPEG, PNG, GIF).',
+        variant: 'destructive',
       });
       return;
     }
 
     reader.onload = () => {
-      if (typeof reader.result !== "string") return;
-      const base64String = reader?.result?.split(",")[1];
+      if (typeof reader.result !== 'string') return;
+      const base64String = reader?.result?.split(',')[1];
       setAttachment((prev) => ({
         ...prev,
         base64: `data:${file?.type};base64,${base64String}`,
@@ -93,10 +93,10 @@ export const useImageAttachment = ({ id }: TUseImageAttachment) => {
           />
 
           <Button
-            size={"iconXS"}
+            size={'iconXS'}
             variant="default"
             onClick={clearAttachment}
-            className="absolute right-[-4px] top-[-4px] z-10 h-4 w-4 flex-shrink-0"
+            className="absolute top-[-4px] right-[-4px] z-10 h-4 w-4 flex-shrink-0"
           >
             <X size={12} weight="bold" />
           </Button>
@@ -108,7 +108,7 @@ export const useImageAttachment = ({ id }: TUseImageAttachment) => {
   const renderImageUpload = ({
     showIcon,
     label,
-    tooltip = "Attach an image",
+    tooltip = 'Attach an image',
   }: TRenderImageUpload) => {
     return (
       <>

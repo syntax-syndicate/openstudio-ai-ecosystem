@@ -11,10 +11,10 @@ export const useAssistantUtils = () => {
   const { preferences } = usePreferenceContext();
 
   const ollamaModelsQuery = assistantQueries.useOllamaModelsQuery(
-    preferences.ollamaBaseUrl,
+    preferences.ollamaBaseUrl
   );
 
-  const ollamaModelsSupportsTools = ["llama3-groq-tool-use:latest"];
+  const ollamaModelsSupportsTools = ['llama3-groq-tool-use:latest'];
 
   const allModels: TModelItem[] = useMemo(
     () => [
@@ -25,7 +25,7 @@ export const useAssistantUtils = () => {
           key: model.name,
           tokens: 128000,
           plugins: ollamaModelsSupportsTools.includes(model.name)
-            ? ["web_search"]
+            ? ['web_search']
             : [],
           icon: 'ollama',
           provider: 'ollama',
@@ -46,10 +46,10 @@ export const useAssistantUtils = () => {
         name: model.name,
         key: model.key,
         baseModel: model.key,
-        type: "base",
+        type: 'base',
         systemPrompt:
           preferences.systemPrompt || defaultPreferences.systemPrompt,
-      }),
+      })
     ),
     ...(assistantQueries?.assistantsQuery.data || []),
   ];
@@ -71,14 +71,14 @@ export const useAssistantUtils = () => {
     return (
       <ModelIcon
         type={
-          assistant?.assistant.type === "base"
+          assistant?.assistant.type === 'base'
             ? assistant?.model?.icon
-            : "chathub"
+            : 'chathub'
         }
         size={size}
         base64={assistant?.assistant.iconURL}
       />
-    )
+    );
   };
 
   return {

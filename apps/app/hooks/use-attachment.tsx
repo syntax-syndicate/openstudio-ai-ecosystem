@@ -1,10 +1,10 @@
 import type { TAttachment } from '@/app/(authenticated)/chat/components/chat-input';
+import { usePreferenceContext } from '@/context';
 import { X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Pdf01Icon } from '@repo/design-system/components/ui/icons';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { type ChangeEvent, useState } from 'react';
-import { usePreferenceContext } from "@/context";
 
 export const useAttachment = () => {
   const { apiKeys } = usePreferenceContext();
@@ -29,7 +29,6 @@ export const useAttachment = () => {
         ...prev,
         file,
       }));
-      
     }
   };
   const handleFileSelect = () => {
@@ -44,7 +43,7 @@ export const useAttachment = () => {
             size={'iconXS'}
             variant="default"
             onClick={clearAttachment}
-            className="absolute right-[-4px] top-[-4px] z-10 h-4 w-4 flex-shrink-0"
+            className="absolute top-[-4px] right-[-4px] z-10 h-4 w-4 flex-shrink-0"
           >
             <X size={12} weight="bold" />
           </Button>

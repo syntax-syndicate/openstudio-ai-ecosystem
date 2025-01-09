@@ -1,25 +1,25 @@
-import { CreateAssistant } from "@/app/(authenticated)/chat/components/assistants/create-assistant";
-import { Button } from "@repo/design-system/components/ui/button";
+import { CreateAssistant } from '@/app/(authenticated)/chat/components/assistants/create-assistant';
+import { usePreferenceContext } from '@/context';
+import { useAssistantUtils } from '@/hooks';
+import { Button } from '@repo/design-system/components/ui/button';
 import {
   Command,
   CommandEmpty,
   CommandInput,
   CommandList,
-} from "@repo/design-system/components/ui/command";
-import { Flex } from "@repo/design-system/components/ui/flex";
-import { Type } from "@repo/design-system/components/ui/text";
-import { usePreferenceContext } from "@/context";
-import { cn } from "@repo/design-system/lib/utils";
-import { useAssistantUtils } from "@/hooks";
+} from '@repo/design-system/components/ui/command';
+import { Flex } from '@repo/design-system/components/ui/flex';
+import { Type } from '@repo/design-system/components/ui/text';
+import { cn } from '@repo/design-system/lib/utils';
 
-import { defaultPreferences } from "@/config";
-import { TAssistant } from "@/types";
-import { CommandGroup } from "@repo/design-system/components/ui/command";
-import { FC, useEffect, useRef, useState } from "react";
-import { Drawer } from "vaul";
-import { AssistantBanner } from "@/app/(authenticated)/chat/components/assistants/assistant-banner";
-import { AssistantHeader } from "@/app/(authenticated)/chat/components/assistants/assistant-header";
-import { AssistantItem } from "@/app/(authenticated)/chat/components/assistants/assistant-item";
+import { AssistantBanner } from '@/app/(authenticated)/chat/components/assistants/assistant-banner';
+import { AssistantHeader } from '@/app/(authenticated)/chat/components/assistants/assistant-header';
+import { AssistantItem } from '@/app/(authenticated)/chat/components/assistants/assistant-item';
+import { defaultPreferences } from '@/config';
+import type { TAssistant } from '@/types';
+import { CommandGroup } from '@repo/design-system/components/ui/command';
+import { type FC, useEffect, useRef, useState } from 'react';
+import { Drawer } from 'vaul';
 
 export type TAssitantModal = {
   open: boolean;
@@ -46,8 +46,8 @@ export const AssistantModal: FC<TAssitantModal> = ({
   const [openCreateAssistant, setOpenCreateAssistant] = useState(false);
   const [updateAssistant, setUpdateAssistant] = useState<TAssistant>();
 
-  const customAssistants = assistants?.filter((a) => a.type === "custom");
-  const baseAssistants = assistants?.filter((a) => a.type === "base");
+  const customAssistants = assistants?.filter((a) => a.type === 'custom');
+  const baseAssistants = assistants?.filter((a) => a.type === 'base');
 
   useEffect(() => {
     if (open && searchRef?.current) {
@@ -115,8 +115,8 @@ export const AssistantModal: FC<TAssitantModal> = ({
         <Drawer.Overlay className="fixed inset-0 z-[400] bg-zinc-500/70 backdrop-blur-sm dark:bg-zinc-900/70" />
         <Drawer.Content
           className={cn(
-            "fixed bottom-0 left-0 right-0 z-[500] mx-auto mt-24 flex max-h-[430px] flex-col items-center outline-none md:bottom-4 md:left-[50%]",
-            `w-full md:ml-[-200px] md:w-[400px]`,
+            'fixed right-0 bottom-0 left-0 z-[500] mx-auto mt-24 flex max-h-[430px] flex-col items-center outline-none md:bottom-4 md:left-[50%]',
+            `w-full md:ml-[-200px] md:w-[400px]`
           )}
         >
           <Command className="relative rounded-2xl dark:border dark:border-white/10">
@@ -127,7 +127,7 @@ export const AssistantModal: FC<TAssitantModal> = ({
             />
             <CommandEmpty>{renderEmptyState()}</CommandEmpty>
 
-            <CommandList className="border-t border-zinc-500/20">
+            <CommandList className="border-zinc-500/20 border-t">
               <CommandGroup>
                 <Flex direction="col" className="w-full p-2">
                   {!!customAssistants?.length ? (
@@ -149,8 +149,8 @@ export const AssistantModal: FC<TAssitantModal> = ({
                       <Drawer.Overlay className="fixed inset-0 z-[600] bg-zinc-500/70 backdrop-blur-sm dark:bg-zinc-900/70" />
                       <Drawer.Content
                         className={cn(
-                          "fixed bottom-0 left-0 right-0 z-[605] mx-auto mt-24 flex max-h-[450px] flex-col items-center outline-none md:bottom-6 md:left-[50%]",
-                          `w-full md:ml-[-220px] md:w-[440px]`,
+                          'fixed right-0 bottom-0 left-0 z-[605] mx-auto mt-24 flex max-h-[450px] flex-col items-center outline-none md:bottom-6 md:left-[50%]',
+                          `w-full md:ml-[-220px] md:w-[440px]`
                         )}
                       >
                         <CreateAssistant
@@ -166,7 +166,7 @@ export const AssistantModal: FC<TAssitantModal> = ({
                                   setOpenCreateAssistant(false);
                                   setUpdateAssistant(undefined);
                                 },
-                              },
+                              }
                             );
                           }}
                           onCreateAssistant={(assistant) => {
@@ -175,7 +175,7 @@ export const AssistantModal: FC<TAssitantModal> = ({
                                 setOpenCreateAssistant(false);
                               },
                               onError: (error) => {
-                                console.log("error", error);
+                                console.log('error', error);
                               },
                             });
                           }}

@@ -12,8 +12,7 @@ export type ModelIconType =
   | 'calculator'
   | 'duckduckgo_search'
   | 'website_reader'
-  | 'ollama'
-  | 'custom' //TODO: remove this later
+  | 'ollama';
 
 export type TModelIcon = {
   type: ModelIconType;
@@ -34,10 +33,7 @@ export const ModelIcon = ({ type, size, base64 }: TModelIcon) => {
     duckduckgo_search: '/icons/duckduckgo.svg',
     website_reader: '/icons/website_reader.svg',
     ollama: '/icons/ollama.svg',
-    //TODO: remove this later
-    custom: '/icons/ollama.svg'
   };
-
 
   return (
     <Image
@@ -47,10 +43,10 @@ export const ModelIcon = ({ type, size, base64 }: TModelIcon) => {
       alt={type}
       className={cn(
         'object-cover',
-        "rounded-md",
-        size === "sm" && "h-6 min-w-6",
-        size === "md" && "h-8 min-w-8",
-        size === "lg" && "h-10 min-w-10",
+        'rounded-md',
+        size === 'sm' && 'h-6 min-w-6',
+        size === 'md' && 'h-8 min-w-8',
+        size === 'lg' && 'h-10 min-w-10'
       )}
       sizes="100vw"
     />

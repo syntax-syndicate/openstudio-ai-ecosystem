@@ -1,10 +1,10 @@
-import { TDocument } from "@/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { documentService } from "@/services/documents/client";
+import { documentService } from '@/services/documents/client';
+import type { TDocument } from '@/types';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useDocumentsQueries = () => {
   const documentsQuery = useQuery({
-    queryKey: ["documents"],
+    queryKey: ['documents'],
     queryFn: () => documentService.getDocuments(),
   });
   const createDocumentMutation = useMutation({
@@ -25,7 +25,7 @@ export const useDocumentsQueries = () => {
       newDocument,
     }: {
       documentId: string;
-      newDocument: Omit<Partial<TDocument>, "id">;
+      newDocument: Omit<Partial<TDocument>, 'id'>;
     }) => documentService.updateDocument(documentId, newDocument),
     onSuccess: () => {
       documentsQuery.refetch();

@@ -8,7 +8,7 @@ export const useAssistantsQueries = () => {
     queryFn: () => assistantService.getAssistants(),
   });
   const createAssistantMutation = useMutation({
-    mutationFn: (assistant: Omit<TAssistant, "key">) =>
+    mutationFn: (assistant: Omit<TAssistant, 'key'>) =>
       assistantService.createAssistant(assistant),
     onSuccess: () => {
       assistantsQuery.refetch();

@@ -1,4 +1,3 @@
-import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import type { TModelKey } from '@/types';
 import { Badge } from '@repo/design-system/components/ui/badge';
@@ -79,11 +78,7 @@ export const ModelSelect: FC<TModelSelect> = ({
                     setIsOpen(false);
                   }}
                 >
-                  {assistant.type === 'base' ? (
-                    getAssistantIcon(assistant.key, 'sm')
-                  ) : (
-                    <ModelIcon type="custom" size="sm" />
-                  )}
+                  {getAssistantIcon(assistant.key, 'sm')}
                   {assistant.name}
                   {model?.isNew && <Badge>New</Badge>}
                 </DropdownMenuItem>
