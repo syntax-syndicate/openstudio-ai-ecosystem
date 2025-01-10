@@ -16,7 +16,6 @@ import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
 import moment from 'moment';
-import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export const HistoryItem = ({
@@ -26,16 +25,16 @@ export const HistoryItem = ({
   session: TChatSession;
   dismiss: () => void;
 }) => {
-  const { sessionId } = useParams();
   const {
     updateSessionMutation,
     removeSessionMutation,
     refetchSessions,
     createSession,
+    setActiveSessionId,
+    activeSessionId,
   } = useSessions();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(session.title);
-  const router = useRouter();
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const historyInputRef = useRef<HTMLInputElement>(null);
 
@@ -48,9 +47,11 @@ export const HistoryItem = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
+
   const handleInputBlur = () => {
     setIsEditing(false);
   };
+
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setIsEditing(false);
@@ -62,22 +63,26 @@ export const HistoryItem = ({
       });
     }
   };
+
   const handleOnClick = () => {
     if (!isEditing) {
-      router.push(`/chat/${session.id}`);
+      setActiveSessionId(session.id);
       dismiss();
     }
   };
+
   const containerClasses = cn(
-    'group flex w-full cursor-pointer flex-row items-start gap-2 rounded-xl py-2 pr-2 pl-3 hover:bg-black/10 hover:dark:bg-black/30',
-    sessionId?.toString() === session.id || isEditing
+    'group flex w-full w-full cursor-pointer flex-row items-start gap-2 rounded-xl py-2 pr-2 pl-3 hover:bg-black/10 hover:dark:bg-black/30',
+    activeSessionId === session.id || isEditing
       ? 'bg-black/10 dark:bg-black/30'
       : ''
   );
+
   const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setIsEditing(true);
     e.stopPropagation();
   };
+
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setOpenDeleteConfirm(true);
     e.stopPropagation();
@@ -86,7 +91,7 @@ export const HistoryItem = ({
   const handleDeleteConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     removeSessionMutation.mutate(session.id, {
       onSuccess: () => {
-        if (sessionId === session.id) {
+        if (activeSessionId === session.id) {
           createSession({
             redirect: true,
           });

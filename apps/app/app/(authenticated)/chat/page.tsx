@@ -1,21 +1,42 @@
 'use client';
-import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
-import { useSessions } from '@/context';
+import { ChatInput } from '@/app/(authenticated)/chat/components/chat-input';
+import { MainLayout } from '@/app/(authenticated)/chat/components/layout/main-layout';
+import { ChatMessages } from '@/app/(authenticated)/chat/components/messages/chat-messages';
+import {
+  AssistantsProvider,
+  ChatProvider,
+  CommandsProvider,
+  PromptsProvider,
+  useSessions,
+} from '@/context';
 import { Spinner } from '@repo/design-system/components/ui/loading-spinner';
-import { useEffect } from 'react';
 
-const ChatPage = () => {
-  const { createSession } = useSessions();
-  useEffect(() => {
-    createSession({
-      redirect: true,
-    });
-  }, []);
+const ChatSessionPage = () => {
+  const { isAllSessionLoading, activeSessionId } = useSessions();
+  const renderLoader = () => {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  };
+  const isLoading = isAllSessionLoading || !activeSessionId;
+  if (isLoading) return renderLoader();
   return (
-    <main className="flex h-[100dvh] w-screen flex-col items-center justify-center gap-2">
-      <ModelIcon type="chathub" size="lg" />
-      <Spinner />
-    </main>
+    <ChatProvider sessionId={activeSessionId}>
+      <CommandsProvider>
+        <AssistantsProvider>
+          <PromptsProvider>
+            <MainLayout>
+              <div className="relative flex h-[100%] w-full flex-row overflow-hidden bg-white dark:bg-zinc-800">
+                <ChatMessages />
+                <ChatInput />
+              </div>
+            </MainLayout>
+          </PromptsProvider>
+        </AssistantsProvider>
+      </CommandsProvider>
+    </ChatProvider>
   );
 };
-export default ChatPage;
+export default ChatSessionPage;

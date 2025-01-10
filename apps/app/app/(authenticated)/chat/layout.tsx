@@ -1,10 +1,5 @@
-import { MainLayout } from '@/app/(authenticated)/chat/components/layout/main-layout';
 import {
-  AssistantsProvider,
-  ChatProvider,
-  CommandsProvider,
   PreferenceProvider,
-  PromptsProvider,
   ReactQueryProvider,
   SessionsProvider,
 } from '@/context'; // Consolidated context imports
@@ -37,17 +32,7 @@ export default function ChatLayout({
         <ReactQueryProvider>
           <TooltipProvider>
             <PreferenceProvider>
-              <SessionsProvider>
-                <ChatProvider>
-                  <CommandsProvider>
-                    <AssistantsProvider>
-                      <PromptsProvider>
-                        <MainLayout>{children}</MainLayout>
-                      </PromptsProvider>
-                    </AssistantsProvider>
-                  </CommandsProvider>
-                </ChatProvider>
-              </SessionsProvider>
+              <SessionsProvider>{children}</SessionsProvider>
             </PreferenceProvider>
           </TooltipProvider>
         </ReactQueryProvider>

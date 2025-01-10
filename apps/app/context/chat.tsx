@@ -3,13 +3,11 @@ import { useSessions } from '@/context/sessions';
 import { useTitleGenerator } from '@/hooks/use-title-generator';
 import { createChatStore } from '@/store/chat/store';
 import type { TChatContext, TChatProvider } from '@/types/chat';
-import { useParams } from 'next/navigation';
 import { type FC, createContext, useContext, useEffect, useMemo } from 'react';
 
 export const ChatContext = createContext<undefined | TChatContext>(undefined);
 
-export const ChatProvider: FC<TChatProvider> = ({ children }) => {
-  const { sessionId } = useParams();
+export const ChatProvider: FC<TChatProvider> = ({ children, sessionId }) => {
   const store = useMemo(() => createChatStore(), []); // Create a unique store for each provider
   const setSession = store((state) => state.setSession);
   const setMessages = store((state) => state.setMessages);

@@ -8,11 +8,6 @@ let nextConfig: NextConfig = {
   ...config,
   async rewrites() {
     return [
-      // Wildcard path matching
-      {
-        source: '/',
-        destination: '/chat/new',
-      },
       {
         source: '/chat/settings/llms',
         destination: '/chat/settings/llms/openai',
@@ -20,6 +15,16 @@ let nextConfig: NextConfig = {
       {
         source: '/chat/settings',
         destination: '/chat/settings/common',
+      },
+    ];
+  },
+
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/chat',
+        permanent: true,
       },
     ];
   },

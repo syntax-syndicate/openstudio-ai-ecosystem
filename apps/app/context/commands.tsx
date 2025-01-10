@@ -45,7 +45,8 @@ export type TCommandsProvider = {
   children: React.ReactNode;
 };
 export const CommandsProvider = ({ children }: TCommandsProvider) => {
-  const { sessions, createSession, refetchSessions } = useSessions();
+  const { sessions, createSession, refetchSessions, setActiveSessionId } =
+    useSessions();
   const { toast } = useToast();
   const router = useRouter();
   const [isCommandOpen, setIsCommandOpen] = useState(false);
@@ -157,7 +158,7 @@ export const CommandsProvider = ({ children }: TCommandsProvider) => {
                   value={`${session.id}/${session.title}`}
                   className={cn('w-full gap-2')}
                   onSelect={(value) => {
-                    router.push(`/chat/${session.id}`);
+                    setActiveSessionId(session.id);
                     onClose();
                   }}
                 >
