@@ -1,4 +1,4 @@
-import type { TPrompt } from '@/hooks/use-prompts';
+import type { TPrompt } from '@/types';
 import { DotsThree, Pencil, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {

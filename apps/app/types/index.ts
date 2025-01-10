@@ -5,3 +5,5 @@ export * from '@/types/preferences';
 export * from '@/types/sessions';
 export * from '@/types/tools';
 export * from '@/types/documents';
+export * from '@/types/export';
+export * from '@/types/prompt';

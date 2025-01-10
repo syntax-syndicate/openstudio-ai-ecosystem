@@ -97,7 +97,7 @@ export const Sidebar = () => {
   };
 
   return (
-    <div className="absolute top-0 bottom-0 left-0 z-[50] flex flex-col items-center justify-center gap-3 border-zinc-500/5 border-r pb-6 md:p-3 dark:border-zinc-500/5">
+    <div className="flex flex-row items-center justify-center gap-3 border-zinc-500/5 p-3 pb-6 md:h-screen md:flex-col md:border-r dark:border-zinc-500/5">
       <div className="flex flex-row items-center gap-2">
         {renderNewSession()}
       </div>

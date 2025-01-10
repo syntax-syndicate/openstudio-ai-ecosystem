@@ -2,7 +2,8 @@
 import { CreatePrompt } from '@/app/(authenticated)/chat/components/prompts/create-prompt';
 import { PromptLibrary } from '@/app/(authenticated)/chat/components/prompts/prompt-library';
 import { useChatContext } from '@/context/chat';
-import { type TPrompt, usePrompts } from '@/hooks/use-prompts';
+import { usePromptsQueries } from '@/services/prompts';
+import type { TPrompt } from '@/types';
 import {
   Dialog,
   DialogContent,
@@ -45,12 +46,11 @@ export const PromptsProvider = ({ children }: TPromptsProvider) => {
     undefined
   );
   const {
-    getPrompts,
     promptsQuery,
     createPromptMutation,
     deletePromptMutation,
     updatePromptMutation,
-  } = usePrompts();
+  } = usePromptsQueries();
   const { store } = useChatContext();
   const editor = store((state) => state.editor);
 

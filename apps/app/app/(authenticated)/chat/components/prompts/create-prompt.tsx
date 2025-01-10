@@ -1,4 +1,4 @@
-import type { TPrompt } from '@/hooks/use-prompts';
+import type { TPrompt } from '@/types';
 import { ArrowLeft } from '@phosphor-icons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';

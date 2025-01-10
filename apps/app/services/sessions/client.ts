@@ -3,7 +3,7 @@ import type { TChatMessage, TChatSession } from '@/types';
 import { del, get, set } from 'idb-keyval';
 import moment from 'moment';
 
-class SessionsService {
+export class SessionsService {
   private messagesService: MessagesService;
   constructor(messagesService: MessagesService) {
     this.messagesService = messagesService;
@@ -67,13 +67,18 @@ class SessionsService {
   }
   async addSessions(sessions: TChatSession[]) {
     const existingSessions = await this.getSessions();
-    const newSessions = [...existingSessions, ...sessions];
+    const newSessions = [
+      ...sessions,
+      ...existingSessions?.filter(
+        (existingSession) => !sessions.some((s) => s.id === existingSession.id)
+      ),
+    ];
     await set('chat-sessions', newSessions);
     return newSessions;
   }
 }
 
-class MessagesService {
+export class MessagesService {
   async getMessages(parentId: string): Promise<TChatMessage[]> {
     return (await get(`messages-${parentId}`)) || [];
   }
@@ -95,13 +100,29 @@ class MessagesService {
       : [...messages, chatMessage];
     await set(`messages-${parentId}`, newMessages);
   }
-  async removeMessage(parentId: string, messageId: string): Promise<TChatMessage[]>  {
+  async addMessages(parentId: string, messages: TChatMessage[]) {
+    const existingMessages = await this.getMessages(parentId);
+    const newMessages = existingMessages
+      ? [
+          ...messages,
+          ...existingMessages.filter(
+            (message) => !messages.some((m) => m.id === message.id)
+          ),
+        ]
+      : messages;
+    await set(`messages-${parentId}`, newMessages);
+  }
+
+  async removeMessage(
+    parentId: string,
+    messageId: string
+  ): Promise<TChatMessage[]> {
     const messages = await this.getMessages(parentId);
     const newMessages = messages.filter((message) => message.id !== messageId);
-    if (!newMessages?.length) {
-      await del(`messages-${parentId}`);
-    } else {
+    if (newMessages?.length) {
       await set(`messages-${parentId}`, newMessages);
+    } else {
+      await del(`messages-${parentId}`);
     }
     return newMessages;
   }

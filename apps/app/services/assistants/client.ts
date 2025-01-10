@@ -2,7 +2,7 @@ import { generateShortUUID } from '@/helper/utils';
 import type { TAssistant } from '@/types';
 import { get, set } from 'idb-keyval';
 
-class AssistantService {
+export class AssistantService {
   key = 'assistants';
   async getAssistants(): Promise<TAssistant[]> {
     return (await get(this.key)) || [];
@@ -32,6 +32,20 @@ class AssistantService {
         ? { ...assistant, ...newAssistant }
         : assistant
     );
+    await set(this.key, newAssistants);
+  }
+
+  async addAssistants(assistants: TAssistant[]) {
+    const allAssistants = await this.getAssistants();
+    const newAssistants = [
+      ...assistants,
+      ...allAssistants.filter(
+        (existingAssistant) =>
+          !assistants.some(
+            (assistant) => assistant.key === existingAssistant.key
+          )
+      ),
+    ];
     await set(this.key, newAssistants);
   }
 }

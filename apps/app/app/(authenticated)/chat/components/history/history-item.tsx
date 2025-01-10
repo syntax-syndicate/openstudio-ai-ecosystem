@@ -92,6 +92,7 @@ export const HistoryItem = ({
           });
         }
         refetchSessions?.();
+        setOpenDeleteConfirm(false);
       },
     });
     e.stopPropagation();
@@ -142,7 +143,7 @@ export const HistoryItem = ({
                 <Button
                   variant={openDeleteConfirm ? 'secondary' : 'ghost'}
                   size="iconXS"
-                  onClick={handleDeleteClick}
+                  onClick={(e) => handleDeleteClick(e)}
                 >
                   <Delete01Icon size={14} variant="stroke" strokeWidth="2" />
                 </Button>

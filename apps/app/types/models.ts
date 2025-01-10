@@ -18,7 +18,7 @@ export const models = [
   'gemini-1.5-flash-latest',
   'gemini-1.5-pro-latest',
   'phi3:latest',
-];
+] as const;
 export type TModelKey = (typeof models)[number] | string;
 export type TModelItem = {
   name: string;
