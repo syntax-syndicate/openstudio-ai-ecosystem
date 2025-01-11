@@ -6,6 +6,7 @@ import {
 import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
 import { ThemeProvider } from '@repo/design-system/providers/theme';
 
+import { MainLayout } from '@/app/(authenticated)/chat/components/layout/main-layout';
 import type { Viewport } from 'next';
 
 export const viewport: Viewport = {
@@ -32,7 +33,9 @@ export default function ChatLayout({
         <ReactQueryProvider>
           <TooltipProvider>
             <PreferenceProvider>
-              <SessionsProvider>{children}</SessionsProvider>
+              <SessionsProvider>
+                <MainLayout>{children}</MainLayout>
+              </SessionsProvider>
             </PreferenceProvider>
           </TooltipProvider>
         </ReactQueryProvider>

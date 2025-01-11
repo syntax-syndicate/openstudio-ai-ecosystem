@@ -103,7 +103,7 @@ export default function DataSettings() {
             <PopOverConfirmProvider
               title="Are you sure you want to reset all chat sessions and preferences? This action cannot be undone."
               confimBtnText="Reset All"
-              onConfirm={() => {
+              onConfirm={(dismiss) => {
                 clearSessionsMutation.mutate(undefined, {
                   onSuccess: () => {
                     updatePreferences(defaultPreferences);
@@ -115,7 +115,7 @@ export default function DataSettings() {
                     createSession({
                       redirect: true,
                     });
-                    //     dismiss();
+                    dismiss();
                   },
                 });
               }}
@@ -149,8 +149,9 @@ export default function DataSettings() {
               confimBtnText="Import Data"
               confimBtnVariant="default"
               confirmIcon={AttachmentIcon}
-              onConfirm={() => {
+              onConfirm={(dismiss) => {
                 document?.getElementById('import-config')?.click();
+                dismiss();
               }}
             >
               <Button variant="outline" size="sm">
