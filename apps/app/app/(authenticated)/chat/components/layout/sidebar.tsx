@@ -1,7 +1,7 @@
 import { useFeedback } from '@/app/(authenticated)/chat/components/feedback/use-feedback';
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
 import { useSessions } from '@/context';
-import { FolderLibraryIcon } from '@hugeicons/react';
+import { FolderLibraryIcon, HelpCircleIcon } from '@hugeicons/react';
 import {
   Button,
   DropdownMenu,
@@ -12,7 +12,6 @@ import {
 import { Flex } from '@repo/design-system/components/ui/flex';
 import {
   Moon02Icon,
-  MoreHorizontalIcon,
   PlusSignIcon,
   Settings03Icon,
   Sun01Icon,
@@ -87,7 +86,7 @@ export const Sidebar = () => {
   };
 
   return (
-    <div className="fixed z-10 flex flex-row items-center justify-center gap-3 border-zinc-500/10 p-3 md:h-screen md:flex-col md:border-r dark:border-zinc-500/5">
+    <div className="group fixed z-10 flex flex-row items-center justify-center gap-3 border-zinc-500/10 p-3 md:h-screen md:flex-col md:border-r dark:border-zinc-500/5">
       <div className="flex flex-row items-center gap-2">
         {renderNewSession()}
       </div>
@@ -109,7 +108,7 @@ export const Sidebar = () => {
         <Tooltip content="More" side="left" sideOffset={4}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="iconSm">
-              <MoreHorizontalIcon size={20} variant="solid" />
+              <HelpCircleIcon size={20} variant="solid" />
             </Button>
           </DropdownMenuTrigger>
         </Tooltip>

@@ -60,9 +60,7 @@ export default function Spaces() {
     deleteDocumentMutation,
   } = useDocumentsQueries();
   const extractContent = async (file: File, documentId: string) => {
-    const worker = new Worker(
-      new URL('@/worker/worker.ts', import.meta.url)
-    ); // Updated path
+    const worker = new Worker(new URL('@/worker/worker.ts', import.meta.url)); // Updated path
     worker.postMessage({ file, documentId });
     worker.onmessage = async (event) => {
       console.log('event', event);
