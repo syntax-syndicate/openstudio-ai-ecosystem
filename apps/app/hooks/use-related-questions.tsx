@@ -132,7 +132,7 @@ export const useRelatedQuestions = () => {
       );
 
       let questions: string[] = [];
-      if (typeof generation?.questions === "string") {
+      if (typeof generation?.questions === 'string') {
         try {
           const parsed = JSON.parse(generation.questions);
           questions = Array.isArray(parsed) ? parsed : [generation.questions];
@@ -142,7 +142,7 @@ export const useRelatedQuestions = () => {
       } else if (Array.isArray(generation?.questions)) {
         questions = generation.questions;
       }
-      return questions.filter((q) => typeof q === "string");
+      return questions.filter((q) => typeof q === 'string');
     } catch (error) {
       console.error(error);
       return [];

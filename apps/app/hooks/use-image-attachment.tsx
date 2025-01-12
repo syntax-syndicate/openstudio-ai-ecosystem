@@ -1,11 +1,14 @@
 import type { TAttachment } from '@/app/(authenticated)/chat/components/chat-input';
 import { X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
+import { Flex } from '@repo/design-system/components/ui/flex';
 import { ImageAdd01Icon } from '@repo/design-system/components/ui/icons';
+import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import Image from 'next/image';
-import { type ChangeEvent, useState } from 'react';
+import { type ChangeEvent, useCallback, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 import Resizer from 'react-image-file-resizer';
 
 export type TRenderImageUpload = {
@@ -20,6 +23,13 @@ export type TUseImageAttachment = {
 
 export const useImageAttachment = ({ id }: TUseImageAttachment) => {
   const [attachment, setAttachment] = useState<TAttachment>();
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    console.log('ACCEPTED FILES', acceptedFiles);
+    const file = acceptedFiles?.[0];
+    readImageFile(file);
+  }, []);
+  const dropzonProps = useDropzone({ onDrop, multiple: false, noClick: true });
   const { toast } = useToast();
 
   const resizeFile = (file: File) =>
@@ -42,9 +52,7 @@ export const useImageAttachment = ({ id }: TUseImageAttachment) => {
     setAttachment(undefined);
   };
 
-  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
+  const readImageFile = async (file?: File) => {
     const reader = new FileReader();
 
     const fileTypes = ['image/jpeg', 'image/png', 'image/gif'];
@@ -75,6 +83,11 @@ export const useImageAttachment = ({ id }: TUseImageAttachment) => {
 
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    readImageFile(file);
   };
 
   const handleFileSelect = () => {
@@ -133,13 +146,40 @@ export const useImageAttachment = ({ id }: TUseImageAttachment) => {
     );
   };
 
+  const renderDropZone = () => {
+    return (
+      <>
+        <input {...dropzonProps.getInputProps()} />
+        {dropzonProps.isDragActive && (
+          <Flex
+            className="absolute inset-0 z-10 bg-white/50 backdrop-blur-sm dark:bg-black/50"
+            items="center"
+            justify="center"
+            gap="sm"
+          >
+            <ImageAdd01Icon
+              size={18}
+              strokeWidth={2}
+              className="text-zinc-500"
+            />
+            <Type size="sm" textColor="secondary">
+              Drag and drop an image here, or click to select an image
+            </Type>
+          </Flex>
+        )}
+      </>
+    );
+  };
+
   return {
     attachment,
+    ...dropzonProps,
     handleImageUpload,
     handleFileSelect,
     clearAttachment,
     renderAttachedImage,
     renderImageUpload,
     setAttachment,
+    renderDropZone,
   };
 };
