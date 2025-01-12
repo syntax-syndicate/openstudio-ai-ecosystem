@@ -7,3 +7,18 @@ export * from '@/types/tools';
 export * from '@/types/documents';
 export * from '@/types/export';
 export * from '@/types/prompt';
+
+export enum TStopReason {
+  Error = 'error',
+  Cancel = 'cancel',
+  ApiKey = 'apikey',
+  Recursion = 'recursion',
+  Finish = 'finish',
+  RateLimit = 'rateLimit',
+  Unauthorized = 'unauthorized',
+  Length = 'length',
+  Stop = 'stop',
+  FunctionCall = 'function_call',
+  ContentFilter = 'content_filter',
+  ToolCalls = 'tool_calls',
+}

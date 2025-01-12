@@ -7,7 +7,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
     const ratelimiter = createRateLimiter({
-      limiter: slidingWindow(5, '1 d'), // 5 requests from the same IP in 1 day
+      limiter: slidingWindow(20, '1 d'), // 5 requests from the same IP in 1 day
     });
     const head = await headers();
     const ip = head.get('x-forwarded-for');
@@ -15,7 +15,10 @@ export async function POST(req: NextRequest) {
     const { success } = await ratelimiter.limit(`chathub_completions_${ip}`);
 
     if (!success) {
-      return NextResponse.redirect(new URL('/api/chathub/limit', req.url));
+      return NextResponse.json(
+        { message: 'Too many requests' },
+        { status: 429 }
+      );
     }
   }
   const requestHeaders = new Headers(req.headers);
@@ -38,23 +41,23 @@ export async function POST(req: NextRequest) {
   const stream = new TransformStream();
   const writer = stream.writable.getWriter();
   const encoder = new TextEncoder();
-  response.data.on('data', async (chunk: Buffer) => {
-    const decodedChunk = chunk.toString('utf8');
-    const lines = decodedChunk.split('\n');
-    for (const line of lines) {
-      if (line.startsWith('data: ')) {
-        const data = line.slice(6);
-        if (data.trim() === '[DONE]') {
-          await writer.close();
-          return;
-        }
-        await writer.write(encoder.encode(`data: ${data}\n\n`));
-      }
-    }
-  });
-  response.data.on('end', async () => {
-    await writer.close();
-  });
+  // response.data.on('data', async (chunk: Buffer) => {
+  //   const decodedChunk = chunk.toString('utf8');
+  //   const lines = decodedChunk.split('\n');
+  //   for (const line of lines) {
+  //     if (line.startsWith('data: ')) {
+  //       const data = line.slice(6);
+  //       if (data.trim() === '[DONE]') {
+  //         await writer.close();
+  //         return;
+  //       }
+  //       await writer.write(encoder.encode(`data: ${data}\n\n`));
+  //     }
+  //   }
+  // });
+  // response.data.on('end', async () => {
+  //   await writer.close();
+  // });
   return new Response(response.data, {
     headers: {
       'Content-Type': 'text/event-stream',

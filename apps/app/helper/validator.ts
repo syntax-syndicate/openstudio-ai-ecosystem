@@ -1,5 +1,6 @@
 import { providers } from '@/config/models';
 import { models } from '@/types';
+import { stopReasons } from '@/types';
 import { z } from 'zod';
 
 export const assistantSchema = z.object({
@@ -61,9 +62,7 @@ export const chatMessageSchema = z.object({
   tools: toolsSchema.optional(),
   isLoading: z.boolean().optional(),
   stop: z.boolean().optional(),
-  stopReason: z
-    .enum(['error', 'cancel', 'apikey', 'recursion', 'finish'])
-    .optional(),
+  stopReason: z.enum(stopReasons).optional(),
   createdAt: z.string(),
 });
 export const apiKeysSchema = z.record(z.enum(providers), z.string());

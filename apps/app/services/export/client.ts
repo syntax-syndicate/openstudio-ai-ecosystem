@@ -13,6 +13,7 @@ export class ExportService {
   private preferencesService: PreferenceService;
   private assistantsService: AssistantService;
   private promptsService: PromptsService;
+
   constructor(
     messagesService: MessagesService,
     sessionsService: SessionsService,
@@ -26,6 +27,7 @@ export class ExportService {
     this.assistantsService = assistantsService;
     this.promptsService = promptsService;
   }
+
   async processExport(): Promise<ExportData> {
     try {
       const chatSessions = await this.sessionsService.getSessions();
@@ -41,6 +43,7 @@ export class ExportService {
           });
         })
       );
+
       const chatMessages = messages.filter(
         (message): message is { key: string; message: TChatMessage[] } =>
           message !== null
@@ -48,6 +51,7 @@ export class ExportService {
       const preferences = await this.preferencesService.getPreferences();
       const apiKeys = await this.preferencesService.getApiKeys();
       const assistants = await this.assistantsService.getAssistants();
+
       dataValidator.parseAsync({
         preferences: { ...defaultPreferences, ...preferences },
         apiKeys,
@@ -55,6 +59,7 @@ export class ExportService {
         chatSessions,
         assistants,
       });
+
       return {
         preferences: { ...defaultPreferences, ...preferences },
         apiKeys,
@@ -67,6 +72,7 @@ export class ExportService {
       throw error;
     }
   }
+
   async processImport(data: string) {
     try {
       const parsedData = dataValidator.parse(JSON.parse(data), {
@@ -81,6 +87,7 @@ export class ExportService {
       const apiKeys = parsedData.apiKeys;
       const assistants = parsedData.assistants;
       const prompts = parsedData.prompts;
+
       sessions && (await sessionsService.addSessions(sessions));
       messages &&
         (await Promise.all(
@@ -93,8 +100,11 @@ export class ExportService {
         ));
       prompts && (await this.promptsService.addPrompts(prompts));
       preferences && (await preferencesService.setPreferences(preferences));
+
       console.log('API KEYS', apiKeys);
+
       apiKeys && (await preferencesService.setApiKeys(apiKeys));
+
       assistants && (await assistantsService.addAssistants(assistants));
     } catch (error) {
       console.error(error);
@@ -102,11 +112,13 @@ export class ExportService {
     }
   }
 }
+
 const messagesService = new MessagesService();
 const sessionsService = new SessionsService(messagesService);
 const preferencesService = new PreferenceService();
 const assistantsService = new AssistantService();
 const promptsService = new PromptsService();
+
 export const exportService = new ExportService(
   messagesService,
   sessionsService,

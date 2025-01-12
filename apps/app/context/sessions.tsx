@@ -8,6 +8,7 @@ import type {
   TSessionsContext,
   TSessionsProvider,
 } from '@/types';
+import { usePathname } from 'next/navigation';
 import {
   type FC,
   createContext,
@@ -16,7 +17,6 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { usePathname } from 'next/navigation';
 
 export const SessionContext = createContext<TSessionsContext | undefined>(
   undefined
@@ -48,8 +48,8 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log("pathname", pathname);
-    if (!activeSessionId && pathname !== "/") {
+    console.log('pathname', pathname);
+    if (!activeSessionId && pathname !== '/') {
       createSession({ redirect: true });
     }
   }, []);

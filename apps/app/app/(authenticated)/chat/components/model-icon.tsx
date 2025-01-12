@@ -36,19 +36,23 @@ export const ModelIcon = ({ type, size, base64 }: TModelIcon) => {
   };
 
   return (
-    <Image
-      src={base64 ? base64 : iconSrc[type]}
-      width={0}
-      height={0}
-      alt={type}
+    <div
       className={cn(
-        'object-cover',
-        'rounded-md',
-        size === 'sm' && 'h-6 min-w-6',
+        'relative rounded-md',
+        size === 'sm' && 'h-7 min-w-7',
         size === 'md' && 'h-8 min-w-8',
         size === 'lg' && 'h-10 min-w-10'
       )}
-      sizes="100vw"
-    />
+    >
+      <div className="absolute inset-0 z-10 rounded-md border border-zinc-800/10"></div>
+      <Image
+        src={base64 ? base64 : iconSrc[type]}
+        width={0}
+        height={0}
+        alt={type}
+        className={'relative h-full w-full rounded-md object-cover'}
+        sizes="100vw"
+      />
+    </div>
   );
 };

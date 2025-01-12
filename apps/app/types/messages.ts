@@ -1,5 +1,15 @@
 import type { TAssistant, TToolResponse } from '@/types';
 
+export const stopReasons = [
+  'error',
+  'cancel',
+  'apikey',
+  'recursion',
+  'finish',
+] as const;
+
+export type TStopReason = (typeof stopReasons)[number];
+
 export type TLLMRunConfig = {
   context?: string;
   input?: string;
@@ -19,7 +29,7 @@ export type TChatMessage = {
   tools?: TToolResponse[];
   isLoading?: boolean;
   stop?: boolean;
-  stopReason?: 'error' | 'cancel' | 'apikey' | 'recursion' | 'finish';
+  stopReason?: TStopReason;
   createdAt: string;
   relatedQuestions?: string[];
 };

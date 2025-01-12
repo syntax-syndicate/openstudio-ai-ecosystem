@@ -5,7 +5,7 @@ import { constructMessagePrompt, constructPrompt } from '@/helper/promptUtil';
 import { generateShortUUID } from '@/helper/utils';
 import { modelService } from '@/services/models';
 import { messagesService, sessionsService } from '@/services/sessions/client';
-import type { TLLMRunConfig } from '@/types';
+import type { TLLMRunConfig, TStopReason } from '@/types';
 import type { LLMResult } from '@langchain/core/outputs';
 import { useToast } from '@repo/design-system/hooks/use-toast';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
@@ -57,6 +57,11 @@ export const useLLMRunner = () => {
       parentId: sessionId,
       sessionId,
       rawHuman: input,
+      stop: false,
+      stopReason: undefined,
+      rawAI: undefined,
+      image: undefined,
+      tools: [],
       relatedQuestions: [],
       createdAt: moment().toISOString(),
       isLoading: true,
@@ -211,14 +216,22 @@ export const useLLMRunner = () => {
                   });
                 }
 
+                const hasError: Record<string, boolean> = {
+                  cancel: currentAbortController?.signal.aborted,
+                  rateLimit: err.message.includes('429'),
+                  unauthorized: err.message.includes('401'),
+                };
+
+                const stopReason = Object.keys(hasError).find(
+                  (value) => hasError[value]
+                ) as TStopReason;
+
                 updateCurrentMessage({
                   isLoading: false,
                   rawHuman: input,
                   rawAI: streamedMessage,
                   stop: true,
-                  stopReason: currentAbortController?.signal.aborted
-                    ? 'cancel'
-                    : 'error',
+                  stopReason: stopReason as any,
                 });
               },
             },

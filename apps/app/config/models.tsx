@@ -12,7 +12,7 @@ export const models: TModelItem[] = [
   {
     name: 'ChatHub',
     key: 'chathub',
-    isNew: true,
+    isFree: true,
     tokens: 128000,
     maxOutputTokens: 2048,
     vision: true,
