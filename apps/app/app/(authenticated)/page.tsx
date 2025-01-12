@@ -18,7 +18,7 @@ export default function Home() {
       <Flex direction="col" items="center" gap="md" className="">
         <Button variant="accent" size="sm" rounded="full">
           <NewTwitterIcon size={20} variant="solid" />
-          Follow us on X
+          Follow on X
         </Button>
         <Flex
           direction="col"
@@ -31,11 +31,11 @@ export default function Home() {
             ChatHub
           </span>
         </Flex>
-        <Type className="!text-base md:!text-lg max-w-[400px] text-center font-medium opacity-60">
+        <Type className="!text-base md:!text-lg max-w-[500px] px-6 text-center font-medium opacity-60">
           App of Apps - Your gateway to AI-Powered Applications
         </Type>
       </Flex>
-      <Button size="lg" className="mt-4 mb-8" onClick={() => push('/chat')}>
+      <Button size="lg" className="mt-4 mb-12" onClick={() => push('/chat')}>
         Get Started
       </Button>
 
@@ -43,8 +43,8 @@ export default function Home() {
         src={configs.heroVideo}
         autoPlay
         loop
-        muted
-        className="w-[70vw] rounded-xl object-cover"
+        controls
+        className="w-[90vw] rounded-xl object-cover md:w-[70vw]"
       />
       <Flex
         direction="col"
