@@ -16,6 +16,11 @@ let nextConfig: NextConfig = {
         source: '/chat/settings',
         destination: '/chat/settings/common',
       },
+      // {
+      //   source: '/api/chathub/:path*',
+      //   destination: 'https://api.chathub.ai/v1/messages',
+      //   // Proxy to Backend
+      // },
     ];
   },
 

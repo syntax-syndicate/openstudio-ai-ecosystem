@@ -1,7 +1,11 @@
 import { useFeedback } from '@/app/(authenticated)/chat/components/feedback/use-feedback';
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
 import { useSessions } from '@/context';
-import { FolderLibraryIcon, HelpCircleIcon } from '@hugeicons/react';
+import {
+  ArrowLeft02Icon,
+  FolderLibraryIcon,
+  HelpCircleIcon,
+} from '@hugeicons/react';
 import {
   Button,
   DropdownMenu,
@@ -20,17 +24,34 @@ import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import Avatar from 'boring-avatars';
 import { useTheme } from 'next-themes';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export const Sidebar = () => {
   const { theme, setTheme } = useTheme();
   const { push } = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { createSession } = useSessions();
   const { renderModal, setOpen: openFeedback } = useFeedback();
 
   const renderNewSession = () => {
+    if (!pathname.startsWith('/chat')) {
+      return (
+        <Tooltip content="New Session" side="left" sideOffset={4}>
+          <Button
+            size="icon"
+            variant="secondary"
+            className="h-8 min-w-8"
+            onClick={() => {
+              push('/chat');
+            }}
+          >
+            <ArrowLeft02Icon size={20} strokeWidth={2} />
+          </Button>
+        </Tooltip>
+      );
+    }
     return (
       <Tooltip content="New Session" side="left" sideOffset={4}>
         <Button
@@ -101,7 +122,7 @@ export const Sidebar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="fixed right-4 bottom-4 z-10"
+              className="fixed right-4 bottom-[120px] z-10 md:bottom-4"
             >
               <HelpCircleIcon size={28} variant="solid" />
             </Button>

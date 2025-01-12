@@ -1,6 +1,5 @@
 'use client';
 import {
-  ArrowLeft02Icon,
   BrainIcon,
   DashboardCircleIcon,
   Database02Icon,
@@ -93,16 +92,6 @@ export default function SettingsPage({
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white md:flex-row dark:bg-zinc-800">
       <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row items-end gap-1 overflow-x-auto border-zinc-500/10 bg-zinc-50/50 px-2 pt-2 pb-2 md:bottom-0 md:h-full md:w-[30vw] md:flex-col md:gap-0 md:overflow-y-auto md:pb-16 dark:bg-zinc-900/50">
         <div className="mt-[60px] flex w-full flex-row items-start justify-start gap-2 p-2 md:mt-0 md:w-[200px] md:flex-col md:p-4 md:pr-4">
-          <Button
-            onClick={() => push('/')}
-            variant="ghost"
-            className="justify-start md:w-full md:gap-2 md:px-2"
-          >
-            <div className="flex h-6 w-6 flex-row items-center justify-center">
-              <ArrowLeft02Icon size={20} strokeWidth={2} />
-            </div>
-            Back
-          </Button>
           <Flex
             direction="row"
             gap="xs"
@@ -113,7 +102,7 @@ export default function SettingsPage({
           </Flex>
         </div>
       </div>
-      <div className="no-scrollbar mt-32 h-full w-full max-w-[720px] overflow-y-auto p-4 pb-16 md:mt-0 md:ml-[30vw] md:p-8">
+      <div className="no-scrollbar mt-32 h-full w-full max-w-[720px] overflow-y-auto p-0 pb-16 md:mt-0 md:ml-[30vw] md:p-8">
         {children}
       </div>
     </div>

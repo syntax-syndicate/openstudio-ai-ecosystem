@@ -197,7 +197,6 @@ export const useLLMRunner = () => {
               handleLLMNewToken: async (token: string) => {
                 streamedMessage += token;
 
-                console.log('handleLLMNewToken', token);
                 updateCurrentMessage({
                   isLoading: true,
                   rawAI: streamedMessage,
@@ -238,8 +237,6 @@ export const useLLMRunner = () => {
           ],
         }
       );
-
-      console.log(stream);
 
       updateCurrentMessage({
         rawHuman: input,

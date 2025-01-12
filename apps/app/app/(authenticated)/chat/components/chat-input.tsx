@@ -240,7 +240,7 @@ export const ChatInput = () => {
                 </div>
               </div>
               <Flex
-                className="w-full px-2 pt-1 pb-2"
+                className="w-full px-1 pt-1 pb-1 md:px-2 md:pb-2"
                 items="center"
                 justify="between"
               >
@@ -271,7 +271,7 @@ export const ChatInput = () => {
                     size="sm"
                   >
                     <AiIdeaIcon size={18} variant="stroke" strokeWidth="2" />
-                    Prompts
+                    <span className="hidden md:flex">Prompts</span>
                   </Button>
                   {!isGenerating && (
                     <Button

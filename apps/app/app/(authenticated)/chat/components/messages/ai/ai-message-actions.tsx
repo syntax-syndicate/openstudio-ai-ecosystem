@@ -25,6 +25,7 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
   canRegenerate,
 }) => {
   const { refetch, store } = useChatContext();
+  const removeLastMessage = store((state) => state.removeLastMessage);
   const { getAssistantByKey } = useAssistantUtils();
   const { invokeModel } = useLLMRunner();
   const { removeMessageByIdMutation } = useSessions();
@@ -51,6 +52,7 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
       messageId: message.id,
       assistant: props.assistant,
     });
+    removeLastMessage();
   };
 
   return (

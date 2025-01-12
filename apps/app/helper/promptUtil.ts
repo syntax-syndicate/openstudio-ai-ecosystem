@@ -69,7 +69,7 @@ const constructMessagePrompt = async ({
     .slice(0, limit)
     .reduce((acc: (HumanMessage | AIMessage)[], { rawAI, rawHuman }) => {
       if (rawAI && rawHuman) {
-        return [...acc, new HumanMessage(rawHuman), new AIMessage(rawAI)];
+        return [new HumanMessage(rawHuman), new AIMessage(rawAI), ...acc];
       } else {
         return acc;
       }
