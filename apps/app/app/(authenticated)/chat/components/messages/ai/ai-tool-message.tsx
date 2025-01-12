@@ -1,6 +1,7 @@
 import { useTools } from '@/hooks';
 import type { TToolResponse } from '@/types';
 import { Spinner } from '@repo/design-system/components/ui';
+import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 
 type TAIToolMessage = {
@@ -23,22 +24,19 @@ export const AIToolMessage = ({ tool }: TAIToolMessage) => {
   return (
     <>
       {toolUsed && (
-        <Type
-          size="xs"
-          className="flex flex-row items-center gap-2 pb-4"
-          textColor="tertiary"
+        <Flex
+          direction="row"
+          items="center"
+          gap="sm"
+          className="mb-4 rounded-full bg-zinc-500/10 px-3 py-1.5"
         >
-          {tool?.toolLoading ? (
-            <Spinner />
-          ) : (
-            <Icon size={20} strokeWidth={1.5} />
-          )}
-          <Type size="sm" textColor="tertiary">
+          {tool?.toolLoading ? <Spinner /> : <Icon size={16} strokeWidth={2} />}
+          <Type size="sm" textColor="secondary">
             {tool?.toolLoading
               ? toolUsed.loadingMessage
               : toolUsed.resultMessage}
           </Type>
-        </Type>
+        </Flex>
       )}
 
       {toolUsed &&

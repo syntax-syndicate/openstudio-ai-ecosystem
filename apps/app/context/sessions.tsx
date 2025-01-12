@@ -50,9 +50,9 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   useEffect(() => {
     console.log('pathname', pathname);
     if (!activeSessionId && pathname !== '/') {
-      createSession({ redirect: true });
+      // createSession({ redirect: true });
     }
-  }, []);
+  }, [activeSessionId]);
 
   const addMessage = async (parentId: string, message: TChatMessage) => {
     await addMessageMutation.mutateAsync({
