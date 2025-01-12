@@ -16,6 +16,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { usePathname } from 'next/navigation';
 
 export const SessionContext = createContext<TSessionsContext | undefined>(
   undefined
@@ -23,6 +24,7 @@ export const SessionContext = createContext<TSessionsContext | undefined>(
 
 export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   const store = useMemo(() => createSessionsStore(), []);
+  const pathname = usePathname();
   const [sessions, setSessions] = useState<TChatSession[]>([]);
   const activeSessionId = store((state) => state.activeSessionId);
   const setActiveSessionId = store((state) => state.setActiveSessionId);
@@ -46,7 +48,8 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!activeSessionId) {
+    console.log("pathname", pathname);
+    if (!activeSessionId && pathname !== "/") {
       createSession({ redirect: true });
     }
   }, []);
