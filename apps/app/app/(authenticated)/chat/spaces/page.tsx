@@ -153,44 +153,45 @@ export default function Spaces() {
     }
   };
 
-  const extractContent = async (file: File, documentId: string) => {
-    const worker = new Worker(
-      new URL('../../worker/worker.ts', import.meta.url)
-    );
-    worker.postMessage({ file, documentId });
-    worker.onmessage = async (event) => {
-      console.log('event', event);
-      const { pages = [], documentId } = event?.data;
-      try {
-        await updateDocumentStatus(documentId, {
-          isIndexing: true,
-          isFailed: false,
-        });
-        await Promise.all(
-          pages.map(async (page: any) => {
-            return vectorStore.addText(page.content, {
-              page: page.page,
-              fileName: page.fileName,
-              fileType: page.fileType,
-              documentId,
-            });
-          })
-        );
+  //TODO: fix this later
+//   const extractContent = async (file: File, documentId: string) => {
+//     const worker = new Worker(
+//       new URL('../../worker/worker.ts', import.meta.url)
+//     );
+//     worker.postMessage({ file, documentId });
+//     worker.onmessage = async (event) => {
+//       console.log('event', event);
+//       const { pages = [], documentId } = event?.data;
+//       try {
+//         await updateDocumentStatus(documentId, {
+//           isIndexing: true,
+//           isFailed: false,
+//         });
+//         await Promise.all(
+//           pages.map(async (page: any) => {
+//             return vectorStore.addText(page.content, {
+//               page: page.page,
+//               fileName: page.fileName,
+//               fileType: page.fileType,
+//               documentId,
+//             });
+//           })
+//         );
 
-        await updateDocumentStatus(documentId, {
-          isIndexed: true,
-          isIndexing: false,
-          isFailed: false,
-        });
-      } catch (error) {
-        await updateDocumentStatus(documentId, {
-          isFailed: true,
-          isIndexing: false,
-          isIndexed: false,
-        });
-      }
-    };
-  };
+//         await updateDocumentStatus(documentId, {
+//           isIndexed: true,
+//           isIndexing: false,
+//           isFailed: false,
+//         });
+//       } catch (error) {
+//         await updateDocumentStatus(documentId, {
+//           isFailed: true,
+//           isIndexing: false,
+//           isIndexed: false,
+//         });
+//       }
+//     };
+//   };
 
   useEffect(() => {
     console.log('attachment', attachment);
@@ -209,8 +210,9 @@ export default function Spaces() {
         {
           onSuccess(data) {
             documentsQuery.refetch();
-            typeof data.content !== 'string' &&
-              extractContent(data.content, data.id);
+            //TODO: uncomment later
+            // typeof data.content !== 'string' &&
+            //   extractContent(data.content, data.id);
           },
           onError(error) {
             console.log('error', error);
