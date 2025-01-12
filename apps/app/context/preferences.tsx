@@ -70,6 +70,7 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
 
   useEffect(() => {
     updateApiKey('ollama', 'kdskdmkmsd');
+    updateApiKey('chathub', 'openstudio');
   }, []);
 
   const updateApiKeys = (newApiKeys: TApiKeys) => {

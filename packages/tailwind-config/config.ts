@@ -107,10 +107,10 @@ export const config: Config = {
       //   "5xl": "3.052rem",
       // },
       fontWeight: {
-        normal: "350",
-        medium: "450",
-        semibold: "550",
-        bold: "650",
+        normal: '350',
+        medium: '450',
+        semibold: '550',
+        bold: '650',
       },
       borderRadius: {
         lg: 'var(--radius)',

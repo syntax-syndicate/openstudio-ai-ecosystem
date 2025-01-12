@@ -10,7 +10,7 @@ import { useAssistantUtils } from '.';
 
 const parser = StructuredOutputParser.fromZodSchema(
   z.object({
-    questions: z.array(z.string()).describe('list of 2 questions'),
+    questions: z.array(z.string()).describe('list of questions'),
   })
 );
 
@@ -37,11 +37,23 @@ export const useRelatedQuestions = () => {
       return [];
     }
     const apiKey = apiKeys[assistant.model.provider];
-    const selectedModel = await modelService.createInstance({
-      model: assistant.model,
-      preferences,
-      apiKey,
-    });
+    const selectedModel =
+      assistant.model.provider === 'ollama'
+        ? await modelService.createInstance({
+            model: assistant.model,
+            preferences,
+            apiKey,
+            provider: assistant.model.provider,
+            props: {
+              format: 'json',
+            },
+          })
+        : await modelService.createInstance({
+            model: assistant.model,
+            preferences,
+            apiKey,
+            provider: assistant.model.provider,
+          });
     const prompt = await constructPrompt({
       hasMessages: false,
       formatInstructions: true,

@@ -35,6 +35,7 @@ const memoryTool = (args: TToolArg) => {
         const existingMemories = preferences?.memories || [];
         const currentModel = await modelService.createInstance({
           model: model,
+          provider: model.provider,
           apiKey: apiKeys.openai,
         });
         const chain = RunnableSequence.from([

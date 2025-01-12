@@ -1,8 +1,25 @@
 import type { TModelItem } from '@/types';
 
-export const providers = ['openai', 'anthropic', 'gemini', 'ollama'] as const;
+export const providers = [
+  'chathub',
+  'openai',
+  'anthropic',
+  'gemini',
+  'ollama',
+] as const;
 
 export const models: TModelItem[] = [
+  {
+    name: 'ChatHub',
+    key: 'chathub',
+    isNew: true,
+    tokens: 128000,
+    maxOutputTokens: 2048,
+    vision: true,
+    plugins: ['web_search', 'image_generation', 'memory', 'chart'],
+    icon: 'chathub',
+    provider: 'chathub',
+  },
   {
     name: 'GPT 4o Mini',
     key: 'gpt-4o-mini',
