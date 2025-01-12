@@ -12,7 +12,8 @@ export type ModelIconType =
   | 'calculator'
   | 'duckduckgo_search'
   | 'website_reader'
-  | 'ollama';
+  | 'ollama'
+  | 'groq';
 
 export type TModelIcon = {
   type: ModelIconType;
@@ -33,6 +34,7 @@ export const ModelIcon = ({ type, size, base64 }: TModelIcon) => {
     duckduckgo_search: '/icons/duckduckgo.svg',
     website_reader: '/icons/website_reader.svg',
     ollama: '/icons/ollama.svg',
+    groq: '/icons/groq.svg',
   };
 
   return (

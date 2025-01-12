@@ -29,31 +29,31 @@ function cleanHtml(html: string): string {
     );
 }
 
-export async function POST(req: NextRequest) {
-  const { url } = await req.json();
-  console.log(url);
-  if (!url) {
-    return NextResponse.json({
-      success: false,
-      error: 'Feedback and feedback type are required',
-    });
-  }
+export type TReaderResult = {
+  success: boolean;
+  title?: string;
+  url?: string;
+  markdown?: string;
+};
+
+const readURL = async (url: string): Promise<TReaderResult> => {
   const response = await fetch(url);
   const html = await response.text();
   const cleanedHtml = cleanHtml(html);
   var doc = new JSDOM(cleanedHtml);
+
   if (doc?.window?.document) {
     const article = new Readability(doc?.window?.document).parse();
+
     if (article?.content) {
       const markdown = turndownService.turndown(article.content);
-      // const cleanedMarkdown = markdown.replace(/\n/g, "<br/>");
-      return NextResponse.json({
+
+      return {
         success: true,
         title: article.title,
         url: url,
         markdown: markdown,
-        type: 'article',
-      });
+      };
     } else {
       const response = await fetch(`https://r.jina.ai/${url}`, {
         method: 'GET',
@@ -62,15 +62,41 @@ export async function POST(req: NextRequest) {
           Accept: 'application/json',
         },
       });
+
+      console.log('jina');
+
       const data = await response.json();
-      return NextResponse.json({
+
+      return {
         success: true,
         markdown: data.content,
         title: data.title,
         url: url,
-        type: 'jina',
-      });
+      };
     }
+  } else {
+    return {
+      success: false,
+    };
   }
-  return NextResponse.json({ success: false, error: html });
+};
+
+export async function POST(req: NextRequest) {
+  const { urls } = await req.json();
+  console.log(urls);
+
+  if (!urls?.length) {
+    return NextResponse.json({
+      success: false,
+      error: 'Feedback and feedback type are required',
+    });
+  }
+
+  const results = await Promise.all(
+    urls?.map(async (url: string) => await readURL(url))
+  );
+
+  console.log(results);
+
+  return NextResponse.json({ results });
 }

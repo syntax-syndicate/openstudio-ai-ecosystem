@@ -2,6 +2,13 @@ import type { TAssistant, TProvider, TToolKey } from '@/types';
 
 export type TApiKeys = Partial<Record<TProvider, string>>;
 
+export type TPreferencesState = {
+  preferences: TPreferences;
+  setPreferences: (preferences: Partial<TPreferences>) => void;
+  apiKeys: TApiKeys;
+  setApiKeys: (apiKeys: Partial<TApiKeys>) => void;
+};
+
 export type TPreferences = {
   defaultAssistant: TAssistant['key'];
   systemPrompt: string;

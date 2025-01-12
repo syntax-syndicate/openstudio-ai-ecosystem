@@ -1,4 +1,3 @@
-import { SettingCard } from '@/app/(authenticated)/chat/components/settings/setting-card';
 import { usePreferenceContext } from '@/context/preferences';
 import { ArrowRight, CaretDown, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -50,21 +49,6 @@ export const WebSearchPlugin = () => {
     }
   };
 
-  const renderWebSearchOptions = () => {
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button size="sm" variant="secondary">
-            google <CaretDown size={12} weight="bold" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[200px]" align="end">
-          <DropdownMenuItem>Google</DropdownMenuItem>
-          <DropdownMenuItem>DuckDuckGo</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
-  };
   return (
     <Flex direction="col" gap="sm" className="border-white/10 border-t pt-2">
       <Flex className="w-full" justify="between" items="center">
@@ -97,7 +81,7 @@ export const WebSearchPlugin = () => {
         </DropdownMenu>
       </Flex>
       {preferences.defaultWebSearchEngine === 'google' && (
-        <SettingCard className="flex w-full flex-col items-start gap-2 py-3">
+        <Flex direction="col" gap="sm" className="w-full">
           <Flex direction="col" gap="sm" className="w-full">
             <Type
               size="xs"
@@ -151,7 +135,7 @@ export const WebSearchPlugin = () => {
               Get your API key here <ArrowRight size={16} weight="bold" />
             </Button>
           </Flex>
-        </SettingCard>
+        </Flex>
       )}
     </Flex>
   );

@@ -6,6 +6,7 @@ import {
 } from '@/app/(authenticated)/chat/components/model-icon';
 import { AnthropicSettings } from '@/app/(authenticated)/chat/components/settings/models/anthropic';
 import { GeminiSettings } from '@/app/(authenticated)/chat/components/settings/models/gemini';
+import { GroqSettings } from '@/app/(authenticated)/chat/components/settings/models/groq';
 import { OllamaSettings } from '@/app/(authenticated)/chat/components/settings/models/ollama';
 import { OpenAISettings } from '@/app/(authenticated)/chat/components/settings/models/openai';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
@@ -84,6 +85,13 @@ export default function LLMsSettings() {
       iconType: 'ollama',
       connected: ollamaConnected,
       settingsComponent: OllamaSettings,
+    },
+    {
+      value: 'groq',
+      label: 'Groq',
+      iconType: 'groq',
+      connected: !!apiKeys.groq,
+      settingsComponent: GroqSettings,
     },
   ];
   return (

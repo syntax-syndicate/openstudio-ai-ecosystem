@@ -18,6 +18,7 @@ export type TToolConfig = {
   loadingMessage?: string;
   resultMessage?: string;
   isBeta?: boolean;
+  enforceTool?: boolean;
   renderUI?: (args: any) => ReactNode;
   showInMenu?: boolean;
   validate?: () => Promise<boolean>;

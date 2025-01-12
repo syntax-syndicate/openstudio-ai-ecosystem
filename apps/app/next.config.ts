@@ -6,6 +6,19 @@ import type { NextConfig } from 'next';
 
 let nextConfig: NextConfig = {
   ...config,
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'icon.horse',
+      },
+      {
+        hostname: 'icons.duckduckgo.com',
+      },
+      {
+        hostname: 'www.google.com',
+      },
+    ],
+  },
   async rewrites() {
     return [
       {

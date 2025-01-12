@@ -1,9 +1,8 @@
 'use client';
-
-import { defaultPreferences } from '@/config';
 import { usePreferencesQueries } from '@/services/preferences';
+import { createPreferencesStore } from '@/store/preferences/store';
 import type { TApiKeys, TPreferences, TProvider } from '@/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { createContext, useContext } from 'react';
 
 export type TPreferenceContext = {
@@ -32,19 +31,20 @@ export type TPreferencesProvider = {
 };
 
 export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
+  const store = useMemo(() => createPreferencesStore(), []);
+  const preferences = store((state) => state.preferences);
+  const apiKeys = store((state) => state.apiKeys);
+  const setPreferences = store((state) => state.setPreferences);
+  const setApiKeys = store((state) => state.setApiKeys);
   const {
     preferencesQuery,
     setPreferencesMutation,
     apiKeysQuery,
     setApiKeyMutation,
   } = usePreferencesQueries();
-  const [preferences, setPreferences] =
-    useState<TPreferences>(defaultPreferences);
-  const [apiKeys, setApiKeys] = useState<TApiKeys>({});
 
   useEffect(() => {
-    preferencesQuery.data &&
-      setPreferences({ ...defaultPreferences, ...preferencesQuery.data });
+    preferencesQuery.data && setPreferences(preferencesQuery.data);
   }, [preferencesQuery.data]);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
     newPreferences: Partial<TPreferences>,
     onSuccess?: (preference: TPreferences) => void
   ) => {
-    setPreferences({ ...preferences, ...newPreferences });
+    setPreferences(newPreferences);
     setPreferencesMutation.mutate(newPreferences, {
       onSuccess: () => {
         preferencesQuery.refetch();
