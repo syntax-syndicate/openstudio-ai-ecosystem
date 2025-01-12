@@ -1,3 +1,4 @@
+import { useFeedback } from '@/app/(authenticated)/chat/components/feedback/use-feedback';
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
 import { useSessions } from '@/context';
 import { FolderLibraryIcon } from '@hugeicons/react';
@@ -26,6 +27,7 @@ export const Sidebar = () => {
   const { push } = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { createSession } = useSessions();
+  const { renderModal, setOpen: openFeedback } = useFeedback();
 
   const renderNewSession = () => {
     return (
@@ -49,7 +51,12 @@ export const Sidebar = () => {
 
   const menuItems = [
     { label: 'About', onClick: () => {} },
-    { label: 'Feedback', onClick: () => {} },
+    {
+      label: 'Feedback',
+      onClick: () => {
+        openFeedback(true);
+      },
+    },
     { label: 'Support', onClick: () => {} },
   ];
 
@@ -80,7 +87,7 @@ export const Sidebar = () => {
   };
 
   return (
-    <div className="fixed z-10 flex flex-row items-center justify-center gap-3 border-zinc-500/10 p-3 pb-6 md:h-screen md:flex-col md:border-r dark:border-zinc-500/5">
+    <div className="fixed z-10 flex flex-row items-center justify-center gap-3 border-zinc-500/10 p-3 md:h-screen md:flex-col md:border-r dark:border-zinc-500/5">
       <div className="flex flex-row items-center gap-2">
         {renderNewSession()}
       </div>
@@ -133,6 +140,7 @@ export const Sidebar = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      {renderModal()}
     </div>
   );
 };
