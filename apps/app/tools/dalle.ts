@@ -33,6 +33,7 @@ const dalleTool = (args: TToolArg) => {
           },
           toolRenderArgs: {
             image: result,
+            query: imageDescription,
           },
           toolResponse: result,
           toolLoading: false,

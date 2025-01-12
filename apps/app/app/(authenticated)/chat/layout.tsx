@@ -26,7 +26,7 @@ export default function ChatLayout({
       {/* <Header pages={['']} page=""></Header> */}
       <ThemeProvider
         attribute="class"
-        defaultTheme="system"
+        defaultTheme="dark"
         enableSystem
         disableTransitionOnChange
       >

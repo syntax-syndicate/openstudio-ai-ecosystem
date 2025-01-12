@@ -19,15 +19,15 @@ let nextConfig: NextConfig = {
     ];
   },
 
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/chat',
-        permanent: true,
-      },
-    ];
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/chat',
+  //       permanent: true,
+  //     },
+  //   ];
+  // },
   webpack: (config, { isServer }) => {
     // Existing webpack config from config object
     const existingWebpack =

@@ -78,18 +78,11 @@ export default function SettingsPage({
         variant={isSelected ? 'secondary' : 'ghost'}
         key={menu.route}
         onClick={() => push(menu.route)}
-        className="w-full justify-start gap-2 px-2"
+        className="w-full justify-start gap-2"
         size="default"
       >
-        <div className="flex h-6 w-6 flex-row items-center justify-center">
-          <Icon size={18} variant="solid" className="dark:text-zinc-500" />
-        </div>
-        <span
-          className={cn(
-            'font-medium text-xs md:flex md:text-sm',
-            isSelected ? 'flex' : 'hidden'
-          )}
-        >
+        <Icon size={18} variant="solid" className="dark:text-zinc-500" />
+        <span className={cn('font-medium text-xs md:flex md:text-sm')}>
           {menu.name}
         </span>
       </Button>
@@ -99,23 +92,28 @@ export default function SettingsPage({
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white md:flex-row dark:bg-zinc-800">
       <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row items-end gap-1 overflow-x-auto border-zinc-500/10 bg-zinc-50/50 px-2 pt-2 pb-2 md:bottom-0 md:h-full md:w-[30vw] md:flex-col md:gap-0 md:overflow-y-auto md:pb-16 dark:bg-zinc-900/50">
-        <div className="flex w-[200px] flex-col items-end gap-2 p-4">
+        <div className="mt-[60px] flex w-full flex-row items-start justify-start gap-2 p-2 md:mt-0 md:w-[200px] md:flex-col md:p-4 md:pr-4">
           <Button
             onClick={() => push('/')}
             variant="ghost"
-            className="w-full justify-start gap-2 px-2"
+            className="justify-start md:w-full md:gap-2 md:px-2"
           >
             <div className="flex h-6 w-6 flex-row items-center justify-center">
               <ArrowLeft02Icon size={20} strokeWidth={2} />
             </div>
             Back
           </Button>
-          <Flex direction="col" gap="xs" className="w-full">
+          <Flex
+            direction="row"
+            gap="xs"
+            justify="start"
+            className="w-full md:flex-col"
+          >
             {settingMenu.map(renderMenuItem)}
           </Flex>
         </div>
       </div>
-      <div className="no-scrollbar mt-12 h-full w-full max-w-[720px] overflow-y-auto p-8 pb-16 md:mt-0 md:ml-[30vw]">
+      <div className="no-scrollbar mt-32 h-full w-full max-w-[720px] overflow-y-auto p-4 pb-16 md:mt-0 md:ml-[30vw] md:p-8">
         {children}
       </div>
     </div>
