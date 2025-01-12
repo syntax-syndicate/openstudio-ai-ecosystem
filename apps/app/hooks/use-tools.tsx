@@ -5,11 +5,8 @@ import { duckduckGoTool } from '@/tools/duckduckgo';
 import { googleSearchTool } from '@/tools/google';
 import { memoryTool } from '@/tools/memory';
 import type { TToolConfig, TToolKey } from '@/types';
-import {
-  BrainIcon,
-  GlobalSearchIcon,
-  Image01Icon,
-} from '@repo/design-system/components/ui/icons';
+import { AiImageIcon, Globe02Icon } from '@hugeicons/react';
+import { BrainIcon } from '@repo/design-system/components/ui/icons';
 import { useRouter } from 'next/navigation';
 
 export const useTools = () => {
@@ -48,8 +45,8 @@ export const useTools = () => {
         preferences?.defaultWebSearchEngine === 'google'
           ? 'Results from Google search'
           : 'Result from DuckDuckGo search',
-      icon: GlobalSearchIcon,
-      smallIcon: GlobalSearchIcon,
+      icon: Globe02Icon,
+      smallIcon: Globe02Icon,
     },
     {
       key: 'image_generation',
@@ -67,8 +64,8 @@ export const useTools = () => {
       },
       loadingMessage: 'Generating Image ...',
       resultMessage: 'Generated Image',
-      icon: Image01Icon,
-      smallIcon: Image01Icon,
+      icon: AiImageIcon,
+      smallIcon: AiImageIcon,
     },
     {
       key: 'memory',

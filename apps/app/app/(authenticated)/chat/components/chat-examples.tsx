@@ -23,7 +23,7 @@ export const ChatExamples = () => {
         {examplePrompts?.slice(0, 4)?.map((prompt, index) => (
           <Button
             key={index}
-            rounded="full"
+            variant="outlined"
             className="justify-start"
             onClick={() => {
               editor?.commands?.clearContent();

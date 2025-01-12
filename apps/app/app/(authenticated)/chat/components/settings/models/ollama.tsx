@@ -2,6 +2,7 @@ import { Mdx } from '@/app/(authenticated)/chat/components/mdx';
 import { usePreferenceContext } from '@/context/preferences';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { FormLabel } from '@repo/design-system/components/ui/form-label';
 import { Input } from '@repo/design-system/components/ui/input';
 import {
   Tabs,
@@ -10,7 +11,6 @@ import {
   TabsTrigger,
 } from '@repo/design-system/components/ui/tabs';
 import { useToast } from '@repo/design-system/hooks/use-toast';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export const OllamaSettings = () => {
@@ -51,17 +51,24 @@ export const OllamaSettings = () => {
 
   const macosOllamaConfig = `
 #### Step 1: Install and Launch Ollama Locally
+
 Ensure you have Ollama installed on your machine. If you haven't downloaded it yet, please visit the [official website](#) to get started.
+
 #### Step 2: Set Up Cross-Origin Access for Ollama
+
 To ensure proper functionality, you'll need to configure cross-origin settings due to browser security policies.
+
 1. Open the **Terminal** application.
 2. Enter the following command and press **Enter**:
+
    \`\`\`bash
    launchctl setenv OLLAMA_ORIGINS "*"
    \`\`\`
   `;
+
   const windowsOllamaConfig = `
   #### Step 1: Install and Start Ollama Locally
+
   Please make sure you have enabled Ollama. If you haven't downloaded Ollama yet, please visit the [official website](#) to download.
   
   #### Step 2: Configure Ollama for Cross-Origin Access
@@ -74,6 +81,7 @@ To ensure proper functionality, you'll need to configure cross-origin settings d
   
   Please restart the Ollama service after completion.
   `;
+
   const tabConfigs = [
     { value: 'macos', label: 'Macos', message: macosOllamaConfig },
     { value: 'windows', label: 'Windows', message: windowsOllamaConfig },
@@ -81,30 +89,19 @@ To ensure proper functionality, you'll need to configure cross-origin settings d
 
   return (
     <Flex direction="col" gap="sm">
-      <Flex items="center" gap="sm">
-        <p className="text-xs text-zinc-500 md:text-sm">
-          Ollama local server URL
-        </p>
-        <Link
-          href="https://aistudio.google.com/app/apikey"
-          className="font-medium text-blue-400"
-        >
-          (Configuration guide)
-        </Link>
-      </Flex>
+      <FormLabel label="Ollama local server URL" />
       <Input
         placeholder="http://localhost:11434"
         value={url}
         autoComplete="off"
         onChange={handleURLChange}
       />
-      <div className="flex flex-row items-center gap-2">
-        <Button size="sm" variant="outline" onClick={verifyAndSaveURL}>
-          Check Connection
-        </Button>
-      </div>
 
-      <Tabs defaultValue="macos" className="w-full">
+      <Button size="sm" variant="default" onClick={verifyAndSaveURL}>
+        Check Connection
+      </Button>
+
+      <Tabs defaultValue="macos" className="mt-2 w-full">
         <TabsList className="grid w-full grid-cols-2">
           {tabConfigs.map((tab) => (
             <TabsTrigger key={tab.value} value={tab.value}>
@@ -113,7 +110,7 @@ To ensure proper functionality, you'll need to configure cross-origin settings d
           ))}
         </TabsList>
         {tabConfigs.map((tab) => (
-          <TabsContent key={tab.value} value={tab.value}>
+          <TabsContent key={tab.value} value={tab.value} className="pb-4">
             <Mdx
               message={tab.message}
               animate={false}

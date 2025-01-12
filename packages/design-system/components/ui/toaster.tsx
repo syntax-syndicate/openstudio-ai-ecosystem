@@ -9,8 +9,7 @@ import {
   ToastViewport,
 } from "@repo/design-system/components/ui/toast";
 import { useToast } from "@repo/design-system/components/ui/use-toast";
-//@ts-ignore
-import { Check, Warning } from "@phosphor-icons/react";
+import { AlertCircleIcon, CheckmarkCircle01Icon } from "@hugeicons/react";
 import { Button } from "@repo/design-system/components/ui/button";
 
 export function Toaster() {
@@ -22,16 +21,16 @@ export function Toaster() {
           <Toast key={id} {...props}>
             <div className="flex flex-row gap-3">
               {props.variant === "destructive" ? (
-                <Warning
+                <AlertCircleIcon
                   size={24}
-                  weight="bold"
-                  className="text-red-400 flex-shrink-0 mt-1"
+                  variant="solid"
+                  className="mt-1 flex-shrink-0 text-rose-400"
                 />
               ) : (
-                <Check
+                <CheckmarkCircle01Icon
                   size={24}
-                  weight="bold"
-                  className="text-blue-400 flex-shrink-0 mt-1"
+                  variant="solid"
+                  className="mt-1 flex-shrink-0 text-emerald-400"
                 />
               )}
               <div className="grid gap-0 w-full">

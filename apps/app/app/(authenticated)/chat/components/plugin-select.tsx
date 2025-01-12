@@ -5,7 +5,7 @@ import type { TToolKey } from '@/types';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import { ElectricPlugsIcon } from '@repo/design-system/components/ui/icons';
+import { PuzzleIcon } from '@repo/design-system/components/ui/icons';
 import {
   Popover,
   PopoverContent,
@@ -48,13 +48,13 @@ export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
         <Tooltip content="Plugins">
           <PopoverTrigger asChild>
             <Button variant="ghost" size="sm">
-              <ElectricPlugsIcon size={18} variant="stroke" strokeWidth="2" />
+              <PuzzleIcon size={18} variant="stroke" strokeWidth="2" />
               <Badge>{selectedPlugins.length}</Badge>
             </Button>
           </PopoverTrigger>
         </Tooltip>
         <PopoverContent
-          className="roundex-2xl mr-8 w-[340px] p-0 dark:bg-zinc-700"
+          className="roundex-lg mr-8 w-[340px] p-0 dark:bg-zinc-700"
           side="top"
         >
           <p className="flex flex-row gap-2 border-zinc-500/20 border-b px-3 py-2 font-medium text-sm">
@@ -66,7 +66,7 @@ export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
               return (
                 <div
                   key={tool.key}
-                  className="flex w-full flex-row items-center gap-3 rounded-2xl px-3 py-2 text-xs hover:bg-zinc-50 md:text-sm dark:hover:bg-black/30"
+                  className="flex w-full flex-row items-center gap-3 rounded-lg px-3 py-2 text-xs hover:bg-zinc-50 md:text-sm dark:hover:bg-black/30"
                 >
                   <Icon size={20} strokeWidth={1.5} />
                   <Flex direction="col" gap="none" items="start">

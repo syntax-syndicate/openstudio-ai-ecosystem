@@ -45,7 +45,11 @@ export const AIMessageError: FC<TAIMessageError> = ({
   };
 
   return (
-    <Flex className="p-1 text-sm text-zinc-500" gap="sm" items="center">
+    <Flex
+      className="mb-4 rounded-xl bg-white/5 px-3 py-2 text-sm text-zinc-500"
+      gap="sm"
+      items="center"
+    >
       <Alert02Icon size={16} strokeWidth={1.5} />
       {renderErrorMessage(stopReason)}
     </Flex>

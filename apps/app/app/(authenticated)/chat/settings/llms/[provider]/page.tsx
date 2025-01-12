@@ -12,6 +12,7 @@ import { SettingsContainer } from '@/app/(authenticated)/chat/components/setting
 import { providers } from '@/config/models';
 import { usePreferenceContext } from '@/context/preferences';
 import type { TProvider } from '@/types';
+import { Alert01Icon, CheckmarkCircle01Icon } from '@hugeicons/react';
 import {
   Accordion,
   AccordionContent,
@@ -19,10 +20,6 @@ import {
   AccordionTrigger,
 } from '@repo/design-system/components/ui/accordion';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import {
-  AlertCircleIcon,
-  CheckmarkCircle02Icon,
-} from '@repo/design-system/components/ui/icons';
 import { cn } from '@repo/design-system/lib/utils';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
@@ -103,7 +100,7 @@ export default function LLMsSettings() {
         {modelSettingsData.map((model) => (
           <AccordionItem key={model.value} value={model.value}>
             <AccordionTrigger>
-              <Flex gap="sm" items="center">
+              <Flex gap="md" items="center">
                 <ModelIcon type={model.iconType as ModelIconType} size="sm" />
                 {model.label}
               </Flex>
@@ -111,25 +108,23 @@ export default function LLMsSettings() {
               <div
                 className={cn(
                   '!rotate-0 px-2',
-                  model.connected ? 'text-emerald-400' : 'text-zinc-500'
+                  model.connected
+                    ? 'text-emerald-500 dark:text-emerald-400'
+                    : 'text-zinc-500'
                 )}
               >
                 {model.connected ? (
-                  <CheckmarkCircle02Icon
+                  <CheckmarkCircle01Icon
                     size={20}
                     strokeWidth={1.5}
                     variant="solid"
                   />
                 ) : (
-                  <AlertCircleIcon
-                    size={20}
-                    strokeWidth={1.5}
-                    variant="solid"
-                  />
+                  <Alert01Icon size={20} strokeWidth={1.5} variant="solid" />
                 )}
               </div>
             </AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent className="px-3 py-6">
               <model.settingsComponent />
             </AccordionContent>
           </AccordionItem>

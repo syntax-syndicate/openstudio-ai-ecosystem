@@ -78,6 +78,13 @@ const memoryTool = (args: TToolArg) => {
         });
         return question;
       } catch (error) {
+        sendToolResponse({
+          toolName: 'memory',
+          toolArgs: {
+            memory,
+          },
+          toolLoading: false,
+        });
         return 'Error performing memory update. Please check API keys.';
       }
     },

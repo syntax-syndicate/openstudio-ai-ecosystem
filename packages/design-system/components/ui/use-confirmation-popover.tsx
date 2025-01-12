@@ -1,6 +1,7 @@
-import { RefAttributes, FC, useState } from "react";
+import { FC, useState } from "react";
 import { Button } from "@repo/design-system/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/design-system/components/ui/popover";
+import {Flex} from "@repo/design-system/components/ui/flex";
 
 export type TPopoverConfirm = {
   title: string;
@@ -28,8 +29,8 @@ export const PopOverConfirmProvider = ({
     <Popover open={openConfirm} onOpenChange={setOpenConfirm}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent className="z-[1000]" side="bottom">
-        <p className="text-sm md:text-base font-medium pb-2">{title}</p>
-        <div className="flex flex-row gap-1">
+        <p className="pb-4 text-sm font-medium">{title}</p>
+        <Flex gap="sm">
           <Button
             variant={confimBtnVariant}
             size="sm"
@@ -42,7 +43,7 @@ export const PopOverConfirmProvider = ({
             {confimBtnText}
           </Button>
           <Button
-            variant="ghost"
+            variant="secondary"
             size="sm"
             onClick={(e) => {
               onCancel?.();
@@ -52,7 +53,7 @@ export const PopOverConfirmProvider = ({
           >
             Cancel
           </Button>
-        </div>
+        </Flex>{" "}
       </PopoverContent>
     </Popover>
   );

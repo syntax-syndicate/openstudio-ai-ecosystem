@@ -13,10 +13,16 @@ type TCreateInstance = {
 
 export class ModelService {
   async createInstance({ model, preferences, apiKey }: TCreateInstance) {
-    const { temperature, topP, topK, maxTokens, ollamaBaseUrl } = {
+    const { temperature, topP, topK, ollamaBaseUrl, ...rest } = {
       ...defaultPreferences,
       ...preferences,
     };
+
+    const maxTokens =
+      rest.maxTokens <= model.maxOutputTokens
+        ? rest.maxTokens
+        : model.maxOutputTokens;
+
     switch (model.provider) {
       case 'openai':
         return new ChatOpenAI({

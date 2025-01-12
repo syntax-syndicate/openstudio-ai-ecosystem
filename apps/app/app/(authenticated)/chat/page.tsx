@@ -1,6 +1,6 @@
 'use client';
 import { ChatInput } from '@/app/(authenticated)/chat/components/chat-input';
-import { ChatMessages } from '@/app/(authenticated)/chat/components/messages/chat-messages';
+import { ChatMessages } from '@/app/(authenticated)/chat/components/messages';
 import {
   AssistantsProvider,
   ChatProvider,
@@ -26,7 +26,7 @@ const ChatSessionPage = () => {
       <CommandsProvider>
         <AssistantsProvider>
           <PromptsProvider>
-            <div className="relative flex h-[100%] w-full flex-row overflow-hidden bg-white dark:bg-zinc-800">
+            <div className="relative flex h-[100%] w-full flex-row overflow-hidden bg-zinc-50/20 dark:bg-zinc-800">
               <ChatMessages />
               <ChatInput />
             </div>

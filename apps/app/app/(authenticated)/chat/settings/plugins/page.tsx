@@ -2,6 +2,7 @@
 import { ImageGenerationPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/image-generation';
 import { WebSearchPlugin } from '@/app/(authenticated)/chat/components/settings/plugins/web-search';
 import { SettingsContainer } from '@/app/(authenticated)/chat/components/settings/settings-container';
+import { AiImageIcon, Globe02Icon } from '@hugeicons/react';
 import {
   Accordion,
   AccordionContent,
@@ -9,23 +10,19 @@ import {
   AccordionTrigger,
 } from '@repo/design-system/components/ui/accordion';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import {
-  GlobalSearchIcon,
-  Image01Icon,
-} from '@repo/design-system/components/ui/icons';
 
 export default function PluginsSettings() {
   const pluginSettingsData = [
     {
       value: 'websearch',
       label: 'Web Search',
-      icon: GlobalSearchIcon,
+      icon: Globe02Icon,
       settingsComponent: WebSearchPlugin,
     },
     {
       value: 'image_generation',
       label: 'Image Generation',
-      icon: Image01Icon,
+      icon: AiImageIcon,
       settingsComponent: ImageGenerationPlugin,
     },
   ];
@@ -37,8 +34,10 @@ export default function PluginsSettings() {
           return (
             <AccordionItem key={plugin.value} value={plugin.value}>
               <AccordionTrigger>
-                <Flex gap="sm" items="center">
-                  {Icon && <Icon size={20} strokeWidth={1.5} />}
+                <Flex gap="md" items="center">
+                  {Icon && (
+                    <Icon size={20} strokeWidth={2} className="opacity-50" />
+                  )}
                   {plugin.label}
                 </Flex>
               </AccordionTrigger>

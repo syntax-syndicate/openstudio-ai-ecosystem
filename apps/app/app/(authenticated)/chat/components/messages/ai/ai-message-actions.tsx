@@ -10,10 +10,10 @@ import {
   Delete01Icon,
   Tick01Icon,
 } from '@repo/design-system/components/ui/icons';
-import { ConfirmPopover } from '@repo/design-system/components/ui/popover-confirm';
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
-import { type FC, useState } from 'react';
+import { PopOverConfirmProvider } from '@repo/design-system/components/ui/use-confirmation-popover';
+import type { FC } from 'react';
 
 export type TAIMessageActions = {
   message: TChatMessage;
@@ -25,8 +25,6 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
   canRegenerate,
 }) => {
   const { refetch, store } = useChatContext();
-  const messages = store((state) => state.messages);
-  const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { getAssistantByKey } = useAssistantUtils();
   const { invokeModel } = useLLMRunner();
   const { removeMessageByIdMutation } = useSessions();
@@ -87,8 +85,9 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
           </Tooltip>
 
           <Tooltip content="Delete">
-            <ConfirmPopover
+            <PopOverConfirmProvider
               title="Are you sure you want to delete this message?"
+              confimBtnVariant="destructive"
               onConfirm={() => {
                 removeMessageByIdMutation.mutate(
                   {
@@ -102,13 +101,11 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
                   }
                 );
               }}
-              open={openDeleteConfirm}
-              onOpenChange={setOpenDeleteConfirm}
             >
               <Button variant="ghost" size="iconSm" rounded="lg">
                 <Delete01Icon size={18} variant="stroke" strokeWidth="2" />
               </Button>
-            </ConfirmPopover>
+            </PopOverConfirmProvider>
           </Tooltip>
           {canRegenerate && (
             <RegenerateWithModelSelect

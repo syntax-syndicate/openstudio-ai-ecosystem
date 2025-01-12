@@ -1,9 +1,11 @@
 import { ApiKeyInfo } from '@/app/(authenticated)/chat/components/settings/models/api-key-info';
 import ApiKeyInput from '@/app/(authenticated)/chat/components/settings/models/api-key-input';
+import { configs } from '@/config';
 import { usePreferenceContext } from '@/context/preferences';
 import { useLLMTest } from '@/hooks/use-llm-test';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { FormLabel } from '@repo/design-system/components/ui/form-label';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -18,17 +20,17 @@ export const GeminiSettings = () => {
 
   return (
     <Flex direction="col" gap="sm">
-      <Flex items="center" gap="sm">
-        <p className="font-medium text-xs text-zinc-300 md:text-sm">
-          Google Gemini API Key
-        </p>
-        <Link
-          href="https://aistudio.google.com/app/apikey"
-          className="font-medium text-blue-400"
-        >
-          (Get API key here)
-        </Link>
-      </Flex>
+      <FormLabel
+        label="Google Gemini API Key"
+        extra={() => (
+          <Link
+            href={configs.geminiApiKeyUrl}
+            className="font-medium text-blue-400 text-sm hover:opacity-90"
+          >
+            Get API key here
+          </Link>
+        )}
+      />
       <ApiKeyInput
         value={key}
         setValue={setKey}
@@ -37,11 +39,11 @@ export const GeminiSettings = () => {
         isLocked={!!apiKeys.gemini}
       />
 
-      <div className="flex flex-row items-center gap-1">
+      <Flex gap="sm">
         {!apiKeys.gemini && (
           <Button
             size="sm"
-            variant="outline"
+            variant="default"
             onClick={() => {
               checkApiKey({
                 model: 'gemini',
@@ -71,7 +73,7 @@ export const GeminiSettings = () => {
             Remove Key
           </Button>
         )}
-      </div>
+      </Flex>
       <ApiKeyInfo />
     </Flex>
   );

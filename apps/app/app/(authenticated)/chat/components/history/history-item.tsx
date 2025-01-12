@@ -16,6 +16,7 @@ import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
 import moment from 'moment';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export const HistoryItem = ({
@@ -33,6 +34,7 @@ export const HistoryItem = ({
     setActiveSessionId,
     activeSessionId,
   } = useSessions();
+  const { push } = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(session.title);
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
@@ -66,13 +68,14 @@ export const HistoryItem = ({
 
   const handleOnClick = () => {
     if (!isEditing) {
+      push('/chat');
       setActiveSessionId(session.id);
       dismiss();
     }
   };
 
   const containerClasses = cn(
-    'group flex w-full w-full cursor-pointer flex-row items-start gap-2 rounded-xl py-2 pr-2 pl-3 hover:bg-black/10 hover:dark:bg-black/30',
+    'group flex w-full w-full cursor-pointer flex-row items-start gap-2 rounded-lg py-2 pr-2 pl-3 hover:bg-black/10 hover:dark:bg-black/30',
     activeSessionId === session.id || isEditing
       ? 'bg-black/10 dark:bg-black/30'
       : ''

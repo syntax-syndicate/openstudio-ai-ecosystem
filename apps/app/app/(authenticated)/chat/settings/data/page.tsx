@@ -154,7 +154,7 @@ export default function DataSettings() {
                 dismiss();
               }}
             >
-              <Button variant="outline" size="sm">
+              <Button variant="outlined" size="sm">
                 <FileImportIcon size={16} variant="solid" /> Import
               </Button>
             </PopOverConfirmProvider>
@@ -171,7 +171,7 @@ export default function DataSettings() {
               </Type>
             </Flex>
             <Button
-              variant="outline"
+              variant="outlined"
               size="sm"
               onClick={() => {
                 exportService.processExport().then((data) => {

@@ -24,7 +24,7 @@ export const QuickSettings = () => {
   const renderResetToDefault = (key: keyof TPreferences) => {
     return (
       <Button
-        variant="outline"
+        variant="outlined"
         size="iconXS"
         rounded="lg"
         onClick={() => {

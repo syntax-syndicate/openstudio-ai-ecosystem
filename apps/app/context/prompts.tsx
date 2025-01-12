@@ -10,7 +10,7 @@ import {
 } from '@repo/design-system/components/ui/dialog';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 export type TPromptsContext = {
   open: (create?: boolean) => void;
@@ -61,6 +61,17 @@ export const PromptsProvider = ({ children }: TPromptsProvider) => {
     setIsPromptOpen(true);
   };
 
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'P' && e.ctrlKey) {
+        e.preventDefault();
+        setIsPromptOpen((open) => !open);
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
+
   const dismiss = () => setIsPromptOpen(false);
 
   const localPromptsQuery = promptsQuery;
@@ -80,7 +91,7 @@ export const PromptsProvider = ({ children }: TPromptsProvider) => {
       {children}
 
       <Dialog open={isPromptOpen} onOpenChange={setIsPromptOpen}>
-        <DialogContent className="flex max-h-[80dvh] w-[96dvw] flex-col gap-0 overflow-hidden rounded-2xl border border-white/5 p-0 md:max-h-[600px] md:w-[600px]">
+        <DialogContent className="flex max-h-[80dvh] w-[96dvw] flex-col gap-0 overflow-hidden rounded-lg border border-white/5 p-0 md:max-h-[600px] md:w-[600px]">
           {showCreatePrompt ? (
             <CreatePrompt
               prompt={editablePrompt}

@@ -30,16 +30,16 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
   return (
     <div
       className={cn(
-        'not-prose w-full flex-shrink-0 overflow-hidden rounded-xl border border-zinc-50 bg-zinc-50/30 text-zinc-600 dark:border-white/5 dark:bg-black/20 dark:text-white'
+        'not-prose w-full flex-shrink-0 overflow-hidden rounded-lg border border-zinc-200/30 bg-white text-zinc-600 dark:border-white/5 dark:bg-black/20 dark:text-white'
       )}
     >
-      <div className="flex w-full items-center justify-between border-zinc-50 border-b p-1 dark:border-white/5">
+      <div className="flex w-full items-center justify-between border-zinc-200/20 border-b py-1.5 pr-1.5 pl-2 dark:border-white/5">
         <p className="px-2 text-xs text-zinc-500">{language}</p>
         <Tooltip content={showCopied ? 'Copied!' : 'Copy'}>
           <Button
-            className="!text-xs"
-            variant="text"
-            size="sm"
+            variant="ghost"
+            size="xs"
+            rounded="default"
             onClick={() => {
               code && copy(code);
             }}

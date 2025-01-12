@@ -31,7 +31,7 @@ const ApiKeyInput: FC<TApiKeyInput> = ({
         value={value}
         disabled={isDisabled}
         type={showKey ? 'text' : 'password'}
-        autoComplete="off"
+        autoComplete="new-password"
         className="w-full pr-16"
         onChange={(e) => {
           setValue(e.target.value);

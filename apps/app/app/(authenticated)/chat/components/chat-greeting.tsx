@@ -1,4 +1,3 @@
-import { WavingHand02Icon } from '@repo/design-system/components/ui/icons';
 import { motion } from 'framer-motion';
 
 export const ChatGreeting = () => {
@@ -14,11 +13,11 @@ export const ChatGreeting = () => {
           },
         }}
       >
-        <span className="flex flex-row items-center gap-1 text-zinc-300 dark:text-zinc-500">
-          <WavingHand02Icon size={32} variant="stroke" strokeWidth="2" />
-          Hello,
+        Good Morning,
+        <br />
+        <span className="text-zinc-300 dark:text-zinc-500">
+          How can I help you today?
         </span>
-        How can I help you today? 😊
       </motion.h1>
     </div>
   );

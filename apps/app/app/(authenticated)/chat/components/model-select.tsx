@@ -1,7 +1,10 @@
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import type { TModelKey } from '@/types';
 import { Badge } from '@repo/design-system/components/ui/badge';
-import { Button } from '@repo/design-system/components/ui/button';
+import {
+  Button,
+  type ButtonProps,
+} from '@repo/design-system/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +17,7 @@ import { type FC, useState } from 'react';
 export type TModelSelect = {
   selectedModel: TModelKey;
   fullWidth?: boolean;
-  variant?: 'outline' | 'ghost' | 'default' | 'secondary';
+  variant?: ButtonProps['variant'];
   setSelectedModel: (model: TModelKey) => void;
   className?: string;
 };
@@ -44,7 +47,7 @@ export const ModelSelect: FC<TModelSelect> = ({
         <DropdownMenuTrigger asChild>
           <Button
             variant={variant || 'ghost'}
-            className={cn('gap-2 pr-3 pl-1 text-xs md:text-sm', className)}
+            className={cn('gap-2 text-xs md:text-sm', className)}
             size="sm"
           >
             {activeAssistant?.assistant &&

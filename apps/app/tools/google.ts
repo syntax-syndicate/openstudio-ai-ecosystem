@@ -51,6 +51,13 @@ const googleSearchTool = (args: TToolArg) => {
         });
         return searchPrompt;
       } catch (error) {
+        sendToolResponse({
+          toolName: 'web_search',
+          toolArgs: {
+            input,
+          },
+          toolLoading: false,
+        });
         return 'Error performing Google search. Ask user to check API keys.';
       }
     },
