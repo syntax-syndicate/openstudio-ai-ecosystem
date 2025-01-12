@@ -7,7 +7,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
     const ratelimiter = createRateLimiter({
-      limiter: slidingWindow(5, '1 d'), // 1 requests from the same IP in 10 seconds
+      limiter: slidingWindow(5, '1 d'), // 5 requests from the same IP in 1 day
     });
     const head = await headers();
     const ip = head.get('x-forwarded-for');
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const { success } = await ratelimiter.limit(`chathub_completions_${ip}`);
 
     if (!success) {
-      return NextResponse.redirect(new URL('/blocked', req.url));
+      return NextResponse.redirect(new URL('/api/chathub/limit', req.url));
     }
   }
   const requestHeaders = new Headers(req.headers);
