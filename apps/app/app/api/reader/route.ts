@@ -29,7 +29,7 @@ function cleanHtml(html: string): string {
     );
 }
 
-export async function POST(req: NextRequest, resp: NextResponse) {
+export async function POST(req: NextRequest) {
   const { url } = await req.json();
   console.log(url);
   if (!url) {
