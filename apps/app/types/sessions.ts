@@ -1,6 +1,11 @@
 import type { useChatSessionQueries } from '@/services/sessions/queries';
 import type { TChatMessage } from '@/types';
 
+export type TSessionsState = {
+  activeSessionId?: string;
+  setActiveSessionId: (id: string) => void;
+};
+
 export type TChatSession = {
   title?: string;
   id: string;

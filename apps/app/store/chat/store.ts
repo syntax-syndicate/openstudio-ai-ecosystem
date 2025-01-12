@@ -62,7 +62,7 @@ export const createChatStore = () =>
       const { messages } = get();
       const messageExists = messages.some((m) => m.id === message.id);
       const updatedMessages = messages.map((m) =>
-        m.id === message.id ? message : m
+        m.id === message.id ? { ...m, ...message } : m
       );
       set({
         messages: messageExists ? updatedMessages : [...messages, message],

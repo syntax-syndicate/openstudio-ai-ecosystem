@@ -15,9 +15,10 @@ export const ChatMessages = () => {
   }, [messages]);
   useEffect(() => {
     scrollToBottom();
-  }, [messages?.length]);
+  }, [messages?.length, messages?.[messages.length - 1]?.relatedQuestions]);
+
   function isUserNearBottom() {
-    var scrollThreshold = 50;
+    var scrollThreshold = 100;
     if (chatContainer.current) {
       return (
         chatContainer.current.scrollHeight - chatContainer.current.scrollTop <=

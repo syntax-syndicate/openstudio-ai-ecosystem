@@ -21,4 +21,5 @@ export type TChatMessage = {
   stop?: boolean;
   stopReason?: 'error' | 'cancel' | 'apikey' | 'recursion' | 'finish';
   createdAt: string;
+  relatedQuestions?: string[];
 };

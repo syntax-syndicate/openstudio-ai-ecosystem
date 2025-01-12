@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { Mdx } from '@/app/(authenticated)/chat/components/mdx';
 import { AIMessageActions } from '@/app/(authenticated)/chat/components/messages/ai/ai-message-actions';
 import { AIMessageError } from '@/app/(authenticated)/chat/components/messages/ai/ai-message-error';
+import { AIRelatedQuestions } from '@/app/(authenticated)/chat/components/messages/ai/ai-related-questions';
 import { AISelectionProvider } from '@/app/(authenticated)/chat/components/messages/ai/ai-selection-provider';
 import { AIToolMessage } from '@/app/(authenticated)/chat/components/messages/ai/ai-tool-message';
 import { useChatContext } from '@/context';
@@ -54,6 +55,7 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
         </AISelectionProvider>
         {stop && <AIMessageError stopReason={stopReason} message={message} />}
         <AIMessageActions message={message} canRegenerate={message && isLast} />
+        <AIRelatedQuestions message={message} show={message && isLast} />
       </Flex>
     </div>
   );

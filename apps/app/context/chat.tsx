@@ -1,5 +1,6 @@
 'use client';
 import { useSessions } from '@/context/sessions';
+import { useRelatedQuestions } from '@/hooks/use-related-questions';
 import { useTitleGenerator } from '@/hooks/use-title-generator';
 import { createChatStore } from '@/store/chat/store';
 import type { TChatContext, TChatProvider } from '@/types/chat';
@@ -16,9 +17,11 @@ export const ChatProvider: FC<TChatProvider> = ({ children, sessionId }) => {
   const setIsGenerating = store((state) => state.setIsGenerating);
 
   const { generateTitleForSession } = useTitleGenerator();
+  const { generateRelatedQuestion } = useRelatedQuestions();
   const {
     useGetSessionByIdQuery,
     addMessageMutation,
+    updateSessionMutation,
     useMessagesQuery,
     createSession,
   } = useSessions();
@@ -43,6 +46,21 @@ export const ChatProvider: FC<TChatProvider> = ({ children, sessionId }) => {
             if (messages?.[0].sessionId && messages?.length < 2) {
               await generateTitleForSession(messages?.[0].sessionId as string);
             }
+            console.log('start generating questions');
+            const questions = await generateRelatedQuestion(
+              messages?.[0].sessionId
+            );
+            console.log('questions', questions);
+            const message = {
+              ...currentMessage,
+              relatedQuestions: questions,
+            };
+            console.log('messageee', message);
+            addMessage(message);
+            addMessageMutation.mutate({
+              parentId: currentMessage.sessionId,
+              message: message,
+            });
           },
         }
       );

@@ -1,5 +1,7 @@
+import { sortMessages } from '@/helper/utils';
+import type { TChatMessage } from '@/types';
 import type { TConstructPrompt } from '@/types/prompts';
-import { HumanMessage } from '@langchain/core/messages';
+import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import {
   type BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
@@ -9,9 +11,14 @@ import {
 const constructPrompt = async (props: TConstructPrompt) => {
   const { context, image, hasMessages, memories, systemPrompt } = props;
   const messagePlaceholders = new MessagesPlaceholder('chat_history');
-  const memoryPrompt = `Things to remember:\n${memories.join('\n')}`;
+  const memoryPrompt =
+    memories.length > 0 ? `Things to remember:\n${memories.join('\n')}` : '';
   const messagesPrompt = hasMessages
     ? `You can also refer to these previous conversations`
+    : ``;
+
+  const formatInstructions = props?.formatInstructions
+    ? `\n{format_instructions}`
     : ``;
   const systemMessage: BaseMessagePromptTemplateLike = [
     'system',
@@ -43,8 +50,28 @@ const constructPrompt = async (props: TConstructPrompt) => {
   return ChatPromptTemplate.fromMessages([
     systemMessage,
     messagePlaceholders,
+    formatInstructions,
     userMessage,
     ['placeholder', '{agent_scratchpad}'],
   ]);
 };
-export { constructPrompt };
+const constructMessagePrompt = async ({
+  messages,
+  limit,
+}: {
+  messages: TChatMessage[];
+  limit: number;
+}) => {
+  const sortedMessages = sortMessages(messages, 'createdAt');
+  const chatHistory = sortedMessages
+    .slice(0, limit)
+    .reduce((acc: (HumanMessage | AIMessage)[], { rawAI, rawHuman }) => {
+      if (rawAI && rawHuman) {
+        return [...acc, new HumanMessage(rawHuman), new AIMessage(rawAI)];
+      } else {
+        return acc;
+      }
+    }, []);
+  return chatHistory;
+};
+export { constructMessagePrompt, constructPrompt };
