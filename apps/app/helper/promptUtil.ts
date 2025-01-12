@@ -44,7 +44,7 @@ const constructPrompt = async (props: TConstructPrompt) => {
       }).content
     : userContent;
 
-  console.log("userMessageContent", userMessageContent);
+  console.log('userMessageContent', userMessageContent);
 
   const userMessage: BaseMessagePromptTemplateLike = [
     'user',
