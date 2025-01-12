@@ -51,6 +51,7 @@ export const createChatStore = () =>
         currentMessage: undefined,
         currentTools: [],
         isGenerating: false,
+        context: undefined,
         abortController: undefined,
       }),
     setAbortController: (abortController) => set({ abortController }),

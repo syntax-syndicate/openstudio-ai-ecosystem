@@ -16,7 +16,9 @@ import {
   Settings03Icon,
   Sun01Icon,
 } from '@repo/design-system/components/ui/icons';
+import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
+import Avatar from 'boring-avatars';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -85,19 +87,8 @@ export const Sidebar = () => {
     );
   };
 
-  return (
-    <div className="group fixed z-10 flex w-full flex-row items-center justify-center gap-3 border-zinc-500/10 p-3 md:h-screen md:w-auto md:flex-col md:border-r dark:border-zinc-500/5">
-      <div className="flex flex-row items-center gap-2">
-        {renderNewSession()}
-      </div>
-
-      <div className="flex flex-col items-center gap-2">
-        <HistorySidebar />
-      </div>
-      {renderSpaces()}
-
-      <Flex className="flex-1" />
-      {renderSettings()}
+  const renderHelpSupport = () => {
+    return (
       <DropdownMenu
         open={isOpen}
         onOpenChange={(open: boolean) => {
@@ -105,11 +96,46 @@ export const Sidebar = () => {
           setIsOpen(open);
         }}
       >
+        <Tooltip content="More" side="top" sideOffset={2}>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="fixed right-4 bottom-4 z-10"
+            >
+              <HelpCircleIcon size={28} variant="solid" />
+            </Button>
+          </DropdownMenuTrigger>
+        </Tooltip>
+        <DropdownMenuContent
+          className="mr-2 min-w-[250px] text-sm md:text-base"
+          align="end"
+          side="top"
+          sideOffset={2}
+        >
+          {menuItems.map((item, index) => (
+            <DropdownMenuItem key={index} onClick={item.onClick}>
+              {item.label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  };
+
+  const renderProfile = () => {
+    return (
+      <DropdownMenu>
         <Tooltip content="More" side="left" sideOffset={4}>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="iconSm">
-              <HelpCircleIcon size={20} variant="solid" />
-            </Button>
+            <div className="cursor-pointer rounded-full p-1 outline-none ring-2 ring-zinc-500/20 hover:ring-zinc-500/30 focus:outline-none focus:ring-zinc-500/30">
+              <Avatar
+                name={'ChatHub'}
+                variant="beam"
+                size={28}
+                colors={['#4A2BE2', '#D5EC77', '#3EE2DE', '#AF71FF', '#F882B3']}
+              />
+            </div>
           </DropdownMenuTrigger>
         </Tooltip>
         <DropdownMenuContent
@@ -118,13 +144,24 @@ export const Sidebar = () => {
           side="left"
           sideOffset={4}
         >
-          {menuItems.map((item, index) => (
-            <DropdownMenuItem key={index} onClick={item.onClick}>
-              {item.label}
-            </DropdownMenuItem>
-          ))}
+          <Flex className="items-center p-2" gap="md">
+            <Avatar
+              name={'ChatHub'}
+              variant="beam"
+              size={44}
+              colors={['#4A2BE2', '#D5EC77', '#3EE2DE', '#AF71FF', '#F882B3']}
+            />
+            <Type>ChatHub</Type>
+          </Flex>
           <div className="my-1 h-[1px] w-full bg-black/10 dark:bg-white/10" />
-
+          <DropdownMenuItem
+            onClick={() => {
+              push('/settings');
+            }}
+          >
+            <Settings03Icon size={20} strokeWidth={2} />
+            Settings
+          </DropdownMenuItem>{' '}
           <DropdownMenuItem
             onClick={() => {
               setTheme(theme === 'light' ? 'dark' : 'light');
@@ -139,7 +176,28 @@ export const Sidebar = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {renderModal()}
-    </div>
+    );
+  };
+
+  return (
+    <>
+      <div className="group fixed z-10 flex w-full flex-row items-center justify-center gap-3 border-zinc-500/10 p-3 md:h-screen md:w-auto md:flex-col md:border-r dark:border-zinc-500/5">
+        <div className="flex flex-row items-center gap-2">
+          {renderNewSession()}
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <HistorySidebar />
+        </div>
+
+        {renderSpaces()}
+
+        <Flex className="flex-1" />
+        {renderSettings()}
+        {renderProfile()}
+
+        {renderModal()}
+      </div>
+      {renderHelpSupport()}
+    </>
   );
 };
