@@ -21,10 +21,20 @@ export class PreferenceService {
     await set('preferences', defaultPreferences);
   }
   async setApiKey(key: TProvider, value: string): Promise<void> {
-    const keys = await this.getApiKeys();
-    const newKeys = { ...keys, [key]: value };
-    await set('api-keys', newKeys);
+    try {
+      const keys = await this.getApiKeys();
+      const newKeys = { ...keys, [key]: value };
+      await set('api-keys', newKeys);
+    } catch (error) {
+      console.error('Error setting API key', error);
+    }
   }
+
+  async setApiKeys(keys: TApiKeys): Promise<void> {
+    const existingKeys = await this.getApiKeys();
+    const newKeys = { ...existingKeys, ...keys };
+  }
+
   async getApiKey(key: string): Promise<string | undefined> {
     const keys = await this.getApiKeys();
     return keys[key as keyof TApiKeys];
