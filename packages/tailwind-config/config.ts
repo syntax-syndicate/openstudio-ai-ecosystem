@@ -106,12 +106,12 @@ export const config: Config = {
       //   "4xl": "2.441rem",
       //   "5xl": "3.052rem",
       // },
-      // fontWeights: {
-      //   normal: 350,
-      //   medium: 450,
-      //   semibold: 550,
-      //   bold: 650,
-      // },
+      fontWeight: {
+        normal: "350",
+        medium: "450",
+        semibold: "550",
+        bold: "650",
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
