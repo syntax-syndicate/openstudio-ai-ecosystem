@@ -25,6 +25,7 @@ export const GeminiSettings = () => {
         extra={() => (
           <Link
             href={configs.geminiApiKeyUrl}
+            target="_blank"
             className="font-medium text-blue-400 text-sm hover:opacity-90"
           >
             Get API key here

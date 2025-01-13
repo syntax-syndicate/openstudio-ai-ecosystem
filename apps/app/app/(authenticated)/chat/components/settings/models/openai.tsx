@@ -25,6 +25,7 @@ export const OpenAISettings = () => {
         extra={() => (
           <Link
             href={configs.openaiApiKeyUrl}
+            target="_blank"
             className="font-medium text-blue-400 text-sm hover:opacity-90"
           >
             Get API key here

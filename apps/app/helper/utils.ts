@@ -38,6 +38,15 @@ export const sortSessions = (
   return sessions.sort((a, b) => moment(b[sortBy]).diff(moment(a[sortBy])));
 };
 
+export const isValidUrl = (url: string) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export const sortMessages = (
   messages: Partial<TChatMessage>[],
   sortBy: 'createdAt'

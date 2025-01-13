@@ -24,8 +24,12 @@ export const useLLMRunner = () => {
   const { preferences, apiKeys, updatePreferences } = usePreferenceContext();
   const { getToolByKey } = useTools();
   const { toast } = useToast();
+  const removeLastMessage = store((state) => state.removeLastMessage);
 
   const invokeModel = async (config: TLLMRunConfig) => {
+    if (config?.messageId) {
+      removeLastMessage();
+    }
     resetState();
     setIsGenerating(true);
     const currentAbortController = new AbortController();
@@ -74,7 +78,10 @@ export const useLLMRunner = () => {
 
     const apiKey = apiKeys[selectedModelKey?.provider];
 
-    if (!apiKey) {
+    if (
+      !apiKey &&
+      !['ollama', 'chathub'].includes(selectedModelKey?.provider)
+    ) {
       updateCurrentMessage({
         isLoading: false,
         stop: true,

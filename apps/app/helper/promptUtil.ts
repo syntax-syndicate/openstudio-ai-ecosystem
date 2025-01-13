@@ -12,12 +12,12 @@ const constructPrompt = async (props: TConstructPrompt) => {
   const { context, image, hasMessages, memories, systemPrompt } = props;
   const messagePlaceholders = new MessagesPlaceholder('chat_history');
   const memoryPrompt =
-    memories.length > 0 ? `Things to remember:\n${memories.join('\n')}` : '';
+    memories?.length > 0 ? `Things to remember:\n${memories.join('\n')}` : '';
   const messagesPrompt = hasMessages
     ? `You can also refer to these previous conversations`
     : ``;
 
-  const formatInstructions = props?.formatInstructions
+  const formatInstructions = props.formatInstructions
     ? `\n{format_instructions}`
     : ``;
   const systemMessage: BaseMessagePromptTemplateLike = [
@@ -30,18 +30,16 @@ const constructPrompt = async (props: TConstructPrompt) => {
       : ``
   }`;
   const userMessageContent = image
-    ? new HumanMessage({
-        content: [
-          {
-            type: 'text',
-            text: userContent,
-          },
-          {
-            type: 'image_url',
-            image_url: image,
-          },
-        ],
-      }).content
+    ? [
+        {
+          type: 'text',
+          text: userContent,
+        },
+        {
+          type: 'image_url',
+          image_url: image,
+        },
+      ]
     : userContent;
 
   console.log('userMessageContent', userMessageContent);
@@ -66,13 +64,15 @@ const constructMessagePrompt = async ({
 }) => {
   const sortedMessages = sortMessages(messages, 'createdAt');
   const chatHistory = sortedMessages
-    .slice(0, limit)
+    .slice(-limit)
     .reduce((acc: (HumanMessage | AIMessage)[], { rawAI, rawHuman }) => {
-      if (rawAI && rawHuman) {
-        return [new HumanMessage(rawHuman), new AIMessage(rawAI), ...acc];
-      } else {
-        return acc;
+      if (rawHuman) {
+        acc.push(new HumanMessage(rawHuman));
       }
+      if (rawAI) {
+        acc.push(new AIMessage(rawAI));
+      }
+      return acc;
     }, []);
   return chatHistory;
 };

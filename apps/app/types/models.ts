@@ -1,9 +1,10 @@
 import type { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
-import type { providers } from '@/config/models';
+import type { providers, providersRequireApi } from '@/config/models';
 import type { TToolKey } from '@/types/tools';
 import type { ComponentProps } from 'react';
 
 export type TProvider = (typeof providers)[number];
+export type TProviderRequireApi = (typeof providersRequireApi)[number];
 export const models = [
   'gpt-4o-mini',
   'gpt-4o',

@@ -1,3 +1,4 @@
+import { webPageReaderPrompt } from '@/config/prompts';
 import type { TToolArg } from '@/types';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import axios from 'axios';
@@ -12,8 +13,7 @@ const readerTool = (args: TToolArg) => {
   });
   return new DynamicStructuredTool({
     name: 'webpage_reader',
-    description:
-      'A tool to read a webpage and extract information from it. Useful for when you need to answer questions about a webpage. Input should be a URL of the page to be read.',
+    description: webPageReaderPrompt,
     schema: webSearchSchema,
     func: async ({ url, question }, runManager) => {
       try {
@@ -38,7 +38,7 @@ const readerTool = (args: TToolArg) => {
             return `title: ${result?.title},markdown: ${chunks?.[0]?.pageContent},url: ${result?.url}`;
           })
         );
-        const searchPrompt = `Information: \n\n ${information.join('\n\n')} \n\n Based on the information please answer the given question with proper citations. Question: ${question}`;
+        const searchPrompt = `Information: \n\n ${information.join('\n\n')} \n\n Based on the information please answer the given question with  proper citations. Question: ${question}`;
         sendToolResponse({
           toolName: 'webpage_reader',
           toolArgs: {
