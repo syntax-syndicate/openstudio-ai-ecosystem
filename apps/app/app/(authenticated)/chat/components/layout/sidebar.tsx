@@ -63,9 +63,7 @@ export const Sidebar = () => {
           className="h-8 min-w-8"
           onClick={() => {
             push('/chat');
-            createSession({
-              redirect: true,
-            });
+            createSession();
           }}
         >
           <PlusSignIcon size={20} strokeWidth={2} />
