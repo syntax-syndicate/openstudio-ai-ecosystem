@@ -1,6 +1,7 @@
 import type { TToolArg } from '@/types';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import axios from 'axios';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { z } from 'zod';
 
 const readerTool = (args: TToolArg) => {
@@ -19,16 +20,25 @@ const readerTool = (args: TToolArg) => {
         const readerResults = await axios.post('/api/reader', {
           urls: [url],
         });
-        const information = readerResults?.data?.results
-          ?.filter((result: any) => !!result?.success)
-          ?.map(
-            (result: any) => `
-          title: ${result?.title},
-          markdown: ${result?.markdown},
-          url: ${result?.url},
-        `
-          );
-        const searchPrompt = `Information: \n\n ${information} \n\n Based on snippet please answer the given question with proper citations without using duckduckgo_search function again. Must Remove XML tags if any. Question: ${question}`;
+        const results = readerResults?.data?.results?.filter(
+          (result: any) => !!result?.success
+        );
+        const information = await Promise.all(
+          results?.map(async (result: any) => {
+            const textSplitter = new RecursiveCharacterTextSplitter({
+              chunkSize: 1400,
+              chunkOverlap: 200,
+              separators: ['\n\n'],
+            });
+            const chunks = await textSplitter.createDocuments([
+              result?.markdown,
+            ]);
+            console.log('chunks', chunks?.[0]?.pageContent?.length);
+            console.log('rawchunks', result?.markdown?.length);
+            return `title: ${result?.title},markdown: ${chunks?.[0]?.pageContent},url: ${result?.url}`;
+          })
+        );
+        const searchPrompt = `Information: \n\n ${information.join('\n\n')} \n\n Based on the information please answer the given question with proper citations. Question: ${question}`;
         sendToolResponse({
           toolName: 'webpage_reader',
           toolArgs: {
@@ -43,6 +53,7 @@ const readerTool = (args: TToolArg) => {
         });
         return searchPrompt;
       } catch (error) {
+        console.log('error', error);
         sendToolResponse({
           toolName: 'webpage_reader',
           toolArgs: {
