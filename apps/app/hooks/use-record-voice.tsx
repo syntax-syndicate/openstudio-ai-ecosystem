@@ -4,15 +4,21 @@ import { usePreferenceContext } from '@/context';
 import { blobToBase64 } from '@/helper/record';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import { RecordIcon, StopIcon } from '@repo/design-system/components/ui/icons';
+import {
+  Cancel01Icon,
+  RecordIcon,
+  Tick01Icon,
+} from '@repo/design-system/components/ui/icons';
+import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 import { OpenAI, toFile } from 'openai';
-import { useRef, useState } from 'react';
-import { Type } from '@repo/design-system/components/ui/text';
+import { useEffect, useRef, useState } from 'react';
 
 export const useRecordVoice = () => {
+  const { push } = useRouter();
+  const [startTime, setStartTime] = useState<number>(0);
   const [text, setText] = useState<string>('');
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
@@ -23,12 +29,14 @@ export const useRecordVoice = () => {
   const [recording, setRecording] = useState<boolean>(false);
   const [transcribing, setIsTranscribing] = useState<boolean>(false);
   const { preferences } = usePreferenceContext();
-  const { push } = useRouter();
   const chunks = useRef<Blob[]>([]);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const startRecording = async (): Promise<void> => {
     setText('');
     chunks.current = [];
+    setElapsedTime(0); // Reset elapsed time
+    setStartTime(Date.now()); // Reset start time
     if (mediaRecorder) {
       mediaRecorder.start(1000);
       setRecording(true);
@@ -38,13 +46,11 @@ export const useRecordVoice = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setStream(stream);
       const newMediaRecorder = new MediaRecorder(stream);
+      setStartTime(Date.now());
       newMediaRecorder.ondataavailable = (event) => {
         chunks.current.push(event.data);
       };
-      newMediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(chunks.current, { type: 'audio/wav' });
-        blobToBase64(audioBlob, getText);
-      };
+      newMediaRecorder.onstop = async () => {};
       setMediaRecorder(newMediaRecorder);
       newMediaRecorder.start(1000);
       setRecording(true);
@@ -62,9 +68,18 @@ export const useRecordVoice = () => {
     if (mediaRecorder) {
       mediaRecorder.stop();
       setRecording(false);
+      const audioBlob = new Blob(chunks.current, { type: 'audio/wav' });
+      blobToBase64(audioBlob, getText);
     }
   };
 
+  const cancelRecording = (): void => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+
+      setRecording(false);
+    }
+  };
   const getText = async (base64data: string): Promise<void> => {
     setIsTranscribing(true);
     try {
@@ -102,7 +117,8 @@ export const useRecordVoice = () => {
           'Recordings require OpenAI API key. Please check settings.',
         variant: 'destructive',
       });
-      push('/chat/settings/llms/openai');
+
+      push(`/settings/llms/openai`);
       return;
     }
 
@@ -115,34 +131,11 @@ export const useRecordVoice = () => {
           'Recordings require Speech to Text enabled. Please check settings.',
         variant: 'destructive',
       });
-      push('/chat/settings/voice');
+      push(`/settings/voice`);
     }
   };
 
   const renderRecordingControls = () => {
-    if (recording) {
-      return (
-        <>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="group"
-            onClick={() => {
-              stopRecording();
-            }}
-          >
-            <StopIcon
-              size={18}
-              variant="solid"
-              strokeWidth="2"
-              className="text-rose-400/80"
-            />
-            <span className="hidden group-hover:flex">Stop</span>
-          </Button>
-        </>
-      );
-    }
-
     return (
       <Tooltip content="Record">
         <Button size="icon" variant="ghost" onClick={startVoiceRecording}>
@@ -150,6 +143,27 @@ export const useRecordVoice = () => {
         </Button>
       </Tooltip>
     );
+  };
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (recording) {
+      interval = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        if (elapsedTime > 60000) {
+          stopRecording();
+        } else {
+          setElapsedTime(Math.floor(elapsedTime / 1000));
+        }
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [recording, startTime]);
+
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
   const renderListeningIndicator = () => {
@@ -160,13 +174,71 @@ export const useRecordVoice = () => {
         </Flex>
       );
     }
+    navigator.vibrate(200);
+
     if (recording && stream) {
       return (
-        <Flex items="center" gap="sm">
-          <AudioVisualizer stream={stream} />
-          <Type size="sm" textColor="secondary" className="flex-shrink-0">
-            Listening ...
-          </Type>
+        <Flex
+          className="fixed top-0 right-0 bottom-0 left-0 z-50 bg-white/90 backdrop-blur-sm dark:bg-zinc-800/90"
+          direction="col"
+          items="center"
+          justify="center"
+        >
+          <Flex
+            items="center"
+            direction="col"
+            gap="sm"
+            justify="between"
+            className="h-screen"
+          >
+            <Flex direction="row" gap="sm" items="center" className="p-6">
+              <Flex
+                gap="xs"
+                items="center"
+                className="rounded-full bg-zinc-100 px-4 py-2 dark:bg-zinc-700"
+              >
+                <Type size="base" weight="medium" className="flex-shrink-0">
+                  {formatTime(elapsedTime)}
+                </Type>
+                <Type
+                  textColor="tertiary"
+                  size="base"
+                  weight="medium"
+                  className="flex-shrink-0"
+                >
+                  / 1:00
+                </Type>
+              </Flex>
+            </Flex>
+
+            <AudioVisualizer stream={stream} />
+
+            <Flex gap="sm" className="w-full p-6" justify="center">
+              <Button
+                variant="secondary"
+                rounded="full"
+                size="lg"
+                onClick={() => {
+                  cancelRecording();
+                }}
+                className="group"
+              >
+                <Cancel01Icon size={18} strokeWidth="2" />
+                Cancel
+              </Button>
+              <Button
+                rounded="full"
+                size="lg"
+                onClick={() => {
+                  stopRecording();
+                }}
+                className="group"
+              >
+                <Tick01Icon size={18} strokeWidth="2" />
+                Done
+              </Button>
+            </Flex>
+          </Flex>
         </Flex>
       );
     }
