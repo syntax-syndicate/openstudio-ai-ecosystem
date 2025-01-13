@@ -160,7 +160,7 @@ export const CreateAssistant = ({
       </div>
       <div className="flex w-full flex-row items-center justify-between gap-1 border-zinc-500/20 border-t p-2">
         <Button variant="ghost" onClick={onCancel}>
-          Back
+          Cancel
         </Button>
         <Button
           variant="default"

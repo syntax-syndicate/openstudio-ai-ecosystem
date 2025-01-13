@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
     if (!success) {
       return NextResponse.json(
-        { message: 'Too many requests' },
+        { message: 'Exceeded daily chathub usage limit' },
         { status: 429 }
       );
     }

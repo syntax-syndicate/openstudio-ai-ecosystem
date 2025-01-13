@@ -52,6 +52,7 @@ export const ModelSelect: FC<TModelSelect> = ({
           >
             {activeAssistant?.assistant &&
               getAssistantIcon(activeAssistant?.assistant.key, 'sm')}
+            {activeAssistant?.assistant?.name}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent

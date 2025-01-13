@@ -16,6 +16,9 @@ const getErrorMessage = (error: string) => {
   if (error.includes('image_url') && error.includes('400')) {
     return 'This model does not support images';
   }
+  if (error.includes('429')) {
+    return 'Exceeded daily limit or API is running out of credits.';
+  }
   return undefined;
 };
 
@@ -34,10 +37,10 @@ export const useLLMRunner = () => {
   const removeLastMessage = store((state) => state.removeLastMessage);
 
   const invokeModel = async (config: TLLMRunConfig) => {
-    if (config?.messageId) {
-      removeLastMessage();
+    //to avoid duplication not refetch when regenerating
+    if (!config?.messageId) {
+      refetch();
     }
-    refetch();
     resetState();
     setIsGenerating(true);
     const currentAbortController = new AbortController();
@@ -234,7 +237,9 @@ export const useLLMRunner = () => {
 
                 const hasError: Record<string, boolean> = {
                   cancel: currentAbortController?.signal.aborted,
-                  rateLimit: err.message.includes('429'),
+                  rateLimit:
+                    err.message.includes('429') &&
+                    !err.message.includes('chathub'),
                   unauthorized: err.message.includes('401'),
                 };
 

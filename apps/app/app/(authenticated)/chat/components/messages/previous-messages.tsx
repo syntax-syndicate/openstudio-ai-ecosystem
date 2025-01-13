@@ -27,7 +27,7 @@ export const PreviousMessages = () => {
 
   const previousMessages = useMemo(() => {
     return messages.map(renderMessage);
-  }, [messages, currentMessage]);
+  }, [messages, currentMessage?.stop]);
 
   return previousMessages;
 };
