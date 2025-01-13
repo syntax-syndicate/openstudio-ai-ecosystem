@@ -37,12 +37,16 @@ export const useLLMRunner = () => {
   const removeLastMessage = store((state) => state.removeLastMessage);
 
   const invokeModel = async (config: TLLMRunConfig) => {
+    resetState();
+    setIsGenerating(true);
+    if (config.messageId) {
+      removeLastMessage();
+    }
     //to avoid duplication not refetch when regenerating
     if (!config?.messageId) {
       refetch();
     }
-    resetState();
-    setIsGenerating(true);
+
     const currentAbortController = new AbortController();
     setAbortController(currentAbortController);
     const { sessionId, messageId, input, context, image, assistant } = config;
