@@ -1,3 +1,4 @@
+import { AudioVisualizer } from '@/app/(authenticated)/chat/components/audio-visualizer';
 import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
 import { usePreferenceContext } from '@/context';
 import { blobToBase64 } from '@/helper/record';
@@ -9,9 +10,11 @@ import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 import { OpenAI, toFile } from 'openai';
 import { useRef, useState } from 'react';
+import { Type } from '@repo/design-system/components/ui/text';
 
 export const useRecordVoice = () => {
   const [text, setText] = useState<string>('');
+  const [stream, setStream] = useState<MediaStream | null>(null);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
   );
@@ -33,6 +36,7 @@ export const useRecordVoice = () => {
     }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      setStream(stream);
       const newMediaRecorder = new MediaRecorder(stream);
       newMediaRecorder.ondataavailable = (event) => {
         chunks.current.push(event.data);
@@ -71,27 +75,6 @@ export const useRecordVoice = () => {
         dangerouslyAllowBrowser: true,
       });
       const audioBuffer = Buffer.from(base64data, 'base64');
-
-      const audioCTX = new AudioContext({
-        sampleRate: 20,
-      });
-      const blobUrl = URL.createObjectURL(
-        new Blob([audioBuffer], { type: 'audio/*' })
-      );
-      const audioData = await audioCTX.decodeAudioData(audioBuffer);
-      let audio;
-      if (audioData.numberOfChannels === 2) {
-        const SCALING_FACTOR = Math.sqrt(2);
-        const left = audioData.getChannelData(0);
-        const right = audioData.getChannelData(1);
-        audio = new Float32Array(left.length);
-        for (let i = 0; i < audioData.length; ++i) {
-          audio[i] = (SCALING_FACTOR * (left[i] + right[i])) / 2;
-        }
-      } else {
-        // If the audio is not stereo, we can just use the first channel:
-        audio = audioData.getChannelData(0);
-      }
 
       const transcription = await openai.audio.transcriptions.create({
         file: await toFile(audioBuffer, 'audio.wav', { type: 'audio/wav' }),
@@ -177,11 +160,13 @@ export const useRecordVoice = () => {
         </Flex>
       );
     }
-    if (recording) {
+    if (recording && stream) {
       return (
-        <Flex items="center" gap="sm" className="opacity-50">
-          <AudioWaveSpinner />
-          <p>Listening ...</p>
+        <Flex items="center" gap="sm">
+          <AudioVisualizer stream={stream} />
+          <Type size="sm" textColor="secondary" className="flex-shrink-0">
+            Listening ...
+          </Type>
         </Flex>
       );
     }
