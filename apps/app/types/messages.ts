@@ -30,6 +30,7 @@ export type TChatMessage = {
   isLoading?: boolean;
   stop?: boolean;
   stopReason?: TStopReason;
+  errorMessage?: string;
   createdAt: string;
   relatedQuestions?: string[];
 };

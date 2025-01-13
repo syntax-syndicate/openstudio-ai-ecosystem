@@ -3,8 +3,11 @@ import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/hi
 import { useSessions } from '@/context';
 import {
   ArrowLeft02Icon,
+  Comment01Icon,
   FolderLibraryIcon,
+  Github01Icon,
   HelpCircleIcon,
+  TwitterIcon,
 } from '@hugeicons/react';
 import {
   Button,
@@ -72,14 +75,14 @@ export const Sidebar = () => {
   };
 
   const menuItems = [
-    { label: 'About', onClick: () => {} },
     {
       label: 'Feedback',
       onClick: () => {
         openFeedback(true);
       },
+      icon: Comment01Icon,
     },
-    { label: 'Support', onClick: () => {} },
+    { label: 'Support', onClick: () => {}, icon: HelpCircleIcon },
   ];
 
   const renderSpaces = () => {
@@ -108,42 +111,6 @@ export const Sidebar = () => {
     );
   };
 
-  const renderHelpSupport = () => {
-    return (
-      <DropdownMenu
-        open={isOpen}
-        onOpenChange={(open: boolean) => {
-          document.body.style.pointerEvents = 'auto';
-          setIsOpen(open);
-        }}
-      >
-        <Tooltip content="More" side="top" sideOffset={2}>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="fixed right-4 bottom-[120px] z-10 md:bottom-4"
-            >
-              <HelpCircleIcon size={28} variant="solid" />
-            </Button>
-          </DropdownMenuTrigger>
-        </Tooltip>
-        <DropdownMenuContent
-          className="mr-2 min-w-[250px] text-sm md:text-base"
-          align="end"
-          side="top"
-          sideOffset={2}
-        >
-          {menuItems.map((item, index) => (
-            <DropdownMenuItem key={index} onClick={item.onClick}>
-              {item.label}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
-  };
-
   const renderProfile = () => {
     return (
       <DropdownMenu>
@@ -160,7 +127,7 @@ export const Sidebar = () => {
           </DropdownMenuTrigger>
         </Tooltip>
         <DropdownMenuContent
-          className="mr-2 min-w-[250px] text-sm md:text-base"
+          className="mr-2 min-w-[250px] p-1 text-sm md:text-base"
           align="end"
           side="left"
           sideOffset={4}
@@ -175,14 +142,15 @@ export const Sidebar = () => {
             <Type>ChatHub</Type>
           </Flex>
           <div className="my-1 h-[1px] w-full bg-black/10 dark:bg-white/10" />
-          <DropdownMenuItem
-            onClick={() => {
-              push('/settings');
-            }}
-          >
-            <Settings03Icon size={20} strokeWidth={2} />
-            Settings
-          </DropdownMenuItem>{' '}
+          {menuItems.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <DropdownMenuItem key={index} onClick={item.onClick}>
+                <Icon size={18} variant="stroke" strokeWidth="2" />
+                {item.label}
+              </DropdownMenuItem>
+            );
+          })}
           <DropdownMenuItem
             onClick={() => {
               setTheme(theme === 'light' ? 'dark' : 'light');
@@ -195,6 +163,23 @@ export const Sidebar = () => {
             )}
             Switch to {theme === 'light' ? 'dark' : 'light'} mode
           </DropdownMenuItem>
+          <Flex
+            justify="between"
+            items="center"
+            className="mt-1 w-full border-zinc-500/10 border-t p-1"
+          >
+            <Type size="sm" textColor="secondary">
+              Follow us on{' '}
+            </Type>
+            <Flex>
+              <Button size="iconSm" variant="ghost">
+                <Github01Icon size={20} variant="solid" />
+              </Button>
+              <Button size="iconSm" variant="ghost">
+                <TwitterIcon size={20} variant="solid" />
+              </Button>
+            </Flex>
+          </Flex>
         </DropdownMenuContent>
       </DropdownMenu>
     );
@@ -218,7 +203,6 @@ export const Sidebar = () => {
 
         {renderModal()}
       </div>
-      {renderHelpSupport()}
     </>
   );
 };

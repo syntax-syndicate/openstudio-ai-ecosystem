@@ -1,4 +1,4 @@
-import { duckDuckGoSearchPropmt } from '@/config/prompts';
+import { duckDuckGoSearchPropmt, duckDuckGoToolPrompt } from '@/config/prompts';
 import type { TToolArg } from '@/types';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import axios from 'axios';
@@ -11,8 +11,7 @@ const duckduckGoTool = (args: TToolArg) => {
   });
   return new DynamicStructuredTool({
     name: 'web_search',
-    description:
-      "A search engine optimized for comprehensive, accurate, and trusted results. Useful for when you need to answer questions about current events. Input should be a search query. Don't use tool if already used it to answer the question.",
+    description: duckDuckGoToolPrompt,
     schema: webSearchSchema,
     func: async ({ input }, runManager) => {
       try {

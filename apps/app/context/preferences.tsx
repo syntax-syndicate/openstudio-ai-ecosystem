@@ -31,8 +31,7 @@ export type TPreferencesProvider = {
 };
 
 export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
-  const [preferences, setPreferences] =
-    useState<TPreferences>(defaultPreferences);
+  const [preferences, setPreferences] = useState<TPreferences>();
   const [apiKeys, setApiKeys] = useState<TApiKeys>({});
   const {
     preferencesQuery,
@@ -40,6 +39,10 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
     apiKeysQuery,
     setApiKeyMutation,
   } = usePreferencesQueries();
+
+  useEffect(() => {
+    setPreferences(defaultPreferences);
+  }, []);
 
   useEffect(() => {
     preferencesQuery.data && setPreferences(preferencesQuery.data);
@@ -53,7 +56,11 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
     newPreferences: Partial<TPreferences>,
     onSuccess?: (preference: TPreferences) => void
   ) => {
-    setPreferences((existing) => ({ ...existing, ...newPreferences }));
+    setPreferences((existing) => ({
+      ...defaultPreferences,
+      ...existing,
+      ...newPreferences,
+    }));
     setPreferencesMutation.mutate(newPreferences, {
       onSuccess: (preference) => {
         preferencesQuery.refetch();
@@ -78,7 +85,7 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
   return (
     <PreferenceContext.Provider
       value={{
-        preferences,
+        preferences: { ...defaultPreferences, ...preferences },
         updatePreferences,
         apiKeys,
         updateApiKey,

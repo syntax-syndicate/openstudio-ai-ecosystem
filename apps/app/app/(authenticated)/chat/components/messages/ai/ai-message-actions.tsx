@@ -1,5 +1,5 @@
 import { RegenerateWithModelSelect } from '@/app/(authenticated)/chat/components/regenerate-model-select';
-import { useChatContext, useSessions } from '@/context';
+import { useChatContext, usePreferenceContext, useSessions } from '@/context';
 import { useAssistantUtils, useClipboard } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TChatMessage } from '@/types';
@@ -24,6 +24,7 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
   message,
   canRegenerate,
 }) => {
+  const { updatePreferences } = usePreferenceContext();
   const { refetch, store } = useChatContext();
   const { getAssistantByKey } = useAssistantUtils();
   const { invokeModel } = useLLMRunner();
@@ -46,6 +47,11 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
     if (!props?.assistant) {
       return;
     }
+
+    updatePreferences({
+      defaultAssistant: assistant,
+    });
+
     invokeModel({
       ...message.runConfig,
       messageId: message.id,

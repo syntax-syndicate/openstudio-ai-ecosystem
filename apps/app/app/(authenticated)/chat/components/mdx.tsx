@@ -14,6 +14,7 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
 import type { FC, JSX, ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 export type TMdx = {
   message?: string;
   animate: boolean;
@@ -21,6 +22,34 @@ export type TMdx = {
   size?: 'xs' | 'sm' | 'base';
 };
 const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
+  const [processedMessage, setProcessedMessage] = useState('');
+  useEffect(() => {
+    if (message) {
+      // Process the message to hide incomplete Markdown elements
+      const processed = hideIncompleteMarkdown(message);
+      setProcessedMessage(processed);
+    }
+  }, [message]);
+  const hideIncompleteMarkdown = (text: string) => {
+    // Remove incomplete links
+    text = text.replace(/\[([^\]]*)\](\([^)]*\)?)?/g, (match, text, url) => {
+      return url && url.endsWith(')') ? match : '';
+    });
+    // Remove incomplete images
+    text = text.replace(/!\[([^\]]*)\]\(([^)]*)\)/g, (match, alt, src) => {
+      return src && src.endsWith(')') ? match : '';
+    });
+    // Remove incomplete table cells
+    text = text.replace(/\|([^|]+)\|/g, (match, text) => {
+      return text ? match : '';
+    });
+    // Remove incomplete table cells (duplicate, can be removed)
+    text = text.replace(/\|([^|]+)\|/g, (match, text) => {
+      return text ? match : '';
+    });
+    return text;
+  };
+
   if (!message || !messageId) {
     return null;
   }
@@ -56,9 +85,13 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
               window.open(href, '_blank');
             }}
           >
-            <Flex gap="sm" items="start" className="text-zinc-500">
-              <SearchFavicon link={url} className="!m-0 !mt-1" />
-              <Type size="sm" textColor="secondary" className="line-clamp-2">
+            <Flex gap="sm" items="start" className="w-full text-zinc-500">
+              <SearchFavicon link={url} className="!m-0 !mt-1" size="md" />
+              <Type
+                size="sm"
+                textColor="secondary"
+                className="line-clamp-2 flex-1"
+              >
                 {href}
               </Type>
               <ArrowUpRight
@@ -135,8 +168,9 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
           code: renderCode,
           codespan: renderCodespan,
         }}
+        openLinksInNewTab={true}
       >
-        {message}
+        {processedMessage}
       </Markdown>
     </article>
   );

@@ -15,7 +15,7 @@ export const useLLMTest = () => {
       const modelKey = getTestModelKey(provider);
       console.log('apikey', apiKey);
 
-      if (!apiKey) {
+      if (!apiKey && !['ollama'].includes(provider)) {
         return false;
       }
 

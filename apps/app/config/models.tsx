@@ -163,16 +163,6 @@ export const models: TModelItem[] = [
     provider: 'gemini',
   },
   {
-    name: 'Gemini Pro',
-    key: 'gemini-pro',
-    isNew: false,
-    tokens: 200000,
-    maxOutputTokens: 4096,
-    plugins: [],
-    icon: 'gemini',
-    provider: 'gemini',
-  },
-  {
     name: 'LLama3 70b Groq',
     key: 'llama3-groq-70b-8192-tool-use-preview',
     isNew: false,

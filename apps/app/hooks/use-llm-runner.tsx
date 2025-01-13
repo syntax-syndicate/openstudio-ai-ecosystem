@@ -12,8 +12,15 @@ import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import moment from 'moment';
 import { useAssistantUtils, useTools } from '.';
 
+const getErrorMessage = (error: string) => {
+  if (error.includes('image_url') && error.includes('400')) {
+    return 'This model does not support images';
+  }
+  return undefined;
+};
+
 export const useLLMRunner = () => {
-  const { store } = useChatContext();
+  const { store, refetch } = useChatContext();
   const setIsGenerating = store((state) => state.setIsGenerating);
   const setCurrentMessage = store((state) => state.setCurrentMessage);
   const updateCurrentMessage = store((state) => state.updateCurrentMessage);
@@ -30,6 +37,7 @@ export const useLLMRunner = () => {
     if (config?.messageId) {
       removeLastMessage();
     }
+    refetch();
     resetState();
     setIsGenerating(true);
     const currentAbortController = new AbortController();
@@ -64,7 +72,7 @@ export const useLLMRunner = () => {
       stop: false,
       stopReason: undefined,
       rawAI: undefined,
-      image: undefined,
+      image,
       tools: [],
       relatedQuestions: [],
       createdAt: moment().toISOString(),
@@ -162,6 +170,8 @@ export const useLLMRunner = () => {
       limit: messageLimit,
     });
 
+    console.log('chatHistory', chatHistory);
+
     try {
       const stream: any = await executor.invoke(
         {
@@ -232,11 +242,14 @@ export const useLLMRunner = () => {
                   (value) => hasError[value]
                 ) as TStopReason;
 
+                console.log(err.message);
+
                 updateCurrentMessage({
                   isLoading: false,
                   rawHuman: input,
                   rawAI: streamedMessage,
                   stop: true,
+                  errorMessage: getErrorMessage(err.message),
                   stopReason: stopReason as any,
                 });
               },
@@ -245,10 +258,13 @@ export const useLLMRunner = () => {
         }
       );
 
+      console.log('stream', stream);
+
       updateCurrentMessage({
         rawHuman: input,
         rawAI: stream?.content || stream?.output?.[0]?.text || stream?.output,
         isLoading: false,
+        image,
         stop: true,
         stopReason: 'finish',
       });
