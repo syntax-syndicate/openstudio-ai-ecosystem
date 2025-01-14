@@ -6,7 +6,6 @@ import { useLLMTest } from '@/hooks/use-llm-test';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { FormLabel } from '@repo/design-system/components/ui/form-label';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export const GeminiSettings = () => {
@@ -22,15 +21,8 @@ export const GeminiSettings = () => {
     <Flex direction="col" gap="sm">
       <FormLabel
         label="Google Gemini API Key"
-        extra={() => (
-          <Link
-            href={configs.geminiApiKeyUrl}
-            target="_blank"
-            className="font-medium text-blue-400 text-sm hover:opacity-90"
-          >
-            Get API key here
-          </Link>
-        )}
+        link={configs.geminiApiKeyUrl}
+        linkText="Get API key here"
       />
       <ApiKeyInput
         value={key}

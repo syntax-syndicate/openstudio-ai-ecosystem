@@ -6,7 +6,6 @@ import { useLLMTest } from '@/hooks/use-llm-test';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { FormLabel } from '@repo/design-system/components/ui/form-label';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export const AnthropicSettings = () => {
@@ -22,15 +21,8 @@ export const AnthropicSettings = () => {
     <Flex direction="col" gap="md">
       <FormLabel
         label="Anthropic API Key"
-        extra={() => (
-          <Link
-            href={configs.anthropicApiKeyUrl}
-            target="_blank"
-            className="font-medium text-blue-400 text-sm hover:opacity-90"
-          >
-            Get API key here
-          </Link>
-        )}
+        link={configs.anthropicApiKeyUrl}
+        linkText="Get API key here"
       />
       <ApiKeyInput
         value={key}

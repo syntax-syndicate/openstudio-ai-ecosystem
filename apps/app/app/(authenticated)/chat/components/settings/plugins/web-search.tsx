@@ -15,7 +15,6 @@ import { Input } from '@repo/design-system/components/ui/input';
 import { Type } from '@repo/design-system/components/ui/text';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import axios from 'axios';
-import Link from 'next/link';
 import { useEffect } from 'react';
 
 export const WebSearchPlugin = () => {
@@ -55,7 +54,7 @@ export const WebSearchPlugin = () => {
 
   return (
     <Flex direction="col" gap="sm" className="border-white/10 border-t pt-2">
-      <Flex className="w-full" justify="between" items="center">
+      <Flex className="mb-2 w-full" justify="between" items="center">
         <Type size="sm" textColor="secondary">
           Default Search Engine
         </Type>
@@ -85,19 +84,16 @@ export const WebSearchPlugin = () => {
         </DropdownMenu>
       </Flex>
       {preferences.defaultWebSearchEngine === 'google' && (
-        <Flex direction="col" gap="md" className="w-full">
+        <Flex
+          direction="col"
+          gap="lg"
+          className="w-full border-zinc-500/10 border-t pt-4"
+        >
           <Flex direction="col" gap="sm" className="w-full">
             <FormLabel
               label="Google Search Engine ID"
-              extra={() => (
-                <Link
-                  href={configs.googleSearchApiUrl}
-                  target="_blank"
-                  className="font-medium text-blue-400 text-sm hover:opacity-90"
-                >
-                  Get your ID here
-                </Link>
-              )}
+              linkText="Get your ID here"
+              link={configs.googleSearchApiUrl}
             />
 
             <Input
@@ -113,15 +109,8 @@ export const WebSearchPlugin = () => {
           <Flex direction="col" gap="sm" className="w-full">
             <FormLabel
               label="Google Search Api Key"
-              extra={() => (
-                <Link
-                  href={configs.googleSearchEngineApiKeyUrl}
-                  target="_blank"
-                  className="font-medium text-blue-400 text-sm hover:opacity-90"
-                >
-                  Get your API key here
-                </Link>
-              )}
+              link={configs.googleSearchEngineApiKeyUrl}
+              linkText="Get API key here"
             />
 
             <ApiKeyInput

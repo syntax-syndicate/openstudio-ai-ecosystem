@@ -19,7 +19,7 @@ type RootLayoutProperties = {
 const RootLayout = ({ children }: RootLayoutProperties) => (
   <html
     lang="en"
-    className={cn(interVar.variable, 'antialiased')}
+    className={cn(interVar.variable, 'antialiased', 'light')}
     suppressHydrationWarning
   >
     <head>

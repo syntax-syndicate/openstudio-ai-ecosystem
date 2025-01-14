@@ -1,3 +1,4 @@
+import { AIMessage } from '@/app/(authenticated)/chat/components/messages/ai/ai-message';
 import { ContextMessage } from '@/app/(authenticated)/chat/components/messages/context-message';
 import { HumanMessage } from '@/app/(authenticated)/chat/components/messages/human-message';
 import { ImageMessage } from '@/app/(authenticated)/chat/components/messages/image-message';
@@ -11,8 +12,8 @@ import {
   AccordionTrigger,
 } from '@repo/design-system/components/ui/accordion';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { cn } from '@repo/design-system/lib/utils';
 import { type FC, forwardRef } from 'react';
-import { AIMessage } from './ai/ai-message';
 
 export type TMessage = {
   message: TChatMessage;
@@ -58,7 +59,10 @@ export const Message: FC<TMessage> = ({ message, isLast }) => {
       <AccordionItem
         value={message.id}
         key={message.id}
-        className="flex w-full flex-col items-start gap-1 border-zinc-500/10 border-b py-8"
+        className={cn(
+          'flex w-full flex-col items-start gap-1 border-zinc-500/15 border-b py-8',
+          isLast && 'border-b-0'
+        )}
       >
         <CustomTrigger>
           <Flex direction="col" gap="md" items="start">

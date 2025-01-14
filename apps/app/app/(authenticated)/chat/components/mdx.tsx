@@ -61,7 +61,7 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
     return <Heading>{children}</Heading>;
   };
   const renderHr = () => (
-    <hr className="my-4 border-gray-100 dark:border-white/10" />
+    <hr className="my-4 border-black/5 dark:border-white/5" />
   );
   const renderLink = (href: string, text: ReactNode, messageId: string) => {
     if (text && isValidUrl(href)) {
@@ -135,7 +135,7 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
   );
 
   const articleClass = cn(
-    'prose dark:prose-invert prose-zinc w-full pb-8 prose-h3:font-medium prose-h4:font-medium prose-h5:font-medium prose-h6:font-medium prose-heading:font-medium prose-strong:font-medium prose-h3:text-base prose-h4:text-sm prose-h5:text-sm prose-h6:text-sm prose-headings:text-lg prose-th:text-sm md:prose-h3:text-lg md:prose-h4:text-base md:prose-h5:text-base md:prose-h6:text-base',
+    'prose dark:prose-invert prose-zinc max-w-full pt-2 pb-8 prose-h3:font-medium prose-h4:font-medium prose-h5:font-medium prose-h6:font-medium prose-heading:font-medium prose-p:font-[350] prose-strong:font-medium prose-h3:text-base prose-h4:text-sm prose-h5:text-sm prose-h6:text-sm prose-headings:text-lg prose-p:text-[0.925rem] prose-th:text-sm md:prose-h3:text-lg md:prose-h4:text-base md:prose-h5:text-base md:prose-h6:text-base',
     {
       'prose-sm': size === 'sm',
       'prose-sm md:prose-base': size === 'base',
