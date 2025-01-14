@@ -64,9 +64,6 @@ export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
           >
             Plugins <Badge>Beta</Badge>
           </Type>
-          <p className="flex flex-row gap-2 border-zinc-500/20 border-b px-3 py-2 font-medium text-sm">
-            Plugins <Badge>Beta</Badge>
-          </p>
           <div className="flex flex-col p-1">
             {availableTools.map((tool) => {
               const Icon = tool.icon;
