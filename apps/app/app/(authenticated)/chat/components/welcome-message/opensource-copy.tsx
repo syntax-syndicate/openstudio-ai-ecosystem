@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export const OpenSourceCopy = () => {
   const linkClass =
-    'underline decoration-zinc-500 underline-offset-4 inline-block cursor-pointer';
+    'underline decoration-zinc-500/50 underline-offset-4 cursor-pointer';
   const { renderModal, setOpen: openFeedback } = useFeedback();
   return (
     <>

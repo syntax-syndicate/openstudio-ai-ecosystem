@@ -1,6 +1,6 @@
 'use client';
 
-import { Sidebar } from '@/app/(authenticated)/chat/components/layout/sidebar';
+import { Navbar } from '@/app/(authenticated)/chat/components/layout/navbar';
 import { Toaster } from '@repo/design-system/components/ui/toaster';
 export type MainLayoutProps = {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ export type MainLayoutProps = {
 export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <div className="flex min-h-[100dvh] w-full flex-col justify-start bg-zinc-25 md:flex-row dark:bg-zinc-800">
-      <Sidebar />
+      <Navbar />
       {children}
       <Toaster />
     </div>

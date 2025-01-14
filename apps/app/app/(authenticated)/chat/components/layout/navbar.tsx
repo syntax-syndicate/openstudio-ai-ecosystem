@@ -9,7 +9,9 @@ import { PlusSignIcon } from '@repo/design-system/components/ui/icons';
 import { SidebarTrigger } from '@repo/design-system/components/ui/sidebar';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useRouter } from 'next/navigation';
-export const SidebarItem = ({
+import { BetaTag } from '@repo/design-system/components/ui/beta-tag';
+
+export const NavbarItem = ({
   tooltip,
   icon,
   onClick,
@@ -29,7 +31,7 @@ export const SidebarItem = ({
   );
 };
 
-export const Sidebar = () => {
+export const Navbar = () => {
   const { push } = useRouter();
   const { createSession } = useSessions();
 
@@ -45,10 +47,10 @@ export const Sidebar = () => {
         className="cursor-pointer"
       >
         <ModelIcon type="chathub" size="xs" rounded={false} />
-        <Badge>Beta</Badge>
+        <BetaTag />
       </Flex>
 
-      <SidebarItem
+      <NavbarItem
         tooltip="New Session"
         icon={PlusSignIcon}
         onClick={() => {
