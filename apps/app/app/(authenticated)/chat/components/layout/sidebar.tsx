@@ -29,6 +29,9 @@ import Avatar from 'boring-avatars';
 import { useTheme } from 'next-themes';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import { Badge } from '@repo/design-system/components/ui/badge';
+import { SidebarTrigger } from '@repo/design-system/components/ui/sidebar';
 
 export const Sidebar = () => {
   const { theme, setTheme } = useTheme();
@@ -186,6 +189,9 @@ export const Sidebar = () => {
   return (
     <>
       <div className="group fixed z-10 flex w-full flex-row items-center justify-center gap-3 border-zinc-500/10 p-3 md:h-screen md:w-auto md:flex-col md:border-r dark:border-zinc-500/5">
+        <SidebarTrigger className="-ml-1" />
+        <ModelIcon type="chathub" size="sm" />
+        <Badge>Beta</Badge>
         <div className="flex flex-row items-center gap-2">
           {renderNewSession()}
         </div>
