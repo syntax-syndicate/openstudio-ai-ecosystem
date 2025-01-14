@@ -64,7 +64,6 @@ export default function SettingsPage({
   ];
 
   useEffect(() => {
-    console.log(pathname);
     if (pathname === '/chat/settings') {
       push('/chat/settings/common');
     }

@@ -60,7 +60,7 @@ export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
           <Type
             size="sm"
             weight="medium"
-            className="border-zinc-500/20 border-b px-3 py-2"
+            className="border-zinc-500/20 border-b px-3 py-2 gap-2"
           >
             Plugins <Badge>Beta</Badge>
           </Type>

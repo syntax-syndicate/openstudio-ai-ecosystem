@@ -45,10 +45,8 @@ export class SessionsService {
   async createNewSession() {
     const sessions = (await this.getSessions()) || [];
     const latestSession = sortSessions(sessions, 'createdAt')?.[0];
-    console.log('new session sort', latestSession);
     const latestSessionMessages =
       (await this.messagesService.getMessages(latestSession?.id)) || [];
-    console.log('new session message', latestSessionMessages);
     if (latestSession && latestSessionMessages?.length === 0) {
       return latestSession;
     }
@@ -57,7 +55,6 @@ export class SessionsService {
       title: 'Untitled',
       createdAt: moment().toISOString(),
     };
-    console.log('new session', newSession);
     const newSessions = [...(sessions || []), newSession];
     await set('chat-sessions', newSessions);
     return newSession;

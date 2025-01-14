@@ -11,7 +11,7 @@ export const ChatEditor: FC<TChatEditor> = ({ sendMessage }) => {
   const { store } = useChatContext();
   const editor = store((state) => state.editor);
   const isGenerating = store((state) => state.isGenerating);
-  console.log(isGenerating);
+
   if (!editor) return null;
   const editorContainerClass =
     'no-scrollbar [&>*]:no-scrollbar wysiwyg max-h-[120px] min-h-8 w-full cursor-text overflow-y-auto p-1 text-sm outline-none focus:outline-none md:text-base [&>*]:leading-6 [&>*]:outline-none';

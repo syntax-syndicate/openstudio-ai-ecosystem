@@ -17,7 +17,6 @@ export const SessionContext = createContext<TSessionsContext | undefined>(
 export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   const store = createSessionsStore();
   store?.persist?.onFinishHydration((state) => {
-    console.log(state);
     if (!state?.activeSessionId) {
       createSession();
     }
@@ -42,7 +41,6 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   const createSession = async () => {
     try {
       const data = await createNewSessionMutation.mutateAsync(undefined);
-      console.log(store);
       setActiveSessionId(data.id);
     } catch (error) {
       console.error('Failed to create session:', error);

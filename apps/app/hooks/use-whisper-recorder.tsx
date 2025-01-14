@@ -57,7 +57,6 @@ export const useWhisperRecorder = () => {
       //   setText(data.data.text);
       // }
       if (data?.data?.text && data?.status === 'update') {
-        console.log(data);
         setPartialText(data?.data?.[0]?.trim());
       }
     };
@@ -179,7 +178,6 @@ export const useWhisperRecorder = () => {
       new URL('../worker/transformer-worker.js', import.meta.url)
     );
     workerRef.current.addEventListener('message', (event) => {
-      console.log(event.data);
       if (event?.data?.status === 'start') {
         setIsProcessing(true);
         recorderRef.current?.requestData();
@@ -190,9 +188,7 @@ export const useWhisperRecorder = () => {
       }
     });
     return () => {
-      workerRef.current?.removeEventListener('message', (event) => {
-        console.log(event.data);
-      });
+      workerRef.current?.terminate();
     };
   }, []);
   const renderListeningIndicator = () => {

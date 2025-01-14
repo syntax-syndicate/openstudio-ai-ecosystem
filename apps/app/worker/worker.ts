@@ -11,9 +11,7 @@ self.onmessage = async (e) => {
   // Use FileReader to read the file
   const reader = new FileReader();
   reader.onload = async (event) => {
-    console.log(event);
     const typedArray = new Uint8Array(event.target?.result as ArrayBuffer);
-    console.log('typedArray', typedArray);
     try {
       const pdf = await getDocument(typedArray).promise;
       const pages: any[] = [];

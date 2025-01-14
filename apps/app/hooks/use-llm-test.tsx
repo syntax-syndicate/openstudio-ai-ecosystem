@@ -11,17 +11,13 @@ export const useLLMTest = () => {
   const { toast } = useToast();
   const testLLM = async (provider: TProvider, apiKey?: string) => {
     try {
-      console.log('provider', provider);
       const modelKey = getTestModelKey(provider);
-      console.log('apikey', apiKey);
 
       if (!apiKey && !['ollama'].includes(provider)) {
         return false;
       }
 
       const selectedModelKey = getModelByKey(modelKey, provider);
-
-      console.log('selectedModelKey', selectedModelKey);
 
       if (!selectedModelKey) {
         return false;
@@ -32,8 +28,6 @@ export const useLLMTest = () => {
         provider: provider,
         apiKey,
       });
-
-      console.log('selectedModel', selectedModel);
 
       const data = await selectedModel
         .withListeners({
