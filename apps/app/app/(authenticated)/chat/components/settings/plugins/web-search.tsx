@@ -1,5 +1,7 @@
+import ApiKeyInput from '@/app/(authenticated)/chat/components/settings/models/api-key-input';
+import { configs } from '@/config';
 import { usePreferenceContext } from '@/context/preferences';
-import { ArrowRight, CaretDown, Info } from '@phosphor-icons/react';
+import { CaretDown } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   DropdownMenu,
@@ -8,15 +10,13 @@ import {
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { FormLabel } from '@repo/design-system/components/ui/form-label';
 import { Input } from '@repo/design-system/components/ui/input';
 import { Type } from '@repo/design-system/components/ui/text';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import axios from 'axios';
-import { useEffect } from 'react';
-import { FormLabel } from '@repo/design-system/components/ui/form-label';
 import Link from 'next/link';
-import ApiKeyInput from '@/app/(authenticated)/chat/components/settings/models/api-key-input';
-import { configs } from '@/config';
+import { useEffect } from 'react';
 
 export const WebSearchPlugin = () => {
   const { toast } = useToast();
@@ -26,35 +26,35 @@ export const WebSearchPlugin = () => {
 
   const handleRunTest = async () => {
     try {
-      const url = "https://www.googleapis.com/customsearch/v1";
+      const url = 'https://www.googleapis.com/customsearch/v1';
       const params = {
         key: preferences.googleSearchApiKey,
         cx: preferences.googleSearchEngineId,
-        q: "Latest news",
+        q: 'Latest news',
       };
 
       const response = await axios.get(url, { params });
 
       if (response.status === 200) {
         toast({
-          title: "Test successful",
-          description: "Google search plugin is working",
-          variant: "default",
+          title: 'Test successful',
+          description: 'Google search plugin is working',
+          variant: 'default',
         });
       } else {
-        throw new Error("Invalid response");
+        throw new Error('Invalid response');
       }
     } catch (error) {
       toast({
-        title: "Test failed",
-        description: "Google search plugin is not working",
-        variant: "destructive",
+        title: 'Test failed',
+        description: 'Google search plugin is not working',
+        variant: 'destructive',
       });
     }
   };
 
   return (
-    <Flex direction="col" gap="sm" className="border-t border-white/10 pt-2">
+    <Flex direction="col" gap="sm" className="border-white/10 border-t pt-2">
       <Flex className="w-full" justify="between" items="center">
         <Type size="sm" textColor="secondary">
           Default Search Engine
@@ -62,21 +62,21 @@ export const WebSearchPlugin = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="secondary">
-              {preferences.defaultWebSearchEngine}{" "}
+              {preferences.defaultWebSearchEngine}{' '}
               <CaretDown size={12} weight="bold" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[200px]" align="end">
             <DropdownMenuItem
               onClick={() => {
-                updatePreferences({ defaultWebSearchEngine: "google" });
+                updatePreferences({ defaultWebSearchEngine: 'google' });
               }}
             >
               Google
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                updatePreferences({ defaultWebSearchEngine: "duckduckgo" });
+                updatePreferences({ defaultWebSearchEngine: 'duckduckgo' });
               }}
             >
               DuckDuckGo
@@ -84,7 +84,7 @@ export const WebSearchPlugin = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </Flex>
-      {preferences.defaultWebSearchEngine === "google" && (
+      {preferences.defaultWebSearchEngine === 'google' && (
         <Flex direction="col" gap="md" className="w-full">
           <Flex direction="col" gap="sm" className="w-full">
             <FormLabel
@@ -93,7 +93,7 @@ export const WebSearchPlugin = () => {
                 <Link
                   href={configs.googleSearchApiUrl}
                   target="_blank"
-                  className="text-sm font-medium text-blue-400 hover:opacity-90"
+                  className="font-medium text-blue-400 text-sm hover:opacity-90"
                 >
                   Get your ID here
                 </Link>
@@ -117,7 +117,7 @@ export const WebSearchPlugin = () => {
                 <Link
                   href={configs.googleSearchEngineApiKeyUrl}
                   target="_blank"
-                  className="text-sm font-medium text-blue-400 hover:opacity-90"
+                  className="font-medium text-blue-400 text-sm hover:opacity-90"
                 >
                   Get your API key here
                 </Link>

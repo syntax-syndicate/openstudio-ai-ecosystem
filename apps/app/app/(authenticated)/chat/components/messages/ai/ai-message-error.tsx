@@ -1,4 +1,4 @@
-import { usePreferenceContext, useChatContext } from '@/context';
+import { useChatContext, usePreferenceContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TChatMessage } from '@/types';

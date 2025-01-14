@@ -1,7 +1,7 @@
-import { cn } from '@repo/design-system/lib/utils';
-import Image from 'next/image';
-import Avatar from "boring-avatars"
 import { constants } from '@/config/constants';
+import { cn } from '@repo/design-system/lib/utils';
+import Avatar from 'boring-avatars';
+import Image from 'next/image';
 export type ModelIconType =
   | 'gpt3'
   | 'gpt4'
@@ -40,18 +40,18 @@ export const ModelIcon = ({ type, size, base64, name }: TModelIcon) => {
     groq: '/icons/groq.svg',
   };
 
-  if (type === "assistant") {
+  if (type === 'assistant') {
     return (
       <div
         className={cn(
-          "relative overflow-hidden rounded-full",
-          size === "sm" && "h-6 w-6",
-          size === "md" && "h-8 w-8",
-          size === "lg" && "h-10 w-10",
+          'relative overflow-hidden rounded-full',
+          size === 'sm' && 'h-6 w-6',
+          size === 'md' && 'h-8 w-8',
+          size === 'lg' && 'h-10 w-10'
         )}
       >
         <Avatar
-          name={name || "assistant"}
+          name={name || 'assistant'}
           variant="marble"
           square
           size={40}

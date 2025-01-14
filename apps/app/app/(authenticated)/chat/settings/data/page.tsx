@@ -99,9 +99,9 @@ export default function DataSettings() {
               onConfirm={(dismiss) => {
                 updatePreferences(defaultPreferences);
                 toast({
-                  title: "Reset successful",
-                  description: "All preferences have been reset",
-                  variant: "default",
+                  title: 'Reset successful',
+                  description: 'All preferences have been reset',
+                  variant: 'default',
                 });
               }}
             >

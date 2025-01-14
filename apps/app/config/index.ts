@@ -1,10 +1,10 @@
+import { constants } from '@/config/constants';
 import { docs } from '@/config/docs';
 import { examplePrompts } from '@/config/example-prompts';
 import { links } from '@/config/links';
 import { defaultPreferences } from '@/config/preferences';
 import * as prompts from '@/config/prompts';
 import { models } from '@/types';
-import { constants } from '@/config/constants';
 
 const configs = {
   ...links,

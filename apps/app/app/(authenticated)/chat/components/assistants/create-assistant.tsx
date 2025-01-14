@@ -90,7 +90,7 @@ export const CreateAssistant = ({
 
   const handleClearAttachment = () => {
     clearAttachment();
-    formik.setFieldValue("iconURL", "");
+    formik.setFieldValue('iconURL', '');
   };
 
   return (
