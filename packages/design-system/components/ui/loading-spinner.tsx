@@ -58,7 +58,7 @@ export function Spinner() {
   );
 }
 
-export function LinerSpinner() {
+export function LinearSpinner() {
   return (
     <div
       style={{

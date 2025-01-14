@@ -2,7 +2,7 @@ import { cn } from '@repo/design-system/lib/utils';
 import { useCallback, useEffect, useRef } from 'react';
 
 export type AudioVisualizerProps = {
-  stream: MediaStream;
+  stream?: MediaStream | null;
 };
 
 export function AudioVisualizer({ stream }: AudioVisualizerProps) {
@@ -81,6 +81,8 @@ export function AudioVisualizer({ stream }: AudioVisualizerProps) {
       }
     };
   }, [visualize, stream]);
+
+  if (!stream) return null;
 
   return (
     <div className="flex h-24 w-full items-center justify-center space-x-1">

@@ -1,9 +1,14 @@
-import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
+import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-input/chat-examples';
 import { Mdx } from '@/app/(authenticated)/chat/components/mdx';
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { Flex } from '@repo/design-system/components/ui/flex';
 
-export const ChatGreeting = () => {
+export type TWelcomeMessageProps = {
+  show: boolean;
+};
+
+export const WelcomeMessage = ({ show }: TWelcomeMessageProps) => {
+  if (!show) return null;
   return (
     <div className="flex w-full flex-row items-start justify-start gap-2 md:w-[720px]">
       <div className="mt-6 flex w-full flex-col items-start md:flex-row">

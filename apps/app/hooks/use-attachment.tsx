@@ -1,5 +1,4 @@
-import type { TAttachment } from '@/app/(authenticated)/chat/components/chat-input';
-import { usePreferenceContext } from '@/context';
+import type { TAttachment } from '@/types';
 import { X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Pdf01Icon } from '@repo/design-system/components/ui/icons';
@@ -7,7 +6,6 @@ import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { type ChangeEvent, useState } from 'react';
 
 export const useAttachment = () => {
-  const { apiKeys } = usePreferenceContext();
   const [attachment, setAttachment] = useState<TAttachment>();
   const { toast } = useToast();
   const clearAttachment = () => {

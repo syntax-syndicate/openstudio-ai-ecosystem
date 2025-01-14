@@ -108,3 +108,9 @@ export async function imageUrlToBase64(imageUrl: string): Promise<string> {
     reader.readAsDataURL(blob);
   });
 }
+
+export const formatTickerTime = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+};

@@ -7,6 +7,7 @@ export * from '@/types/tools';
 export * from '@/types/documents';
 export * from '@/types/export';
 export * from '@/types/prompt';
+export * from '@/types/attachment';
 
 export enum TStopReason {
   Error = 'error',

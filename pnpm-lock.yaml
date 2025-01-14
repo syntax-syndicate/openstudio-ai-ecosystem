@@ -998,6 +998,9 @@ importers:
       input-otp:
         specifier: ^1.4.1
         version: 1.4.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      lottie-web:
+        specifier: ^5.12.2
+        version: 5.12.2
       lucide-react:
         specifier: ^0.469.0
         version: 0.469.0(react@19.0.0)

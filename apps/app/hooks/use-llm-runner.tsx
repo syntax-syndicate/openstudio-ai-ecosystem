@@ -37,12 +37,12 @@ export const useLLMRunner = () => {
   const { toast } = useToast();
 
   const invokeModel = async (config: TLLMRunConfig) => {
-    setIsGenerating(true);
     //to avoid duplication not refetch when regenerating
     if (!config?.messageId) {
       refetch();
     }
     resetState();
+    setIsGenerating(true);
 
     const currentAbortController = new AbortController();
     setAbortController(currentAbortController);
