@@ -12,6 +12,7 @@ const WHISPER_SAMPLING_RATE = 16_000;
 const MAX_AUDIO_LENGTH = 60; // seconds
 const MAX_SAMPLES = WHISPER_SAMPLING_RATE * MAX_AUDIO_LENGTH;
 
+// WIP: Experimenting with local whisper
 export const useWhisperRecorder = () => {
   const { push } = useRouter();
   const [text, setText] = useState<string>('');
@@ -191,23 +192,27 @@ export const useWhisperRecorder = () => {
       workerRef.current?.terminate();
     };
   }, []);
-  const renderListeningIndicator = () => {
-    if (transcribing) {
-      return (
-        <Flex items="center" gap="sm" className="opacity-50">
-          <AudioWaveSpinner /> <p>Transcribing ...</p>
-        </Flex>
-      );
-    }
-    if (recording) {
-      return (
-        <Flex items="center" gap="sm" className="opacity-50">
-          <AudioWaveSpinner />
-          <p>Listening ...</p>
-        </Flex>
-      );
-    }
-  };
+  
+//   const renderListeningIndicator = () => {
+//     if (transcribing) {
+//       return (
+//         <Flex items="center" gap="sm" className="opacity-50">
+//           <AudioWaveSpinner /> <p>Transcribing ...</p>
+//         </Flex>
+//       );
+//     }
+//     if (recording) {
+//       return (
+//         <Flex items="center" gap="sm" className="opacity-50">
+//           <AudioWaveSpinner />
+//           <p>Listening ...</p>
+//         </Flex>
+//       );
+//     }
+//   };
+
+  const renderListeningIndicator = () => {};
+
   const renderDownloadButton = () => {
     return (
       <Button
@@ -223,6 +228,8 @@ export const useWhisperRecorder = () => {
       </Button>
     );
   };
+
+
   return {
     recording,
     startRecording: startVoiceRecording,
