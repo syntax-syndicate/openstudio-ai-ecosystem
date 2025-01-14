@@ -1,4 +1,4 @@
-import { usePreferenceContext } from '@/context/preferences';
+import { usePreferenceContext, useChatContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TChatMessage } from '@/types';
@@ -26,6 +26,11 @@ export const AIMessageError: FC<TAIMessageError> = ({
   stopReason,
   message,
 }) => {
+  const { store } = useChatContext();
+  const currentMessage = store((state) => state.currentMessage);
+  const removeLastMessage = store((state) => state.removeLastMessage);
+  const setCurrentMessage = store((state) => state.setCurrentMessage);
+
   const { push } = useRouter();
   const { apiKeys } = usePreferenceContext();
   const { getModelByKey } = useAssistantUtils();
@@ -63,7 +68,11 @@ export const AIMessageError: FC<TAIMessageError> = ({
       action: {
         label: 'Retry',
         onClick: () => {
-          invokeModel(message.runConfig);
+          if (currentMessage?.id !== message.id) {
+            removeLastMessage();
+          }
+          setCurrentMessage(undefined);
+          invokeModel({ ...message.runConfig, messageId: message.id });
         },
       },
     },
