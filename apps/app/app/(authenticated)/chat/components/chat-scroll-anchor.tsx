@@ -24,5 +24,5 @@ export const ChatScrollAnchor = ({
       }
     }
   }, [inView, entry, isAtBottom, trackVisibility]);
-  return <div ref={ref} className="h-px w-full" />;
+  return <div ref={ref} className="mt-8 h-px w-full" />;
 };
