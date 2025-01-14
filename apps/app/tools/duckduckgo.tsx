@@ -1,14 +1,18 @@
+import { SearchResults } from '@/app/(authenticated)/chat/components/tools/search-results';
 import { duckDuckGoSearchPropmt, duckDuckGoToolPrompt } from '@/config/prompts';
-import type { TToolArg } from '@/types';
+import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
+import { Globe02Icon } from '@hugeicons/react';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import axios from 'axios';
 import { z } from 'zod';
 
-const duckduckGoTool = (args: TToolArg) => {
-  const { sendToolResponse } = args;
-  const webSearchSchema = z.object({
-    input: z.string(),
-  });
+const webSearchSchema = z.object({
+  input: z.string(),
+});
+
+const duckduckGoFunction = (context: ToolExecutionContext) => {
+  const { updateToolExecutionState } = context;
+
   return new DynamicStructuredTool({
     name: 'web_search',
     description: duckDuckGoToolPrompt,
@@ -21,6 +25,7 @@ const duckduckGoTool = (args: TToolArg) => {
           runManager?.handleToolError('Error performing Duckduck go search');
           throw new Error('Invalid response');
         }
+
         const information = result?.map(
           (result: any) => `
           title: ${result?.title},
@@ -28,12 +33,13 @@ const duckduckGoTool = (args: TToolArg) => {
           link: ${result?.link}
         `
         );
-        sendToolResponse({
+
+        updateToolExecutionState({
           toolName: 'web_search',
-          toolArgs: {
+          executionArgs: {
             input,
           },
-          toolRenderArgs: {
+          renderData: {
             query: input,
             searchResults: result?.map((result: any) => ({
               title: result?.title,
@@ -41,21 +47,39 @@ const duckduckGoTool = (args: TToolArg) => {
               link: result?.link,
             })),
           },
-          toolResponse: result,
-          toolLoading: false,
+          executionResult: result,
+          isLoading: false,
         });
         return duckDuckGoSearchPropmt(input, information);
       } catch (error) {
-        sendToolResponse({
+        updateToolExecutionState({
           toolName: 'web_search',
-          toolArgs: {
+          executionArgs: {
             input,
           },
-          toolLoading: false,
+          isLoading: false,
         });
         return 'Error performing search. Must not use duckduckgo_search tool now. Ask user to check API keys.';
       }
     },
   });
 };
-export { duckduckGoTool };
+
+const duckduckGoToolDefinition: ToolDefinition = {
+  key: 'web_search',
+  description: 'Search on DuckDuckGo',
+  executionFunction: duckduckGoFunction,
+  displayName: 'Web Search',
+  isBeta: true,
+  isVisibleInMenu: true,
+  validateAvailability: async () => Promise.resolve(true),
+  renderComponent: ({ searchResults, query }) => {
+    return <SearchResults searchResults={searchResults} query={query} />;
+  },
+  loadingMessage: 'Searching on DuckDuckGo...',
+  successMessage: 'Results from DuckDuckGo search',
+  icon: Globe02Icon,
+  compactIcon: Globe02Icon,
+};
+
+export { duckduckGoToolDefinition };

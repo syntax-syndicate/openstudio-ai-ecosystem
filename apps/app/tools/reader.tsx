@@ -1,16 +1,18 @@
 import { webPageReaderPrompt } from '@/config/prompts';
-import type { TToolArg } from '@/types';
+import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
+import { Book01Icon } from '@hugeicons/react';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import axios from 'axios';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { z } from 'zod';
+const webSearchSchema = z.object({
+  url: z.string().url().describe('URL of the page to be read'),
+  question: z.string().describe('Question to be asked to the webpage'),
+});
 
-const readerTool = (args: TToolArg) => {
-  const { sendToolResponse } = args;
-  const webSearchSchema = z.object({
-    url: z.string().url().describe('URL of the page to be read'),
-    question: z.string().describe('Question to be asked to the webpage'),
-  });
+const readerFunction = (context: ToolExecutionContext) => {
+  const { updateToolExecutionState } = context;
+
   return new DynamicStructuredTool({
     name: 'webpage_reader',
     description: webPageReaderPrompt,
@@ -20,9 +22,11 @@ const readerTool = (args: TToolArg) => {
         const readerResults = await axios.post('/api/reader', {
           urls: [url],
         });
+
         const results = readerResults?.data?.results?.filter(
           (result: any) => !!result?.success
         );
+
         const information = await Promise.all(
           results?.map(async (result: any) => {
             const textSplitter = new RecursiveCharacterTextSplitter({
@@ -30,37 +34,57 @@ const readerTool = (args: TToolArg) => {
               chunkOverlap: 200,
               separators: ['\n\n'],
             });
+
             const chunks = await textSplitter.createDocuments([
               result?.markdown,
             ]);
+
             return `title: ${result?.title},markdown: ${chunks?.[0]?.pageContent},url: ${result?.url}`;
           })
         );
-        const searchPrompt = `Information: \n\n ${information.join('\n\n')} \n\n Based on the information please answer the given question with  proper citations. Question: ${question}`;
-        sendToolResponse({
+
+        const searchPrompt = `Information: \n\n ${information.join('\n\n')} \n\n Based on the information please answer the given question with proper citations. Question: ${question}`;
+        updateToolExecutionState({
           toolName: 'webpage_reader',
-          toolArgs: {
+          executionArgs: {
             url,
           },
-          toolRenderArgs: {
+          renderData: {
             url,
             information,
           },
-          toolResponse: information,
-          toolLoading: false,
+          executionResult: information,
+          isLoading: false,
         });
         return searchPrompt;
       } catch (error) {
-        sendToolResponse({
+        updateToolExecutionState({
           toolName: 'webpage_reader',
-          toolArgs: {
+          executionArgs: {
             url,
           },
-          toolLoading: false,
+          isLoading: false,
         });
         return 'Error reading webpage. Must not use webpage_reader tool now. Ask user to check API keys.';
       }
     },
   });
 };
-export { readerTool };
+
+const readerToolDefinition: ToolDefinition = {
+  key: 'webpage_reader',
+  description: 'Read and analyze web pages',
+  executionFunction: readerFunction,
+  displayName: 'Web Page Reader',
+  isBeta: false,
+  isVisibleInMenu: false,
+  validateAvailability: async (context) => {
+    return true;
+  },
+  loadingMessage: 'Reading webpage...',
+  successMessage: 'Webpage read successfully',
+  icon: Book01Icon,
+  compactIcon: Book01Icon,
+};
+
+export { readerToolDefinition };

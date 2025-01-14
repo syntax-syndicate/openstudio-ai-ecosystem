@@ -1,14 +1,18 @@
+import { SearchResults } from '@/app/(authenticated)/chat/components/tools/search-results';
 import { googleSearchPrompt } from '@/config/prompts';
-import type { TToolArg } from '@/types';
+import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
+import { Globe02Icon } from '@hugeicons/react';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import axios from 'axios';
 import { z } from 'zod';
 
-const googleSearchTool = (args: TToolArg) => {
-  const { preferences, sendToolResponse } = args;
-  const webSearchSchema = z.object({
-    input: z.string(),
-  });
+const webSearchSchema = z.object({
+  input: z.string(),
+});
+
+const googleSearchFunction = (context: ToolExecutionContext) => {
+  const { preferences, updateToolExecutionState } = context;
+
   return new DynamicStructuredTool({
     name: 'web_search',
     description:
@@ -21,8 +25,10 @@ const googleSearchTool = (args: TToolArg) => {
         cx: preferences.googleSearchEngineId,
         q: input,
       };
+
       try {
         const response = await axios.get(url, { params });
+
         if (response.status !== 200) {
           runManager?.handleToolError('Error performing Google search');
           throw new Error('Invalid response');
@@ -43,12 +49,12 @@ const googleSearchTool = (args: TToolArg) => {
           `
         );
 
-        sendToolResponse({
+        updateToolExecutionState({
           toolName: 'web_search',
-          toolArgs: {
+          executionArgs: {
             input,
           },
-          toolRenderArgs: {
+          renderData: {
             query: input,
             searchResults: googleSearchResult?.map((result: any) => ({
               title: result?.title,
@@ -56,21 +62,44 @@ const googleSearchTool = (args: TToolArg) => {
               link: result?.link,
             })),
           },
-          toolResponse: googleSearchResult,
-          toolLoading: false,
+          executionResult: googleSearchResult,
+          isLoading: false,
         });
         return googleSearchPrompt(input, information);
       } catch (error) {
-        sendToolResponse({
+        updateToolExecutionState({
           toolName: 'web_search',
-          toolArgs: {
+          executionArgs: {
             input,
           },
-          toolLoading: false,
+          isLoading: false,
         });
         return 'Error performing Google search. Ask user to check API keys.';
       }
     },
   });
 };
-export { googleSearchTool };
+
+const googleSearchToolDefinition: ToolDefinition = {
+  key: 'web_search',
+  description: 'Search on Google',
+  executionFunction: googleSearchFunction,
+  displayName: 'Web Search',
+  isBeta: true,
+  isVisibleInMenu: true,
+  validateAvailability: async (context) => {
+    return !!(
+      context?.preferences?.googleSearchApiKey &&
+      context?.preferences?.googleSearchEngineId
+    );
+  },
+  renderComponent: ({ searchResults, query }) => {
+    return <SearchResults searchResults={searchResults} query={query} />;
+  },
+  loadingMessage: 'Searching on Google...',
+  successMessage: 'Results from Google search',
+  icon: Globe02Icon,
+  compactIcon: Globe02Icon,
+};
+
+export { googleSearchToolDefinition };

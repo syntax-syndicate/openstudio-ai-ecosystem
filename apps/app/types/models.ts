@@ -1,6 +1,6 @@
 import type { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import type { providers } from '@/config/models';
-import type { TToolKey } from '@/types/tools';
+import type { ToolKey } from '@/types/tools';
 import type { ComponentProps } from 'react';
 
 export type TProvider = (typeof providers)[number];
@@ -30,7 +30,7 @@ export type TModelItem = {
   icon: ComponentProps<typeof ModelIcon>['type'];
   vision?: boolean;
   tokens: number;
-  plugins: TToolKey[];
+  plugins: ToolKey[];
   provider: TProvider;
   maxOutputTokens: number;
 };

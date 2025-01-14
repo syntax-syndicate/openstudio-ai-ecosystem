@@ -243,9 +243,7 @@ export default function Spaces() {
         },
       }
     );
-
   };
-
 
   return (
     <Flex className="w-full pt-8" items="center" direction="col" gap="md">

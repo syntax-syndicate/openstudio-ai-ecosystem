@@ -1,7 +1,7 @@
 import { usePreferenceContext } from '@/context/preferences';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import { useTools } from '@/hooks/use-tools';
-import type { TToolKey } from '@/types';
+import type { ToolKey } from '@/types';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -24,17 +24,20 @@ export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { tools } = useTools();
   const { getAssistantByKey } = useAssistantUtils();
-  const { preferences, updatePreferences } = usePreferenceContext();
-  const availableTools = tools.filter((tool) => tool.showInMenu);
-  const availableToolsKey = availableTools.map((tool) => tool.key);
-  const [selectedPlugins, setSelectedPlugins] = useState<TToolKey[]>([]);
+  const { preferences, updatePreferences, apiKeys } = usePreferenceContext();
+
+  const availableTools = tools.filter((tool) => tool.isVisibleInMenu);
+  const availableToolKeys = availableTools.map((tool) => tool.key);
+
+  const [selectedPlugins, setSelectedPlugins] = useState<ToolKey[]>([]);
+
   useEffect(() => {
     setSelectedPlugins(
       preferences.defaultPlugins?.filter((p) =>
-        availableToolsKey.includes(p)
+        availableToolKeys.includes(p)
       ) || []
     );
-  }, [isOpen, preferences]);
+  }, [isOpen, preferences.defaultPlugins]);
 
   const assistantProps = getAssistantByKey(selectedAssistantKey);
 
@@ -42,81 +45,89 @@ export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
     return null;
   }
 
-  return (
-    <>
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <Tooltip content="Plugins">
-          <PopoverTrigger asChild>
-            <Button variant="ghost" size="sm">
-              <PuzzleIcon size={18} variant="stroke" strokeWidth="2" />
-              <Badge>{selectedPlugins.length}</Badge>
-            </Button>
-          </PopoverTrigger>
-        </Tooltip>
-        <PopoverContent
-          className="roundex-lg mr-8 w-[340px] p-0 dark:bg-zinc-700"
-          side="top"
-        >
-          <Type
-            size="sm"
-            weight="medium"
-            className="border-zinc-500/20 border-b px-3 py-2 gap-2"
-          >
-            Plugins <Badge>Beta</Badge>
-          </Type>
-          <div className="flex flex-col p-1">
-            {availableTools.map((tool) => {
-              const Icon = tool.icon;
-              return (
-                <div
-                  key={tool.key}
-                  className="flex w-full flex-row items-center gap-3 rounded-lg px-3 py-2 text-xs hover:bg-zinc-50 md:text-sm dark:hover:bg-black/30"
-                >
-                  <Icon size={20} strokeWidth={1.5} />
-                  <Flex direction="col" gap="none" items="start">
-                    <Type size="sm" weight="medium">
-                      {tool.name}
-                    </Type>
-                    <Type size="xs" textColor="tertiary">
-                      {tool.description}
-                    </Type>
-                  </Flex>
-                  <span className="flex-1" />
-                  <Switch
-                    checked={selectedPlugins.includes(tool.key)}
-                    onCheckedChange={async (checked) => {
-                      const defaultPlugins = preferences.defaultPlugins || [];
-                      const isValidated = await tool?.validate?.();
+  const handlePluginToggle = async (
+    tool: (typeof availableTools)[0],
+    checked: boolean
+  ) => {
+    const defaultPlugins = preferences.defaultPlugins || [];
+    const isAvailable = await tool.validateAvailability?.({
+      preferences,
+      apiKeys,
+    });
 
-                      if (checked) {
-                        if (tool?.validate === undefined || isValidated) {
-                          updatePreferences({
-                            defaultPlugins: [...defaultPlugins, tool.key],
-                          });
-                          setSelectedPlugins([...selectedPlugins, tool.key]);
-                        } else {
-                          tool?.validationFailedAction?.();
-                        }
-                      } else {
-                        updatePreferences({
-                          defaultPlugins: defaultPlugins.filter(
-                            (plugin) => plugin !== tool.key
-                          ),
-                        });
-                        setSelectedPlugins(
-                          selectedPlugins.filter(
-                            (plugin) => plugin !== tool.key
-                          )
-                        );
-                      }
-                    }}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </PopoverContent>
-      </Popover>
-    </>
+    if (checked) {
+      if (!tool.validateAvailability || isAvailable) {
+        updatePreferences({ defaultPlugins: [...defaultPlugins, tool.key] });
+        setSelectedPlugins([...selectedPlugins, tool.key]);
+      } else {
+        tool.onValidationFailed?.();
+      }
+    } else {
+      const updatedPlugins = defaultPlugins.filter(
+        (plugin) => plugin !== tool.key
+      );
+      updatePreferences({ defaultPlugins: updatedPlugins });
+      setSelectedPlugins(updatedPlugins);
+    }
+  };
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <Tooltip content="Plugins">
+        <PopoverTrigger asChild>
+          <Button variant="ghost" size="sm">
+            <PuzzleIcon size={18} variant="stroke" strokeWidth="2" />
+            <Badge>{selectedPlugins.length}</Badge>
+          </Button>
+        </PopoverTrigger>
+      </Tooltip>
+      <PopoverContent
+        className="roundex-lg mr-8 w-[340px] p-0 dark:bg-zinc-700"
+        side="top"
+      >
+        <Type
+          size="sm"
+          weight="medium"
+          className="gap-2 border-zinc-500/20 border-b px-3 py-2"
+        >
+          Plugins <Badge>Beta</Badge>
+        </Type>
+        <div className="flex flex-col p-1">
+          {availableTools.map((tool) => (
+            <ToolItem
+              key={tool.key}
+              tool={tool}
+              isSelected={selectedPlugins.includes(tool.key)}
+              onToggle={(checked) => handlePluginToggle(tool, checked)}
+            />
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+type ToolItemProps = {
+  tool: ReturnType<typeof useTools>['tools'][0];
+  isSelected: boolean;
+  onToggle: (checked: boolean) => void;
+};
+
+const ToolItem: FC<ToolItemProps> = ({ tool, isSelected, onToggle }) => {
+  const Icon = tool.icon;
+  return (
+    <div className="flex w-full flex-row items-center gap-3 rounded-lg px-3 py-2 text-xs hover:bg-zinc-50 md:text-sm dark:hover:bg-black/30">
+      <Icon size={20} strokeWidth={1.5} />
+      <Flex direction="col" gap="none" items="start">
+        <Type size="sm" weight="medium">
+          {tool.displayName}
+        </Type>
+        <Type size="xs" textColor="tertiary">
+          {tool.description}
+        </Type>
+      </Flex>
+      <span className="flex-1" />
+      <Switch checked={isSelected} onCheckedChange={onToggle} />
+    </div>
   );
 };

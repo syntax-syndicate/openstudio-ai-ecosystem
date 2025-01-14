@@ -1,5 +1,6 @@
 import { modelService } from '@/services/models';
-import type { TToolArg } from '@/types';
+import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
+import { BrainIcon } from '@hugeicons/react';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { RunnableSequence } from '@langchain/core/runnables';
 import { DynamicStructuredTool } from '@langchain/core/tools';
@@ -14,30 +15,39 @@ const memoryParser = StructuredOutputParser.fromZodSchema(
   })
 );
 
-const memoryTool = (args: TToolArg) => {
-  const { apiKeys, sendToolResponse, preferences, updatePreferences, model } =
-    args;
-  const memorySchema = z.object({
-    memory: z
-      .array(z.string().describe('key information'))
-      .describe(
-        'key informations about the user, any user preference to personalize future interactions.'
-      ),
-    question: z.string().describe('question user asked'),
-  });
+const memoryToolSchema = z.object({
+  memory: z
+    .array(z.string().describe('key information'))
+    .describe(
+      'key informations about the user, any user preference to personalize future interactions.'
+    ),
+  question: z.string().describe('question user asked'),
+});
+
+const memoryFunction = (context: ToolExecutionContext) => {
+  const {
+    apiKeys,
+    preferences,
+    updatePreferences,
+    model,
+    updateToolExecutionState,
+  } = context;
+
   return new DynamicStructuredTool({
     name: 'memory',
     description:
       'Useful when user gives key information, preferences about them for personalize future interactions. user could specifically asked to remember something.',
-    schema: memorySchema,
+    schema: memoryToolSchema,
     func: async ({ memory, question }, runManager) => {
       try {
         const existingMemories = preferences?.memories || [];
+
         const currentModel = await modelService.createInstance({
           model: model,
           provider: model.provider,
           apiKey: apiKeys.openai,
         });
+
         const chain = RunnableSequence.from([
           PromptTemplate.fromTemplate(
             `User's request: "{question}"
@@ -54,41 +64,66 @@ const memoryTool = (args: TToolArg) => {
           currentModel as any,
           memoryParser as any,
         ]);
+
         const response = await chain.invoke({
           new_memory: memory.join('\n'),
           existing_memory: existingMemories.join('\n'),
           question: question,
           format_instructions: memoryParser.getFormatInstructions(),
         });
+
         if (!response?.memories?.length) {
           runManager?.handleToolError('Error performing memory update');
           return question;
         }
 
-        updatePreferences({
+        updatePreferences?.({
           memories: response.memories,
         });
 
-        sendToolResponse({
+        updateToolExecutionState({
           toolName: 'memory',
-          toolArgs: {
+          executionArgs: {
             memory,
+            question,
           },
-          toolLoading: false,
-          toolResponse: response,
+          renderData: {
+            memories: response.memories,
+          },
+          executionResult: response,
+          isLoading: false,
         });
         return question;
       } catch (error) {
-        sendToolResponse({
+        updateToolExecutionState({
           toolName: 'memory',
-          toolArgs: {
+          executionArgs: {
             memory,
+            question,
           },
-          toolLoading: false,
+          isLoading: false,
         });
         return 'Error performing memory update. Please check API keys.';
       }
     },
   });
 };
-export { memoryTool };
+
+const memoryToolDefinition: ToolDefinition = {
+  key: 'memory',
+  description: 'Update and manage user memories',
+  executionFunction: memoryFunction,
+  displayName: 'Memory',
+  isBeta: false,
+  isVisibleInMenu: true,
+  validateAvailability: async (context) => {
+    return true;
+  },
+
+  loadingMessage: 'Updating memories...',
+  successMessage: 'Memories updated successfully',
+  icon: BrainIcon,
+  compactIcon: BrainIcon,
+};
+
+export { memoryToolDefinition };
