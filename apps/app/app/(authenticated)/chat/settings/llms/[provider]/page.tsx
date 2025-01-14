@@ -36,7 +36,7 @@ export default function LLMsSettings() {
   const checkOllamaConnection = async () => {
     try {
       const url = preferences.ollamaBaseUrl;
-      const response = await fetch(url + '/api/tags');
+      await fetch(url + '/api/tags');
       setOllamaConnected(true);
     } catch (error) {
       setOllamaConnected(false);
@@ -84,7 +84,13 @@ export default function LLMsSettings() {
       label: 'Ollama',
       iconType: 'ollama',
       connected: ollamaConnected,
-      settingsComponent: OllamaSettings,
+      settingsComponent: () => (
+        <OllamaSettings
+          onRefresh={() => {
+            checkOllamaConnection();
+          }}
+        />
+      ),
     },
     {
       value: 'groq',

@@ -9,7 +9,7 @@ import { Input } from '@repo/design-system/components/ui/input';
 import { type FC, useState } from 'react';
 
 export type TApiKeyInput = {
-  value: string;
+  value?: string;
   setValue: (key: string) => void;
   isDisabled: boolean;
   placeholder: string;
@@ -31,7 +31,7 @@ const ApiKeyInput: FC<TApiKeyInput> = ({
         value={value}
         disabled={isDisabled}
         type={showKey ? 'text' : 'password'}
-        autoComplete="new-password"
+        autoComplete="off"
         className="w-full pr-16"
         onChange={(e) => {
           setValue(e.target.value);

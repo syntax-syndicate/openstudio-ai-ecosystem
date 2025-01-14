@@ -8,7 +8,8 @@
     "analyze": "ANALYZE=true pnpm build",
     "test": "NODE_ENV=test vitest run",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hugeicons/react": "0.8.0-beta.1",
@@ -63,6 +64,7 @@
     "framer-motion": "^11.15.0",
     "fuse.js": "^7.0.0",
     "highlight.js": "^11.11.1",
+    "husky": "^9.1.7",
     "idb": "^7.1.1",
     "idb-keyval": "^6.2.1",
     "import-in-the-middle": "^1.12.0",
