@@ -57,6 +57,13 @@ export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
           className="roundex-lg mr-8 w-[340px] p-0 dark:bg-zinc-700"
           side="top"
         >
+          <Type
+            size="sm"
+            weight="medium"
+            className="border-zinc-500/20 border-b px-3 py-2"
+          >
+            Plugins <Badge>Beta</Badge>
+          </Type>
           <p className="flex flex-row gap-2 border-zinc-500/20 border-b px-3 py-2 font-medium text-sm">
             Plugins <Badge>Beta</Badge>
           </p>

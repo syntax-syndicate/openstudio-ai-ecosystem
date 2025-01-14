@@ -26,6 +26,7 @@ export const ChatProvider: FC<TChatProvider> = ({ children, sessionId }) => {
 
   useEffect(() => {
     if (sessionId && currentSession?.error) {
+      setCurrentMessage(undefined);
       createSession();
     }
   }, [currentSession?.error, sessionId]);

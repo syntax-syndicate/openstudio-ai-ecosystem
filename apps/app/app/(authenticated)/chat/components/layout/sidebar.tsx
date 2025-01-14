@@ -1,8 +1,8 @@
 import { useFeedback } from '@/app/(authenticated)/chat/components/feedback/use-feedback';
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { useSessions } from '@/context';
 import {
-  ArrowLeft02Icon,
   Comment01Icon,
   FolderLibraryIcon,
   Github01Icon,
@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui';
+import { Badge } from '@repo/design-system/components/ui/badge';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import {
   Moon02Icon,
@@ -23,15 +24,13 @@ import {
   Settings03Icon,
   Sun01Icon,
 } from '@repo/design-system/components/ui/icons';
+import { SidebarTrigger } from '@repo/design-system/components/ui/sidebar';
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import Avatar from 'boring-avatars';
 import { useTheme } from 'next-themes';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
-import { Badge } from '@repo/design-system/components/ui/badge';
-import { SidebarTrigger } from '@repo/design-system/components/ui/sidebar';
 
 export const Sidebar = () => {
   const { theme, setTheme } = useTheme();
@@ -42,22 +41,6 @@ export const Sidebar = () => {
   const { renderModal, setOpen: openFeedback } = useFeedback();
 
   const renderNewSession = () => {
-    if (!pathname.startsWith('/chat')) {
-      return (
-        <Tooltip content="New Session" side="left" sideOffset={4}>
-          <Button
-            size="icon"
-            variant="secondary"
-            className="h-8 min-w-8"
-            onClick={() => {
-              push('/chat');
-            }}
-          >
-            <ArrowLeft02Icon size={20} strokeWidth={2} />
-          </Button>
-        </Tooltip>
-      );
-    }
     return (
       <Tooltip content="New Session" side="left" sideOffset={4}>
         <Button

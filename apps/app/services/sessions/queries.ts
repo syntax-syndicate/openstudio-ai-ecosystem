@@ -64,6 +64,7 @@ export const useChatSessionQueries = () => {
     useQuery({
       queryKey: ['messages', id],
       queryFn: () => messagesService.getMessages(id),
+      enabled: !!id,
     });
   const createNewSessionMutation = useMutation({
     mutationFn: async () => await sessionsService.createNewSession(),
