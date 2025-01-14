@@ -35,6 +35,8 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   const { sessionsQuery, createNewSessionMutation, addMessageMutation } =
     useChatSessionQueriesProps;
 
+  console.log('sessionsQuery', sessionsQuery);
+
   useEffect(() => {
     store.persist.rehydrate();
   }, []);
@@ -43,11 +45,15 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
     if (sessionsQuery?.data) {
       setSessions(sessionsQuery.data);
     }
+    if (sessionsQuery?.data?.length === 0) {
+      createSession();
+    }
   }, [sessionsQuery?.data]);
 
   const createSession = async () => {
     try {
       const data = await createNewSessionMutation.mutateAsync(undefined);
+      console.log('data', data);
       setActiveSessionId(data.id);
     } catch (error) {
       console.error('Failed to create session:', error);
@@ -64,6 +70,8 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
       console.error('Failed to add message:', error);
     }
   };
+
+  console.log('sessions', sessions, activeSessionId);
 
   if (!activeSessionId || sessions?.length === 0) {
     return null;

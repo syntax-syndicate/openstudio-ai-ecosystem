@@ -13,7 +13,7 @@ export default function MemorySettings() {
   const { updatePreferences, preferences } = usePreferenceContext();
   const renderMemory = (memory: string) => {
     return (
-      <SettingCard className="flex flex-row items-center py-1 pr-2 pl-4">
+      <SettingCard className="flex flex-row items-center py-2 pr-2 pl-4">
         <Type size="sm" className="flex-1">
           {memory}
         </Type>

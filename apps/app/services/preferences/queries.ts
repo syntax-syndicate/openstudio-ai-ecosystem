@@ -5,11 +5,11 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 export const usePreferencesQueries = () => {
   const preferencesQuery = useQuery({
     queryKey: ['preferences'],
-    queryFn: preferencesService.getPreferences,
+    queryFn: () => preferencesService.getPreferences(),
   });
   const apiKeysQuery = useQuery({
     queryKey: ['api-keys'],
-    queryFn: preferencesService.getApiKeys,
+    queryFn: () => preferencesService.getApiKeys(),
   });
   const setPreferencesMutation = useMutation({
     mutationFn: async (preferences: Partial<TPreferences>) =>
