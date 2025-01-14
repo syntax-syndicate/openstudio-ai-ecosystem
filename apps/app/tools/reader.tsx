@@ -74,7 +74,7 @@ const readerFunction = (context: ToolExecutionContext) => {
 const readerToolDefinition: ToolDefinition = {
   key: 'webpage_reader',
   description: 'Read and analyze web pages',
-  executionFunction: readerFunction,
+  executionFunction: readerFunction as any,
   displayName: 'Web Page Reader',
   isBeta: false,
   isVisibleInMenu: false,

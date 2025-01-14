@@ -83,7 +83,7 @@ const googleSearchFunction = (context: ToolExecutionContext) => {
 const googleSearchToolDefinition: ToolDefinition = {
   key: 'web_search',
   description: 'Search on Google',
-  executionFunction: googleSearchFunction,
+  executionFunction: googleSearchFunction as any,
   displayName: 'Web Search',
   isBeta: true,
   isVisibleInMenu: true,

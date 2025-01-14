@@ -13,9 +13,9 @@ import { Type } from '@repo/design-system/components/ui/text';
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
+import Link from 'next/link';
 import type { FC, JSX, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
-import Link from "next/link";
 
 export type TMdx = {
   message?: string;

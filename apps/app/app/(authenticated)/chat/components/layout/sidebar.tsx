@@ -174,7 +174,7 @@ export const Sidebar = () => {
           direction="col"
           items="center"
           gap="sm"
-          onClick={() => push("/")}
+          onClick={() => push('/')}
           className="cursor-pointer"
         >
           <ModelIcon type="chathub" size="sm" />

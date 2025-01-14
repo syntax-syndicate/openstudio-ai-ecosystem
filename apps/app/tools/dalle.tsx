@@ -63,7 +63,7 @@ const dalleFunction = (context: ToolExecutionContext) => {
 const dalleToolDefinition: ToolDefinition = {
   key: 'image_generation',
   description: 'Generate images',
-  executionFunction: dalleFunction,
+  executionFunction: dalleFunction as any,
   displayName: 'Image Generation',
   isBeta: true,
   isVisibleInMenu: true,

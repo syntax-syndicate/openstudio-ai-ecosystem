@@ -68,7 +68,7 @@ const duckduckGoFunction = (context: ToolExecutionContext) => {
 const duckduckGoToolDefinition: ToolDefinition = {
   key: 'web_search',
   description: 'Search on DuckDuckGo',
-  executionFunction: duckduckGoFunction,
+  executionFunction: duckduckGoFunction as any,
   displayName: 'Web Search',
   isBeta: true,
   isVisibleInMenu: true,

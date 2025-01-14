@@ -1,4 +1,4 @@
-import type { TAssistant, TProvider, TToolKey } from '@/types';
+import type { TAssistant, TProvider, ToolKey } from '@/types';
 
 export type TApiKeys = Partial<Record<TProvider, string>>;
 
@@ -17,7 +17,7 @@ export type TPreferences = {
   memories: string[];
   suggestRelatedQuestions: boolean;
   generateTitle: boolean;
-  defaultPlugins: TToolKey[];
+  defaultPlugins: ToolKey[];
   whisperSpeechToTextEnabled: boolean;
   dalleImageQuality: 'standard' | 'hd';
   dalleImageSize: '1024x1024' | '1792x1024' | '1024x1792';

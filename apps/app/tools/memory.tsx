@@ -112,7 +112,7 @@ const memoryFunction = (context: ToolExecutionContext) => {
 const memoryToolDefinition: ToolDefinition = {
   key: 'memory',
   description: 'Update and manage user memories',
-  executionFunction: memoryFunction,
+  executionFunction: memoryFunction as any,
   displayName: 'Memory',
   isBeta: false,
   isVisibleInMenu: true,

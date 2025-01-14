@@ -18,7 +18,7 @@ export type ToolExecutionContext = {
 
 export type ToolExecutionState = {
   toolName: string;
-  executionArgs: Record<string, any>;
+  executionArgs?: Record<string, any>;
   renderData?: Record<string, any>;
   executionResult?: any;
   isLoading: boolean;

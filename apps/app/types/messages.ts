@@ -1,4 +1,4 @@
-import type { TAssistant, TToolResponse } from '@/types';
+import type { TAssistant, ToolExecutionState } from '@/types';
 
 export const stopReasons = [
   'error',
@@ -26,7 +26,7 @@ export type TChatMessage = {
   sessionId: string;
   parentId: string;
   runConfig: TLLMRunConfig;
-  tools?: TToolResponse[];
+  tools?: ToolExecutionState[];
   isLoading?: boolean;
   stop?: boolean;
   stopReason?: TStopReason;
