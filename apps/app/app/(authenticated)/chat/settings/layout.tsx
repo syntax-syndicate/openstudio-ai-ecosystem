@@ -1,5 +1,6 @@
 'use client';
 import {
+  ArrowLeft01Icon,
   BrainIcon,
   DashboardCircleIcon,
   Database02Icon,
@@ -77,7 +78,7 @@ export default function SettingsPage({
         key={menu.route}
         onClick={() => push(menu.route)}
         className="w-full justify-start gap-2"
-        size="default"
+        size="sm"
       >
         <Icon
           size={16}
@@ -101,6 +102,18 @@ export default function SettingsPage({
           justify="start"
           className="w-[180px] pt-[60px]"
         >
+          <Button
+            className="w-full"
+            variant="outlined"
+            size="sm"
+            onClick={() => {
+              push('/chat');
+            }}
+          >
+            <ArrowLeft01Icon size={16} />
+            Back
+          </Button>
+          <div className="h-2" />
           {settingMenu.map(renderMenuItem)}
         </Flex>
         <Flex className="no-scrollbar h-full w-full flex-1 overflow-y-auto px-4 py-[60px]">

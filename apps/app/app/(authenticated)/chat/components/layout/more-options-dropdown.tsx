@@ -58,7 +58,7 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
     {
       label: 'Settings',
       onClick: () => {
-        push('/chat/settings');
+        push('/chat/settings/common');
       },
       icon: Settings03Icon,
     },

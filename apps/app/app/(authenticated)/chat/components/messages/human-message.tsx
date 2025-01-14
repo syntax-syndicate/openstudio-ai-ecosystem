@@ -13,11 +13,11 @@ export const HumanMessage = ({ chatMessage }: THumanMessage) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showReadMore, setShowReadMore] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     if (contentRef.current) {
       setShowReadMore(
-        contentRef.current.scrollHeight > contentRef.current.clientHeight,
+        contentRef.current.scrollHeight > contentRef.current.clientHeight
       );
     }
   }, [rawHuman]);
