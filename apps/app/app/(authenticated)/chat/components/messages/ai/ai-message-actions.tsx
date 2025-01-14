@@ -35,6 +35,7 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
   const { tools, runConfig, isLoading, rawAI } = message;
   const isToolRunning = !!tools?.filter((t) => !!t?.toolLoading)?.length;
   const isGenerating = isLoading && !isToolRunning;
+  const removeLastMessage = store((state) => state.removeLastMessage);
 
   const { showCopied, copy } = useClipboard();
   const handleCopyContent = () => {
@@ -42,6 +43,25 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
     if (doc) {
       copy(doc.innerText);
     }
+  };
+
+  const handleDeleteMessage = () => {
+    removeMessageByIdMutation.mutate(
+      {
+        parentId: message.parentId,
+        messageId: message.id,
+      },
+      {
+        onSettled: () => {
+          if (currentMessage?.id === message.id) {
+            setCurrentMessage(undefined);
+          } else {
+            removeLastMessage();
+          }
+          refetch();
+        },
+      }
+    );
   };
 
   const handleRegenerate = (assistant: string) => {
@@ -53,6 +73,10 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
     updatePreferences({
       defaultAssistant: assistant,
     });
+
+    if (currentMessage?.id !== message.id) {
+      removeLastMessage();
+    }
 
     setCurrentMessage(undefined);
 
@@ -98,23 +122,7 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
             <PopOverConfirmProvider
               title="Are you sure you want to delete this message?"
               confimBtnVariant="destructive"
-              onConfirm={() => {
-                removeMessageByIdMutation.mutate(
-                  {
-                    parentId: message.parentId,
-                    messageId: message.id,
-                  },
-                  {
-                    onSuccess: () => {
-                      // if the current message is the one being deleted, set the current message to undefined
-                      if (message.id === currentMessage?.id) {
-                        setCurrentMessage(undefined);
-                      }
-                      refetch();
-                    },
-                  }
-                );
-              }}
+              onConfirm={handleDeleteMessage}
             >
               <Button variant="ghost" size="iconSm" rounded="lg">
                 <Delete01Icon size={18} variant="stroke" strokeWidth="2" />
