@@ -13,10 +13,10 @@ import { useAssistantUtils, useImageAttachment } from '@/hooks';
 import { useChatEditor } from '@/hooks/use-editor';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import { FlexSpacer } from '@repo/design-system/components/ui/flex-spacer';
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import { ChatExamples } from './chat-examples';
 
 export const ChatInput = () => {
   const { store } = useChatContext();
@@ -53,14 +53,13 @@ export const ChatInput = () => {
     isFreshSession && 'top-0'
   );
   const chatContainer = cn(
-    'flex w-full flex-col gap-1 md:w-[700px] lg:w-[720px]',
+    'relative flex w-full flex-col items-center justify-center gap-1 md:w-[700px] lg:w-[720px]',
     isFreshSession && 'h-screen'
   );
   return (
     <div className={chatInputBackgroundContainer}>
       <div className={chatContainer}>
         <WelcomeMessage show={isFreshSession} />
-        <FlexSpacer />
         <Flex items="center" justify="center" gap="sm" className="mb-2">
           <ScrollToBottomButton />
           <StopGenerationButton />
@@ -89,6 +88,7 @@ export const ChatInput = () => {
             />
           </ImageDropzoneRoot>
         </motion.div>
+        {isFreshSession && <ChatExamples />}
       </div>
     </div>
   );

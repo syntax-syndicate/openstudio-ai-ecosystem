@@ -1,5 +1,5 @@
-import { constants } from "@/config";
-import { cn } from "@repo/design-system/lib/utils";
+import { useFeedback } from '@/app/(authenticated)/chat/components/feedback/use-feedback';
+import { constants } from '@/config';
 import {
   Comment01Icon,
   Github01Icon,
@@ -7,20 +7,20 @@ import {
   Moon02Icon,
   Sun01Icon,
   TwitterIcon,
-} from "@hugeicons/react";
-import Avatar from "boring-avatars";
-import { useTheme } from "next-themes";
-import { FC } from "react";
-import { useFeedback } from "@/app/(authenticated)/chat/components/feedback/use-feedback";
+} from '@hugeicons/react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/design-system/components/ui";
-import { Flex } from "@repo/design-system/components/ui/flex";
-import { Tooltip } from "@repo/design-system/components/ui/tooltip-with-content";
+} from '@repo/design-system/components/ui';
+import { Flex } from '@repo/design-system/components/ui/flex';
+import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
+import { cn } from '@repo/design-system/lib/utils';
+import Avatar from 'boring-avatars';
+import { useTheme } from 'next-themes';
+import type { FC } from 'react';
 
 export const MoreOptionsDropdownItem = ({
   label,
@@ -36,7 +36,7 @@ export const MoreOptionsDropdownItem = ({
   const Icon = icon;
   return (
     <DropdownMenuItem key={key} onClick={onClick}>
-      <Icon size={18} variant="stroke" strokeWidth="2" />
+      <Icon size={16} variant="stroke" strokeWidth="2" />
       {label}
     </DropdownMenuItem>
   );
@@ -46,18 +46,20 @@ export type MoreOptionsDropdownProps = {
   className?: string;
 };
 
-export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({ className }) => {
+export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
+  className,
+}) => {
   const { theme, setTheme } = useTheme();
   const { renderModal, setOpen: openFeedback } = useFeedback();
   const menuItems = [
     {
-      label: "Feedback",
+      label: 'Feedback',
       onClick: () => {
         openFeedback(true);
       },
       icon: Comment01Icon,
     },
-    { label: "Support", onClick: () => {}, icon: HelpCircleIcon },
+    { label: 'Support', onClick: () => {}, icon: HelpCircleIcon },
   ];
   return (
     <>
@@ -66,14 +68,14 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({ className })
           <DropdownMenuTrigger asChild>
             <div
               className={cn(
-                "cursor-pointer rounded-full p-1 outline-none ring-2 ring-zinc-500/20 hover:ring-zinc-500/30 focus:outline-none focus:ring-zinc-500/30",
-                className,
+                'cursor-pointer rounded-full p-1 outline-none ring-2 ring-zinc-500/20 hover:ring-zinc-500/30 focus:outline-none focus:ring-zinc-500/30',
+                className
               )}
             >
               <Avatar
-                name={"ChatHub"}
+                name={'ChatHub'}
                 variant="beam"
-                size={28}
+                size={24}
                 colors={constants.avatarColors}
               />
             </div>
@@ -87,10 +89,10 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({ className })
         >
           <Flex className="items-center p-2" gap="md">
             <Avatar
-              name={"ChatHub"}
+              name={'ChatHub'}
               variant="beam"
               size={24}
-              colors={["#4A2BE2", "#D5EC77", "#3EE2DE", "#AF71FF", "#F882B3"]}
+              colors={['#4A2BE2', '#D5EC77', '#3EE2DE', '#AF71FF', '#F882B3']}
             />
           </Flex>
           {menuItems.map((item, index) => {
@@ -118,11 +120,11 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({ className })
           <DropdownMenuSeparator />
           <MoreOptionsDropdownItem
             key={`theme-${theme}`}
-            label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
             onClick={() => {
-              setTheme(theme === "light" ? "dark" : "light");
+              setTheme(theme === 'light' ? 'dark' : 'light');
             }}
-            icon={theme === "light" ? Moon02Icon : Sun01Icon}
+            icon={theme === 'light' ? Moon02Icon : Sun01Icon}
           />
         </DropdownMenuContent>
       </DropdownMenu>

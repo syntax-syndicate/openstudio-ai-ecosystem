@@ -1,22 +1,18 @@
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
+import { MoreOptionsDropdown } from '@/app/(authenticated)/chat/components/layout/more-options-dropdown';
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { useSessions } from '@/context';
-import {
-  FolderLibraryIcon,
-} from '@hugeicons/react';
-import {
-  Button
-} from '@repo/design-system/components/ui';
+import { FolderLibraryIcon } from '@hugeicons/react';
+import { Button } from '@repo/design-system/components/ui';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import {
   PlusSignIcon,
   Settings03Icon,
 } from '@repo/design-system/components/ui/icons';
+import { SidebarTrigger } from '@repo/design-system/components/ui/sidebar';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useRouter } from 'next/navigation';
-import { MoreOptionsDropdown } from '@/app/(authenticated)/chat/components/layout/more-options-dropdown';
-import { SidebarTrigger } from '@repo/design-system/components/ui/sidebar';
 export const SidebarItem = ({
   tooltip,
   icon,
@@ -31,7 +27,7 @@ export const SidebarItem = ({
   return (
     <Tooltip content={tooltip} side="left" sideOffset={4}>
       <Button size="iconSm" variant="ghost" onClick={onClick}>
-        <Icon size={20} strokeWidth={2} />
+        <Icon size={18} strokeWidth={2} />
       </Button>
     </Tooltip>
   );
@@ -42,13 +38,13 @@ export const Sidebar = () => {
   const { createSession } = useSessions();
 
   return (
-    <div className="group fixed z-10 flex w-full flex-row items-center justify-center gap-2.5 border-zinc-500/10 p-2.5 dark:border-zinc-500/5 md:h-screen md:w-auto md:flex-col md:border-r">
+    <div className="group fixed z-10 flex w-full flex-row items-center justify-center gap-2.5 border-zinc-500/10 p-2.5 md:h-screen md:w-auto md:flex-col md:border-r dark:border-zinc-500/5">
       <SidebarTrigger />
       <Flex
         direction="col"
         items="center"
         gap="sm"
-        onClick={() => push("/")}
+        onClick={() => push('/')}
         className="cursor-pointer"
       >
         <ModelIcon type="chathub" size="sm" />
@@ -59,7 +55,7 @@ export const Sidebar = () => {
         tooltip="New Session"
         icon={PlusSignIcon}
         onClick={() => {
-          push("/chat");
+          push('/chat');
           createSession();
         }}
       />
@@ -75,7 +71,7 @@ export const Sidebar = () => {
       <SidebarItem
         tooltip="Settings"
         icon={Settings03Icon}
-        onClick={() => push("/settings")}
+        onClick={() => push('/settings')}
       />
       <MoreOptionsDropdown />
     </div>
