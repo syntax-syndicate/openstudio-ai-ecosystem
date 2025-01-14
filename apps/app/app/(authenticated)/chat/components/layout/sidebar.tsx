@@ -70,7 +70,11 @@ export const Sidebar = () => {
     return (
       <Tooltip content="Spaces (coming soon)" side="left" sideOffset={4}>
         <Button size="iconSm" variant="ghost">
-          <FolderLibraryIcon size={20} strokeWidth={2} />
+          <FolderLibraryIcon
+            size={20}
+            strokeWidth={2}
+            className="text-zinc-500"
+          />
         </Button>
       </Tooltip>
     );

@@ -1,7 +1,5 @@
 import { usePreferenceContext } from '@/context';
-import { AudioWaveSpinner } from '@repo/design-system/components/ui/audio-wave';
 import { Button } from '@repo/design-system/components/ui/button';
-import { Flex } from '@repo/design-system/components/ui/flex';
 import { RecordIcon, StopIcon } from '@repo/design-system/components/ui/icons';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
@@ -192,24 +190,24 @@ export const useWhisperRecorder = () => {
       workerRef.current?.terminate();
     };
   }, []);
-  
-//   const renderListeningIndicator = () => {
-//     if (transcribing) {
-//       return (
-//         <Flex items="center" gap="sm" className="opacity-50">
-//           <AudioWaveSpinner /> <p>Transcribing ...</p>
-//         </Flex>
-//       );
-//     }
-//     if (recording) {
-//       return (
-//         <Flex items="center" gap="sm" className="opacity-50">
-//           <AudioWaveSpinner />
-//           <p>Listening ...</p>
-//         </Flex>
-//       );
-//     }
-//   };
+
+  //   const renderListeningIndicator = () => {
+  //     if (transcribing) {
+  //       return (
+  //         <Flex items="center" gap="sm" className="opacity-50">
+  //           <AudioWaveSpinner /> <p>Transcribing ...</p>
+  //         </Flex>
+  //       );
+  //     }
+  //     if (recording) {
+  //       return (
+  //         <Flex items="center" gap="sm" className="opacity-50">
+  //           <AudioWaveSpinner />
+  //           <p>Listening ...</p>
+  //         </Flex>
+  //       );
+  //     }
+  //   };
 
   const renderListeningIndicator = () => {};
 
@@ -228,7 +226,6 @@ export const useWhisperRecorder = () => {
       </Button>
     );
   };
-
 
   return {
     recording,

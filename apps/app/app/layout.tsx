@@ -3,12 +3,13 @@ import { interVar } from '@/lib/fonts';
 import { DesignSystemProvider } from '@repo/design-system';
 import { cn } from '@repo/design-system/lib/utils';
 import { Toolbar } from '@repo/feature-flags/components/toolbar';
+import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Open Studio - ChatHub',
-  description: 'OpenStudio - App of Apps, Your gateway to AI Powered Applications',
+  description:
+    'OpenStudio - App of Apps, Your gateway to AI Powered Applications',
 };
 
 type RootLayoutProperties = {

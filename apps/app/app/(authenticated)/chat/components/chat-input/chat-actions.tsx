@@ -1,4 +1,5 @@
 import { ImageUpload } from '@/app/(authenticated)/chat/components/chat-input/image-upload';
+import { SpaceSelector } from '@/app/(authenticated)/chat/components/chat-input/space-selector';
 import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
 import { defaultPreferences } from '@/config';
 import {
@@ -74,6 +75,7 @@ export const ChatActions = ({
           showIcon
           handleImageUpload={handleImageUpload}
         />
+        <SpaceSelector />
       </Flex>
       <Flex gap="xs" items="center">
         <Button
