@@ -28,6 +28,16 @@ const slideUpVariant = {
     opacity: 1,
   },
 };
+
+const popInVariant = {
+  hidden: { scale: 0.8, opacity: 0 },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: { duration: 0.2, ease: 'easeInOut', delay: 0.1 },
+  },
+};
+
 const zoomVariant = {
   initial: { scale: 0.8, opacity: 0 },
   animate: {
@@ -36,4 +46,4 @@ const zoomVariant = {
     transition: { duration: 0.5, ease: 'easeInOut', delay: 1 },
   },
 };
-export { slideUpVariant, zoomVariant };
+export { slideUpVariant, zoomVariant, popInVariant };

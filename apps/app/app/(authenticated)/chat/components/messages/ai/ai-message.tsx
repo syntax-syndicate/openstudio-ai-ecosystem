@@ -6,11 +6,12 @@ import { AIMessageError } from '@/app/(authenticated)/chat/components/messages/a
 import { AIRelatedQuestions } from '@/app/(authenticated)/chat/components/messages/ai/ai-related-questions';
 import { AISelectionProvider } from '@/app/(authenticated)/chat/components/messages/ai/ai-selection-provider';
 import { AIToolMessage } from '@/app/(authenticated)/chat/components/messages/ai/ai-tool-message';
+import { ToolBadge } from '@/app/(authenticated)/chat/components/tools/tool-badge';
 import { useChatContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
 import type { TChatMessage } from '@/types';
+import { Book02Icon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 
 export type TAIMessage = {
   message: TChatMessage;
@@ -33,22 +34,24 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
   };
 
   return (
-    <div className="mt-6 flex w-full flex-col items-start md:flex-row">
-      <Tooltip content={runConfig.assistant.name}>
+    <div className="mt-6 flex w-full flex-col items-start overflow-hidden md:flex-row">
+      {/* <Tooltip content={runConfig.assistant.name}>
         <div className="p-2 md:px-3 md:py-2">
           {getAssistantIcon(runConfig.assistant.key, 'sm')}
         </div>
-      </Tooltip>
+      </Tooltip> */}
       <Flex
         ref={messageRef}
         direction="col"
-        gap="none"
+        gap="xs"
         items="start"
-        className="w-full flex-1 overflow-hidden p-2"
+        className="w-full flex-1 overflow-hidden"
       >
         {tools?.map((tool) => (
           <AIToolMessage tool={tool} key={tool.toolName} />
         ))}
+
+        {rawAI && <ToolBadge icon={Book02Icon} text={'Answer'} />}
 
         <AISelectionProvider onSelect={handleSelection}>
           <Mdx message={rawAI} animate={!!isLoading} messageId={id} />

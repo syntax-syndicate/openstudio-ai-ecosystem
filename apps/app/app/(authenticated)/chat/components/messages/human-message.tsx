@@ -1,45 +1,45 @@
 import type { TChatMessage } from '@/types';
-import { Quotes } from '@phosphor-icons/react';
-import { Flex } from '@repo/design-system/components/ui/flex';
-import Image from 'next/image';
+import { ArrowDown01Icon, ArrowUp01Icon } from '@hugeicons/react';
+import { Type } from '@repo/design-system/components/ui/text';
+import { cn } from '@repo/design-system/lib/utils';
+import { useState } from 'react';
 
 export type THumanMessage = {
   chatMessage: TChatMessage;
-  isLast: boolean;
 };
-export const HumanMessage = ({ chatMessage, isLast }: THumanMessage) => {
-  const { rawHuman, runConfig } = chatMessage;
+
+export const HumanMessage = ({ chatMessage }: THumanMessage) => {
+  const { rawHuman } = chatMessage;
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  if (!rawHuman) return null;
 
   return (
-    <>
-      {runConfig?.context && (
-        <div className="ml-16 flex flex-row gap-2 rounded-lg border border-transparent bg-zinc-50 p-2 pr-4 pl-3 text-sm text-zinc-600 hover:border-white/5 md:ml-32 md:text-base dark:bg-black/30 dark:text-zinc-100">
-          <Quotes size={16} weight="bold" className="mt-2 flex-shrink-0" />
-
-          <span className="pt-[0.35em] pb-[0.25em] leading-6">
-            {runConfig?.context}
-          </span>
-        </div>
+    <div className="relative w-full">
+      <Type
+        size="lg"
+        className={cn('relative text-left leading-7', {
+          'line-clamp-2': !isExpanded,
+        })}
+      >
+        {rawHuman}
+      </Type>
+      {rawHuman?.split('\n').length > 2 && (
+        <Type
+          onClick={(e) => {
+            setIsExpanded(!isExpanded);
+            e.stopPropagation();
+          }}
+          className="items-center gap-1 py-1 opacity-60 hover:underline hover:opacity-100"
+        >
+          {isExpanded ? (
+            <ArrowUp01Icon className="h-4 w-4" />
+          ) : (
+            <ArrowDown01Icon className="h-4 w-4" />
+          )}
+          {isExpanded ? 'Read Less' : 'Read More'}
+        </Type>
       )}
-      {runConfig?.image && (
-        <div className="relative h-[120px] min-w-[120px] rounded-lg border border-white/5 shadow-md">
-          <Image
-            src={runConfig?.image}
-            alt="uploaded image"
-            className="h-full w-full overflow-hidden rounded-xl object-cover"
-            width={0}
-            sizes="50vw"
-            height={0}
-          />
-        </div>
-      )}
-      <Flex className="ml-16 md:ml-32" gap="xs" items="center">
-        <div className="flex flex-row gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-sm text-zinc-600 md:text-base dark:bg-black/30 dark:text-zinc-100">
-          <span className="whitespace-pre-wrap pt-[0.20em] pb-[0.15em] leading-6">
-            {rawHuman}
-          </span>
-        </div>
-      </Flex>
-    </>
+    </div>
   );
 };

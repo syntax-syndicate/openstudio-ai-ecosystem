@@ -4,6 +4,7 @@ import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { cn } from "@repo/design-system/lib/utils"
 import { ArrowDown01Icon } from "@hugeicons/react";
+import { AccordionHeader } from "@radix-ui/react-accordion";
 
 const Accordion = AccordionPrimitive.Root;
 const AccordionItem = React.forwardRef<
@@ -56,4 +57,4 @@ const AccordionContent = React.forwardRef<
   </AccordionPrimitive.Content>
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
-export { Accordion, AccordionContent, AccordionItem, AccordionTrigger };
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger, AccordionHeader };

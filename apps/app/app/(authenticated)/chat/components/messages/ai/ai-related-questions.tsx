@@ -1,10 +1,10 @@
+import { ToolBadge } from '@/app/(authenticated)/chat/components/tools/tool-badge';
 import { useChatContext, usePreferenceContext } from '@/context';
 import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TChatMessage } from '@/types';
-import { MessageQuestionIcon } from '@hugeicons/react';
-import { Button } from '@repo/design-system/components/ui';
+import { ArrowRight02Icon, MessageAdd01Icon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { StaggerContainer } from '@repo/design-system/components/ui/stagger-container';
 import { Type } from '@repo/design-system/components/ui/text';
@@ -25,8 +25,11 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
   const { preferences } = usePreferenceContext();
   const { getAssistantByKey } = useAssistantUtils();
   const { invokeModel } = useLLMRunner();
+
   const handleOnClick = (question: string) => {
+    console.log('question', question);
     const assistant = preferences.defaultAssistant;
+
     const props = getAssistantByKey(assistant);
     if (!props?.assistant) {
       return;
@@ -46,28 +49,27 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
   ) {
     return null;
   }
+
   return (
     <StaggerContainer>
-      <Flex direction="col" gap="sm" className="w-full pt-6">
-        <Type
-          size="sm"
-          weight="medium"
-          textColor="secondary"
-          className="items-center gap-2 py-1"
-        >
-          <MessageQuestionIcon size={20} variant="solid" /> Related
-        </Type>
+      <Flex
+        direction="col"
+        gap="sm"
+        className="mt-4 w-full border-zinc-500/10 border-t pt-8"
+      >
+        <ToolBadge icon={MessageAdd01Icon} text={'Related'} />
         {message?.relatedQuestions?.map((question) => {
           return (
             <motion.div key={question} variants={slideUpVariant}>
-              <Button
-                size="sm"
-                className="h-auto text-wrap py-2 text-left"
-                variant="secondary"
+              <Type
+                className="cursor-pointer items-center gap-2 py-0.5 decoration-zinc-500 underline-offset-4 opacity-70 hover:underline hover:opacity-100"
+                size="base"
                 onClick={() => handleOnClick(question)}
+                weight="medium"
               >
+                <ArrowRight02Icon size={18} strokeWidth={2} />
                 {question}
-              </Button>
+              </Type>
             </motion.div>
           );
         })}

@@ -127,6 +127,7 @@ export const useLLMRunner = () => {
     modifiedModel.bindTools = (tools: any[], options: any) => {
       return selectedModel?.bindTools?.(tools, {
         ...options,
+        recursionLimit: 5,
         signal: currentAbortController?.signal,
       });
     };
@@ -170,6 +171,7 @@ export const useLLMRunner = () => {
           input,
         },
         {
+          recursionLimit: 5,
           callbacks: [
             {
               handleLLMStart: async () => {},
