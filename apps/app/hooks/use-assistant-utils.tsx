@@ -74,8 +74,9 @@ export const useAssistantUtils = () => {
         type={
           assistant?.assistant.type === 'base'
             ? assistant?.model?.icon
-            : 'chathub'
+            : 'assistant'
         }
+        name={assistant?.assistant.name}
         size={size}
         base64={assistant?.assistant.iconURL}
       />

@@ -15,7 +15,6 @@ import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
 import Link from 'next/link';
 import type { FC, JSX, ReactNode } from 'react';
-import { useEffect, useState } from 'react';
 
 export type TMdx = {
   message?: string;
@@ -24,14 +23,14 @@ export type TMdx = {
   size?: 'xs' | 'sm' | 'base';
 };
 const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
-  const [processedMessage, setProcessedMessage] = useState('');
-  useEffect(() => {
-    if (message) {
-      // Process the message to hide incomplete Markdown elements
-      const processed = hideIncompleteMarkdown(message);
-      setProcessedMessage(processed);
-    }
-  }, [message]);
+  // const [processedMessage, setProcessedMessage] = useState('');
+  // useEffect(() => {
+  //   if (message) {
+  //     // Process the message to hide incomplete Markdown elements
+  //     const processed = hideIncompleteMarkdown(message);
+  //     setProcessedMessage(processed);
+  //   }
+  // }, [message]);
   const hideIncompleteMarkdown = (text: string) => {
     // Remove incomplete links
     text = text.replace(/\[([^\]]*)\](\([^)]*\)?)?/g, (match, text, url) => {
@@ -172,7 +171,7 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
         }}
         openLinksInNewTab={true}
       >
-        {processedMessage}
+        {message}
       </Markdown>
     </article>
   );
