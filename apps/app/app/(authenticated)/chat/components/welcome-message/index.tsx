@@ -9,8 +9,8 @@ import {
   AiChat02Icon,
   AiLockIcon,
   AiMagicIcon,
-  Github01Icon,
   PuzzleIcon,
+  Rocket01Icon,
 } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
@@ -44,7 +44,7 @@ const welcomePoints: WelcomePoint[] = [
     text: <PrivacyCopy />,
   },
   {
-    icon: Github01Icon,
+    icon: Rocket01Icon,
     text: <OpenSourceCopy />,
   },
 ];
