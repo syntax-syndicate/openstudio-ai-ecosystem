@@ -1,24 +1,29 @@
-import { motion } from 'framer-motion';
+import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
+import { Mdx } from '@/app/(authenticated)/chat/components/mdx';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import { Flex } from '@repo/design-system/components/ui/flex';
 
 export const ChatGreeting = () => {
   return (
     <div className="flex w-full flex-row items-start justify-start gap-2 md:w-[720px]">
-      <motion.h1
-        className="py-2 text-left font-semibold text-3xl text-zinc-800 leading-9 tracking-tight dark:text-zinc-100"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: 1,
-          transition: {
-            duration: 1,
-          },
-        }}
-      >
-        Good Morning,
-        <br />
-        <span className="text-zinc-300 dark:text-zinc-500">
-          How can I help you today?
-        </span>
-      </motion.h1>
+      <div className="mt-6 flex w-full flex-col items-start md:flex-row">
+        <div className="p-2 md:px-3 md:py-2">
+          <ModelIcon type="chathub" size="sm" />
+        </div>
+        <Flex
+          direction="col"
+          gap="none"
+          items="start"
+          className="w-full flex-1 overflow-hidden p-2"
+        >
+          <Mdx
+            message={`Introducing ChatHub! Your conversations remain confidential, saved on your device only, and never utilized for AI model training.`}
+            animate={true}
+            messageId={'intro-message'}
+          />
+          <ChatExamples />
+        </Flex>
+      </div>
     </div>
   );
 };

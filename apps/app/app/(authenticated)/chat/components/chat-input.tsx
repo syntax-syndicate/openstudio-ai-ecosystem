@@ -1,4 +1,3 @@
-import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-examples';
 import { ChatGreeting } from '@/app/(authenticated)/chat/components/chat-greeting';
 import { PluginSelect } from '@/app/(authenticated)/chat/components/plugin-select';
 import { defaultPreferences } from '@/config';
@@ -18,14 +17,11 @@ import {
 import { useChatEditor } from '@/hooks/use-editor';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TAssistant } from '@/types';
-import { AiIdeaIcon } from '@hugeicons/react';
+import { AiIdeaIcon, SentIcon } from '@hugeicons/react';
 import { ArrowElbowDownRight, Stop, X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import {
-  ArrowDown02Icon,
-  Navigation03Icon,
-} from '@repo/design-system/components/ui/icons';
+import { ArrowDown02Icon } from '@repo/design-system/components/ui/icons';
 import { cn } from '@repo/design-system/lib/utils';
 import { EditorContent } from '@tiptap/react';
 import { motion } from 'framer-motion';
@@ -188,18 +184,23 @@ export const ChatInput = () => {
   return (
     <div
       className={cn(
-        'absolute right-0 bottom-0 flex w-full flex-col items-center justify-end gap-2 px-4 pt-16 pb-4 md:justify-center md:px-4',
+        'absolute right-0 bottom-0 flex w-full flex-col items-center justify-end gap-2 px-4 pt-16 pb-4 md:justify-end md:px-4',
         'left-0 bg-gradient-to-t from-70% from-white to-transparent transition-all duration-1000 ease-in-out dark:from-zinc-800',
         isFreshSession && 'top-0'
       )}
     >
-      {isFreshSession && <ChatGreeting />}
-      <div className="mb-2 flex flex-row items-center justify-center gap-2">
-        {renderScrollToBottom()}
-        {renderStopGeneration()}
-      </div>
-
-      <div className="flex w-full flex-col gap-1 md:w-[700px] lg:w-[720px]">
+      <div
+        className={cn(
+          'flex w-full flex-col gap-1 md:w-[700px] lg:w-[720px]',
+          isFreshSession && 'h-screen'
+        )}
+      >
+        {isFreshSession && <ChatGreeting />}
+        <Flex className="flex-1"></Flex>
+        <div className="mb-2 flex flex-row items-center justify-center gap-2">
+          {renderScrollToBottom()}
+          {renderStopGeneration()}
+        </div>
         {renderSelectedContext()}
 
         {editor && (
@@ -294,9 +295,10 @@ export const ChatInput = () => {
                         sendMessage(editor.getText());
                       }}
                     >
-                      <Navigation03Icon
+                      <SentIcon
                         size={18}
-                        variant="stroke"
+                        className="-translate-x-0.5 rotate-45"
+                        variant="solid"
                         strokeWidth="2"
                       />
                     </Button>
@@ -308,7 +310,6 @@ export const ChatInput = () => {
           </motion.div>
         )}
       </div>
-      {isFreshSession && <ChatExamples />}
     </div>
   );
 };
