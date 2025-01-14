@@ -1,4 +1,4 @@
-import { AudioWaveSpinner } from '@/app/(authenticated)/chat/components/audio-wave';
+import { AudioWaveSpinner } from '@repo/design-system/components/ui/audio-wave';
 import { usePreferenceContext } from '@/context';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
