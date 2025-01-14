@@ -21,6 +21,9 @@ const RootLayout = ({ children }: RootLayoutProperties) => (
     className={cn(interVar.variable, 'antialiased')}
     suppressHydrationWarning
   >
+    <head>
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+    </head>
     <body>
       <DesignSystemProvider>{children}</DesignSystemProvider>
       <Toolbar />
