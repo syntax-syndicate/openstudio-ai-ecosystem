@@ -15,6 +15,8 @@ import { motion } from 'framer-motion';
 import Markdown from 'marked-react';
 import type { FC, JSX, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
+import Link from "next/link";
+
 export type TMdx = {
   message?: string;
   animate: boolean;
@@ -68,15 +70,15 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
       return (
         <HoverCard>
           <HoverCardTrigger>
-            <a
-              href={url}
+            <Link
+              href={href}
               target="_blank"
               data-message-id={messageId}
               className="!no-underline font-normal text-blue-500 dark:text-blue-400"
               rel="noreferrer"
             >
               {text}
-            </a>
+            </Link>
           </HoverCardTrigger>
           <HoverCardContent
             sideOffset={12}

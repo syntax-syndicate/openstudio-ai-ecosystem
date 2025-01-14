@@ -29,14 +29,11 @@ import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import Avatar from 'boring-avatars';
 import { useTheme } from 'next-themes';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export const Sidebar = () => {
   const { theme, setTheme } = useTheme();
   const { push } = useRouter();
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
   const { createSession } = useSessions();
   const { renderModal, setOpen: openFeedback } = useFeedback();
 
@@ -173,8 +170,16 @@ export const Sidebar = () => {
     <>
       <div className="group fixed z-10 flex w-full flex-row items-center justify-center gap-3 border-zinc-500/10 p-3 md:h-screen md:w-auto md:flex-col md:border-r dark:border-zinc-500/5">
         <SidebarTrigger className="-ml-1" />
-        <ModelIcon type="chathub" size="sm" />
-        <Badge>Beta</Badge>
+        <Flex
+          direction="col"
+          items="center"
+          gap="sm"
+          onClick={() => push("/")}
+          className="cursor-pointer"
+        >
+          <ModelIcon type="chathub" size="sm" />
+          <Badge>Beta</Badge>
+        </Flex>
         <div className="flex flex-row items-center gap-2">
           {renderNewSession()}
         </div>
