@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'OpenStudio - ChatHub',
     short_name: 'ChatHub',
-    description: 'OpenStudio - ChatHub',
+    description: 'OpenStudio - App of Apps, Your gateway to AI Powered Applications',
     start_url: '/',
     display: 'standalone',
     background_color: '#fff',
