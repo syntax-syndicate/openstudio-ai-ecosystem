@@ -128,13 +128,9 @@ export default function LLMsSettings() {
                 )}
               >
                 {model.connected ? (
-                  <CheckmarkCircle01Icon
-                    size={20}
-                    strokeWidth={1.5}
-                    variant="solid"
-                  />
+                  <CheckmarkCircle01Icon size={16} variant="solid" />
                 ) : (
-                  <Alert01Icon size={20} strokeWidth={1.5} variant="solid" />
+                  <Alert01Icon size={16} strokeWidth={1.5} variant="solid" />
                 )}
               </div>
             </AccordionTrigger>

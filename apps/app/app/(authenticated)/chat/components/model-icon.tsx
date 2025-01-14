@@ -19,7 +19,7 @@ export type ModelIconType =
 
 export type TModelIcon = {
   type: ModelIconType;
-  size: 'sm' | 'md' | 'lg';
+  size: 'sm' | 'md' | 'lg' | 'xs';
   rounded?: boolean;
   base64?: string;
   name?: string;
@@ -52,6 +52,7 @@ export const ModelIcon = ({
       <div
         className={cn(
           'relative overflow-hidden rounded-md',
+          size === 'xs' && 'h-5 w-5',
           size === 'sm' && 'h-6 w-6',
           size === 'md' && 'h-8 w-8',
           size === 'lg' && 'h-10 w-10',
@@ -73,6 +74,7 @@ export const ModelIcon = ({
     <div
       className={cn(
         'relative overflow-hidden rounded-md',
+        size === 'xs' && 'h-5 w-5',
         size === 'sm' && 'h-6 w-6',
         size === 'md' && 'h-8 w-8',
         size === 'lg' && 'h-10 w-10',

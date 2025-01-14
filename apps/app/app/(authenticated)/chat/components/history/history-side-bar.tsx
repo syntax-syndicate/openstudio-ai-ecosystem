@@ -15,8 +15,8 @@ export const HistorySidebar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <Drawer.Root direction="left" open={open} onOpenChange={setOpen}>
-      <Tooltip content="Chat History" side="left" sideOffset={4}>
+    <Drawer.Root direction="right" open={open} onOpenChange={setOpen}>
+      <Tooltip content="Chat History" side="bottom" sideOffset={4}>
         <Drawer.Trigger asChild>
           <Button variant="ghost" size="iconSm">
             <MessageMultiple02Icon size={18} strokeWidth={2} />
@@ -26,7 +26,7 @@ export const HistorySidebar = () => {
 
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[10] bg-zinc-500/70 backdrop-blur-sm dark:bg-zinc-900/70" />
-        <Drawer.Content className="fixed top-2 left-2 z-[901] flex h-[98dvh] w-[320px] flex-col rounded-3xl outline-none md:bottom-2">
+        <Drawer.Content className="fixed top-2 right-2 z-[901] flex h-[98dvh] w-[320px] flex-col rounded-3xl outline-none md:bottom-2">
           <div className="relative flex h-[98dvh] flex-1 flex-row rounded-lg bg-white dark:border dark:border-white/5 dark:bg-zinc-800">
             <Flex
               direction="col"

@@ -1,4 +1,5 @@
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { Type } from '@repo/design-system/components/ui/text';
 import { cn } from '@repo/design-system/lib/utils';
 import type { ComponentProps, FC } from 'react';
 
@@ -19,9 +20,13 @@ export const SettingsContainer: FC<
       )}
       {...props}
     >
-      <p className="pt-4 pb-2 font-semibold text-xl text-zinc-800 dark:text-zinc-50">
+      <Type
+        size="lg"
+        weight="medium"
+        className="w-full border-zinc-500/10 border-b pb-4"
+      >
         {title}
-      </p>
+      </Type>
       {children}
     </Flex>
   );

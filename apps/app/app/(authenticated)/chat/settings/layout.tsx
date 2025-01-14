@@ -1,6 +1,5 @@
 'use client';
 import {
-  ArrowLeft02Icon,
   BrainIcon,
   DashboardCircleIcon,
   Database02Icon,
@@ -80,7 +79,12 @@ export default function SettingsPage({
         className="w-full justify-start gap-2"
         size="default"
       >
-        <Icon size={18} variant="solid" className="dark:text-zinc-500" />
+        <Icon
+          size={16}
+          strokeWidth={2}
+          variant="solid"
+          className="dark:text-zinc-500"
+        />
         <span className={cn('font-medium text-xs md:flex md:text-sm')}>
           {menu.name}
         </span>
@@ -89,30 +93,20 @@ export default function SettingsPage({
   };
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white md:flex-row dark:bg-zinc-800">
-      <div className="no-scrollbar absolute top-0 right-0 left-0 flex w-full flex-row items-end gap-1 overflow-x-auto border-zinc-500/10 bg-zinc-50/50 px-2 pt-2 pb-2 md:bottom-0 md:h-full md:w-[30vw] md:flex-col md:gap-0 md:overflow-y-auto md:pt-0 md:pb-16 dark:bg-zinc-900/50">
-        <div className="mt-[60px] flex w-full flex-row items-start justify-start gap-1 p-2 md:mt-0 md:w-[200px] md:flex-col md:p-4 md:pr-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => push('/')}
-            className="w-full justify-start gap-2"
-          >
-            <ArrowLeft02Icon size={18} variant="solid" /> Back
-          </Button>
-          <Flex
-            direction="row"
-            gap="xs"
-            justify="start"
-            className="w-full md:flex-col"
-          >
-            {settingMenu.map(renderMenuItem)}
-          </Flex>
-        </div>
-      </div>
-      <div className="no-scrollbar mt-32 h-full w-full max-w-[720px] overflow-y-auto p-0 pb-16 md:mt-0 md:ml-[30vw] md:p-8">
-        {children}
-      </div>
-    </div>
+    <Flex justify="center" className="w-full">
+      <Flex className="relative h-[100dvh] w-[800px]">
+        <Flex
+          direction="col"
+          gap="xs"
+          justify="start"
+          className="w-[180px] pt-[60px]"
+        >
+          {settingMenu.map(renderMenuItem)}
+        </Flex>
+        <Flex className="no-scrollbar h-full w-full flex-1 overflow-y-auto px-4 py-[60px]">
+          {children}
+        </Flex>
+      </Flex>
+    </Flex>
   );
 }

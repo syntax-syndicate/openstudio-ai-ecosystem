@@ -2,14 +2,10 @@ import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/hi
 import { MoreOptionsDropdown } from '@/app/(authenticated)/chat/components/layout/more-options-dropdown';
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { useSessions } from '@/context';
-import { FolderLibraryIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import {
-  PlusSignIcon,
-  Settings03Icon,
-} from '@repo/design-system/components/ui/icons';
+import { PlusSignIcon } from '@repo/design-system/components/ui/icons';
 import { SidebarTrigger } from '@repo/design-system/components/ui/sidebar';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useRouter } from 'next/navigation';
@@ -25,7 +21,7 @@ export const SidebarItem = ({
   if (!icon) return null;
   const Icon = icon;
   return (
-    <Tooltip content={tooltip} side="left" sideOffset={4}>
+    <Tooltip content={tooltip} side="bottom" sideOffset={4}>
       <Button size="iconSm" variant="ghost" onClick={onClick}>
         <Icon size={18} strokeWidth={2} />
       </Button>
@@ -38,16 +34,17 @@ export const Sidebar = () => {
   const { createSession } = useSessions();
 
   return (
-    <div className="group fixed z-10 flex w-full flex-row items-center justify-center gap-2.5 border-zinc-500/10 p-2.5 md:h-screen md:w-auto md:flex-col md:border-r dark:border-zinc-500/5">
+    <div className="group fixed top-0 right-0 left-0 z-10 flex w-full flex-row items-center justify-center gap-2.5 border-zinc-500/10 py-2 pr-2 pl-4 md:border-r dark:border-zinc-500/5">
+      <Flex className="flex-1" />
       <SidebarTrigger />
       <Flex
-        direction="col"
+        direction="row"
         items="center"
         gap="sm"
         onClick={() => push('/')}
         className="cursor-pointer"
       >
-        <ModelIcon type="chathub" size="sm" />
+        <ModelIcon type="chathub" size="xs" rounded={false} />
         <Badge>Beta</Badge>
       </Flex>
 
@@ -59,20 +56,8 @@ export const Sidebar = () => {
           createSession();
         }}
       />
-
+      {/* <Flex className="flex-1" /> */}
       <HistorySidebar />
-      <SidebarItem
-        tooltip="Spaces (coming soon)"
-        icon={FolderLibraryIcon}
-        onClick={() => {}}
-      />
-
-      <Flex className="flex-1" />
-      <SidebarItem
-        tooltip="Settings"
-        icon={Settings03Icon}
-        onClick={() => push('/settings')}
-      />
       <MoreOptionsDropdown />
     </div>
   );
