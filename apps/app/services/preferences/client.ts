@@ -7,7 +7,6 @@ export class PreferenceService {
     return (await get('api-keys')) || {};
   }
   async getPreferences(): Promise<TPreferences> {
-    console.log('getPreferences');
     return (await get('preferences')) as TPreferences;
   }
   async setPreferences(

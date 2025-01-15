@@ -35,7 +35,6 @@ export const AnthropicSettings = () => {
       <Flex gap="sm">
         {!apiKeys.anthropic && (
           <Button
-            size="sm"
             variant="default"
             onClick={() => {
               checkApiKey({
@@ -56,7 +55,6 @@ export const AnthropicSettings = () => {
 
         {apiKeys?.anthropic && (
           <Button
-            size="sm"
             variant="secondary"
             onClick={() => {
               setKey('');

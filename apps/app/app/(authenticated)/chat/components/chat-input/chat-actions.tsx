@@ -14,6 +14,7 @@ import { AiIdeaIcon, SentIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { cn } from '@repo/design-system/lib/utils';
+import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export type TChatActions = {
@@ -59,13 +60,14 @@ export const ChatActions = ({
     >
       <Flex gap="xs" items="center">
         <Button
-          variant="ghost"
+          variant="secondary"
           onClick={openAssistants}
-          className="gap-2 pr-3 pl-1.5 text-xs md:text-sm"
+          className="gap-1 pr-3 pl-1.5"
           size="sm"
         >
           {assistantKey && getAssistantIcon(assistantKey, 'sm')}
           {assistantName}
+          <ChevronDown size={16} strokeWidth={2} />
         </Button>
         <PluginSelect selectedAssistantKey={selectedAssistantKey} />
         <ImageUpload
@@ -83,7 +85,6 @@ export const ChatActions = ({
           onClick={() => {
             openPrompts();
           }}
-          className="gap-2 pr-3 pl-1.5 text-xs md:text-sm"
           size="sm"
         >
           <AiIdeaIcon size={16} variant="stroke" strokeWidth="2" />

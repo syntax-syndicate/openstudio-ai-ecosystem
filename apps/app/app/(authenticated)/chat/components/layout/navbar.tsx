@@ -69,7 +69,16 @@ export const Navbar = () => {
         }}
       />
       {/* <Flex className="flex-1" /> */}
-      <HistorySidebar />
+      <Flex direction="row" items="center" gap="none">
+        <NavbarItem
+          tooltip="Github"
+          icon={Github01Icon}
+          onClick={() => {
+            window.open('https://git.new/llmchat', '_blank');
+          }}
+        />
+        <HistorySidebar />
+      </Flex>
       <MoreOptionsDropdown />
     </div>
   );

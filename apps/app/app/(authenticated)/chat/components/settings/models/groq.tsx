@@ -32,7 +32,6 @@ export const GroqSettings = () => {
       <Flex gap="sm">
         {!apiKeys.groq && (
           <Button
-            size="sm"
             variant="default"
             onClick={() => {
               checkApiKey({
@@ -52,7 +51,6 @@ export const GroqSettings = () => {
         )}
         {apiKeys?.anthropic && (
           <Button
-            size="sm"
             variant="secondary"
             onClick={() => {
               setKey('');

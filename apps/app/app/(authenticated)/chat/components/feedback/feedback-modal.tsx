@@ -1,18 +1,18 @@
 'use client';
-import {
-  Comment01Icon,
-  NeutralIcon,
-  Sad01Icon,
-  SmileIcon,
-} from '@hugeicons/react';
+import { NeutralIcon, Sad01Icon, SmileIcon } from '@hugeicons/react';
 import { Button, Input, Textarea } from '@repo/design-system/components/ui';
+import {
+  Dialog,
+  DialogContent,
+  DialogPortal,
+} from '@repo/design-system/components/ui/dialog';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { FormLabel } from '@repo/design-system/components/ui/form-label';
 import { Type } from '@repo/design-system/components/ui/text';
 import { useToast } from '@repo/design-system/hooks/use-toast';
 import { cn } from '@repo/design-system/lib/utils';
 import { useFormik } from 'formik';
-import { Drawer } from 'vaul';
+import { Flag } from 'lucide-react';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
@@ -62,25 +62,17 @@ export const FeedbackModal = ({ open, onOpenChange }: FeedbackModalProps) => {
     { type: 'negative', icon: Sad01Icon, color: 'text-rose-400' },
   ];
   return (
-    <Drawer.Root
-      direction="bottom"
-      shouldScaleBackground
-      open={open}
-      onOpenChange={onOpenChange}
-    >
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[400] bg-zinc-500/70 backdrop-blur-sm dark:bg-zinc-900/70" />
-        <Drawer.Content
-          className={cn(
-            'fixed right-0 bottom-0 left-0 z-[500] mx-auto mt-24 flex max-h-[530px] flex-col items-center outline-none md:bottom-4 md:left-[50%]',
-            `w-full md:ml-[-200px] md:w-[400px]`
-          )}
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogPortal>
+        <DialogContent
+          ariaTitle="Assistants"
+          className="!w-[450px] rounded-xl bg-white p-0 dark:border dark:border-white/10"
         >
-          <div className="relative w-full space-y-4 rounded-lg bg-white dark:border dark:border-white/10 dark:bg-zinc-800">
-            <Flex className="w-full border-b p-3" gap="sm" items="center">
-              <Comment01Icon size={20} variant="solid" />
+          <div className="relative w-full space-y-4">
+            <Flex className="w-full p-4" gap="sm" items="center">
+              <Flag size={20} strokeWidth={2} />
               <Type size="base" weight="medium">
-                Share your feedback
+                Share your insights
               </Type>
             </Flex>
             <Flex gap="sm" direction="col" className="w-full px-3 pb-3">
@@ -88,6 +80,7 @@ export const FeedbackModal = ({ open, onOpenChange }: FeedbackModalProps) => {
                 We&apos;re always looking for ways to improve our product.
                 Please let us know what you think.
               </Type>
+
               <FormLabel label="Email" isOptional />
               <Input
                 type="email"
@@ -97,6 +90,7 @@ export const FeedbackModal = ({ open, onOpenChange }: FeedbackModalProps) => {
                 placeholder="Email"
                 className="w-full"
               />
+
               <FormLabel label="Feedback" />
               <Textarea
                 id="feedback"
@@ -130,27 +124,19 @@ export const FeedbackModal = ({ open, onOpenChange }: FeedbackModalProps) => {
                       formik.setFieldValue('feedbackType', type as FeedbackType)
                     }
                   >
-                    <Icon
-                      size={28}
-                      variant={
-                        formik.values.feedbackType === type ? 'solid' : 'stroke'
-                      }
-                      className={color}
-                    />
+                    <Icon size={24} strokeWidth={2} />
                   </Button>
                 ))}
               </Flex>
-              <Button
-                className="w-full"
-                type="submit"
-                onClick={() => formik.handleSubmit()}
-              >
-                Submit Feedback
-              </Button>
+              <Flex gap="sm" className="w-full" justify="end">
+                <Button type="submit" onClick={() => formik.handleSubmit()}>
+                  Submit Feedback
+                </Button>
+              </Flex>
             </Flex>
           </div>
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   );
 };

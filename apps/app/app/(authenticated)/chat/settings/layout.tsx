@@ -78,7 +78,6 @@ export default function SettingsPage({
         key={menu.route}
         onClick={() => push(menu.route)}
         className="w-full justify-start gap-2"
-        size="sm"
       >
         <Icon
           size={16}
@@ -86,9 +85,7 @@ export default function SettingsPage({
           variant="solid"
           className="dark:text-zinc-500"
         />
-        <span className={cn('font-medium text-xs md:flex md:text-sm')}>
-          {menu.name}
-        </span>
+        <span className={cn('font-medium md:flex')}>{menu.name}</span>
       </Button>
     );
   };
@@ -105,7 +102,6 @@ export default function SettingsPage({
           <Button
             className="w-full"
             variant="bordered"
-            size="sm"
             onClick={() => {
               push('/chat');
             }}

@@ -3,6 +3,7 @@ import type { TModelItem, TModelKey, TProvider } from './models';
 export type TAssistantType = 'base' | 'custom';
 export type TAssistant = {
   name: string;
+  description?: string;
   systemPrompt: string;
   iconURL?: string;
   provider: TProvider;

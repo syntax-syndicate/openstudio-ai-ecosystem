@@ -2,7 +2,7 @@ import { cn } from "@repo/design-system/lib/utils";
 import { VariantProps, cva } from "class-variance-authority";
 import React from "react";
 
-const typeVariants = cva("text flex", {
+const typeVariants = cva("text flex !my-0", {
   variants: {
     size: {
       xxs: "text-xs",

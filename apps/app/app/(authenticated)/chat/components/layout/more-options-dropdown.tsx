@@ -28,16 +28,14 @@ export const MoreOptionsDropdownItem = ({
   label,
   onClick,
   icon,
-  key,
 }: {
   label: string;
   onClick: () => void;
   icon: any;
-  key?: string;
 }) => {
   const Icon = icon;
   return (
-    <DropdownMenuItem key={key} onClick={onClick}>
+    <DropdownMenuItem onClick={onClick}>
       <Icon size={16} variant="stroke" strokeWidth="2" />
       {label}
     </DropdownMenuItem>
@@ -98,7 +96,7 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
           </DropdownMenuTrigger>
         </Tooltip>
         <DropdownMenuContent
-          className="min-w-[250px] p-1 text-sm md:text-base"
+          className="min-w-[250px] p-1.5 text-sm md:text-base"
           align="end"
           side="bottom"
           sideOffset={4}
@@ -111,7 +109,7 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
               colors={['#4A2BE2', '#D5EC77', '#3EE2DE', '#AF71FF', '#F882B3']}
             />
           </Flex>
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="my-1.5" />
           {menuItems.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -123,7 +121,7 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
               />
             );
           })}
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="my-1.5" />
           <MoreOptionsDropdownItem
             label="Twitter"
             onClick={() => {
@@ -141,7 +139,7 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
             }}
             icon={Github01Icon}
           />
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="my-1.5" />
           <MoreOptionsDropdownItem
             key={`theme-${theme}`}
             label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}

@@ -13,7 +13,7 @@ export const AiModelsCopy = () => {
   return (
     <>
       Unleash the power of multiple AI minds
-      <div className="relative inline-block h-4 w-[160px]">
+      <span className="relative inline-block h-4 w-[160px]">
         <StaggerContainer>
           <Flex className="-translate-y-1 absolute top-0 left-0 mx-4">
             {modelList?.map((model, index) => {
@@ -50,7 +50,7 @@ export const AiModelsCopy = () => {
             })}
           </Flex>
         </StaggerContainer>
-      </div>
+      </span>
       — simply add your API keys and watch the magic unfold!
     </>
   );
