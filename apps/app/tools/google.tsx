@@ -97,7 +97,7 @@ const googleSearchToolDefinition: ToolDefinition = {
     return <SearchResults searchResults={searchResults} query={query} />;
   },
   loadingMessage: 'Searching on Google...',
-  successMessage: 'Search Results from Google',
+  successMessage: 'Google Search',
   icon: Globe02Icon,
   compactIcon: Globe02Icon,
 };

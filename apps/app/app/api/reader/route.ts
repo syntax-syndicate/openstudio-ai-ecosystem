@@ -66,7 +66,10 @@ const readURL = async (url: string): Promise<TReaderResult> => {
       }
     }
 
-    return await fetchWithJina(url);
+    if (process.env.JINA_API_KEY) {
+      return await fetchWithJina(url);
+    }
+    return { success: false };
   } catch (error) {
     console.error('Error in readURL:', error);
     return { success: false };

@@ -12,16 +12,16 @@ export const Avatar = ({ name, size = "md", className }: TAvatar) => {
     lg: 48,
   };
   return (
-    <div className={
-      cn(
-        "rounded-full relative text-zinc-900/70 dark:text-white dark:bg-white/10 bg-black/10",
-        size === "sm" && "min-w-7 h-7",
-        size === "md" && "min-w-8 h-8",
-        size === "lg" && "min-w-12 h-12",
-        className
-      )
-    }>
-      <p className=" font-bold uppercase absolute inset-0 flex items-center justify-center">
+    <div
+      className={cn(
+        "relative rounded-full bg-black/10 text-zinc-900/70 dark:bg-white/10 dark:text-white",
+        size === "sm" && "h-7 min-w-7",
+        size === "md" && "h-8 min-w-8",
+        size === "lg" && "h-12 min-w-12",
+        className,
+      )}
+    >
+      <p className="absolute inset-0 flex items-center justify-center font-bold uppercase">
         {name?.[0]}
       </p>
     </div>

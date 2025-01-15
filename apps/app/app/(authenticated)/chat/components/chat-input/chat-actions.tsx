@@ -43,7 +43,7 @@ export const ChatActions = ({
         defaultAssistant: defaultPreferences.defaultAssistant,
       });
     }
-  }, [models, preferences]);
+  }, [models, preferences.defaultAssistant]);
   const assistantKey = selectedAssistant?.assistant.key;
   const assistantName = selectedAssistant?.assistant.name;
   const hasTextInput = !!editor?.getText();
