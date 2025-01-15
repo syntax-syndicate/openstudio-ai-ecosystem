@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Open Studio - ChatHub | AI-Powered Innovation Hub',
     siteName: 'Open Studio',
-    description: 'Experience the future of AI applications in one unified platform. Open Studio brings you a seamless gateway to cutting-edge AI tools and services.',
+    description:
+      'Experience the future of AI applications in one unified platform. Open Studio brings you a seamless gateway to cutting-edge AI tools and services.',
     url: 'https://openstudio.tech',
     type: 'website',
   },
@@ -21,7 +22,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Open Studio - ChatHub | AI Innovation Platform',
     site: 'openstudio.tech',
-    description: 'Discover a world of AI possibilities with Open Studio. Your all-in-one platform for accessing and interacting with advanced AI applications.',
+    description:
+      'Discover a world of AI possibilities with Open Studio. Your all-in-one platform for accessing and interacting with advanced AI applications.',
   },
 };
 

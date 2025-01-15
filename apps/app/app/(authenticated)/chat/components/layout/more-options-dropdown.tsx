@@ -69,7 +69,13 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
       },
       icon: Comment01Icon,
     },
-    { label: 'Support', onClick: () => {}, icon: HelpCircleIcon },
+    {
+      label: 'Support',
+      onClick: () => {
+        window.open('mailto:kuluruvineeth8623@gmail.com', '_blank');
+      },
+      icon: HelpCircleIcon,
+    },
   ];
   return (
     <>
@@ -120,12 +126,19 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
           <DropdownMenuSeparator />
           <MoreOptionsDropdownItem
             label="Twitter"
-            onClick={() => {}}
+            onClick={() => {
+              window.open('https://x.com/kuluruvineeth', '_blank');
+            }}
             icon={TwitterIcon}
           />
           <MoreOptionsDropdownItem
             label="Github"
-            onClick={() => {}}
+            onClick={() => {
+              window.open(
+                'https://github.com/kuluruvineeth/openstudio-beta',
+                '_blank'
+              );
+            }}
             icon={Github01Icon}
           />
           <DropdownMenuSeparator />
