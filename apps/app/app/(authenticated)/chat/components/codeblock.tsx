@@ -1,5 +1,5 @@
 import { useClipboard } from '@/hooks/use-clipboard';
-import { ibmPlex } from '@/lib/fonts';
+import { mono } from '@/lib/fonts';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Copy01Icon,
@@ -30,10 +30,10 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
   return (
     <div
       className={cn(
-        'not-prose w-full flex-shrink-0 overflow-hidden rounded-lg border border-zinc-200/30 bg-white text-zinc-600 dark:border-white/5 dark:bg-black/20 dark:text-white'
+        'not-prose w-full flex-shrink-0 overflow-hidden rounded-lg border border-zinc-500/15 bg-zinc-25/20 text-zinc-800 dark:border-white/5 dark:bg-black/20 dark:text-white'
       )}
     >
-      <div className="flex w-full items-center justify-between border-zinc-200/20 border-b py-1.5 pr-1.5 pl-2 dark:border-white/5">
+      <div className="flex w-full items-center justify-between border-zinc-200/20 border-b bg-zinc-25 py-1.5 pr-1.5 pl-2 dark:border-white/5 dark:bg-black/20">
         <p className="px-2 text-xs text-zinc-500">{language}</p>
         <Tooltip content={showCopied ? 'Copied!' : 'Copy'}>
           <Button
@@ -55,8 +55,8 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
       </div>
       <pre className="w-full px-6 py-2">
         <code
-          style={ibmPlex.style}
-          className={`hljs language-${language} inline-block w-full overflow-x-auto whitespace-pre-wrap break-words pr-[100%] text-xs tracking-wide md:text-sm`}
+          style={mono.style}
+          className={`hljs language-${language} inline-block w-full overflow-x-auto whitespace-pre-wrap break-words pr-[100%] text-[0.85rem] tracking-wide`}
           ref={ref}
         ></code>
       </pre>

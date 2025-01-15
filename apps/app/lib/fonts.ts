@@ -13,3 +13,8 @@ export const ibmPlex = IBM_Plex_Mono({
   subsets: ['latin'],
   variable: '--font-ibm-plex-sans',
 });
+
+export const mono = localFont({
+  src: './JetBrainsMono-Regular.woff2',
+  variable: '--font-mono',
+});

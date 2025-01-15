@@ -109,7 +109,7 @@ export const config: Config = {
       // },
       fontWeight: {
         normal: '400',
-        medium: '450',
+        medium: '500',
         semibold: '550',
         bold: '650',
       },
@@ -124,6 +124,7 @@ export const config: Config = {
       // },
       fontFamily: {
         sans: ['var(--font-inter)'],
+        mono: ['var(--font-mono)'],
       },
       keyframes: {
         'accordion-down': {
