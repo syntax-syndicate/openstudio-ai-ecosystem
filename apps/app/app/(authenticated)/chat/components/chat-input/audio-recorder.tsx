@@ -45,7 +45,7 @@ export const AudioRecorder: FC<TAudioRecorder> = ({ sendMessage }) => {
     <Flex>
       <Tooltip content="Record">
         <Button size="iconSm" variant="ghost" onClick={startVoiceRecording}>
-          <RecordIcon size={18} variant="stroke" strokeWidth="2" />
+          <RecordIcon size={16} variant="stroke" strokeWidth="2" />
         </Button>
       </Tooltip>
       {transcribing && (
@@ -102,7 +102,7 @@ export const AudioRecorder: FC<TAudioRecorder> = ({ sendMessage }) => {
                 }}
                 className="group"
               >
-                <Cancel01Icon size={18} strokeWidth="2" />
+                <Cancel01Icon size={16} strokeWidth="2" />
                 Cancel
               </Button>
               <Button
@@ -113,7 +113,7 @@ export const AudioRecorder: FC<TAudioRecorder> = ({ sendMessage }) => {
                 }}
                 className="group"
               >
-                <Tick01Icon size={18} strokeWidth="2" />
+                <Tick01Icon size={16} strokeWidth="2" />
                 Done
               </Button>
             </Flex>

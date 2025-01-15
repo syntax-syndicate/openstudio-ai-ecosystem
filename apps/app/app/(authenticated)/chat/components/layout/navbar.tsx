@@ -2,6 +2,7 @@ import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/hi
 import { MoreOptionsDropdown } from '@/app/(authenticated)/chat/components/layout/more-options-dropdown';
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { useSessions } from '@/context';
+import { Github01Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { BetaTag } from '@repo/design-system/components/ui/beta-tag';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -24,7 +25,7 @@ export const NavbarItem = ({
   return (
     <Tooltip content={tooltip} side="bottom" sideOffset={4}>
       <Button size="iconSm" variant="ghost" onClick={onClick}>
-        <Icon size={18} strokeWidth={2} />
+        <Icon size={16} strokeWidth={2} />
       </Button>
     </Tooltip>
   );
@@ -55,6 +56,16 @@ export const Navbar = () => {
         onClick={() => {
           push('/chat');
           createSession();
+        }}
+      />
+      <NavbarItem
+        tooltip="Github"
+        icon={Github01Icon}
+        onClick={() => {
+          window.open(
+            'https://github.com/kuluruvineeth/openstudio-beta',
+            '_blank',
+          );
         }}
       />
       {/* <Flex className="flex-1" /> */}

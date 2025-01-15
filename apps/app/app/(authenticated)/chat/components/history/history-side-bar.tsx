@@ -1,7 +1,7 @@
 import { HistoryItem } from '@/app/(authenticated)/chat/components/history/history-item';
 import { useSessions } from '@/context/sessions';
 import { sortSessions } from '@/helper/utils';
-import { MessageMultiple02Icon } from '@hugeicons/react';
+import { Clock04Icon } from '@hugeicons/react';
 import { X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -19,7 +19,7 @@ export const HistorySidebar = () => {
       <Tooltip content="Chat History" side="bottom" sideOffset={4}>
         <Drawer.Trigger asChild>
           <Button variant="ghost" size="iconSm">
-            <MessageMultiple02Icon size={18} strokeWidth={2} />
+            <Clock04Icon size={16} strokeWidth={2} />
           </Button>
         </Drawer.Trigger>
       </Tooltip>
@@ -38,11 +38,7 @@ export const HistorySidebar = () => {
                 className="w-ful w-full border-zinc-500/10 border-b py-2 pr-2 pl-3"
               >
                 <Flex items="center" gap="sm">
-                  <MessageMultiple02Icon
-                    size={18}
-                    strokeWidth={2}
-                    className="text-zinc-500"
-                  />
+                  <Clock04Icon size={16} strokeWidth={2} className="text-zinc-500" />
                   <Type size="sm" weight="medium" textColor="secondary">
                     Recent History
                   </Type>
@@ -50,7 +46,7 @@ export const HistorySidebar = () => {
 
                 <Button
                   variant="ghost"
-                  size="iconSm"
+                  size="iconXS"
                   onClick={() => {
                     setOpen(false);
                   }}
@@ -59,7 +55,7 @@ export const HistorySidebar = () => {
                 </Button>
               </Flex>
 
-              <Flex className="w-full p-2" gap="xs" direction="col">
+              <Flex className="w-full p-1.5" gap="xs" direction="col">
                 {sortSessions(sessions, 'createdAt')?.map((session) => (
                   <HistoryItem
                     session={session}

@@ -48,7 +48,7 @@ export const ChatInput = () => {
   };
   const chatInputBackgroundContainer = cn(
     'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 px-4 pt-6 pb-6 md:justify-end md:px-4',
-    'bg-gradient-to-t from-70% from-zinc-25 to-transparent transition-all duration-1000 ease-in-out dark:from-zinc-800'
+    'bg-gradient-to-t from-70% from-white to-transparent transition-all duration-1000 ease-in-out dark:from-zinc-800'
   );
   const chatContainer = cn(
     'relative flex w-full flex-col items-center justify-center gap-1 md:w-[700px] lg:w-[720px]'
@@ -66,7 +66,7 @@ export const ChatInput = () => {
           variants={slideUpVariant}
           initial="initial"
           animate={editor?.isEditable ? 'animate' : 'initial'}
-          className="flex w-full flex-shrink-0 overflow-hidden rounded-xl border bg-white shadow-sm dark:border-white/5 dark:bg-white/5"
+          className="flex w-full flex-shrink-0 overflow-hidden rounded-lg border bg-white shadow-sm dark:border-white/5 dark:bg-white/5"
         >
           <ImageDropzoneRoot dropzoneProps={dropzonProps}>
             <Flex direction="col" className="w-full">

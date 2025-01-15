@@ -295,7 +295,7 @@ export default function Spaces() {
                 <HoverCard key={doc.id}>
                   <HoverCardTrigger asChild>
                     <InformationCircleIcon
-                      size={18}
+                      size={16}
                       variant="solid"
                       className="text-zinc-500"
                     />
@@ -338,7 +338,7 @@ export default function Spaces() {
                     });
                   }}
                 >
-                  <Delete01Icon size={18} strokeWidth={2} />
+                  <Delete01Icon size={16} strokeWidth={2} />
                 </Button>
               </Flex>
             </Flex>

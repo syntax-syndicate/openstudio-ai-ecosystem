@@ -97,9 +97,9 @@ export const config: Config = {
       },
       //TODO: Clerk Components have issue with adding this
       // fontSize: {
-      //   xs: "0.80rem",
-      //   sm: "0.875rem",
-      //   base: "0.925rem",
+      //   xs: "0.75rem",
+      //   sm: "0.85rem",
+      //   base: "1rem",
       //   lg: "1.115rem",
       //   xl: "1.25rem",
       //   "2xl": "1.563rem",
@@ -108,7 +108,7 @@ export const config: Config = {
       //   "5xl": "3.052rem",
       // },
       fontWeight: {
-        normal: '350',
+        normal: '400',
         medium: '450',
         semibold: '550',
         bold: '650',
