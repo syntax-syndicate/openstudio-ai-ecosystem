@@ -10,7 +10,7 @@ export const PrivacyCopy = () => {
       >
         Privacy at its core
       </a>
-      . Your chats stay local, your data stays yours – always.{" "}
+      . Your chats stay local, your data stays yours – always.{' '}
       <ExplainationCard explanation="Your data never leaves your device - everything is stored in your browser's built-in database (IndexDB)">
         <a
           href="/chat/privacy"
@@ -18,7 +18,7 @@ export const PrivacyCopy = () => {
         >
           locally
         </a>
-      </ExplainationCard>{" "}
+      </ExplainationCard>{' '}
       and deleteable anytime.
     </>
   );

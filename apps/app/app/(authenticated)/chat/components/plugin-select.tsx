@@ -3,6 +3,7 @@ import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import { useTools } from '@/hooks/use-tools';
 import type { ToolKey } from '@/types';
 import { Badge } from '@repo/design-system/components/ui/badge';
+import { BetaTag } from '@repo/design-system/components/ui/beta-tag';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { PuzzleIcon } from '@repo/design-system/components/ui/icons';
@@ -15,7 +16,6 @@ import { Switch } from '@repo/design-system/components/ui/switch';
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { type FC, useEffect, useState } from 'react';
-import { BetaTag } from '@repo/design-system/components/ui/beta-tag';
 
 export type TPluginSelect = {
   selectedAssistantKey: string;

@@ -1,11 +1,11 @@
 import { slideUpVariant } from '@/helper/animations';
-import { motion } from 'framer-motion';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from '@repo/design-system/components/ui/hover-card';
 import { Type } from '@repo/design-system/components/ui/text';
+import { motion } from 'framer-motion';
 
 export type ExplainationCard = {
   explanation: string;

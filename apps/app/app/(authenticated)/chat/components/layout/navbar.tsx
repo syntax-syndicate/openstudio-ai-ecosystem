@@ -3,13 +3,12 @@ import { MoreOptionsDropdown } from '@/app/(authenticated)/chat/components/layou
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { useSessions } from '@/context';
 import { Button } from '@repo/design-system/components/ui';
-import { Badge } from '@repo/design-system/components/ui/badge';
+import { BetaTag } from '@repo/design-system/components/ui/beta-tag';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { PlusSignIcon } from '@repo/design-system/components/ui/icons';
 import { SidebarTrigger } from '@repo/design-system/components/ui/sidebar';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useRouter } from 'next/navigation';
-import { BetaTag } from '@repo/design-system/components/ui/beta-tag';
 
 export const NavbarItem = ({
   tooltip,
