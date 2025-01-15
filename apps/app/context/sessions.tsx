@@ -35,8 +35,6 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   const { sessionsQuery, createNewSessionMutation, addMessageMutation } =
     useChatSessionQueriesProps;
 
-  console.log('sessionsQuery', sessionsQuery);
-
   useEffect(() => {
     store.persist.rehydrate();
   }, []);
@@ -70,8 +68,6 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
       console.error('Failed to add message:', error);
     }
   };
-
-  console.log('sessions', sessions, activeSessionId);
 
   if (!activeSessionId || sessions?.length === 0) {
     return null;

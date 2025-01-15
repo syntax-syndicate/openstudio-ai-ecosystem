@@ -56,12 +56,12 @@ export const WelcomeMessage = ({ show }: TWelcomeMessageProps) => {
   if (!show || !isFreshSession) return null;
   return (
     <div className="flex w-full flex-row items-start justify-start gap-2">
-      <div className="flex w-full flex-col items-start md:flex-row">
+      <div className="flex w-full scale-95 flex-col items-start md:scale-100 md:flex-row">
         <Flex
           direction="col"
           gap="md"
           items="start"
-          className="w-full flex-1 overflow-hidden px-8"
+          className="w-full flex-1 overflow-hidden px-0 md:px-8"
         >
           <Type size="lg" className="pb-2">
             Power Up Your
@@ -94,7 +94,7 @@ export const WelcomeMessage = ({ show }: TWelcomeMessageProps) => {
                     strokeWidth={1.5}
                     className="mt-1 flex-shrink-0"
                   />
-                  <p className="inline-block leading-6 tracking-[0.015em]">
+                  <p className="inline-block leading-6 tracking-[0.015em] md:leading-6">
                     {point.text}
                   </p>
                 </Type>
