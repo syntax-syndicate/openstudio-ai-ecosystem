@@ -38,7 +38,11 @@ export const HistorySidebar = () => {
                 className="w-ful w-full border-zinc-500/10 border-b py-2 pr-2 pl-3"
               >
                 <Flex items="center" gap="sm">
-                  <Clock04Icon size={16} strokeWidth={2} className="text-zinc-500" />
+                  <Clock04Icon
+                    size={16}
+                    strokeWidth={2}
+                    className="text-zinc-500"
+                  />
                   <Type size="sm" weight="medium" textColor="secondary">
                     Recent History
                   </Type>

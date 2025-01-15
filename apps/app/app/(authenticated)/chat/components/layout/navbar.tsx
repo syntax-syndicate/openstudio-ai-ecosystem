@@ -64,7 +64,7 @@ export const Navbar = () => {
         onClick={() => {
           window.open(
             'https://github.com/kuluruvineeth/openstudio-beta',
-            '_blank',
+            '_blank'
           );
         }}
       />

@@ -30,7 +30,7 @@ export function Toaster() {
                 <CheckmarkCircle01Icon
                   size={24}
                   variant="solid"
-                  className="mt-1 flex-shrink-0 text-cyan-400"
+                  className="mt-1 flex-shrink-0 text-teal-400"
                 />
               )}
               <div className="grid gap-0 w-full">
