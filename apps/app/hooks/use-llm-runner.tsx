@@ -184,13 +184,10 @@ export const useLLMRunner = () => {
                 metadata,
                 name
               ) {
-                console.log('tool', name);
-
                 name && addTool({ toolName: name, isLoading: true });
               },
               handleLLMNewToken: async (token: string) => {
                 streamedMessage += token;
-                console.log('streamedMessage', streamedMessage);
                 updateCurrentMessage({
                   isLoading: true,
                   rawAI: streamedMessage,

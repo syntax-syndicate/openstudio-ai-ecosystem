@@ -1,9 +1,12 @@
 import { useChatContext, usePreferenceContext } from '@/context';
 import {
+  barChartToolDefinition,
   dalleToolDefinition,
   duckduckGoToolDefinition,
   googleSearchToolDefinition,
+  lineChartToolDefinition,
   memoryToolDefinition,
+  pieChartToolDefinition,
   readerToolDefinition,
 } from '@/tools';
 import type { TModelItem, ToolDefinition, ToolKey } from '@/types';
@@ -20,6 +23,9 @@ export const useTools = () => {
       : googleSearchToolDefinition,
     memoryToolDefinition,
     readerToolDefinition,
+    pieChartToolDefinition,
+    barChartToolDefinition,
+    lineChartToolDefinition,
   ];
 
   const getToolByKey = (key: ToolKey) => {
