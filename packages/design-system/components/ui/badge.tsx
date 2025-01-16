@@ -4,11 +4,11 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@repo/design-system/lib/utils"
 
 const badgeVariants = cva(
-  "flex items-center whitespace-nowrap rounded-sm px-1.5 py-0.5  min-h-2 text-xs font-medium transition-colors text-zinc-500 ",
+  "flex items-center whitespace-nowrap rounded-sm px-2 py-0.5  min-h-2 text-[0.7rem] font-medium transition-colors text-zinc-500 ",
   {
     variants: {
       variant: {
-        default: "text-teal-600 bg-teal-600/20",
+        default: "text-zinc-800 dark:text-zinc-100 bg-zinc-500/20 rounded-full",
         secondary:
           "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive:

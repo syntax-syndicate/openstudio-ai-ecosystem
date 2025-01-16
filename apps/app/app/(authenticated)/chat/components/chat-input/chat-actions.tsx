@@ -49,8 +49,7 @@ export const ChatActions = ({
   const assistantName = selectedAssistant?.assistant.name;
   const hasTextInput = !!editor?.getText();
   const sendButtonClasses = cn({
-    'bg-zinc-800 text-white dark:bg-teal-600/20 dark:text-teal-400 dark:outline-teal-400':
-      hasTextInput,
+    '!bg-teal-600/20 text-teal-600 dark:text-teal-400': hasTextInput,
   });
   return (
     <Flex

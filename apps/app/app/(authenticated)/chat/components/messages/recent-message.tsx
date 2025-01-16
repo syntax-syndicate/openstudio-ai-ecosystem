@@ -73,7 +73,9 @@ export const RecentMessage = () => {
   }, [currentMessage]);
 
   useEffect(() => {
-    scrollToBottom();
+    if (currentMessage?.id) {
+      scrollToBottom();
+    }
   }, [
     isGenerating,
     currentMessage?.relatedQuestions?.length,
@@ -89,6 +91,7 @@ export const RecentMessage = () => {
       <ChatScrollAnchor
         isAtBottom={isAtBottom}
         trackVisibility={!currentMessage?.stop}
+        hasMessages={!!currentMessage?.id}
       />
     </>
   );
