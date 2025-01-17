@@ -150,7 +150,7 @@ export const useLLMRunner = () => {
       agentExecutor = new AgentExecutor({
         agent: agentWithTool as any,
         tools: availableTools,
-        maxIterations: 2,
+        maxIterations: 5,
       });
     }
     const chainWithoutTools = prompt.pipe(

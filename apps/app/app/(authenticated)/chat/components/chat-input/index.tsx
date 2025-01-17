@@ -21,7 +21,7 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import GitHubButton from 'react-github-btn';
+import { ChatFooter } from '@/app/(authenticated)/chat/components/chat-input/chat-footer';
 
 export const ChatInput = () => {
   const { store } = useChatContext();
@@ -149,24 +149,7 @@ export const ChatInput = () => {
           </Type>
         )}
       </div>
-      {isFreshSession && (
-        <Type
-          size="xxs"
-          textColor="tertiary"
-          className="absolute bottom-0 z-10 py-2"
-        >
-          OpenStudio ChatHub is open source{' '}
-          <span className="inline-block px-1">
-            <GitHubButton
-              href="https://github.com/kuluruvineeth/openstudio-beta"
-              data-color-scheme="no-preference: light; light: light; dark: dark;"
-              aria-label="Star kuluruvineeth/openstudio-beta on GitHub"
-            >
-              Star
-            </GitHubButton>{' '}
-          </span>
-        </Type>
-      )}
+      {isFreshSession && <ChatFooter />}
     </div>
   );
 };
