@@ -93,7 +93,7 @@ export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
         >
           Plugins <BetaTag />
         </Type>
-        <div className="flex flex-col p-1.5">
+        <div className="no-scrollbar flex max-h-[310px] flex-col overflow-y-auto p-1.5">
           {availableTools.map((tool) => (
             <ToolItem
               key={tool.key}
@@ -124,7 +124,7 @@ const ToolItem: FC<ToolItemProps> = ({ tool, isSelected, onToggle }) => {
         className="h-8 w-8 rounded-lg border border-zinc-500/15 bg-white dark:bg-zinc-700"
       >
         <Icon size={16} strokeWidth={2} className="flex-shrink-0" />
-      </Flex>{" "}
+      </Flex>{' '}
       <Flex direction="col" gap="none" items="start">
         <Type size="sm" weight="medium">
           {tool.displayName}

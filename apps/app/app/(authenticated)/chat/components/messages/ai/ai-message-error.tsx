@@ -1,7 +1,7 @@
 import { useChatContext, usePreferenceContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
-import type { TChatMessage } from '@/types';
+import type { TChatMessage, TProvider } from '@/types';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Alert02Icon } from '@repo/design-system/components/ui/icons';
@@ -41,15 +41,20 @@ export const AIMessageError: FC<TAIMessageError> = ({
   }
 
   const assistant = message.runConfig.assistant;
-  const model = getModelByKey(assistant.baseModel, assistant.provider);
+  const model = getModelByKey(
+    assistant.baseModel,
+    assistant.provider as TProvider
+  );
 
   const errorConfigs: Record<string, ErrorConfig> = {
     apikey: {
-      message: apiKeys?.[assistant?.provider]
+      message: apiKeys?.find((key) => key.provider === assistant.provider)
         ? 'API Key is invalid or expired.'
         : 'Missing API Key',
       action: {
-        label: apiKeys?.[assistant?.provider] ? 'Check API Key' : 'Set API Key',
+        label: apiKeys?.find((key) => key.provider === assistant.provider)
+          ? 'Check API Key'
+          : 'Set API Key',
         onClick: () => push(`/settings/llms/${model?.provider}`),
       },
     },

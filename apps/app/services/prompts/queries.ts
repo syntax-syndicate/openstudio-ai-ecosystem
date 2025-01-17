@@ -9,7 +9,7 @@ export const usePromptsQueries = () => {
   });
   const createPromptMutation = useMutation({
     mutationFn: (prompt: Omit<TPrompt, 'id'>) =>
-      promptsService.setPrompt(prompt),
+      promptsService.createPrompt(prompt),
     onSuccess: () => {
       promptsQuery.refetch();
     },

@@ -17,6 +17,9 @@ let nextConfig: NextConfig = {
       {
         hostname: 'www.google.com',
       },
+      {
+        hostname: '4sz5k3dpgfzlfzup.public.blob.vercel-storage.com',
+      },
     ],
   },
   async rewrites() {

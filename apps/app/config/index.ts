@@ -7,6 +7,7 @@ import * as prompts from '@/config/prompts';
 import { models } from '@/types';
 
 const configs = {
+  version: '0.0.1',
   ...links,
   ...prompts,
   ollamaTagsEndpoint: '/api/tags',

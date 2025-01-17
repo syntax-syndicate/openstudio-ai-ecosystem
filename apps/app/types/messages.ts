@@ -1,4 +1,5 @@
 import type { TAssistant, ToolExecutionState } from '@/types';
+import type { schema } from '@repo/database/schema';
 
 export const stopReasons = [
   'error',
@@ -6,6 +7,7 @@ export const stopReasons = [
   'apikey',
   'recursion',
   'finish',
+  'unauthorized',
 ] as const;
 
 export type TStopReason = (typeof stopReasons)[number];
@@ -18,19 +20,27 @@ export type TLLMRunConfig = {
   messageId?: string;
   assistant: TAssistant;
 };
-export type TChatMessage = {
+
+export type TChatMessage =
+  | (typeof schema.chatMessages.$inferSelect & {
+      runConfig: TLLMRunConfig;
+      tools?: ToolExecutionState[];
+    })
+  | typeof schema.chatMessages.$inferSelect;
+
+export type TLegacyChatMessage = {
   id: string;
-  image?: string;
-  rawHuman?: string;
-  rawAI?: string;
+  image: string | null;
+  rawHuman: string | null;
+  rawAI: string | null;
   sessionId: string;
-  parentId: string;
-  runConfig: TLLMRunConfig;
-  tools?: ToolExecutionState[];
-  isLoading?: boolean;
-  stop?: boolean;
-  stopReason?: TStopReason;
-  errorMessage?: string;
-  createdAt: string;
-  relatedQuestions?: string[];
+  parentId: string | null;
+  runConfig: TLLMRunConfig | any;
+  tools: ToolExecutionState[] | any;
+  isLoading: boolean;
+  stop: boolean;
+  stopReason: TStopReason;
+  errorMessage: string | null;
+  createdAt: Date;
+  relatedQuestions: string[] | any;
 };

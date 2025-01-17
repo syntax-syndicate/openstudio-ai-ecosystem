@@ -1,43 +1,83 @@
 import { defaultPreferences } from '@/config';
-import type { TApiKeys, TPreferences, TProvider } from '@/types';
-import { get, set } from 'idb-keyval';
+import type { TApiKeyInsert, TApiKeys, TPreferences, TProvider } from '@/types';
+import { database } from '@repo/database';
+import { schema } from '@repo/database/schema';
+import { eq, sql } from 'drizzle-orm';
 
 export class PreferenceService {
-  async getApiKeys(): Promise<TApiKeys> {
-    return (await get('api-keys')) || {};
+  async getApiKeys(): Promise<TApiKeys[]> {
+    const result = await database.select().from(schema.apiKeys);
+    return result;
   }
+
   async getPreferences(): Promise<TPreferences> {
-    return (await get('preferences')) as TPreferences;
+    const result = await database.select().from(schema.preferences).limit(1);
+    console.log('result', result);
+    return result?.[0] || defaultPreferences;
   }
+
   async setPreferences(
-    preferences: Partial<TPreferences>
+    preferences: Partial<Omit<TPreferences, 'id'>>
   ): Promise<TPreferences> {
     const currentPreferences = await this.getPreferences();
     const newPreferences = { ...currentPreferences, ...preferences };
-    await set('preferences', newPreferences);
+    await database
+      ?.insert(schema.preferences)
+      .values(newPreferences)
+      .onConflictDoUpdate({
+        target: schema.preferences.id,
+        set: newPreferences,
+      });
     return newPreferences;
   }
+
   async resetToDefaults(): Promise<void> {
-    await set('preferences', defaultPreferences);
+    await database
+      ?.insert(schema.preferences)
+      .values(defaultPreferences)
+      .onConflictDoUpdate({
+        target: schema.preferences.id,
+        set: defaultPreferences,
+      });
   }
-  async setApiKey(key: TProvider, value: string): Promise<void> {
+
+  async setApiKey(provider: TProvider, value: string): Promise<void> {
     try {
-      const keys = await this.getApiKeys();
-      const newKeys = { ...keys, [key]: value };
-      await set('api-keys', newKeys);
+      const existingKey = await this.getApiKey(provider);
+      if (existingKey) {
+        await database
+          ?.update(schema.apiKeys)
+          .set({ key: value })
+          .where(eq(schema.apiKeys.provider, provider));
+      } else {
+        await database.insert(schema.apiKeys).values({ provider, key: value });
+      }
     } catch (error) {
       console.error('Error setting API key', error);
     }
   }
 
-  async setApiKeys(keys: TApiKeys): Promise<void> {
-    const existingKeys = await this.getApiKeys();
-    const newKeys = { ...existingKeys, ...keys };
+  async setApiKeys(records: TApiKeyInsert[]): Promise<void> {
+    try {
+      await database
+        ?.insert(schema.apiKeys)
+        .values(records)
+        .onConflictDoUpdate({
+          target: schema.apiKeys.provider,
+          set: { key: sql`excluded.key` },
+        });
+    } catch (error) {
+      console.error('Error setting API keys', error);
+    }
   }
 
-  async getApiKey(key: string): Promise<string | undefined> {
-    const keys = await this.getApiKeys();
-    return keys[key as keyof TApiKeys];
+  async getApiKey(provider: TProvider): Promise<TApiKeys | undefined> {
+    const result = await database
+      ?.select()
+      .from(schema.apiKeys)
+      .where(eq(schema.apiKeys.provider, provider))
+      .limit(1);
+    return result?.[0];
   }
 }
 

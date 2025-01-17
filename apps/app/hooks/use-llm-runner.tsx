@@ -4,8 +4,9 @@ import { injectPresetValues } from '@/helper/preset-prompt-values';
 import { constructMessagePrompt, constructPrompt } from '@/helper/promptUtil';
 import { generateShortUUID } from '@/helper/utils';
 import { modelService } from '@/services/models';
+import { preferencesService } from '@/services/preferences/client';
 import { messagesService, sessionsService } from '@/services/sessions/client';
-import type { TLLMRunConfig, TStopReason } from '@/types';
+import type { TLLMRunConfig, TProvider, TStopReason } from '@/types';
 import { useToast } from '@repo/design-system/hooks/use-toast';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import moment from 'moment';
@@ -72,23 +73,29 @@ export const useLLMRunner = () => {
       id: newMessageId,
       parentId: sessionId,
       sessionId,
-      rawHuman: input,
+      rawHuman: input || null,
       stop: false,
-      stopReason: undefined,
-      rawAI: undefined,
-      image,
+      stopReason: null,
+      rawAI: null,
+      image: image || null,
       tools: [],
       relatedQuestions: [],
-      createdAt: moment().toISOString(),
+      createdAt: moment().toDate(),
       isLoading: true,
+      errorMessage: null,
     });
 
-    const selectedModelKey = getModelByKey(modelKey, assistant.provider);
+    const selectedModelKey = getModelByKey(
+      modelKey,
+      assistant.provider as TProvider
+    );
     if (!selectedModelKey) {
       throw new Error('Model not found');
     }
 
-    const apiKey = apiKeys[selectedModelKey?.provider];
+    const apiKey = await preferencesService.getApiKey(
+      selectedModelKey.provider
+    );
 
     if (
       !apiKey &&
@@ -116,7 +123,7 @@ export const useLLMRunner = () => {
       model: selectedModelKey,
       preferences,
       provider: selectedModelKey.provider,
-      apiKey,
+      apiKey: apiKey?.key,
     });
 
     let agentExecutor: AgentExecutor | undefined;

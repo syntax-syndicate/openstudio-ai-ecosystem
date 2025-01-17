@@ -25,6 +25,20 @@ export const metadata: Metadata = {
     description:
       'Discover a world of AI possibilities with Open Studio. Your all-in-one platform for accessing and interacting with advanced AI applications.',
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://openstudio.tech',
+  },
 };
 
 type RootLayoutProperties = {

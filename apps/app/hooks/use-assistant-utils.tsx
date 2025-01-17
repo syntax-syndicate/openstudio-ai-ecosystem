@@ -3,7 +3,7 @@ import { defaultPreferences } from '@/config';
 import { models, ollamaModelsSupportsTools } from '@/config/models';
 import { usePreferenceContext } from '@/context';
 import { useAssistantsQueries } from '@/services/assistants';
-import type { TAssistant, TModelItem, TModelKey, TProvider } from '@/types';
+import type { TAssistant, TModelItem, TModelKey } from '@/types';
 import { useMemo } from 'react';
 
 export const useAssistantUtils = () => {
@@ -34,7 +34,7 @@ export const useAssistantUtils = () => {
     [ollamaModelsQuery.data?.models]
   );
 
-  const getModelByKey = (key: TModelKey, provider: TProvider) => {
+  const getModelByKey = (key: TModelKey, provider: TModelKey) => {
     return allModels.find(
       (model) => model.key === key && model.provider === provider
     );
@@ -46,7 +46,8 @@ export const useAssistantUtils = () => {
         name: model.name,
         key: model.key,
         baseModel: model.key,
-        description: model.description,
+        description: model.description || null,
+        iconURL: null,
         provider: model.provider,
         type: 'base',
         systemPrompt:

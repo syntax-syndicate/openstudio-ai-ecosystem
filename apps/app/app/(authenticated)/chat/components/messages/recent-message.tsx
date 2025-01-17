@@ -30,12 +30,13 @@ export const RecentMessage = () => {
     if (
       !currentMessage ||
       !currentMessage.stop ||
-      !currentMessage.sessionId ||
+      !currentMessage?.sessionId ||
       currentMessage.relatedQuestions?.length
     )
       return;
 
     const processMessage = async () => {
+      if (!currentMessage.sessionId) return;
       try {
         const messages = await addMessageMutation.mutateAsync({
           parentId: currentMessage.sessionId,
@@ -44,7 +45,7 @@ export const RecentMessage = () => {
 
         setIsGenerating(false);
 
-        if (messages?.[0].sessionId && messages?.length < 2) {
+        if (messages?.[0]?.sessionId && messages?.length < 2) {
           await generateTitleForSession(messages[0].sessionId as string);
         }
 
@@ -58,10 +59,11 @@ export const RecentMessage = () => {
             ...currentMessage,
             relatedQuestions: questions,
           };
-          await addMessageMutation.mutateAsync({
-            parentId: currentMessage.sessionId,
-            message: updatedMessage,
-          });
+          currentMessage.sessionId &&
+            (await addMessageMutation.mutateAsync({
+              parentId: currentMessage.sessionId,
+              message: updatedMessage,
+            }));
           setCurrentMessage(updatedMessage);
         }
       } catch (error) {
