@@ -9,7 +9,6 @@ import { ImageDropzoneRoot } from '@/app/(authenticated)/chat/components/chat-in
 import { ScrollToBottomButton } from '@/app/(authenticated)/chat/components/chat-input/scroll-to-bottom-button';
 import { SelectedContext } from '@/app/(authenticated)/chat/components/chat-input/selected-context';
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
-import { WelcomeMessage } from '@/app/(authenticated)/chat/components/welcome-message';
 import { useChatContext, usePreferenceContext } from '@/context';
 import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils, useImageAttachment } from '@/hooks';
@@ -111,8 +110,6 @@ export const ChatInput = () => {
             </Type>
           </Flex>
         )}
-
-        {isFreshSession && <WelcomeMessage />}
 
         <Flex items="center" justify="center" gap="sm" className="mb-2">
           <ScrollToBottomButton />

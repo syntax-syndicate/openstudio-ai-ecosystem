@@ -1,3 +1,4 @@
+import { MainLayout } from '@/app/(authenticated)/chat/components/layout/main-layout';
 import {
   PreferenceProvider,
   ReactQueryProvider,
@@ -5,8 +6,6 @@ import {
 } from '@/context'; // Consolidated context imports
 import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
 import { ThemeProvider } from '@repo/design-system/providers/theme';
-
-import { MainLayout } from '@/app/(authenticated)/chat/components/layout/main-layout';
 import type { Viewport } from 'next';
 
 export const viewport: Viewport = {
