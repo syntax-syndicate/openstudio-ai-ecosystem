@@ -7,6 +7,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uuid,
 } from 'drizzle-orm/pg-core';
 import {
   type TLLMRunConfig,
@@ -35,7 +36,7 @@ export const stopReasonEnum = pgEnum('stop_reason', [
   'apikey',
   'recursion',
   'finish',
-  'unauthorized'
+  'unauthorized',
 ]);
 
 export const providerEnum = pgEnum('provider', providers);
@@ -113,6 +114,15 @@ export const apiKeys = pgTable('api_keys', {
   key: text('key').notNull(),
 });
 
+export const changelogs = pgTable('changelogs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: text('title').notNull(),
+  content: text('content').notNull(),
+  images: text('images').array().notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 export const schema = {
   apiKeys,
   assistants,
@@ -120,6 +130,7 @@ export const schema = {
   chatSessions,
   preferences,
   prompts,
+  changelogs,
   assistantTypeEnum,
   dalleImageQualityEnum,
   dalleImageSizeEnum,
