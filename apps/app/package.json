@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@hotjar/browser": "^1.0.9",
     "@hugeicons/react": "0.8.0-beta.1",
     "@langchain/anthropic": "^0.3.11",
     "@langchain/community": "^0.3.21",

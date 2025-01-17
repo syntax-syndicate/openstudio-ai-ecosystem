@@ -16,7 +16,7 @@ export const ApiKeyInfo = () => {
 
   if (preferences.defaultAssistant === 'chathub') {
     return (
-      <Flex className="w-full py-1 pr-1 pl-3" justify="between" items="center">
+      <Flex className="w-full py-2 pr-1 pl-3" justify="between" items="center">
         <Type size="xs" textColor="secondary">
           OpenStudio ChatHub is free to use with limited access, bring your own
           API key for unlimited access.

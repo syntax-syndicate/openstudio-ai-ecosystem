@@ -78,11 +78,6 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
     setApiKeyMutation.mutate({ key, value });
   };
 
-  useEffect(() => {
-    updateApiKey('ollama', 'ollama');
-    updateApiKey('chathub', 'chathub');
-  }, []);
-
   const updateApiKeys = (newApiKeys: TApiKeyInsert[]) => {
     setApiKeys(newApiKeys);
   };
@@ -96,6 +91,12 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
         updateApiKey,
         updateApiKeys,
         getApiKey: (provider: TProvider) => {
+          if (provider === 'ollama') {
+            return 'ollama';
+          }
+          if (provider === 'chathub') {
+            return 'chathub';
+          }
           return apiKeys.find((key) => key.provider === provider)?.key;
         },
       }}

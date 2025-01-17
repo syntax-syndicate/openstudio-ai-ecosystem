@@ -11,10 +11,9 @@ import {
 import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
 
 const ChatSessionPage = () => {
-  const { isAllSessionLoading, activeSessionId } = useSessions();
+  const { activeSessionId } = useSessions();
 
-  const isLoading = isAllSessionLoading || !activeSessionId;
-  if (isLoading) return <FullPageLoader label="Initializing chat" />;
+  if (!activeSessionId) return <FullPageLoader label="Initializing chat" />;
   return (
     <ChatProvider sessionId={activeSessionId}>
       <CommandsProvider>

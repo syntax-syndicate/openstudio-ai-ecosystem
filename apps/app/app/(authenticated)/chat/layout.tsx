@@ -4,6 +4,7 @@ import {
   ReactQueryProvider,
   SessionsProvider,
 } from '@/context'; // Consolidated context imports
+import { RootProvider } from '@/context/root';
 import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
 import { ThemeProvider } from '@repo/design-system/providers/theme';
 import type { Viewport } from 'next';
@@ -23,22 +24,24 @@ export default function ChatLayout({
   return (
     <>
       {/* <Header pages={['']} page=""></Header> */}
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <ReactQueryProvider>
-          <TooltipProvider>
-            <PreferenceProvider>
-              <SessionsProvider>
-                <MainLayout>{children}</MainLayout>
-              </SessionsProvider>
-            </PreferenceProvider>
-          </TooltipProvider>
-        </ReactQueryProvider>
-      </ThemeProvider>
+      <RootProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ReactQueryProvider>
+            <TooltipProvider>
+              <PreferenceProvider>
+                <SessionsProvider>
+                  <MainLayout>{children}</MainLayout>
+                </SessionsProvider>
+              </PreferenceProvider>
+            </TooltipProvider>
+          </ReactQueryProvider>
+        </ThemeProvider>
+      </RootProvider>
     </>
   );
 }

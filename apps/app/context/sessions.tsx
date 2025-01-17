@@ -4,19 +4,11 @@ import { useChatSessionQueries } from '@/services/sessions/queries';
 import { createSessionsStore } from '@/store/sessions/store';
 import type {
   TChatMessage,
-  TChatSession,
   TSessionsContext,
   TSessionsProvider,
 } from '@/types';
 import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
-import {
-  type FC,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { type FC, createContext, useContext, useEffect, useMemo } from 'react';
 
 export const SessionContext = createContext<TSessionsContext | undefined>(
   undefined
@@ -29,7 +21,6 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
       createSession();
     }
   });
-  const [sessions, setSessions] = useState<TChatSession[]>([]);
   const activeSessionId = store((state) => state.activeSessionId);
   const setActiveSessionId = store((state) => state.setActiveSessionId);
   const useChatSessionQueriesProps = useChatSessionQueries();
@@ -39,15 +30,6 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   useEffect(() => {
     store.persist.rehydrate();
   }, []);
-
-  useEffect(() => {
-    if (sessionsQuery?.data) {
-      setSessions(sessionsQuery.data);
-    }
-    if (sessionsQuery?.data?.length === 0) {
-      createSession();
-    }
-  }, [sessionsQuery?.data]);
 
   const createSession = async () => {
     try {
@@ -71,14 +53,14 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
     }
   };
 
-  if (!activeSessionId || sessions?.length === 0) {
+  if (!activeSessionId) {
     return <FullPageLoader label="Initializing chat" />;
   }
 
   return (
     <SessionContext.Provider
       value={{
-        sessions,
+        sessions: sessionsQuery?.data || [],
         activeSessionId,
         setActiveSessionId,
         isAllSessionLoading: sessionsQuery.isLoading,
