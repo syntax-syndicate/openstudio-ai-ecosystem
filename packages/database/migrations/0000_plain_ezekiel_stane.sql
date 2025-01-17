@@ -2,7 +2,7 @@ CREATE TYPE "public"."assistant_type" AS ENUM('base', 'custom');--> statement-br
 CREATE TYPE "public"."dalle_image_quality" AS ENUM('standard', 'hd');--> statement-breakpoint
 CREATE TYPE "public"."dalle_image_size" AS ENUM('1024x1024', '1792x1024', '1024x1792');--> statement-breakpoint
 CREATE TYPE "public"."provider" AS ENUM('chathub', 'openai', 'anthropic', 'gemini', 'ollama', 'groq');--> statement-breakpoint
-CREATE TYPE "public"."stop_reason" AS ENUM('error', 'cancel', 'apikey', 'recursion', 'finish');--> statement-breakpoint
+CREATE TYPE "public"."stop_reason" AS ENUM('error', 'cancel', 'apikey', 'recursion', 'finish', 'unauthorized');--> statement-breakpoint
 CREATE TYPE "public"."web_search_engine" AS ENUM('google', 'duckduckgo');--> statement-breakpoint
 CREATE TABLE "api_keys" (
 	"provider" text PRIMARY KEY NOT NULL,

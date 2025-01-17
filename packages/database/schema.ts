@@ -35,6 +35,7 @@ export const stopReasonEnum = pgEnum('stop_reason', [
   'apikey',
   'recursion',
   'finish',
+  'unauthorized'
 ]);
 
 export const providerEnum = pgEnum('provider', providers);

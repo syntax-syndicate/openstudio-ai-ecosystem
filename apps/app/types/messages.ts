@@ -7,6 +7,7 @@ export const stopReasons = [
   'apikey',
   'recursion',
   'finish',
+  'unauthorized',
 ] as const;
 
 export type TStopReason = (typeof stopReasons)[number];
