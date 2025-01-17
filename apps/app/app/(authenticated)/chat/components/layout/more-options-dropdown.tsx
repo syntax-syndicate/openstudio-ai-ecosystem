@@ -1,7 +1,5 @@
-import { useFeedback } from '@/app/(authenticated)/chat/components/feedback/use-feedback';
 import { constants } from '@/config';
 import {
-  Comment01Icon,
   Github01Icon,
   HelpCircleIcon,
   Moon02Icon,
@@ -51,7 +49,6 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
 }) => {
   const { push } = useRouter();
   const { theme, setTheme } = useTheme();
-  const { renderModal, setOpen: openFeedback } = useFeedback();
   const menuItems = [
     {
       label: 'Settings',
@@ -59,13 +56,6 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
         push('/chat/settings/common');
       },
       icon: Settings03Icon,
-    },
-    {
-      label: 'Feedback',
-      onClick: () => {
-        openFeedback(true);
-      },
-      icon: Comment01Icon,
     },
     {
       label: 'Support',
@@ -150,7 +140,6 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
           />
         </DropdownMenuContent>
       </DropdownMenu>
-      {renderModal()}
     </>
   );
 };

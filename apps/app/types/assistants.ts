@@ -1,15 +1,15 @@
-import type { TModelItem, TModelKey, TProvider } from './models';
+import type { TModelItem, TProvider } from './models';
 
 export type TAssistantType = 'base' | 'custom';
 export type TAssistant = {
+  key: string;
   name: string;
-  description?: string;
+  description: string | null;
   systemPrompt: string;
-  iconURL?: string;
+  iconURL: string | null;
   provider: TProvider;
-  baseModel: TModelKey;
-  key: TModelKey | string;
-  type: TAssistantType;
+  baseModel: string;
+  type: 'base' | 'custom';
 };
 export type TAssistantsProvider = {
   children: React.ReactNode;

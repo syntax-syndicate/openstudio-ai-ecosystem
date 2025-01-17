@@ -33,11 +33,12 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
     if (!props?.assistant) {
       return;
     }
-    invokeModel({
-      input: question,
-      sessionId: message.sessionId,
-      assistant: props.assistant,
-    });
+    message.sessionId &&
+      invokeModel({
+        input: question,
+        sessionId: message.sessionId,
+        assistant: props.assistant,
+      });
   };
 
   if (

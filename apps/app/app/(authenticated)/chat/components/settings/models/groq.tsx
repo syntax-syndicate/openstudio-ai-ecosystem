@@ -12,9 +12,12 @@ export const GroqSettings = () => {
   const [key, setKey] = useState<string>('');
   const { apiKeys, updateApiKey } = usePreferenceContext();
   const { checkApiKey, isCheckingApiKey } = useLLMTest();
+
+  const groqKey = apiKeys?.find((key) => key.provider === 'groq')?.key;
+
   useEffect(() => {
-    setKey(apiKeys.groq || '');
-  }, [apiKeys.groq]);
+    setKey(groqKey || '');
+  }, [groqKey]);
   return (
     <Flex direction="col" gap="md">
       <FormLabel
@@ -25,12 +28,12 @@ export const GroqSettings = () => {
       <ApiKeyInput
         value={key}
         setValue={setKey}
-        isDisabled={!!apiKeys.groq}
+        isDisabled={!!groqKey}
         placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
-        isLocked={!!apiKeys.groq}
+        isLocked={!!groqKey}
       />
       <Flex gap="sm">
-        {!apiKeys.groq && (
+        {!groqKey && (
           <Button
             variant="default"
             onClick={() => {
@@ -49,7 +52,7 @@ export const GroqSettings = () => {
             {isCheckingApiKey ? 'Checking...' : 'Save Key'}
           </Button>
         )}
-        {apiKeys?.anthropic && (
+        {groqKey && (
           <Button
             variant="secondary"
             onClick={() => {

@@ -1,3 +1,4 @@
+import { useFeedback } from '@/app/(authenticated)/chat/components/feedback/use-feedback';
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
 import { MoreOptionsDropdown } from '@/app/(authenticated)/chat/components/layout/more-options-dropdown';
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
@@ -34,11 +35,21 @@ export const NavbarItem = ({
 export const Navbar = () => {
   const { push } = useRouter();
   const { createSession } = useSessions();
+  const { setOpen, renderModal } = useFeedback();
 
   return (
     <div className="group fixed top-0 right-0 left-0 z-10 flex w-full flex-row items-center justify-center gap-2.5 border-zinc-500/10 py-2 pr-2 pl-4 md:border-r dark:border-zinc-500/5">
       <Flex className="flex-1" />
       <SidebarTrigger />
+      <Button
+        size="sm"
+        variant="bordered"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        Feedback
+      </Button>
       <Flex
         direction="row"
         items="center"
@@ -80,6 +91,7 @@ export const Navbar = () => {
         <HistorySidebar />
       </Flex>
       <MoreOptionsDropdown />
+      {renderModal()}
     </div>
   );
 };

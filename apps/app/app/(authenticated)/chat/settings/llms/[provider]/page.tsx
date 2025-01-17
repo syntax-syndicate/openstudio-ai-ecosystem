@@ -60,14 +60,14 @@ export default function LLMsSettings() {
       value: 'openai',
       label: 'OpenAI',
       iconType: 'openai',
-      connected: !!apiKeys.openai,
+      connected: !!apiKeys.find((key) => key.provider === 'openai'),
       settingsComponent: OpenAISettings,
     },
     {
       value: 'anthropic',
       label: 'Anthropic',
       iconType: 'anthropic',
-      connected: !!apiKeys.anthropic,
+      connected: !!apiKeys.find((key) => key.provider === 'anthropic'),
 
       settingsComponent: AnthropicSettings,
     },
@@ -75,7 +75,7 @@ export default function LLMsSettings() {
       value: 'gemini',
       label: 'Gemini',
       iconType: 'gemini',
-      connected: !!apiKeys.gemini,
+      connected: !!apiKeys.find((key) => key.provider === 'gemini'),
 
       settingsComponent: GeminiSettings,
     },
@@ -96,7 +96,7 @@ export default function LLMsSettings() {
       value: 'groq',
       label: 'Groq',
       iconType: 'groq',
-      connected: !!apiKeys.groq,
+      connected: !!apiKeys.find((key) => key.provider === 'groq'),
       settingsComponent: GroqSettings,
     },
   ];

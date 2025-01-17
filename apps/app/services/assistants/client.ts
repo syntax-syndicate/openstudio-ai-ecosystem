@@ -1,52 +1,60 @@
 import { generateShortUUID } from '@/helper/utils';
 import type { TAssistant } from '@/types';
-import { get, set } from 'idb-keyval';
+import { database } from '@repo/database';
+import { schema } from '@repo/database/schema';
+import { eq, sql } from 'drizzle-orm';
 
 export class AssistantService {
-  key = 'assistants';
   async getAssistants(): Promise<TAssistant[]> {
-    return (await get(this.key)) || [];
+    const assistants = await database.select().from(schema.assistants);
+    return assistants || [];
   }
+
   async createAssistant(assistant: Omit<TAssistant, 'key'>) {
-    const assistants = await this.getAssistants();
-    const newAssistants = [
-      ...assistants,
-      { ...assistant, key: generateShortUUID() },
-    ];
-    await set(this.key, newAssistants);
+    const newAssistant = { ...assistant, key: generateShortUUID() };
+    await database
+      .insert(schema.assistants)
+      .values(newAssistant)
+      .onConflictDoUpdate({
+        target: schema.assistants.key,
+        set: {
+          ...newAssistant,
+        },
+      });
   }
+
   async deleteAssistant(key: string) {
-    const assistants = await this.getAssistants();
-    const newAssistants = assistants.filter(
-      (assistant) => assistant.key !== key
-    );
-    await set(this.key, newAssistants);
+    await database
+      .delete(schema.assistants)
+      .where(eq(schema.assistants.key, key));
   }
+
   async updateAssistant(
     assistantKey: string,
     newAssistant: Omit<TAssistant, 'key'>
   ) {
-    const assistants = await this.getAssistants();
-    const newAssistants = assistants.map((assistant) =>
-      assistant.key === assistantKey
-        ? { ...assistant, ...newAssistant }
-        : assistant
-    );
-    await set(this.key, newAssistants);
+    await database
+      .update(schema.assistants)
+      .set(newAssistant)
+      .where(eq(schema.assistants.key, assistantKey));
   }
 
   async addAssistants(assistants: TAssistant[]) {
-    const allAssistants = await this.getAssistants();
-    const newAssistants = [
-      ...assistants,
-      ...allAssistants.filter(
-        (existingAssistant) =>
-          !assistants.some(
-            (assistant) => assistant.key === existingAssistant.key
-          )
-      ),
-    ];
-    await set(this.key, newAssistants);
+    await database
+      .insert(schema.assistants)
+      .values(assistants)
+      .onConflictDoUpdate({
+        target: schema.assistants.key,
+        set: {
+          name: sql`excluded.name`,
+          description: sql`excluded.description`,
+          baseModel: sql`excluded.baseModel`,
+          provider: sql`excluded.provider`,
+          systemPrompt: sql`excluded.systemPrompt`,
+          type: sql`excluded.type`,
+          iconURL: sql`excluded.iconURL`,
+        },
+      });
   }
 }
 
