@@ -32,7 +32,7 @@ export const AIMessageError: FC<TAIMessageError> = ({
   const setCurrentMessage = store((state) => state.setCurrentMessage);
 
   const { push } = useRouter();
-  const { apiKeys } = usePreferenceContext();
+  const { getApiKey } = usePreferenceContext();
   const { getModelByKey } = useAssistantUtils();
 
   const { invokeModel } = useLLMRunner();
@@ -48,11 +48,11 @@ export const AIMessageError: FC<TAIMessageError> = ({
 
   const errorConfigs: Record<string, ErrorConfig> = {
     apikey: {
-      message: apiKeys?.find((key) => key.provider === assistant.provider)
+      message:  getApiKey(assistant.provider)
         ? 'API Key is invalid or expired.'
         : 'Missing API Key',
       action: {
-        label: apiKeys?.find((key) => key.provider === assistant.provider)
+        label: getApiKey(assistant.provider)
           ? 'Check API Key'
           : 'Set API Key',
         onClick: () => push(`/chat/settings/llms/${model?.provider}`),

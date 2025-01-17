@@ -10,10 +10,10 @@ import { useEffect, useState } from 'react';
 
 export const GroqSettings = () => {
   const [key, setKey] = useState<string>('');
-  const { apiKeys, updateApiKey } = usePreferenceContext();
+  const { updateApiKey, getApiKey } = usePreferenceContext();
   const { checkApiKey, isCheckingApiKey } = useLLMTest();
 
-  const groqKey = apiKeys?.find((key) => key.provider === 'groq')?.key;
+  const groqKey = getApiKey('groq');
 
   useEffect(() => {
     setKey(groqKey || '');

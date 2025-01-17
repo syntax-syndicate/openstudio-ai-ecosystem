@@ -10,12 +10,10 @@ import { useEffect, useState } from 'react';
 
 export const AnthropicSettings = () => {
   const [key, setKey] = useState<string>('');
-  const { apiKeys, updateApiKey } = usePreferenceContext();
+  const { updateApiKey, getApiKey } = usePreferenceContext();
   const { checkApiKey, isCheckingApiKey } = useLLMTest();
 
-  const anthropicKey = apiKeys?.find(
-    (key) => key.provider === 'anthropic'
-  )?.key;
+  const anthropicKey = getApiKey('anthropic');
 
   useEffect(() => {
     setKey(anthropicKey || '');

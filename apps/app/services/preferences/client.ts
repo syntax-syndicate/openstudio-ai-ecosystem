@@ -57,6 +57,12 @@ export class PreferenceService {
     }
   }
 
+  async removeApiKey(provider: TProvider): Promise<void> {
+    await database
+      ?.delete(schema.apiKeys)
+      .where(eq(schema.apiKeys.provider, provider));
+  }
+
   async setApiKeys(records: TApiKeyInsert[]): Promise<void> {
     try {
       await database

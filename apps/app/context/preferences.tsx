@@ -14,6 +14,7 @@ export type TPreferenceContext = {
   apiKeys: TApiKeys[];
   updateApiKey: (key: TProvider, value: string) => void;
   updateApiKeys: (newApiKeys: TApiKeys[]) => void;
+  getApiKey: (provider: TProvider) => string | undefined;
 };
 export const PreferenceContext = createContext<undefined | TPreferenceContext>(
   undefined
@@ -94,6 +95,9 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
         apiKeys,
         updateApiKey,
         updateApiKeys,
+        getApiKey: (provider: TProvider) => {
+          return apiKeys.find((key) => key.provider === provider)?.key;
+        },
       }}
     >
       {children}

@@ -10,10 +10,10 @@ import { useEffect, useState } from 'react';
 
 export const GeminiSettings = () => {
   const [key, setKey] = useState<string>('');
-  const { apiKeys, updateApiKey } = usePreferenceContext();
+  const { updateApiKey, getApiKey } = usePreferenceContext();
   const { checkApiKey, isCheckingApiKey } = useLLMTest();
 
-  const geminiKey = apiKeys?.find((key) => key.provider === 'gemini')?.key;
+  const geminiKey = getApiKey('gemini');
 
   useEffect(() => {
     setKey(geminiKey || '');

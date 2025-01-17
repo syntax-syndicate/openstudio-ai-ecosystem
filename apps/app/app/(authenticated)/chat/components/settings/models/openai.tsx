@@ -10,10 +10,10 @@ import { useEffect, useState } from 'react';
 
 export const OpenAISettings = () => {
   const [key, setKey] = useState<string>('');
-  const { apiKeys, updateApiKey } = usePreferenceContext();
+  const { updateApiKey, getApiKey } = usePreferenceContext();
   const { checkApiKey, isCheckingApiKey } = useLLMTest();
 
-  const openaiKey = apiKeys?.find((key) => key.provider === 'openai')?.key;
+  const openaiKey = getApiKey('openai');
 
   useEffect(() => {
     setKey(openaiKey || '');
