@@ -52,6 +52,7 @@
     "@tiptap/react": "^2.11.0",
     "@tiptap/starter-kit": "^2.11.0",
     "@types/puppeteer": "^7.0.4",
+    "avvvatars-react": "^0.4.2",
     "axios": "^1.7.9",
     "boring-avatars": "^1.11.2",
     "canvas": "^3.0.1",

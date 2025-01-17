@@ -17,6 +17,7 @@ import {
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
+import Avvvatars from 'avvvatars-react';
 import Avatar from 'boring-avatars';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
@@ -92,12 +93,7 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
           sideOffset={4}
         >
           <Flex className="items-center p-2" gap="md">
-            <Avatar
-              name={'ChatHub'}
-              variant="beam"
-              size={24}
-              colors={['#4A2BE2', '#D5EC77', '#3EE2DE', '#AF71FF', '#F882B3']}
-            />
+            <Avvvatars value={'ChatHub'} style={'shape'} size={24} />
           </Flex>
           <DropdownMenuSeparator className="my-1.5" />
           {menuItems.map((item, index) => {

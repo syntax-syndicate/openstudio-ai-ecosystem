@@ -22,6 +22,8 @@ export const ChatProvider: FC<TChatProvider> = ({ children, sessionId }) => {
     if (currentSession?.data) {
       setSession(currentSession?.data || []);
       setCurrentMessage(undefined);
+    } else if (currentSession?.isFetched && !currentSession?.data) {
+      createSession();
     }
   }, [currentSession?.data]);
 
@@ -38,7 +40,7 @@ export const ChatProvider: FC<TChatProvider> = ({ children, sessionId }) => {
     }
   }, [messages?.data]);
 
-  if (currentSession?.isLoading) {
+  if (!currentSession?.data) {
     return <FullPageLoader label="Initializing chat" />;
   }
 

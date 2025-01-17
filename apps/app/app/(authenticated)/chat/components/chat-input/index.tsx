@@ -8,7 +8,6 @@ import { ImageAttachment } from '@/app/(authenticated)/chat/components/chat-inpu
 import { ImageDropzoneRoot } from '@/app/(authenticated)/chat/components/chat-input/image-dropzone-root';
 import { ScrollToBottomButton } from '@/app/(authenticated)/chat/components/chat-input/scroll-to-bottom-button';
 import { SelectedContext } from '@/app/(authenticated)/chat/components/chat-input/selected-context';
-import { StopGenerationButton } from '@/app/(authenticated)/chat/components/chat-input/stop-generation-button';
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { WelcomeMessage } from '@/app/(authenticated)/chat/components/welcome-message';
 import { useChatContext, usePreferenceContext } from '@/context';
@@ -64,7 +63,7 @@ export const ChatInput = () => {
   };
 
   const chatInputBackgroundContainer = cn(
-    'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 px-4 pt-16 pb-3 md:px-4',
+    'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 px-4 pb-3 md:px-4',
     'transition-all duration-1000 ease-in-out',
     isFreshSession && 'top-0 justify-center'
   );
@@ -117,7 +116,6 @@ export const ChatInput = () => {
 
         <Flex items="center" justify="center" gap="sm" className="mb-2">
           <ScrollToBottomButton />
-          <StopGenerationButton />
         </Flex>
         <SelectedContext />
         <Flex direction="col" className="w-full rounded-xl bg-zinc-500/10">
