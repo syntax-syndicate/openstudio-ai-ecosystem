@@ -91,9 +91,7 @@
         "assistants_key_unique": {
           "name": "assistants_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key"
-          ]
+          "columns": ["key"]
         }
       },
       "policies": {},
@@ -199,12 +197,8 @@
           "name": "chat_messages_session_id_chat_sessions_id_fk",
           "tableFrom": "chat_messages",
           "tableTo": "chat_sessions",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["session_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -421,39 +415,22 @@
     "public.assistant_type": {
       "name": "assistant_type",
       "schema": "public",
-      "values": [
-        "base",
-        "custom"
-      ]
+      "values": ["base", "custom"]
     },
     "public.dalle_image_quality": {
       "name": "dalle_image_quality",
       "schema": "public",
-      "values": [
-        "standard",
-        "hd"
-      ]
+      "values": ["standard", "hd"]
     },
     "public.dalle_image_size": {
       "name": "dalle_image_size",
       "schema": "public",
-      "values": [
-        "1024x1024",
-        "1792x1024",
-        "1024x1792"
-      ]
+      "values": ["1024x1024", "1792x1024", "1024x1792"]
     },
     "public.provider": {
       "name": "provider",
       "schema": "public",
-      "values": [
-        "chathub",
-        "openai",
-        "anthropic",
-        "gemini",
-        "ollama",
-        "groq"
-      ]
+      "values": ["chathub", "openai", "anthropic", "gemini", "ollama", "groq"]
     },
     "public.stop_reason": {
       "name": "stop_reason",
@@ -470,10 +447,7 @@
     "public.web_search_engine": {
       "name": "web_search_engine",
       "schema": "public",
-      "values": [
-        "google",
-        "duckduckgo"
-      ]
+      "values": ["google", "duckduckgo"]
     }
   },
   "schemas": {},
