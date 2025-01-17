@@ -94,7 +94,7 @@ export const ChatInput = () => {
             justify="center"
             direction="col"
             gap="md"
-            className="mb-4"
+            className="mb-2"
           >
             <Badge
               onClick={() => setOpenChangelog(true)}
