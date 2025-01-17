@@ -55,7 +55,7 @@ export const AIMessageError: FC<TAIMessageError> = ({
         label: apiKeys?.find((key) => key.provider === assistant.provider)
           ? 'Check API Key'
           : 'Set API Key',
-        onClick: () => push(`/settings/llms/${model?.provider}`),
+        onClick: () => push(`/chat/settings/llms/${model?.provider}`),
       },
     },
     rateLimit: {
@@ -63,7 +63,7 @@ export const AIMessageError: FC<TAIMessageError> = ({
         'You have reached your daily free usage limit. Please try again later or use your own API key.',
       action: {
         label: 'Open Settings',
-        onClick: () => push('/settings/llms'),
+        onClick: () => push('/chat/settings/llms'),
       },
     },
     default: {
