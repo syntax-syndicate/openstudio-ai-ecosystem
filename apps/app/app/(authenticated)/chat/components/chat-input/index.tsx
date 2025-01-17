@@ -148,8 +148,9 @@ export const ChatInput = () => {
         </Flex>
         {isFreshSession && <ChatExamples />}
         {!isFreshSession && (
-          <Type size="xxs" textColor="tertiary" className="pb-1">
-            AI responses may not always be accurate.
+          <Type size="xxs" textColor="tertiary">
+            OpenStudio ChatHub is in public beta. AI responses may not always be
+            accurate.
           </Type>
         )}
       </div>

@@ -8,6 +8,7 @@ import type {
   TSessionsContext,
   TSessionsProvider,
 } from '@/types';
+import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
 import {
   type FC,
   createContext,
@@ -16,7 +17,6 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
 
 export const SessionContext = createContext<TSessionsContext | undefined>(
   undefined
@@ -72,7 +72,7 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
   };
 
   if (!activeSessionId || sessions?.length === 0) {
-    return <FullPageLoader />;
+    return <FullPageLoader label="Initializing chat" />;
   }
 
   return (
