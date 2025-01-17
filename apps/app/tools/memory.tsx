@@ -49,7 +49,8 @@ const memoryFunction = (context: ToolExecutionContext) => {
         const currentModel = await modelService.createInstance({
           model: model,
           provider: model.provider,
-          apiKey: apiKeys.openai,
+          apiKey: apiKeys.find((apiKey) => apiKey.provider === model.provider)
+            ?.key,
         });
 
         const chain = RunnableSequence.from([

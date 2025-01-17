@@ -10,7 +10,7 @@ export const ChatMessages = () => {
     >
       <div className="flex w-full flex-1 flex-col gap-24 p-2 md:w-[640px] lg:w-[700px]">
         <div className="flex w-full flex-col items-start px-4">
-          <WelcomeMessage show={true} />
+          <WelcomeMessage/>
           <PreviousMessages />
           <RecentMessage />
         </div>

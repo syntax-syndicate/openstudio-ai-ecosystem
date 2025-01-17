@@ -1,4 +1,5 @@
 import { ChangeLogs } from '@/app/(authenticated)/chat/components/changelogs';
+import { ApiKeyInfo } from '@/app/(authenticated)/chat/components/chat-input/api-key-info';
 import { AudioRecorder } from '@/app/(authenticated)/chat/components/chat-input/audio-recorder';
 import { ChatActions } from '@/app/(authenticated)/chat/components/chat-input/chat-actions';
 import { ChatEditor } from '@/app/(authenticated)/chat/components/chat-input/chat-editor';
@@ -22,6 +23,7 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import GitHubButton from 'react-github-btn';
 
 export const ChatInput = () => {
   const { store } = useChatContext();
@@ -62,9 +64,9 @@ export const ChatInput = () => {
   };
 
   const chatInputBackgroundContainer = cn(
-    'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 px-4 pt-16 pb-3 md:justify-end md:px-4',
+    'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 px-4 pt-16 pb-3 md:px-4',
     'transition-all duration-1000 ease-in-out',
-    isFreshSession && 'top-0 md:justify-center'
+    isFreshSession && 'top-0 justify-center'
   );
 
   const chatContainer = cn(
@@ -86,14 +88,14 @@ export const ChatInput = () => {
       />
 
       <div className={chatContainer}>
-        <Flex
-          items="center"
-          justify="center"
-          direction="col"
-          gap="md"
-          className="mb-4"
-        >
-          {isFreshSession && (
+        {isFreshSession && (
+          <Flex
+            items="center"
+            justify="center"
+            direction="col"
+            gap="md"
+            className="mb-4"
+          >
             <Badge
               onClick={() => setOpenChangelog(true)}
               className="cursor-pointer gap-1"
@@ -101,15 +103,17 @@ export const ChatInput = () => {
             >
               <Flame size={14} /> Now supports charts!!
             </Badge>
-          )}
-          <ChangeLogs open={openChangelog} setOpen={setOpenChangelog} />
-          {isFreshSession && (
+
+            <ChangeLogs open={openChangelog} setOpen={setOpenChangelog} />
+
             <ModelIcon type="chathub" size="lg" rounded={false} />
-          )}
-          <Type size="lg" textColor="secondary">
-            How can I help you?
-          </Type>
-        </Flex>
+            <Type size="lg" textColor="secondary">
+              How can I help you?
+            </Type>
+          </Flex>
+        )}
+
+        {isFreshSession && <WelcomeMessage />}
 
         <Flex items="center" justify="center" gap="sm" className="mb-2">
           <ScrollToBottomButton />
@@ -117,12 +121,7 @@ export const ChatInput = () => {
         </Flex>
         <SelectedContext />
         <Flex direction="col" className="w-full rounded-xl bg-zinc-500/10">
-          <Flex className="w-full px-3 py-2">
-            <Type size="xs" textColor="secondary">
-              OpenStudio ChatHub is available at zero cost, with daily usage
-              caps.
-            </Type>
-          </Flex>
+          <ApiKeyInfo />
           <motion.div
             variants={slideUpVariant}
             initial="initial"
@@ -148,16 +147,30 @@ export const ChatInput = () => {
           </motion.div>
         </Flex>
         {isFreshSession && <ChatExamples />}
-        <WelcomeMessage show={isFreshSession} />
+        {!isFreshSession && (
+          <Type size="xxs" textColor="tertiary" className="pb-1">
+            AI responses may not always be accurate.
+          </Type>
+        )}
       </div>
-      <Type
-        size="xxs"
-        textColor="tertiary"
-        className="absolute bottom-0 z-10 py-2 opacity-70"
-      >
-        OpenStudio ChatHub is currently in beta. AI responses may not always be
-        accurate.
-      </Type>
+      {isFreshSession && (
+        <Type
+          size="xxs"
+          textColor="tertiary"
+          className="absolute bottom-0 z-10 py-2"
+        >
+          OpenStudio ChatHub is open source{' '}
+          <span className="inline-block px-1">
+            <GitHubButton
+              href="https://github.com/kuluruvineeth/openstudio-beta"
+              data-color-scheme="no-preference: light; light: light; dark: dark;"
+              aria-label="Star kuluruvineeth/openstudio-beta on GitHub"
+            >
+              Star
+            </GitHubButton>{' '}
+          </span>
+        </Type>
+      )}
     </div>
   );
 };

@@ -60,11 +60,11 @@ const data = {
         // },
       ],
     },
-    {
-      title: 'Playground',
-      url: '/playground',
-      icon: BotIcon,
-    },
+    // {
+    //   title: 'Playground',
+    //   url: '/playground',
+    //   icon: BotIcon,
+    // },
     // {
     //   title: 'Models',
     //   url: '#',
