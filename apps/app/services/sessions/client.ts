@@ -74,6 +74,7 @@ export class SessionsService {
   }
 
   async clearSessions() {
+    await database?.delete(schema.chatMessages);
     await database?.delete(schema.chatSessions);
   }
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { AiModelsCopy } from '@/app/(authenticated)/chat/components/welcome-message/ai-models-copy';
 import { CustomAssistantCopy } from '@/app/(authenticated)/chat/components/welcome-message/custom-assistant-copy';
 import { OpenSourceCopy } from '@/app/(authenticated)/chat/components/welcome-message/opensource-copy';
@@ -64,7 +66,7 @@ export const WelcomeMessage = () => {
       if (wasShown !== 'true') {
         const timer = setTimeout(() => {
           setOpen(true);
-        }, 3000);
+        }, 100);
         return () => clearTimeout(timer);
       }
     }
@@ -157,7 +159,7 @@ export const WelcomeMessage = () => {
                     )
                   }
                 >
-                  <Github size={16} /> Star us on GitHub
+                  <Github size={16} /> Star on GitHub
                 </Button>
               </Flex>
             </Flex>

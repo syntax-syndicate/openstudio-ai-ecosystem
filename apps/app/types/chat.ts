@@ -36,5 +36,5 @@ export type TChatContext = {
 
 export type TChatProvider = {
   children: React.ReactNode;
-  sessionId: string;
+  sessionId?: string;
 };

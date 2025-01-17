@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import {
   boolean,
   decimal,
@@ -8,6 +9,7 @@ import {
   text,
   timestamp,
   uuid,
+  varchar,
 } from 'drizzle-orm/pg-core';
 import {
   type TLLMRunConfig,
@@ -123,6 +125,23 @@ export const changelogs = pgTable('changelogs', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+export const feedbackTypeEnum = pgEnum('feedback_type', [
+  'positive',
+  'neutral',
+  'negative',
+]);
+
+export const feedbacks = pgTable('feedbacks', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  feedback: text('feedback').notNull(),
+  feedbackType: feedbackTypeEnum('feedback_type')
+    .$type<(typeof feedbackTypeEnum.enumValues)[number]>()
+    .notNull(),
+  email: varchar('email', { length: 320 }),
+  createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
+
 export const schema = {
   apiKeys,
   assistants,
@@ -130,10 +149,12 @@ export const schema = {
   chatSessions,
   preferences,
   prompts,
+  feedbacks,
   changelogs,
   assistantTypeEnum,
   dalleImageQualityEnum,
   dalleImageSizeEnum,
   webSearchEngineEnum,
   stopReasonEnum,
+  feedbackTypeEnum,
 };

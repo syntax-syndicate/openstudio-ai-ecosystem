@@ -4,13 +4,12 @@ import { AudioRecorder } from '@/app/(authenticated)/chat/components/chat-input/
 import { ChatActions } from '@/app/(authenticated)/chat/components/chat-input/chat-actions';
 import { ChatEditor } from '@/app/(authenticated)/chat/components/chat-input/chat-editor';
 import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-input/chat-examples';
+import { ChatFooter } from '@/app/(authenticated)/chat/components/chat-input/chat-footer';
 import { ImageAttachment } from '@/app/(authenticated)/chat/components/chat-input/image-attachment';
 import { ImageDropzoneRoot } from '@/app/(authenticated)/chat/components/chat-input/image-dropzone-root';
 import { ScrollToBottomButton } from '@/app/(authenticated)/chat/components/chat-input/scroll-to-bottom-button';
 import { SelectedContext } from '@/app/(authenticated)/chat/components/chat-input/selected-context';
-import { StopGenerationButton } from '@/app/(authenticated)/chat/components/chat-input/stop-generation-button';
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
-import { WelcomeMessage } from '@/app/(authenticated)/chat/components/welcome-message';
 import { useChatContext, usePreferenceContext } from '@/context';
 import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils, useImageAttachment } from '@/hooks';
@@ -23,7 +22,6 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import GitHubButton from 'react-github-btn';
 
 export const ChatInput = () => {
   const { store } = useChatContext();
@@ -64,7 +62,7 @@ export const ChatInput = () => {
   };
 
   const chatInputBackgroundContainer = cn(
-    'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 px-4 pt-16 pb-3 md:px-4',
+    'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 px-4 pb-3 md:px-4',
     'transition-all duration-1000 ease-in-out',
     isFreshSession && 'top-0 justify-center'
   );
@@ -94,14 +92,14 @@ export const ChatInput = () => {
             justify="center"
             direction="col"
             gap="md"
-            className="mb-4"
+            className="mb-2"
           >
             <Badge
               onClick={() => setOpenChangelog(true)}
               className="cursor-pointer gap-1"
               variant="tertiary"
             >
-              <Flame size={14} /> Now supports charts!!
+              <Flame size={14} /> What&apos;s new
             </Badge>
 
             <ChangeLogs open={openChangelog} setOpen={setOpenChangelog} />
@@ -113,20 +111,20 @@ export const ChatInput = () => {
           </Flex>
         )}
 
-        {isFreshSession && <WelcomeMessage />}
-
         <Flex items="center" justify="center" gap="sm" className="mb-2">
           <ScrollToBottomButton />
-          <StopGenerationButton />
         </Flex>
         <SelectedContext />
-        <Flex direction="col" className="w-full rounded-xl bg-zinc-500/10">
+        <Flex
+          direction="col"
+          className="w-full rounded-xl bg-zinc-50/95 backdrop-blur-sm dark:bg-zinc-700/95"
+        >
           <ApiKeyInfo />
           <motion.div
             variants={slideUpVariant}
             initial="initial"
             animate={editor?.isEditable ? 'animate' : 'initial'}
-            className="flex w-full flex-shrink-0 overflow-hidden rounded-xl border border-zinc-500/25 bg-white shadow-sm dark:bg-zinc-700/50"
+            className="flex w-full flex-shrink-0 overflow-hidden rounded-xl border border-zinc-500/25 bg-white shadow-sm dark:bg-zinc-800"
           >
             <ImageDropzoneRoot dropzoneProps={dropzonProps}>
               <Flex direction="col" className="w-full">
@@ -148,29 +146,13 @@ export const ChatInput = () => {
         </Flex>
         {isFreshSession && <ChatExamples />}
         {!isFreshSession && (
-          <Type size="xxs" textColor="tertiary" className="pb-1">
-            AI responses may not always be accurate.
+          <Type size="xxs" textColor="tertiary">
+            OpenStudio ChatHub is in public beta. AI responses may not always be
+            accurate.
           </Type>
         )}
       </div>
-      {isFreshSession && (
-        <Type
-          size="xxs"
-          textColor="tertiary"
-          className="absolute bottom-0 z-10 py-2"
-        >
-          OpenStudio ChatHub is open source{' '}
-          <span className="inline-block px-1">
-            <GitHubButton
-              href="https://github.com/kuluruvineeth/openstudio-beta"
-              data-color-scheme="no-preference: light; light: light; dark: dark;"
-              aria-label="Star kuluruvineeth/openstudio-beta on GitHub"
-            >
-              Star
-            </GitHubButton>{' '}
-          </span>
-        </Type>
-      )}
+      {isFreshSession && <ChatFooter />}
     </div>
   );
 };

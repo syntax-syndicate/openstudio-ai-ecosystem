@@ -46,6 +46,7 @@ export const FeedbackModal = ({ open, onOpenChange }: FeedbackModalProps) => {
         body: JSON.stringify({
           feedback: values.feedback,
           feedbackType: values.feedbackType,
+          email: values.email,
         }),
       });
       onOpenChange(false);

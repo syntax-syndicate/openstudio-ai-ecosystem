@@ -36,10 +36,7 @@ export const useRelatedQuestions = () => {
 
     const assistant = getAssistantByKey(message.runConfig.assistant.key);
 
-    if (
-      !assistant ||
-      !getApiKey(assistant.model.provider)
-    ) {
+    if (!assistant || !getApiKey(assistant.model.provider)) {
       return [];
     }
 
@@ -99,10 +96,7 @@ export const useRelatedQuestions = () => {
 
     const assistant = getAssistantByKey(message.runConfig.assistant.key);
 
-    if (
-      !assistant ||
-      !getApiKey(assistant.model.provider)
-    ) {
+    if (!assistant || !getApiKey(assistant.model.provider)) {
       return [];
     }
 

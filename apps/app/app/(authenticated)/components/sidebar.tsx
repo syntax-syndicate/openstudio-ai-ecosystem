@@ -19,7 +19,6 @@ import {
 import { cn } from '@repo/design-system/lib/utils';
 import {
   AnchorIcon,
-  BotIcon,
   FrameIcon,
   LifeBuoyIcon,
   MapIcon,

@@ -33,7 +33,7 @@ export const useLLMRunner = () => {
   const resetState = store((state) => state.resetState);
   const setAbortController = store((state) => state.setAbortController);
   const { getModelByKey } = useAssistantUtils();
-  const { preferences, apiKeys, updatePreferences } = usePreferenceContext();
+  const { preferences } = usePreferenceContext();
   const { getAvailableTools } = useTools();
   const { toast } = useToast();
 
@@ -98,7 +98,7 @@ export const useLLMRunner = () => {
     );
 
     if (
-      !apiKey &&
+      !apiKey?.key &&
       !['ollama', 'chathub'].includes(selectedModelKey?.provider)
     ) {
       updateCurrentMessage({
@@ -150,7 +150,7 @@ export const useLLMRunner = () => {
       agentExecutor = new AgentExecutor({
         agent: agentWithTool as any,
         tools: availableTools,
-        maxIterations: 2,
+        maxIterations: 5,
       });
     }
     const chainWithoutTools = prompt.pipe(

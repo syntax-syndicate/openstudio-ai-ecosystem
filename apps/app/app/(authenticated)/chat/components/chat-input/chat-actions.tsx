@@ -10,11 +10,12 @@ import {
 } from '@/context';
 import { useAssistantUtils } from '@/hooks';
 import type { TAssistant } from '@/types';
-import { AiIdeaIcon, SentIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
-import { ChevronDown } from 'lucide-react';
+import { ArrowUp, Book, ChevronDown } from 'lucide-react';
+import { CircleStop } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export type TChatActions = {
@@ -35,6 +36,8 @@ export const ChatActions = ({
     TAssistant['key']
   >(preferences.defaultAssistant);
   const { models, getAssistantByKey, getAssistantIcon } = useAssistantUtils();
+  const stopGeneration = store((state) => state.stopGeneration);
+  const currentMessage = store((state) => state.currentMessage);
   useEffect(() => {
     const assistantProps = getAssistantByKey(preferences.defaultAssistant);
     if (assistantProps?.model) {
@@ -79,32 +82,33 @@ export const ChatActions = ({
         <SpaceSelector />
       </Flex>
       <Flex gap="xs" items="center">
-        <Button
-          variant="ghost"
-          onClick={() => {
-            openPrompts();
-          }}
-          size="sm"
-        >
-          <AiIdeaIcon size={16} variant="stroke" strokeWidth="2" />
-          <span className="hidden md:flex">Prompts</span>
-        </Button>
-        <Button
-          size="iconSm"
-          variant={hasTextInput ? 'default' : 'secondary'}
-          disabled={!hasTextInput || isGenerating}
-          className={sendButtonClasses}
-          onClick={() => {
-            editor?.getText() && sendMessage(editor?.getText());
-          }}
-        >
-          <SentIcon
-            size={16}
-            className="-translate-x-0.5 rotate-45"
-            variant="solid"
-            strokeWidth="2"
-          />
-        </Button>
+        <Tooltip content="Prompts">
+          <Button
+            size="iconSm"
+            variant="ghost"
+            onClick={() => {
+              openPrompts();
+            }}
+          >
+            <Book size={16} strokeWidth="2" />
+          </Button>
+        </Tooltip>
+        {isGenerating ? (
+          <Button size="sm" variant="secondary" onClick={stopGeneration}>
+            <CircleStop size={16} strokeWidth={2} /> Stop
+          </Button>
+        ) : (
+          <Button
+            size="sm"
+            variant={hasTextInput ? 'default' : 'secondary'}
+            disabled={!hasTextInput || isGenerating}
+            onClick={() => {
+              editor?.getText() && sendMessage(editor?.getText());
+            }}
+          >
+            <ArrowUp size={16} strokeWidth="2" /> Send
+          </Button>
+        )}
       </Flex>
     </Flex>
   );
