@@ -43,7 +43,7 @@ export const createChatStore = () =>
       set({
         currentMessage: {
           ...currentMessage,
-          tools: updatedTools,
+          tools: updatedTools || [],
         },
       });
     },

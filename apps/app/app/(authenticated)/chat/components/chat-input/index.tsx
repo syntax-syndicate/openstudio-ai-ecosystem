@@ -22,6 +22,7 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import GitHubButton from 'react-github-btn';
 
 export const ChatInput = () => {
   const { store } = useChatContext();
@@ -86,14 +87,14 @@ export const ChatInput = () => {
       />
 
       <div className={chatContainer}>
-        <Flex
-          items="center"
-          justify="center"
-          direction="col"
-          gap="md"
-          className="mb-4"
-        >
-          {isFreshSession && (
+        {isFreshSession && (
+          <Flex
+            items="center"
+            justify="center"
+            direction="col"
+            gap="md"
+            className="mb-4"
+          >
             <Badge
               onClick={() => setOpenChangelog(true)}
               className="cursor-pointer gap-1"
@@ -101,15 +102,15 @@ export const ChatInput = () => {
             >
               <Flame size={14} /> Now supports charts!!
             </Badge>
-          )}
-          <ChangeLogs open={openChangelog} setOpen={setOpenChangelog} />
-          {isFreshSession && (
+
+            <ChangeLogs open={openChangelog} setOpen={setOpenChangelog} />
+
             <ModelIcon type="chathub" size="lg" rounded={false} />
-          )}
-          <Type size="lg" textColor="secondary">
-            How can I help you?
-          </Type>
-        </Flex>
+            <Type size="lg" textColor="secondary">
+              How can I help you?
+            </Type>
+          </Flex>
+        )}
 
         <Flex items="center" justify="center" gap="sm" className="mb-2">
           <ScrollToBottomButton />
@@ -147,17 +148,33 @@ export const ChatInput = () => {
             </ImageDropzoneRoot>
           </motion.div>
         </Flex>
+        {!isFreshSession && (
+          <Type size="xxs" textColor="tertiary" className="pb-1">
+            AI responses may not always be accurate.
+          </Type>
+        )}
         {isFreshSession && <ChatExamples />}
-        <WelcomeMessage show={isFreshSession} />
+        {isFreshSession && <WelcomeMessage />}
       </div>
-      <Type
-        size="xxs"
-        textColor="tertiary"
-        className="absolute bottom-0 z-10 py-2 opacity-70"
-      >
-        OpenStudio ChatHub is currently in beta. AI responses may not always be
-        accurate.
-      </Type>
+      {isFreshSession && (
+        <Type
+          size="xxs"
+          textColor="tertiary"
+          className="absolute bottom-0 z-10 py-2"
+        >
+          OpenStudio ChatHub is open source{' '}
+          <span className="inline-block px-1">
+            <GitHubButton
+              href="https://github.com/kuluruvineeth/openstudio-beta"
+              data-color-scheme="no-preference: light; light: light; dark: dark;"
+              data-show-count="true"
+              aria-label="Star kuluruvineeth/openstudio-beta on GitHub"
+            >
+              Star
+            </GitHubButton>{' '}
+          </span>
+        </Type>
+      )}
     </div>
   );
 };

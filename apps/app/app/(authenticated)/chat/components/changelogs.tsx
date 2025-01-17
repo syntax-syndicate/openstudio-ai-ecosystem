@@ -7,7 +7,9 @@ import {
   CarouselItem,
 } from '@repo/design-system/components/ui/carousel';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { Type } from '@repo/design-system/components/ui/text';
 import { useQuery } from '@tanstack/react-query';
+import { Flame } from 'lucide-react';
 import Image from 'next/image';
 
 export type Changelog = {
@@ -26,14 +28,20 @@ export const ChangeLogs = ({ open, setOpen }: ChangelogsProps) => {
   const { data, error } = useQuery<{ changelogs: Changelog[] }>({
     queryKey: ['changelogs'],
     queryFn: () => fetch('/api/changelogs').then((res) => res.json()),
+    staleTime: 1000 * 60 * 30, // 30 minutes
   });
-  const changelogs = data?.changelogs;
+  const changelogs = data?.changelogs || [];
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
         ariaTitle="Changelog"
-        className="no-scrollbar max-h-[80vh] overflow-y-auto rounded-xl p-0"
+        className="no-scrollbar max-h-[80vh] gap-0 overflow-y-auto rounded-xl p-0"
       >
+        <Flex className="w-full py-3" justify="center">
+          <Type size="base" weight="bold">
+            <Flame size={20} /> What&apos;s new
+          </Type>
+        </Flex>
         {changelogs?.map((changelog) => (
           <div key={changelog.id}>
             <Carousel

@@ -91,7 +91,7 @@ export const QuickSettings = () => {
                 min={0.1}
                 max={1}
                 onValueChange={(value: number[]) => {
-                  updatePreferences({ temperature: value?.[0] });
+                  updatePreferences({ temperature: value?.[0].toString() });
                 }}
               />
               {renderResetToDefault('temperature')}
@@ -114,7 +114,7 @@ export const QuickSettings = () => {
                 min={0.1}
                 max={1}
                 onValueChange={(value: number[]) => {
-                  updatePreferences({ topP: value?.[0] });
+                  updatePreferences({ topP: value?.[0].toString() });
                 }}
               />
               {renderResetToDefault('topP')}
@@ -137,7 +137,7 @@ export const QuickSettings = () => {
                 min={0.1}
                 max={1}
                 onValueChange={(value: number[]) => {
-                  updatePreferences({ topK: value?.[0] });
+                  updatePreferences({ topK: value?.[0].toString() });
                 }}
               />
               {renderResetToDefault('topK')}
