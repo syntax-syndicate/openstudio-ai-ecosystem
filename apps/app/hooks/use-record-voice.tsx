@@ -107,7 +107,7 @@ export const useRecordVoice = () => {
         variant: 'destructive',
       });
 
-      push(`/settings/llms/openai`);
+      push(`/chat/settings/llms/openai`);
       return;
     }
 
@@ -120,7 +120,7 @@ export const useRecordVoice = () => {
           'Recordings require Speech to Text enabled. Please check settings.',
         variant: 'destructive',
       });
-      push(`/settings/voice`);
+      push(`/chat/settings/voice`);
     }
   };
 
