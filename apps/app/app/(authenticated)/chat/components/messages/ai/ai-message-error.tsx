@@ -48,13 +48,11 @@ export const AIMessageError: FC<TAIMessageError> = ({
 
   const errorConfigs: Record<string, ErrorConfig> = {
     apikey: {
-      message:  getApiKey(assistant.provider)
+      message: getApiKey(assistant.provider)
         ? 'API Key is invalid or expired.'
         : 'Missing API Key',
       action: {
-        label: getApiKey(assistant.provider)
-          ? 'Check API Key'
-          : 'Set API Key',
+        label: getApiKey(assistant.provider) ? 'Check API Key' : 'Set API Key',
         onClick: () => push(`/chat/settings/llms/${model?.provider}`),
       },
     },

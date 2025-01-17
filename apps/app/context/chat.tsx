@@ -2,6 +2,7 @@
 import { useSessions } from '@/context/sessions';
 import { createChatStore } from '@/store/chat/store';
 import type { TChatContext, TChatProvider } from '@/types/chat';
+import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
 import { type FC, createContext, useContext, useEffect, useMemo } from 'react';
 
 export const ChatContext = createContext<undefined | TChatContext>(undefined);
@@ -36,6 +37,10 @@ export const ChatProvider: FC<TChatProvider> = ({ children, sessionId }) => {
       setMessages(messages.data);
     }
   }, [messages?.data]);
+
+  if (currentSession?.isLoading) {
+    return <FullPageLoader />;
+  }
 
   return (
     <ChatContext.Provider

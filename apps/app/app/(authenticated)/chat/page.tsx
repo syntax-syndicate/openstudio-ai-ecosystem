@@ -8,19 +8,13 @@ import {
   PromptsProvider,
   useSessions,
 } from '@/context';
-import { Spinner } from '@repo/design-system/components/ui/loading-spinner';
+import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
 
 const ChatSessionPage = () => {
   const { isAllSessionLoading, activeSessionId } = useSessions();
-  const renderLoader = () => {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  };
+
   const isLoading = isAllSessionLoading || !activeSessionId;
-  if (isLoading) return renderLoader();
+  if (isLoading) return <FullPageLoader />;
   return (
     <ChatProvider sessionId={activeSessionId}>
       <CommandsProvider>

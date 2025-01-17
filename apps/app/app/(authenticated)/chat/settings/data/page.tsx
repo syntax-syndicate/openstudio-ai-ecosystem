@@ -6,11 +6,6 @@ import { useSessions } from '@/context';
 import { usePreferenceContext } from '@/context/preferences';
 import { generateAndDownloadJson } from '@/helper/utils';
 import { exportService } from '@/services/export/client';
-import {
-  AttachmentIcon,
-  FileExportIcon,
-  FileImportIcon,
-} from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Input } from '@repo/design-system/components/ui/input';
@@ -60,7 +55,7 @@ export default function DataSettings() {
   }
 
   return (
-     <Flex direction="col" gap="xl" className="w-full">
+    <Flex direction="col" gap="xl" className="w-full">
       <SettingsContainer title="Manage your Data">
         <Flex direction="col" gap="md" className="w-full">
           <SettingCard className="p-5">
@@ -75,9 +70,9 @@ export default function DataSettings() {
                   clearSessionsMutation.mutate(undefined, {
                     onSuccess: () => {
                       toast({
-                        title: "Data Cleared",
-                        description: "All chat data has been cleared",
-                        variant: "default",
+                        title: 'Data Cleared',
+                        description: 'All chat data has been cleared',
+                        variant: 'default',
                       });
                       createSession();
                     },
@@ -100,9 +95,9 @@ export default function DataSettings() {
                 onConfirm={(dismiss) => {
                   updatePreferences(defaultPreferences);
                   toast({
-                    title: "Reset successful",
-                    description: "All preferences have been reset",
-                    variant: "default",
+                    title: 'Reset successful',
+                    description: 'All preferences have been reset',
+                    variant: 'default',
                   });
                 }}
               >
@@ -136,7 +131,7 @@ export default function DataSettings() {
                 confimBtnVariant="default"
                 confirmIcon={Paperclip}
                 onConfirm={(dismiss) => {
-                  document?.getElementById("import-config")?.click();
+                  document?.getElementById('import-config')?.click();
                   dismiss();
                 }}
               >
@@ -161,7 +156,7 @@ export default function DataSettings() {
                 size="sm"
                 onClick={() => {
                   exportService.processExport().then((data) => {
-                    generateAndDownloadJson(data, "llmchat.json");
+                    generateAndDownloadJson(data, 'llmchat.json');
                   });
                 }}
               >

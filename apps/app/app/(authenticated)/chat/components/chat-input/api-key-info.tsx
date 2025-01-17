@@ -9,8 +9,8 @@ export const ApiKeyInfo = () => {
   const hasApiKeys =
     apiKeys.filter(
       (key) =>
-        ["openai", "anthropic", "gemini", "groq"].includes(key.provider) &&
-        key.key,
+        ['openai', 'anthropic', 'gemini', 'groq'].includes(key.provider) &&
+        key.key
     ).length > 0;
   if (hasApiKeys) {
     return null;
@@ -40,7 +40,7 @@ export const ApiKeyInfo = () => {
         </Link>{' '}
         for unlimited local access.
       </Type>
-       <Button
+      <Button
         variant="link"
         size="xs"
         className="text-teal-600"
