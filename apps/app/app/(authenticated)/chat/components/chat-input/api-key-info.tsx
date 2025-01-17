@@ -11,9 +11,9 @@ export const ApiKeyInfo = () => {
   const assistant = getAssistantByKey(preferences.defaultAssistant);
   const hasApiKeys =
     apiKeys.filter(
-      (key) => assistant?.model.provider === key.provider && key.key,
+      (key) => assistant?.model.provider === key.provider && key.key
     ).length > 0;
- 
+
   if (preferences.defaultAssistant === 'chathub') {
     return (
       <Flex className="w-full py-1 pr-1 pl-3" justify="between" items="center">
@@ -26,7 +26,8 @@ export const ApiKeyInfo = () => {
           size="xs"
           className="text-teal-600"
           onClick={() => {
-            window.location.href = window.location.origin + '/chat/settings/llms';
+            window.location.href =
+              window.location.origin + '/chat/settings/llms';
           }}
         >
           Manage API Keys

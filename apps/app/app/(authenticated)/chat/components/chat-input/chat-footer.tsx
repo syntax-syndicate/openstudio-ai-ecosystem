@@ -1,6 +1,6 @@
-import { Flex } from "@repo/design-system/components/ui/flex";
-import GitHubButton from "react-github-btn";
-import { Type } from "@repo/design-system/components/ui/text";
+import { Flex } from '@repo/design-system/components/ui/flex';
+import { Type } from '@repo/design-system/components/ui/text';
+import GitHubButton from 'react-github-btn';
 export const ChatFooter = () => {
   return (
     <Flex
@@ -17,15 +17,16 @@ export const ChatFooter = () => {
             aria-label="Star kuluruvineeth/openstudio-beta on GitHub"
           >
             Star
-          </GitHubButton>{" "}
+          </GitHubButton>{' '}
         </span>
       </Type>
       <Type size="xxs" textColor="tertiary">
-        project by{" "}
+        project by{' '}
         <a
           href="https://kuluruvineeth.com"
           target="_blank"
           className="ml-1 text-teal-600 underline decoration-zinc-500/20 underline-offset-2"
+          rel="noreferrer"
         >
           kuluruvineeth
         </a>

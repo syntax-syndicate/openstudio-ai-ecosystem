@@ -4,6 +4,7 @@ import { AudioRecorder } from '@/app/(authenticated)/chat/components/chat-input/
 import { ChatActions } from '@/app/(authenticated)/chat/components/chat-input/chat-actions';
 import { ChatEditor } from '@/app/(authenticated)/chat/components/chat-input/chat-editor';
 import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-input/chat-examples';
+import { ChatFooter } from '@/app/(authenticated)/chat/components/chat-input/chat-footer';
 import { ImageAttachment } from '@/app/(authenticated)/chat/components/chat-input/image-attachment';
 import { ImageDropzoneRoot } from '@/app/(authenticated)/chat/components/chat-input/image-dropzone-root';
 import { ScrollToBottomButton } from '@/app/(authenticated)/chat/components/chat-input/scroll-to-bottom-button';
@@ -21,7 +22,6 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { ChatFooter } from '@/app/(authenticated)/chat/components/chat-input/chat-footer';
 
 export const ChatInput = () => {
   const { store } = useChatContext();
