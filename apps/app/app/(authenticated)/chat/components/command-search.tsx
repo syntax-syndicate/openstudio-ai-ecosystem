@@ -2,7 +2,6 @@
 import { useRootContext } from '@/context/root';
 import { useSessions } from '@/context/sessions';
 import { sortSessions } from '@/helper/utils';
-import { Button } from '@repo/design-system/components/ui/button';
 import {
   CommandDialog,
   CommandEmpty,
@@ -12,9 +11,8 @@ import {
   CommandList,
   CommandSeparator,
 } from '@repo/design-system/components/ui/command';
-import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { cn } from '@repo/design-system/lib/utils';
-import { Moon, Plus, Sun, Trash } from 'lucide-react';
+import { Moon, Plus, Sun } from 'lucide-react';
 import moment from 'moment';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
@@ -23,7 +21,6 @@ export const CommandSearch = () => {
   const { isCommandSearchOpen, setIsCommandSearchOpen } = useRootContext();
   const { sessions, createSession, refetchSessions, setActiveSessionId } =
     useSessions();
-  const { toast } = useToast();
   const { theme, setTheme } = useTheme();
   useEffect(() => {
     if (isCommandSearchOpen) {
@@ -56,37 +53,6 @@ export const CommandSearch = () => {
       action: () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
         onClose();
-      },
-    },
-    {
-      name: 'Delete current session',
-      icon: Trash,
-      action: () => {
-        onClose();
-        toast({
-          title: 'Delete Session?',
-          description: 'This action cannot be undone.',
-          variant: 'destructive',
-          action: (
-            <Button
-              size="sm"
-              variant="default"
-              onClick={() => {
-                // currentSession?.id &&
-                //   removeSessionMutation.mutate(currentSession?.id, {
-                //     onSuccess() {
-                //       createSession({
-                //         redirect: true,
-                //       });
-                //       dismiss();
-                //     },
-                //   });
-              }}
-            >
-              Delete
-            </Button>
-          ),
-        });
       },
     },
   ];

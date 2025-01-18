@@ -1,4 +1,3 @@
-import { AssistantHeader } from '@/app/(authenticated)/chat/components/assistants/assistant-header';
 import { AssistantItem } from '@/app/(authenticated)/chat/components/assistants/assistant-item';
 import { CreateAssistant } from '@/app/(authenticated)/chat/components/assistants/create-assistant';
 import { defaultPreferences } from '@/config';
@@ -96,7 +95,13 @@ export const AssistantModal: FC<TAssitantModal> = ({
 
   const renderEmptyState = () => {
     return (
-      <Flex direction="col" items="center" justify="center" className="w-full">
+      <Flex
+        direction="col"
+        items="center"
+        justify="center"
+        className="w-full px-4"
+        gap="md"
+      >
         <Type size="sm" textColor="tertiary">
           No assistants found.
         </Type>
@@ -105,7 +110,7 @@ export const AssistantModal: FC<TAssitantModal> = ({
           variant="outlined"
           onClick={() => setOpenCreateAssistant(true)}
         >
-          Create New
+          Create Custom Assistant
         </Button>
       </Flex>
     );
@@ -130,15 +135,13 @@ export const AssistantModal: FC<TAssitantModal> = ({
           align="start"
         >
           <Command className="relative h-full overflow-hidden rounded-xl dark:bg-zinc-700">
-            <div className="h-12 w-full border-zinc-500/20 border-b px-2">
+            <div className="h-11 w-full border-zinc-500/20 border-b px-2">
               <CommandInput
                 placeholder="Search assistants..."
-                className="h-12"
+                className="h-11"
                 ref={searchRef}
               />
             </div>
-
-            <CommandEmpty>{renderEmptyState()}</CommandEmpty>
 
             <Flex className="px-3 py-2" gap="xs">
               <Button
@@ -157,14 +160,22 @@ export const AssistantModal: FC<TAssitantModal> = ({
               </Button>
             </Flex>
 
+            <CommandEmpty>{renderEmptyState()}</CommandEmpty>
+
             <CommandList className="!max-h-[50vh] h-full overflow-y-auto pb-2">
               {activeTab === 'assistants' && (
                 <CommandGroup className="w-full px-2.5">
                   {!!customAssistants?.length && (
-                    <AssistantHeader
-                      openCreateAssistant={openCreateAssistant}
-                      setOpenCreateAssistant={setOpenCreateAssistant}
-                    />
+                    <Flex direction="col" className="w-full p-2">
+                      <Button
+                        size="sm"
+                        className="w-full"
+                        variant="outlined"
+                        onClick={() => setOpenCreateAssistant(true)}
+                      >
+                        Create Custom Assistant
+                      </Button>
+                    </Flex>
                   )}
                   <Flex direction="col" className="w-full">
                     {renderAssistants(customAssistants)}

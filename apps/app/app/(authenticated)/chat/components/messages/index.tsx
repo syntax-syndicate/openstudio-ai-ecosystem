@@ -8,7 +8,7 @@ export const ChatMessages = () => {
       className="flex h-[100dvh] w-full flex-col items-center overflow-y-auto pt-[60px] pb-[200px]"
       id="chat-container"
     >
-      <div className="flex w-full flex-col items-start px-4 pt-4 md:w-[640px] lg:w-[720px]">
+      <div className="-translate-x-4 flex w-full flex-col items-start px-4 pt-4 md:w-[600px] lg:w-[680px]">
         <WelcomeMessage />
         <PreviousMessages />
         <RecentMessage />

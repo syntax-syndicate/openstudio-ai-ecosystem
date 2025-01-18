@@ -1,5 +1,6 @@
 'use client';
 
+import { ApiKeyModal } from '@/app/(authenticated)/chat/components/api-key-modal';
 import { CommandSearch } from '@/app/(authenticated)/chat/components/command-search';
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
 import { SettingsSidebar } from '@/app/(authenticated)/chat/components/layout/settings-sidebar';
@@ -39,6 +40,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
               {children}
             </div>
           </div>
+          <ApiKeyModal />
           <CommandSearch />
         </Flex>
         <Toaster />

@@ -1,4 +1,5 @@
 import { ChangeLogs } from '@/app/(authenticated)/chat/components/changelogs';
+import { ApiKeyInfo } from '@/app/(authenticated)/chat/components/chat-input/api-key-info';
 import { ChatActions } from '@/app/(authenticated)/chat/components/chat-input/chat-actions';
 import { ChatEditor } from '@/app/(authenticated)/chat/components/chat-input/chat-editor';
 import { ChatExamples } from '@/app/(authenticated)/chat/components/chat-input/chat-examples';
@@ -68,7 +69,7 @@ export const ChatInput = () => {
   );
 
   const chatContainer = cn(
-    'z-10 flex w-full flex-col items-center gap-1 md:w-[640px] lg:w-[700px]'
+    'z-10 flex w-full flex-1 flex-col items-center gap-1 md:w-[640px] lg:w-[700px]'
   );
 
   return (
@@ -96,7 +97,7 @@ export const ChatInput = () => {
               justify="center"
               direction="col"
               gap="md"
-              className="mb-2"
+              className="mb-2 flex-1"
             >
               <Badge
                 onClick={() => setOpenChangelog(true)}
@@ -112,16 +113,16 @@ export const ChatInput = () => {
               <Type size="lg" textColor="secondary">
                 How can I help you?
               </Type>
+              <ApiKeyInfo />
             </Flex>
           )}
+          {isFreshSession && <ChatExamples />}
 
           <Flex items="center" justify="center" gap="sm" className="mb-2">
             <ScrollToBottomButton />
           </Flex>
 
           <SelectedContext />
-
-          {/* <ApiKeyInfo /> */}
 
           <Flex
             direction="col"
@@ -150,9 +151,8 @@ export const ChatInput = () => {
               </ImageDropzoneRoot>
             </motion.div>
           </Flex>
-          {isFreshSession && <ChatExamples />}
+          <ChatFooter />
         </div>
-        {isFreshSession && <ChatFooter />}
       </div>
     </>
   );
