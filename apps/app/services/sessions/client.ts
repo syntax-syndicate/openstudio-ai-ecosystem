@@ -2,7 +2,7 @@ import { generateShortUUID, sortSessions } from '@/helper/utils';
 import type { TChatMessage, TChatSession } from '@/types';
 import { database } from '@repo/database';
 import { schema } from '@repo/database/schema';
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import moment from 'moment';
 
 export class SessionsService {
@@ -40,13 +40,18 @@ export class SessionsService {
   }
 
   async removeSessionById(id: string) {
-    await database
-      ?.delete(schema.chatSessions)
-      .where(eq(schema.chatSessions.id, id));
+    try {
+      this.messagesService.removeMessages(id);
+      const deletedSession = await database
+        ?.delete(schema.chatSessions)
+        .where(eq(schema.chatSessions.id, id))
+        .returning();
 
-    this.messagesService.removeMessages(id);
-    const session = await this.getSessionById(id);
-    return session;
+      const session = await this.getSessionById(id);
+      return session;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async createNewSession(): Promise<TChatSession | null> {
@@ -85,7 +90,10 @@ export class SessionsService {
 
 export class MessagesService {
   async getAllMessages() {
-    return await database?.select().from(schema.chatMessages);
+    return await database
+      ?.select()
+      .from(schema.chatMessages)
+      .orderBy(asc(schema.chatMessages.createdAt));
   }
 
   async addAllMessages(messages: TChatMessage[]) {
@@ -97,7 +105,8 @@ export class MessagesService {
       (await database
         ?.select()
         .from(schema.chatMessages)
-        .where(eq(schema.chatMessages.parentId, parentId))) || []
+        .where(eq(schema.chatMessages.parentId, parentId))
+        .orderBy(asc(schema.chatMessages.createdAt))) || []
     );
   }
 
@@ -148,7 +157,8 @@ export class MessagesService {
   async removeMessages(parentId: string) {
     await database
       ?.delete(schema.chatMessages)
-      .where(eq(schema.chatMessages.parentId, parentId));
+      .where(eq(schema.chatMessages.parentId, parentId))
+      .returning();
   }
 }
 

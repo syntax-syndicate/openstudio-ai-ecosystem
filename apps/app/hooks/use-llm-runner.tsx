@@ -1,5 +1,6 @@
 import { defaultPreferences } from '@/config';
 import { useChatContext, usePreferenceContext } from '@/context';
+import { useRootContext } from '@/context/root';
 import { injectPresetValues } from '@/helper/preset-prompt-values';
 import { constructMessagePrompt, constructPrompt } from '@/helper/promptUtil';
 import { generateShortUUID } from '@/helper/utils';
@@ -36,15 +37,14 @@ export const useLLMRunner = () => {
   const { preferences } = usePreferenceContext();
   const { getAvailableTools } = useTools();
   const { toast } = useToast();
+  const { setApiKeyModalProvider, setOpenApiKeyModal } = useRootContext();
 
   const invokeModel = async (config: TLLMRunConfig) => {
-    editor?.commands.clearContent();
     //to avoid duplication not refetch when regenerating
     if (!config?.messageId) {
       refetch();
     }
     resetState();
-    setIsGenerating(true);
 
     const currentAbortController = new AbortController();
     setAbortController(currentAbortController);
@@ -68,23 +68,6 @@ export const useLLMRunner = () => {
     const messageLimit =
       preferences.messageLimit || defaultPreferences.messageLimit;
 
-    setCurrentMessage({
-      runConfig: config,
-      id: newMessageId,
-      parentId: sessionId,
-      sessionId,
-      rawHuman: input || null,
-      stop: false,
-      stopReason: null,
-      rawAI: null,
-      image: image || null,
-      tools: [],
-      relatedQuestions: [],
-      createdAt: moment().toDate(),
-      isLoading: true,
-      errorMessage: null,
-    });
-
     const selectedModelKey = getModelByKey(
       modelKey,
       assistant.provider as TProvider
@@ -101,13 +84,30 @@ export const useLLMRunner = () => {
       !apiKey?.key &&
       !['ollama', 'chathub'].includes(selectedModelKey?.provider)
     ) {
-      updateCurrentMessage({
-        isLoading: false,
-        stop: true,
-        stopReason: 'apikey',
-      });
+      setIsGenerating(false);
+      setApiKeyModalProvider(selectedModelKey?.provider);
+      setOpenApiKeyModal(true);
       return;
     }
+
+    editor?.commands.clearContent();
+    setIsGenerating(true);
+    setCurrentMessage({
+      runConfig: config,
+      id: newMessageId,
+      parentId: sessionId,
+      sessionId,
+      rawHuman: input || null,
+      stop: false,
+      stopReason: null,
+      rawAI: null,
+      image: image || null,
+      tools: [],
+      relatedQuestions: [],
+      createdAt: moment().toDate(),
+      isLoading: true,
+      errorMessage: null,
+    });
 
     const prompt = await constructPrompt({
       context,

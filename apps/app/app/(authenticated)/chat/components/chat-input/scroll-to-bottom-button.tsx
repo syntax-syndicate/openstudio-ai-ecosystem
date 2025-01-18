@@ -12,7 +12,12 @@ export const ScrollToBottomButton = () => {
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0, opacity: 0 }}
     >
-      <Button onClick={scrollToBottom} size="iconXS" rounded="full">
+      <Button
+        onClick={scrollToBottom}
+        variant="bordered"
+        size="iconXS"
+        rounded="full"
+      >
         <ArrowDown02Icon size={16} strokeWidth="2" />
       </Button>
     </motion.span>

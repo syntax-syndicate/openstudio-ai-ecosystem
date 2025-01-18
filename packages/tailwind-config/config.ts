@@ -1,6 +1,7 @@
 import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
+import defaultTheme from 'tailwindcss/defaultTheme';
 import typographyConfig from './typography.config';
 
 export const config: Config = {
@@ -98,7 +99,7 @@ export const config: Config = {
       //TODO: Clerk Components have issue with adding this
       // fontSize: {
       //   xs: "0.75rem",
-      //   sm: "0.875rem",
+      //   sm: "0.850rem",
       //   base: "1rem",
       //   lg: "1.115rem",
       //   xl: "1.25rem",
@@ -118,13 +119,9 @@ export const config: Config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
-      // fontFamily: {
-      //   sans: ['var(--font-geist-sans)', ...defaultTheme.fontFamily.sans],
-      //   mono: ['var(--font-geist-mono)', ...defaultTheme.fontFamily.mono],
-      // },
       fontFamily: {
-        sans: ['var(--font-inter)'],
-        mono: ['var(--font-mono)'],
+        sans: ['var(--font-geist-sans)', ...defaultTheme.fontFamily.sans],
+        mono: ['var(--font-geist-mono)', ...defaultTheme.fontFamily.mono],
       },
       keyframes: {
         'accordion-down': {

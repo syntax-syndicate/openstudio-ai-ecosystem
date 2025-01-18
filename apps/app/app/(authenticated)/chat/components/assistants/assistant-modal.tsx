@@ -1,6 +1,9 @@
+import { AssistantItem } from '@/app/(authenticated)/chat/components/assistants/assistant-item';
 import { CreateAssistant } from '@/app/(authenticated)/chat/components/assistants/create-assistant';
+import { defaultPreferences } from '@/config';
 import { usePreferenceContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
+import type { TAssistant } from '@/types';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Command,
@@ -8,15 +11,6 @@ import {
   CommandInput,
   CommandList,
 } from '@repo/design-system/components/ui/command';
-import { Flex } from '@repo/design-system/components/ui/flex';
-import { Type } from '@repo/design-system/components/ui/text';
-import { cn } from '@repo/design-system/lib/utils';
-
-import { AssistantBanner } from '@/app/(authenticated)/chat/components/assistants/assistant-banner';
-import { AssistantHeader } from '@/app/(authenticated)/chat/components/assistants/assistant-header';
-import { AssistantItem } from '@/app/(authenticated)/chat/components/assistants/assistant-item';
-import { defaultPreferences } from '@/config';
-import type { TAssistant } from '@/types';
 import { CommandGroup } from '@repo/design-system/components/ui/command';
 import {
   Dialog,
@@ -24,21 +18,26 @@ import {
   DialogOverlay,
   DialogPortal,
 } from '@repo/design-system/components/ui/dialog';
+import { Flex } from '@repo/design-system/components/ui/flex';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@repo/design-system/components/ui/popover';
+import { Type } from '@repo/design-system/components/ui/text';
+import { cn } from '@repo/design-system/lib/utils';
+import { ChevronDown } from 'lucide-react';
 import { type FC, useEffect, useRef, useState } from 'react';
 
 export type TAssitantModal = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
   selectedAssistantKey: string;
   onAssistantchange: (assistantKey: string) => void;
 };
-
 export const AssistantModal: FC<TAssitantModal> = ({
-  open,
-  onOpenChange,
   selectedAssistantKey,
   onAssistantchange,
 }) => {
+  const { getAssistantByKey, getAssistantIcon } = useAssistantUtils();
   const { preferences, updatePreferences } = usePreferenceContext();
   const {
     assistants,
@@ -54,11 +53,13 @@ export const AssistantModal: FC<TAssitantModal> = ({
   const customAssistants = assistants?.filter((a) => a.type === 'custom');
   const baseAssistants = assistants?.filter((a) => a.type === 'base');
 
-  useEffect(() => {
-    if (open && searchRef?.current) {
-      searchRef?.current?.focus();
-    }
-  }, [open]);
+  const selectedAssistant = getAssistantByKey(selectedAssistantKey);
+
+  // useEffect(() => {
+  //   if (open && searchRef?.current) {
+  //     searchRef?.current?.focus();
+  //   }
+  // }, [open]);
 
   useEffect(() => {
     onAssistantchange(preferences.defaultAssistant);
@@ -85,7 +86,7 @@ export const AssistantModal: FC<TAssitantModal> = ({
           assistant={assistant}
           onSelect={(assistant) => {
             onAssistantchange(assistant.key);
-            onOpenChange(false);
+            // onOpenChange(false);
           }}
         />
       );
@@ -94,7 +95,13 @@ export const AssistantModal: FC<TAssitantModal> = ({
 
   const renderEmptyState = () => {
     return (
-      <Flex direction="col" items="center" justify="center" className="w-full">
+      <Flex
+        direction="col"
+        items="center"
+        justify="center"
+        className="w-full px-4"
+        gap="md"
+      >
         <Type size="sm" textColor="tertiary">
           No assistants found.
         </Type>
@@ -103,73 +110,97 @@ export const AssistantModal: FC<TAssitantModal> = ({
           variant="outlined"
           onClick={() => setOpenCreateAssistant(true)}
         >
-          Create New
+          Create Custom Assistant
         </Button>
       </Flex>
     );
   };
 
+  const [activeTab, setActiveTab] = useState<'assistants' | 'models'>('models');
+
   return (
     <>
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogPortal>
-          <DialogContent
-            ariaTitle="Assistants"
-            className="!w-[440px] rounded-xl bg-white p-0"
-          >
-            <Command className="relative h-full rounded-xl dark:border dark:border-white/10">
-              <div className="h-12 w-full border-zinc-500/20 border-b px-2">
-                <CommandInput
-                  placeholder="Search assistants..."
-                  className="h-12"
-                  ref={searchRef}
-                />
-              </div>
-              <CommandEmpty>{renderEmptyState()}</CommandEmpty>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="bordered" size="sm" className="gap-1 pr-3 pl-1.5">
+            {selectedAssistant?.assistant?.key &&
+              getAssistantIcon(selectedAssistant?.assistant?.key, 'sm')}
+            {selectedAssistant?.assistant?.name}
+            <ChevronDown size={14} strokeWidth="2" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="mr-8 w-[380px] rounded-xl p-0 dark:bg-zinc-700"
+          side="bottom"
+          align="start"
+        >
+          <Command className="relative h-full overflow-hidden rounded-xl dark:bg-zinc-700">
+            <div className="h-11 w-full border-zinc-500/20 border-b px-2">
+              <CommandInput
+                placeholder="Search assistants..."
+                className="h-11"
+                ref={searchRef}
+              />
+            </div>
 
-              <CommandList className="!max-h-[50vh] h-full overflow-y-auto">
-                {!customAssistants?.length && (
-                  <AssistantBanner
-                    openCreateAssistant={openCreateAssistant}
-                    setOpenCreateAssistant={setOpenCreateAssistant}
-                  />
-                )}
+            <Flex className="px-3 py-2" gap="xs">
+              <Button
+                variant={activeTab === 'models' ? 'secondary' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('models')}
+              >
+                Models
+              </Button>
+              <Button
+                variant={activeTab === 'assistants' ? 'secondary' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('assistants')}
+              >
+                Assistants
+              </Button>
+            </Flex>
+
+            <CommandEmpty>{renderEmptyState()}</CommandEmpty>
+
+            <CommandList className="!max-h-[50vh] h-full overflow-y-auto pb-2">
+              {activeTab === 'assistants' && (
                 <CommandGroup className="w-full px-2.5">
                   {!!customAssistants?.length && (
-                    <AssistantHeader
-                      openCreateAssistant={openCreateAssistant}
-                      setOpenCreateAssistant={setOpenCreateAssistant}
-                    />
+                    <Flex direction="col" className="w-full p-2">
+                      <Button
+                        size="sm"
+                        className="w-full"
+                        variant="outlined"
+                        onClick={() => setOpenCreateAssistant(true)}
+                      >
+                        Create Custom Assistant
+                      </Button>
+                    </Flex>
                   )}
                   <Flex direction="col" className="w-full">
                     {renderAssistants(customAssistants)}
                   </Flex>
                 </CommandGroup>
+              )}
 
+              {activeTab === 'models' && (
                 <CommandGroup>
                   <Flex direction="col" className="w-full px-2.5">
-                    <Type
-                      weight="medium"
-                      size="sm"
-                      className="w-full px-2 py-2"
-                    >
-                      Models
-                    </Type>
                     {renderAssistants(baseAssistants)}
                   </Flex>
                 </CommandGroup>
-              </CommandList>
-            </Command>
-          </DialogContent>
-        </DialogPortal>
-      </Dialog>
+              )}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
       <Dialog
         modal={true}
         open={openCreateAssistant}
         onOpenChange={setOpenCreateAssistant}
       >
         <DialogPortal>
-          <DialogOverlay className="fixed inset-0 z-[600] bg-zinc-500/70 backdrop-blur-sm dark:bg-zinc-900/70" />
+          <DialogOverlay className="fixed inset-0 z-[600] bg-zinc-500/50 dark:bg-zinc-900/50" />
           <DialogContent
             ariaTitle="Create Assistant"
             onInteractOutside={(e) => {

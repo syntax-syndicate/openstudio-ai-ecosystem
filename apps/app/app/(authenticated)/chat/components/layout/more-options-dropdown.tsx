@@ -3,7 +3,6 @@ import {
   Github01Icon,
   HelpCircleIcon,
   Moon02Icon,
-  Settings03Icon,
   Sun01Icon,
   TwitterIcon,
 } from '@hugeicons/react';
@@ -52,13 +51,6 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
   const { theme, setTheme } = useTheme();
   const menuItems = [
     {
-      label: 'Settings',
-      onClick: () => {
-        push('/chat/settings/common');
-      },
-      icon: Settings03Icon,
-    },
-    {
       label: 'Support',
       onClick: () => {
         window.open('mailto:kuluruvineeth8623@gmail.com', '_blank');
@@ -89,8 +81,8 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
         <DropdownMenuContent
           className="min-w-[250px] p-1.5 text-sm md:text-base"
           align="end"
-          side="bottom"
-          sideOffset={4}
+          side="right"
+          sideOffset={8}
         >
           <Flex className="items-center p-2" gap="md">
             <Avvvatars value={'ChatHub'} style={'shape'} size={24} />

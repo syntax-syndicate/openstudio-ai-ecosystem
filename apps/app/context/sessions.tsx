@@ -7,7 +7,6 @@ import type {
   TSessionsContext,
   TSessionsProvider,
 } from '@/types';
-import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
 import { type FC, createContext, useContext, useEffect, useMemo } from 'react';
 
 export const SessionContext = createContext<TSessionsContext | undefined>(
@@ -52,10 +51,6 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
       console.error('Failed to add message:', error);
     }
   };
-
-  if (!activeSessionId) {
-    return <FullPageLoader label="Initializing chat" />;
-  }
 
   return (
     <SessionContext.Provider

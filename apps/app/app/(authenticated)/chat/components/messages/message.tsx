@@ -3,7 +3,6 @@ import { ContextMessage } from '@/app/(authenticated)/chat/components/messages/c
 import { HumanMessage } from '@/app/(authenticated)/chat/components/messages/human-message';
 import { ImageMessage } from '@/app/(authenticated)/chat/components/messages/image-message';
 import type { TChatMessage } from '@/types';
-import { Add01Icon, MinusSignIcon } from '@hugeicons/react';
 import {
   Accordion,
   AccordionContent,
@@ -24,28 +23,13 @@ const CustomTrigger = forwardRef<
   HTMLButtonElement,
   React.ComponentPropsWithoutRef<typeof AccordionTrigger>
 >(({ children, ...props }, ref) => (
-  <AccordionHeader className="flex w-full">
+  <AccordionHeader className="flex w-full rounded-xl p-2 hover:bg-zinc-50/50">
     <AccordionTrigger
       {...props}
       ref={ref}
-      className="group flex w-full items-start justify-between"
+      className="group flex w-full items-center justify-between"
     >
       <Flex className="w-full flex-1 items-start">{children}</Flex>
-      <Flex
-        className="mt-1 h-6 w-10 shrink-0 px-2"
-        items="center"
-        justify="center"
-      >
-        <Add01Icon
-          size={20}
-          className="opacity-50 transition-transform duration-200 group-data-[state=open]:hidden"
-        />
-        <MinusSignIcon
-          size={20}
-          strokeWidth={1.5}
-          className="opacity-50 transition-transform duration-200 group-data-[state=closed]:hidden"
-        />
-      </Flex>
     </AccordionTrigger>
   </AccordionHeader>
 ));
@@ -64,7 +48,7 @@ export const Message: FC<TMessage> = ({ message, isLast }) => {
         value={message.id}
         key={message.id}
         className={cn(
-          'flex w-full flex-col items-start gap-1 border-zinc-500/15 border-b py-8',
+          'flex w-full flex-col items-start gap-1 py-2',
           isLast && 'border-b-0'
         )}
       >
@@ -75,7 +59,7 @@ export const Message: FC<TMessage> = ({ message, isLast }) => {
             <HumanMessage chatMessage={message} />
           </Flex>
         </CustomTrigger>
-        <AccordionContent className="w-full items-start">
+        <AccordionContent className="w-full items-start p-2">
           <AIMessage message={message} isLast={isLast} />
         </AccordionContent>
       </AccordionItem>

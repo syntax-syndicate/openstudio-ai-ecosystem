@@ -1,5 +1,4 @@
 import { useClipboard } from '@/hooks/use-clipboard';
-import { mono } from '@/lib/fonts';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Copy01Icon,
@@ -62,7 +61,6 @@ export const CodeBlock = ({
       )}
       <pre className="w-full px-6 py-2">
         <code
-          style={mono.style}
           className={`hljs language-${language} inline-block w-full overflow-x-auto whitespace-pre-wrap break-words pr-[100%] text-[0.85rem] tracking-wide`}
           ref={ref}
         ></code>

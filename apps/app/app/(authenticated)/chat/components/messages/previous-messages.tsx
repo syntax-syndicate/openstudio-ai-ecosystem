@@ -2,7 +2,7 @@ import { Message } from '@/app/(authenticated)/chat/components/messages/message'
 import { useChatContext } from '@/context';
 import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom';
 import type { TChatMessage } from '@/types';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 export const PreviousMessages = () => {
   const { store } = useChatContext();
@@ -16,11 +16,11 @@ export const PreviousMessages = () => {
     return <Message message={message} isLast={isLast} key={message.id} />;
   };
 
-  useEffect(() => {
-    if (messages?.length) {
-      scrollToBottom();
-    }
-  }, [messages.length]);
+  // useEffect(() => {
+  //   if (messages?.length) {
+  //     scrollToBottom();
+  //   }
+  // }, [messages.length]);
 
   const previousMessages = useMemo(() => {
     return messages.map(renderMessage);

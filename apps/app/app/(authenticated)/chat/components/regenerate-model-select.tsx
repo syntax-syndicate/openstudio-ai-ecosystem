@@ -37,7 +37,7 @@ export const RegenerateWithModelSelect = ({
             {
               <Button variant="secondary" size="sm" rounded="lg">
                 <SparklesIcon size={16} variant="stroke" strokeWidth="2" />
-                {messageAssistantProps?.model?.name}
+                Regenerate
                 <ArrowDown01Icon size={16} variant="stroke" strokeWidth="2" />
               </Button>
             }

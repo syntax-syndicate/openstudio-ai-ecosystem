@@ -15,7 +15,6 @@ import {
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
-import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -75,7 +74,7 @@ export const HistoryItem = ({
   };
 
   const containerClasses = cn(
-    'group flex w-full w-full cursor-pointer flex-row items-start gap-2 rounded-lg py-2 pr-2 pl-3 hover:bg-zinc-500/10',
+    'group flex h-10 w-full w-full cursor-pointer flex-row items-center gap-2 rounded-lg py-1 pr-1.5 pl-2.5 hover:bg-zinc-500/10',
     activeSessionId === session.id || isEditing ? 'bg-zinc-500/10' : ''
   );
 
@@ -107,7 +106,7 @@ export const HistoryItem = ({
       {isEditing ? (
         <Input
           variant="ghost"
-          className="h-6 text-sm"
+          className="h-6 pl-0 text-sm"
           ref={historyInputRef}
           value={title || 'Untitled'}
           onChange={handleInputChange}
@@ -117,17 +116,12 @@ export const HistoryItem = ({
       ) : (
         <>
           <Flex direction="col" items="start" className="w-full" gap="none">
-            <Type
-              className="line-clamp-1"
-              size="sm"
-              textColor="primary"
-              weight="medium"
-            >
+            <Type className="line-clamp-1" size="sm" textColor="primary">
               {session.title}
             </Type>
-            <Type className="line-clamp-1" size="xs" textColor="tertiary">
+            {/* <Type className="line-clamp-1" size="xs" textColor="tertiary">
               {moment(session.updatedAt).fromNow()}
-            </Type>
+            </Type> */}
           </Flex>
         </>
       )}
@@ -153,7 +147,7 @@ export const HistoryItem = ({
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="z-[1000]" side="bottom">
-                <p className="pb-2 font-medium text-sm md:text-base">
+                <p className="pb-2 font-medium text-sm">
                   Are you sure you want to delete this session?
                 </p>
                 <div className="flex flex-row gap-1">
@@ -165,7 +159,7 @@ export const HistoryItem = ({
                     Delete
                   </Button>
                   <Button
-                    variant="ghost"
+                    variant="secondary"
                     size="sm"
                     onClick={(e) => {
                       setOpenDeleteConfirm(false);

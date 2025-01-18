@@ -1,4 +1,5 @@
 import { Mdx } from '@/app/(authenticated)/chat/components/mdx';
+import { getRelativeDate } from '@/helper/utils';
 import { Dialog, DialogContent } from '@repo/design-system/components/ui';
 import {
   Autoplay,
@@ -17,6 +18,7 @@ export type Changelog = {
   images: string[];
   content: string;
   title: string;
+  createdAt: string;
 };
 
 export type ChangelogsProps = {
@@ -35,15 +37,28 @@ export const ChangeLogs = ({ open, setOpen }: ChangelogsProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
         ariaTitle="Changelog"
-        className="no-scrollbar max-h-[80vh] gap-0 overflow-y-auto rounded-xl p-0"
+        className="no-scrollbar !max-w-[500px] max-h-[80vh] gap-0 overflow-y-auto rounded-xl p-0"
       >
-        <Flex className="w-full py-3" justify="center">
+        <Flex className="w-full border-b py-3" justify="center">
           <Type size="base" weight="bold">
             <Flame size={20} /> What&apos;s new
           </Type>
         </Flex>
         {changelogs?.map((changelog) => (
-          <div key={changelog.id}>
+          <Flex
+            key={changelog.id}
+            className="px-6 py-4"
+            direction="col"
+            gap="md"
+          >
+            <Flex direction="col" gap="none">
+              <Type size="lg" weight="medium">
+                {changelog.title}
+              </Type>
+              <Type size="sm" textColor="secondary">
+                {getRelativeDate(changelog.createdAt)}
+              </Type>
+            </Flex>
             <Carousel
               opts={{
                 align: 'start',
@@ -54,7 +69,7 @@ export const ChangeLogs = ({ open, setOpen }: ChangelogsProps) => {
                   delay: 2000,
                 }),
               ]}
-              className="w-full bg-zinc-500/10"
+              className="w-full overflow-hidden rounded-xl bg-zinc-500/10"
             >
               <CarouselContent>
                 {changelog.images.map((image) => (
@@ -71,8 +86,7 @@ export const ChangeLogs = ({ open, setOpen }: ChangelogsProps) => {
                 ))}
               </CarouselContent>
             </Carousel>
-            <Flex direction="col" gap="md" className="px-6 py-4">
-              <h3 className="font-medium text-xl">{changelog.title}</h3>
+            <Flex direction="col" gap="md">
               <Mdx
                 message={changelog.content}
                 animate={true}
@@ -80,7 +94,7 @@ export const ChangeLogs = ({ open, setOpen }: ChangelogsProps) => {
                 messageId={changelog.id}
               />
             </Flex>
-          </div>
+          </Flex>
         ))}
       </DialogContent>
     </Dialog>

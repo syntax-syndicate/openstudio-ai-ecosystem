@@ -156,7 +156,7 @@ export default function DataSettings() {
                 size="sm"
                 onClick={() => {
                   exportService.processExport().then((data) => {
-                    generateAndDownloadJson(data, 'llmchat.json');
+                    generateAndDownloadJson(data, 'chathub.json');
                   });
                 }}
               >
