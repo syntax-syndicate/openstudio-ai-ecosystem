@@ -2,7 +2,6 @@ import { CodeBlock } from '@/app/(authenticated)/chat/components/codeblock';
 import { SearchFavicon } from '@/app/(authenticated)/chat/components/tools/search-favicon';
 import { REVEAL_ANIMATION_VARIANTS } from '@/helper/animations';
 import { isValidUrl } from '@/helper/utils';
-import { mono } from '@/lib/fonts';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import {
@@ -90,10 +89,7 @@ const Mdx: FC<TMdx> = ({ message, animate, messageId, size = 'base' }) => {
     </div>
   );
   const renderCodespan = (code: string) => (
-    <span
-      style={mono.style}
-      className="rounded-md border bg-zinc-50 px-1 py-0.5 text-xs text-zinc-800 dark:bg-white/10 dark:text-white"
-    >
+    <span className="mono rounded-md border bg-zinc-50 px-1 py-0.5 text-xs text-zinc-800 dark:bg-white/10 dark:text-white">
       {code}
     </span>
   );
