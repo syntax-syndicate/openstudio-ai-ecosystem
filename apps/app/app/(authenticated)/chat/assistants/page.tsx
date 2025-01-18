@@ -13,21 +13,16 @@ import { PopOverConfirmProvider } from '@repo/design-system/components/ui/use-co
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, Plus, PlusIcon, TrashIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const AssistantPage = () => {
   const { push } = useRouter();
-  const { setActiveSessionId } = useSessions();
   const { assistantsQuery, removeAssistantMutation } = useAssistantUtils();
   const { addAssistantToSessionMutation } = useSessions();
   const { data, error } = useQuery({
     queryKey: ['remote-assistants'],
     queryFn: () => fetch('/api/assistants').then((res) => res.json()),
   });
-
-  useEffect(() => {
-    setActiveSessionId('');
-  }, []);
 
   const [openCreateAssistant, setOpenCreateAssistant] = useState(false);
   const remoteAssistants = data?.assistants || [];

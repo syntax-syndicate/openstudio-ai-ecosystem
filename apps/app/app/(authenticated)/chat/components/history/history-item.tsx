@@ -15,7 +15,7 @@ import {
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export const HistoryItem = ({
@@ -25,6 +25,7 @@ export const HistoryItem = ({
   session: TChatSession;
   dismiss: () => void;
 }) => {
+  const pathname = usePathname();
   const {
     updateSessionMutation,
     removeSessionMutation,
@@ -38,6 +39,7 @@ export const HistoryItem = ({
   const [title, setTitle] = useState(session.title);
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const historyInputRef = useRef<HTMLInputElement>(null);
+  const isChatPage = pathname.startsWith('/chat');
 
   useEffect(() => {
     if (isEditing) {
@@ -75,7 +77,9 @@ export const HistoryItem = ({
 
   const containerClasses = cn(
     'group flex h-9 w-full w-full cursor-pointer flex-row items-center gap-2 rounded-md py-0.5 pr-1 pl-2 hover:bg-zinc-500/10',
-    activeSessionId === session.id || isEditing ? 'bg-zinc-500/10' : ''
+    (activeSessionId === session.id && isChatPage) || isEditing
+      ? 'bg-zinc-500/10'
+      : ''
   );
 
   const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {

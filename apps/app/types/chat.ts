@@ -27,6 +27,8 @@ export type TChatState = {
   stopGeneration: () => void;
   resetState: () => void;
   removeLastMessage: () => void;
+  setIsInitialized: (isInitialized: boolean) => void;
+  isInitialized: boolean;
 };
 
 export type TChatContext = {
