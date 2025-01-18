@@ -67,7 +67,7 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
                 onClick={() => handleOnClick(question)}
                 weight="medium"
               >
-                <ArrowRight02Icon size={16} strokeWidth={2} />
+                <ArrowRight02Icon size={18} strokeWidth={2} className='flex-shrink-0'/>
                 {question}
               </Type>
             </motion.div>

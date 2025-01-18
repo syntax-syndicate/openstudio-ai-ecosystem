@@ -99,7 +99,7 @@ export const config: Config = {
       //TODO: Clerk Components have issue with adding this
       // fontSize: {
       //   xs: "0.75rem",
-      //   sm: "0.850rem",
+      //   sm: "0.875rem",
       //   base: "1rem",
       //   lg: "1.115rem",
       //   xl: "1.25rem",
