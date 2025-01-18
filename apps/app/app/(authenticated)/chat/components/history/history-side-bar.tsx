@@ -5,13 +5,14 @@ import { sortSessions } from '@/helper/utils';
 import type { TChatSession } from '@/types/sessions';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
 import { Type } from '@repo/design-system/components/ui/text';
 import { History } from 'lucide-react';
 import { Command, Plus, Search } from 'lucide-react';
 import moment from 'moment';
 
 export const HistorySidebar = () => {
-  const { sessions, createSession } = useSessions();
+  const { sessions, createSession, isAllSessionLoading } = useSessions();
   const { setIsCommandSearchOpen } = useRootContext();
 
   const groupedSessions: Record<string, TChatSession[]> = {
@@ -88,13 +89,17 @@ export const HistorySidebar = () => {
             </Flex>
           </Button>
         </Flex>
-        <Flex direction="col" className="no-scrollbar w-full overflow-y-auto">
-          {renderGroup('Today', groupedSessions.today)}
-          {renderGroup('Tomorrow', groupedSessions.tomorrow)}
-          {renderGroup('Last 7 Days', groupedSessions.last7Days)}
-          {renderGroup('Last 30 Days', groupedSessions.last30Days)}
-          {renderGroup('Previous Months', groupedSessions.previousMonths)}
-        </Flex>
+        {isAllSessionLoading ? (
+          <FullPageLoader />
+        ) : (
+          <Flex direction="col" className="no-scrollbar w-full overflow-y-auto">
+            {renderGroup('Today', groupedSessions.today)}
+            {renderGroup('Tomorrow', groupedSessions.tomorrow)}
+            {renderGroup('Last 7 Days', groupedSessions.last7Days)}
+            {renderGroup('Last 30 Days', groupedSessions.last30Days)}
+            {renderGroup('Previous Months', groupedSessions.previousMonths)}
+          </Flex>
+        )}
       </Flex>
     </div>
   );

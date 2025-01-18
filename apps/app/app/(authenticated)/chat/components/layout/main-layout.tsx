@@ -30,12 +30,12 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       <div className="flex min-h-[100dvh] w-full flex-col overflow-hidden bg-zinc-50 md:flex-row dark:bg-zinc-900">
         <Sidebar />
         <Flex className="flex-1 gap-0 overflow-hidden">
-          <AnimatePresence mode="sync">
+          <AnimatePresence>
             {isChatPage && isSidebarOpen && (
               <motion.div
                 key="history-sidebar"
                 layoutId="sidebar"
-                initial={{ width: 0, opacity: 0 }}
+                initial={{ width: 0, opacity: 1 }}
                 animate={{ width: 'auto', opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
                 transition={{ duration: 0.3 }}
@@ -45,10 +45,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
             )}
             {isSettingsPage && <SettingsSidebar />}
           </AnimatePresence>
-          <motion.div
-            className="flex-1 pt-2 pr-2"
-            layout={isChatPage ? true : undefined}
-          >
+          <motion.div className="flex-1 pt-2 pr-2">
             <div
               className={cn(
                 isSettingsPage ? settingsContainerClass : mainContainerClass

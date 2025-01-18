@@ -62,10 +62,10 @@ export const useChatEditor = () => {
     setEditor(editor);
   }, [editor]);
   useEffect(() => {
-    if (editor?.isActive) {
+    if (editor) {
       editor.commands.focus('end');
     }
-  }, [editor?.isActive]);
+  }, [editor]);
   return {
     editor,
   };
