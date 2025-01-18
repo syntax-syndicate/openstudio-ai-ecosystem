@@ -22,6 +22,13 @@
       "when": 1737127535775,
       "tag": "0002_loose_tombstone",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1737180601478,
+      "tag": "0003_fearless_wendell_vaughn",
+      "breakpoints": true
     }
   ]
 }

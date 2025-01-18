@@ -831,7 +831,7 @@ importers:
         version: 0.11.1(typescript@5.7.2)(zod@3.24.1)
       drizzle-orm:
         specifier: ^0.38.4
-        version: 0.38.4(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@prisma/client@6.1.0(prisma@6.1.0))(@types/pg@8.11.6)(@types/react@19.0.2)(prisma@6.1.0)(react@19.0.0)
+        version: 0.38.4(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@prisma/client@6.1.0)(@types/pg@8.11.6)(@types/react@19.0.2)(react@19.0.0)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -14589,6 +14589,9 @@ snapshots:
 
   '@popperjs/core@2.11.8': {}
 
+  '@prisma/client@6.1.0':
+    optional: true
+
   '@prisma/client@6.1.0(prisma@6.1.0)':
     optionalDependencies:
       prisma: 6.1.0
@@ -18372,6 +18375,15 @@ snapshots:
       '@types/pg': 8.11.6
       '@types/react': 19.0.2
       prisma: 6.1.0
+      react: 19.0.0
+
+  drizzle-orm@0.38.4(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@prisma/client@6.1.0)(@types/pg@8.11.6)(@types/react@19.0.2)(react@19.0.0):
+    optionalDependencies:
+      '@neondatabase/serverless': 0.10.4
+      '@opentelemetry/api': 1.9.0
+      '@prisma/client': 6.1.0
+      '@types/pg': 8.11.6
+      '@types/react': 19.0.2
       react: 19.0.0
 
   drizzle-zod@0.6.1(drizzle-orm@0.38.4(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@prisma/client@6.1.0(prisma@6.1.0))(@types/pg@8.11.6)(@types/react@19.0.2)(prisma@6.1.0)(react@19.0.0))(zod@3.24.1):
