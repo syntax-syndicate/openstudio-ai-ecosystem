@@ -3,7 +3,6 @@
 import { ApiKeyModal } from '@/app/(authenticated)/chat/components/api-key-modal';
 import { CommandSearch } from '@/app/(authenticated)/chat/components/command-search';
 import { HistorySidebar } from '@/app/(authenticated)/chat/components/history/history-side-bar';
-import { SettingsSidebar } from '@/app/(authenticated)/chat/components/layout/settings-sidebar';
 import { Sidebar } from '@/app/(authenticated)/chat/components/layout/sidebar';
 import { useRootContext } from '@/context/root';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -37,7 +36,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
         </div>
         <Flex className="flex-1 gap-0 overflow-hidden">
           <AnimatePresence>
-            {isChatPage && isSidebarOpen && (
+            {isSidebarOpen && (
               <motion.div
                 key="history-sidebar"
                 layoutId="sidebar"
@@ -51,11 +50,11 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
               </motion.div>
             )}
           </AnimatePresence>
-          {isSettingsPage && (
+          {/* {isSettingsPage && (
             <div className="hidden md:block">
               <SettingsSidebar />
             </div>
-          )}
+          )} */}
           <Drawer.Root
             open={isMobileSidebarOpen}
             direction="left"
@@ -69,20 +68,15 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
               >
                 <Flex className="bg-zinc-50 pr-2 dark:bg-zinc-900">
                   <Sidebar />
-                  {isChatPage && !isSettingsPage && <HistorySidebar />}
-                  {isSettingsPage && <SettingsSidebar />}
+                  {/* {isChatPage && !isSettingsPage && <HistorySidebar />} */}
+                  {/* {isSettingsPage && <SettingsSidebar />} */}
+                  <HistorySidebar />
                 </Flex>
               </Drawer.Content>
             </Drawer.Portal>
           </Drawer.Root>
           <motion.div className="flex-1 pt-2 pr-2">
-            <div
-              className={cn(
-                isSettingsPage ? settingsContainerClass : mainContainerClass
-              )}
-            >
-              {children}
-            </div>
+            <div className={cn(mainContainerClass)}>{children}</div>
           </motion.div>
           <ApiKeyModal />
           <CommandSearch />
