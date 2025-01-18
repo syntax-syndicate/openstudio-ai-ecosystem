@@ -26,7 +26,7 @@ import {
 } from '@repo/design-system/components/ui/popover';
 import { Type } from '@repo/design-system/components/ui/text';
 import { cn } from '@repo/design-system/lib/utils';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Plus } from 'lucide-react';
 import { type FC, useEffect, useRef, useState } from 'react';
 
 export type TAssitantModal = {
@@ -134,7 +134,7 @@ export const AssistantModal: FC<TAssitantModal> = ({
           side="bottom"
           align="start"
         >
-          <Command className="relative h-full overflow-hidden rounded-xl dark:bg-zinc-700">
+          <Command className="relative h-full max-h-[450px] overflow-hidden rounded-xl dark:bg-zinc-700">
             <div className="h-11 w-full border-zinc-500/20 border-b px-2">
               <CommandInput
                 placeholder="Search assistants..."
@@ -173,7 +173,8 @@ export const AssistantModal: FC<TAssitantModal> = ({
                         variant="outlined"
                         onClick={() => setOpenCreateAssistant(true)}
                       >
-                        Create Custom Assistant
+                        <Plus size={14} strokeWidth="2" /> Create Custom
+                        Assistant
                       </Button>
                     </Flex>
                   )}
