@@ -42,7 +42,7 @@ export function PieChartComponent({
         <Type size="sm" weight="medium">
           {title}
         </Type>
-         <ChartContainer config={{}} className="max-h-[350px]">
+        <ChartContainer config={{}} className="max-h-[350px]">
           <PieChart>
             <ChartTooltip
               cursor={false}

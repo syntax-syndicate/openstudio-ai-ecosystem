@@ -55,7 +55,7 @@ export const ProviderSelect: FC<TProviderSelect> = ({
           )}
         >
           {providers
-            ?.filter((a) => !['llmchat'].includes(a))
+            ?.filter((a) => !['chathub'].includes(a))
             .map((p) => {
               return (
                 <DropdownMenuItem
