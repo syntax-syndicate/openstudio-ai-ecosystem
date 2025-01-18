@@ -11,7 +11,7 @@ import {
   Bolt,
   Command,
   Github,
-  Key,
+  KeyRound,
   Moon,
   Plus,
   Search,
@@ -111,7 +111,10 @@ export const HistorySidebar = () => {
         {isAllSessionLoading ? (
           <FullPageLoader />
         ) : (
-          <Flex direction="col" className="no-scrollbar w-full overflow-y-auto">
+          <Flex
+            direction="col"
+            className="no-scrollbar w-full flex-1 overflow-y-auto"
+          >
             {renderGroup('Examples', groupedSessions.examples)}
             {renderGroup('Today', groupedSessions.today)}
             {renderGroup('Tomorrow', groupedSessions.tomorrow)}
@@ -134,7 +137,7 @@ export const HistorySidebar = () => {
                 setOpenApiKeyModal(true);
               }}
             >
-              <Key size={16} strokeWidth={2} />
+              <KeyRound size={16} strokeWidth={2} />
               Add API
             </Button>
             <Button

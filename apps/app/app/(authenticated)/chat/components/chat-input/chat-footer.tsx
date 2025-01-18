@@ -20,7 +20,8 @@ export const ChatFooter = () => {
           className="inline-block text-violet-500 underline decoration-zinc-500/20 underline-offset-2"
           rel="noreferrer"
         >
-          {" "} kuluruvineeth
+          {' '}
+          kuluruvineeth
         </Link>
       </Type>
     </Flex>
