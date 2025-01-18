@@ -115,7 +115,7 @@ export default function LLMsSettings() {
           <AccordionItem key={model.value} value={model.value}>
             <AccordionTrigger>
               <Flex gap="md" items="center">
-                <ModelIcon type={model.iconType as ModelIconType} size="sm" />
+                <ModelIcon type={model.iconType as ModelIconType} size="md" />
                 {model.label}
               </Flex>
               <Flex className="flex-1" />
@@ -128,13 +128,13 @@ export default function LLMsSettings() {
                 )}
               >
                 {model.connected ? (
-                  <CheckmarkCircle01Icon size={16} variant="solid" />
+                  <CheckmarkCircle01Icon size={18} variant="solid" />
                 ) : (
-                  <Alert01Icon size={16} strokeWidth={1.5} variant="solid" />
+                  <Alert01Icon size={18} strokeWidth={1.5} variant="solid" />
                 )}
               </div>
             </AccordionTrigger>
-            <AccordionContent className="px-3 py-6">
+            <AccordionContent className="py-8">
               <model.settingsComponent />
             </AccordionContent>
           </AccordionItem>

@@ -8,12 +8,7 @@ export type TSettingCard = {
 
 export const SettingCard = ({ children, className }: TSettingCard) => {
   return (
-    <div
-      className={cn(
-        'min-h-12 w-full rounded-lg bg-zinc-500/10 px-3 py-1 dark:bg-white/5',
-        className
-      )}
-    >
+    <div className={cn('min-h-12 w-full rounded-lg py-1', className)}>
       {children}
     </div>
   );

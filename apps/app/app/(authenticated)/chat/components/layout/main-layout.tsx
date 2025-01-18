@@ -43,8 +43,8 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
                 <HistorySidebar />
               </motion.div>
             )}
-            {isSettingsPage && <SettingsSidebar />}
           </AnimatePresence>
+          {isSettingsPage && <SettingsSidebar />}
           <motion.div className="flex-1 pt-2 pr-2">
             <div
               className={cn(

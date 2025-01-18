@@ -1,16 +1,17 @@
 import type { TSettingMenu } from '@/app/(authenticated)/chat/settings/layout';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { Type } from '@repo/design-system/components/ui/text';
 import { cn } from '@repo/design-system/lib/utils';
 import {
   AudioLines,
   Bolt,
   Brain,
+  ChevronLeft,
   Database,
   Sparkle,
   ToyBrick,
 } from 'lucide-react';
-
 import { usePathname, useRouter } from 'next/navigation';
 
 export const SettingsSidebar = () => {
@@ -64,14 +65,27 @@ export const SettingsSidebar = () => {
     );
   };
   return (
-    <div className="relative flex h-[98dvh] w-[220px] flex-shrink-0 flex-row rounded-xl p-1">
+    <div className="relative flex h-[100dvh] w-[260px] flex-shrink-0 flex-row border-l">
       <Flex
         direction="col"
         gap="xs"
         justify="start"
-        className="h-full w-[280px] p-1.5"
+        className="h-full w-[280px]"
       >
-        {settingMenu.map(renderMenuItem)}
+        <Flex
+          justify="between"
+          items="center"
+          className="mt-2 w-full cursor-pointer border-zinc-500/10 border-b px-3 py-3"
+          onClick={() => push('/chat')}
+        >
+          <ChevronLeft size={16} strokeWidth={2} className="w-8" />
+          <Type className="w-full" size="base" weight="medium">
+            Settings
+          </Type>
+        </Flex>
+        <Flex className="w-full p-3" direction="col" gap="xs">
+          {settingMenu.map(renderMenuItem)}
+        </Flex>
       </Flex>
     </div>
   );
