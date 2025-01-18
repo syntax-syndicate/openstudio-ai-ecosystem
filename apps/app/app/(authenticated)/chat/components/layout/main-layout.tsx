@@ -19,12 +19,14 @@ export type MainLayoutProps = {
 export const MainLayout = ({ children }: MainLayoutProps) => {
   const pathname = usePathname();
   const { isSidebarOpen } = useRootContext();
+
   const isChatPage = pathname.startsWith('/chat');
-  const isSettingsPage = pathname.startsWith('/chat/settings');
+  const isSettingsPage = pathname.startsWith('/settings');
   const mainContainerClass =
-    'relative flex flex-1 flex-col h-[99dvh] w-full overflow-hidden rounded-t-lg bg-zinc-25 shadow-sm dark:border dark:border-white/5 dark:bg-zinc-800';
+    'relative flex flex-1 flex-col h-[98dvh] w-full overflow-hidden rounded-md bg-zinc-25 shadow-sm dark:border dark:border-white/5 dark:bg-zinc-800';
   const settingsContainerClass =
-    'overflow-hidden h-[98dvh] rounded-t-md bg-white shadow-sm dark:border dark:border-white/5 dark:bg-zinc-800';
+    'overflow-hidden h-[98dvh] w-full rounded-md bg-white shadow-sm dark:border dark:border-white/5 dark:bg-zinc-800';
+
   return (
     <div className="flex min-h-[100dvh] w-full flex-col justify-start bg-white md:flex-row dark:bg-zinc-800">
       <div className="flex min-h-[100dvh] w-full flex-col overflow-hidden bg-zinc-50 md:flex-row dark:bg-zinc-900">
