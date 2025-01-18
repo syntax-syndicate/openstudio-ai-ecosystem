@@ -1,16 +1,17 @@
 import { useRef } from 'react';
 
+import { CustomAssistantAvatar } from '@/app/(authenticated)/chat/components/custom-assistant-avatar';
 import { Mdx } from '@/app/(authenticated)/chat/components/mdx';
 import { AIMessageActions } from '@/app/(authenticated)/chat/components/messages/ai/ai-message-actions';
 import { AIMessageError } from '@/app/(authenticated)/chat/components/messages/ai/ai-message-error';
 import { AIRelatedQuestions } from '@/app/(authenticated)/chat/components/messages/ai/ai-related-questions';
 import { AISelectionProvider } from '@/app/(authenticated)/chat/components/messages/ai/ai-selection-provider';
 import { AIToolMessage } from '@/app/(authenticated)/chat/components/messages/ai/ai-tool-message';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { useChatContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
 import type { TChatMessage } from '@/types';
 import { Flex } from '@repo/design-system/components/ui/flex';
-
 export type TAIMessage = {
   message: TChatMessage;
   isLast: boolean;
@@ -20,6 +21,7 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
   const { id, rawAI, isLoading, stopReason, tools, runConfig, stop } = message;
 
   const { store } = useChatContext();
+  const session = store((state) => state.session);
   const editor = store((state) => state.editor);
   const setContextValue = store((state) => state.setContext);
   const messageRef = useRef<HTMLDivElement>(null);
@@ -34,7 +36,15 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
   return (
     <div className="mt-2 flex w-full flex-row items-start justify-start gap-3">
       <Flex className="flex-shrink-0">
-        {getAssistantIcon(runConfig.assistant.key, 'sm')}
+        {session?.customAssistant?.iconURL ? (
+          <CustomAssistantAvatar
+            url={session?.customAssistant?.iconURL}
+            alt={session?.customAssistant?.name}
+            size="sm"
+          />
+        ) : (
+          <ModelIcon type="assistants" size="sm" />
+        )}
       </Flex>
       <Flex
         ref={messageRef}

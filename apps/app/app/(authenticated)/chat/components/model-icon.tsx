@@ -15,7 +15,8 @@ export type ModelIconType =
   | 'duckduckgo_search'
   | 'website_reader'
   | 'ollama'
-  | 'groq';
+  | 'groq'
+  | 'assistants';
 
 export type TModelIcon = {
   type: ModelIconType;
@@ -44,6 +45,7 @@ export const ModelIcon = ({
     duckduckgo_search: '/icons/duckduckgo.svg',
     website_reader: '/icons/website_reader.svg',
     ollama: '/icons/ollama.svg',
+    assistants: '/icons/assistants.svg',
     groq: '/icons/groq.svg',
   };
 

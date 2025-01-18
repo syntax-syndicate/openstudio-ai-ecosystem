@@ -8,6 +8,7 @@ import { ImageAttachment } from '@/app/(authenticated)/chat/components/chat-inpu
 import { ImageDropzoneRoot } from '@/app/(authenticated)/chat/components/chat-input/image-dropzone-root';
 import { ScrollToBottomButton } from '@/app/(authenticated)/chat/components/chat-input/scroll-to-bottom-button';
 import { SelectedContext } from '@/app/(authenticated)/chat/components/chat-input/selected-context';
+import { CustomAssistantAvatar } from '@/app/(authenticated)/chat/components/custom-assistant-avatar';
 import { useChatContext, usePreferenceContext } from '@/context';
 import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils, useImageAttachment } from '@/hooks';
@@ -149,10 +150,25 @@ export const ChatInput = () => {
 
             <ChangeLogs open={openChangelog} setOpen={setOpenChangelog} />
 
-            {getAssistantIcon(preferences.defaultAssistant, 'lg', true)}
+            {session?.customAssistant ? (
+              <CustomAssistantAvatar
+                url={session?.customAssistant?.iconURL}
+                alt={session?.customAssistant?.name}
+                size="lg"
+              />
+            ) : (
+              getAssistantIcon(preferences.defaultAssistant, 'lg', true)
+            )}
             <Type size="lg" textColor="secondary">
-              How can I help you?
+              {session?.customAssistant
+                ? session?.customAssistant?.name
+                : 'How can I help you?'}
             </Type>
+            {session?.customAssistant && (
+              <Type size="sm" textColor="secondary">
+                {session?.customAssistant?.description}
+              </Type>
+            )}
             <ApiKeyInfo />
           </Flex>
         )}

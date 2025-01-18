@@ -9,6 +9,15 @@ export type TAssistant = {
   type: 'base' | 'custom';
 };
 
+export type TCustomAssistant = {
+  key: string;
+  name: string;
+  description: string | null;
+  systemPrompt: string;
+  iconURL: string | null;
+  startMessage: string[] | null;
+};
+
 export const toolKeys = ['calculator', 'web_search'];
 export type ToolKey = (typeof toolKeys)[number];
 

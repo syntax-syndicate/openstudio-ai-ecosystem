@@ -1,4 +1,5 @@
 import { HistoryItem } from '@/app/(authenticated)/chat/components/history/history-item';
+import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { useRootContext } from '@/context/root';
 import { useSessions } from '@/context/sessions';
 import { sortSessions } from '@/helper/utils';
@@ -85,12 +86,12 @@ export const HistorySidebar = () => {
 
   return (
     <div className="relative flex h-[100dvh] w-[260px] flex-shrink-0 flex-row border-zinc-500/10 border-l">
-      <Flex direction="col" className="no-scrollbar w-full pr-1 pl-3">
+      <Flex direction="col" gap="sm" className="no-scrollbar w-full pr-1 pl-3">
         <Flex
           justify="between"
           items="center"
           direction="col"
-          className="w-full py-4"
+          className="w-full pt-4 pb-2"
           gap="sm"
         >
           <Button size="sm" className="w-full" onClick={createSession}>
@@ -108,6 +109,16 @@ export const HistorySidebar = () => {
             </Flex>
           </Button>
         </Flex>
+        <Button
+          variant="ghost"
+          className="w-full justify-start gap-2 px-2"
+          onClick={() => {
+            push('/chat/assistants');
+          }}
+        >
+          <ModelIcon type="assistants" size="sm" />
+          Explore Assistants
+        </Button>
         {isAllSessionLoading ? (
           <FullPageLoader />
         ) : (

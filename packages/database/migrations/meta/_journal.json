@@ -29,6 +29,13 @@
       "when": 1737180601478,
       "tag": "0003_fearless_wendell_vaughn",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1737193319076,
+      "tag": "0004_faithful_forge",
+      "breakpoints": true
     }
   ]
 }

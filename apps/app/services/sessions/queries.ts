@@ -1,5 +1,6 @@
 import { messagesService, sessionsService } from '@/services/sessions/client';
 import type { TChatMessage, TChatSession } from '@/types';
+import type { TCustomAssistant } from '@repo/database/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useChatSessionQueries = () => {
@@ -106,6 +107,24 @@ export const useChatSessionQueries = () => {
       sessionsQuery.refetch();
     },
   });
+
+  const addAssistantToSessionMutation = useMutation({
+    mutationFn: async (assistant: TCustomAssistant) => {
+      return await sessionsService.addAssistantToSession(assistant);
+    },
+    onSuccess: () => {
+      sessionsQuery.refetch();
+    },
+  });
+  const removeAssistantFromSessionMutation = useMutation({
+    mutationFn: async (sessionId: string) => {
+      return await sessionsService.removeAssistantFromSession(sessionId);
+    },
+    onSuccess: () => {
+      sessionsQuery.refetch();
+    },
+  });
+
   return {
     sessionsQuery,
     setSessionMutation,
@@ -118,5 +137,7 @@ export const useChatSessionQueries = () => {
     removeMessageByIdMutation,
     addSessionsMutation,
     useMessagesQuery,
+    addAssistantToSessionMutation,
+    removeAssistantFromSessionMutation,
   };
 };

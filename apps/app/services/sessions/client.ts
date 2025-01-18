@@ -2,6 +2,7 @@ import { generateShortUUID, sortSessions } from '@/helper/utils';
 import type { TChatMessage, TChatSession } from '@/types';
 import { database } from '@repo/database';
 import { schema } from '@repo/database/schema';
+import type { TCustomAssistant } from '@repo/database/types';
 import { asc, eq } from 'drizzle-orm';
 import moment from 'moment';
 
@@ -18,6 +19,33 @@ export class SessionsService {
 
   async setSession(chatSession: TChatSession) {
     await database.insert(schema.chatSessions).values(chatSession);
+  }
+
+  async addAssistantToSession(assistant: TCustomAssistant) {
+    const newSession = await this.createNewSession();
+    if (!newSession) return;
+    const updatedSession = await database
+      ?.update(schema.chatSessions)
+      .set({
+        customAssistant: assistant,
+      })
+      .where(eq(schema.chatSessions.id, newSession.id))
+      .returning();
+    return updatedSession?.[0] || null;
+  }
+
+  async removeAssistantFromSession(sessionId: string) {
+    const latestSessionMessages =
+      (await this.messagesService.getMessages(sessionId)) || [];
+    if (!!latestSessionMessages?.length) return;
+    const updatedSession = await database
+      ?.update(schema.chatSessions)
+      .set({
+        customAssistant: null,
+      })
+      .where(eq(schema.chatSessions.id, sessionId))
+      .returning();
+    return updatedSession?.[0] || null;
   }
 
   async updateSession(

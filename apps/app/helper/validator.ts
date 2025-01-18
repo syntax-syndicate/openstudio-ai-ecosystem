@@ -58,11 +58,18 @@ export const chatSessionSchema: z.ZodTypeAny = createSelectSchema(
   schema.chatSessions
 );
 
+export const customAssistantSchema: z.ZodTypeAny = createSelectSchema(
+  schema.customAssistants,
+  {
+    startMessage: z.array(z.string()).nullable(),
+  }
+);
+
 export const dataValidator = z.object({
   preferences: preferencesSchema.optional(),
   apiKeys: z.array(apiKeysSchema).optional(),
   prompts: z.array(promptSchema).optional(),
   chatMessages: z.array(chatMessageSchema).optional(),
   chatSessions: z.array(chatSessionSchema).optional(),
-  assistants: z.array(assistantSchema).optional(),
+  customAssistants: z.array(customAssistantSchema).optional(),
 });

@@ -45,7 +45,7 @@ const dalleFunction = (context: ToolExecutionContext) => {
           isLoading: false,
         });
         const searchPrompt =
-          "Only generate one image. Do not generate multiple images. and describe the image in detail.";
+          'Only generate one image. Do not generate multiple images. and describe the image in detail.';
         return searchPrompt;
       } catch (error) {
         updateToolExecutionState({

@@ -1,6 +1,6 @@
 {
-  "id": "da1b8df3-cbe9-4488-9330-5f54e08ec73b",
-  "prevId": "79fe481b-fcc2-40a1-9336-d0b17c1c3ee6",
+  "id": "35eab75a-a6dc-4227-82b8-b695c11f971e",
+  "prevId": "da1b8df3-cbe9-4488-9330-5f54e08ec73b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -90,8 +90,8 @@
       "uniqueConstraints": {
         "assistants_key_unique": {
           "name": "assistants_key_unique",
-          "columns": ["key"],
-          "nullsNotDistinct": false
+          "nullsNotDistinct": false,
+          "columns": ["key"]
         }
       },
       "policies": {},
@@ -248,11 +248,11 @@
         "chat_messages_session_id_chat_sessions_id_fk": {
           "name": "chat_messages_session_id_chat_sessions_id_fk",
           "tableFrom": "chat_messages",
-          "columnsFrom": ["session_id"],
           "tableTo": "chat_sessions",
+          "columnsFrom": ["session_id"],
           "columnsTo": ["id"],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -284,6 +284,12 @@
           "notNull": false,
           "default": false
         },
+        "custom_assistant": {
+          "name": "custom_assistant",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -303,6 +309,61 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.custom_assistants": {
+      "name": "custom_assistants",
+      "schema": "",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "system_prompt": {
+          "name": "system_prompt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "icon_url": {
+          "name": "icon_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "start_message": {
+          "name": "start_message",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "custom_assistants_key_unique": {
+          "name": "custom_assistants_key_unique",
+          "nullsNotDistinct": false,
+          "columns": ["key"]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -568,10 +629,10 @@
     }
   },
   "schemas": {},
-  "views": {},
   "sequences": {},
   "roles": {},
   "policies": {},
+  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},

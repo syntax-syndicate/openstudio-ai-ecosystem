@@ -1,60 +1,50 @@
-import { generateShortUUID } from '@/helper/utils';
 import type { TAssistant } from '@/types';
 import { database } from '@repo/database';
 import { schema } from '@repo/database/schema';
-import { eq, sql } from 'drizzle-orm';
+import type { TCustomAssistant } from '@repo/database/types';
+import { eq } from 'drizzle-orm';
 
 export class AssistantService {
-  async getAssistants(): Promise<TAssistant[]> {
+  async getLegacyAssistants(): Promise<TAssistant[]> {
     const assistants = await database.select().from(schema.assistants);
     return assistants || [];
   }
 
-  async createAssistant(assistant: Omit<TAssistant, 'key'>) {
-    const newAssistant = { ...assistant, key: generateShortUUID() };
-    await database
-      .insert(schema.assistants)
-      .values(newAssistant)
-      .onConflictDoUpdate({
-        target: schema.assistants.key,
-        set: {
-          ...newAssistant,
-        },
-      });
+  async createAssistant(
+    assistant: TCustomAssistant
+  ): Promise<TCustomAssistant | null> {
+    const newAssistant = await database
+      .insert(schema.customAssistants)
+      .values(assistant)
+      .returning();
+    return newAssistant?.[0] || null;
   }
 
-  async deleteAssistant(key: string) {
-    await database
-      .delete(schema.assistants)
-      .where(eq(schema.assistants.key, key));
+  async addAssistants(assistants: TCustomAssistant[]): Promise<void> {
+    await database.insert(schema.customAssistants).values(assistants);
   }
 
   async updateAssistant(
-    assistantKey: string,
-    newAssistant: Omit<TAssistant, 'key'>
-  ) {
-    await database
-      .update(schema.assistants)
-      .set(newAssistant)
-      .where(eq(schema.assistants.key, assistantKey));
+    key: string,
+    assistant: Partial<Omit<TCustomAssistant, 'key'>>
+  ): Promise<TCustomAssistant | null> {
+    const updatedAssistant = await database
+      .update(schema.customAssistants)
+      .set(assistant)
+      .where(eq(schema.customAssistants.key, key))
+      .returning();
+    return updatedAssistant?.[0] || null;
   }
 
-  async addAssistants(assistants: TAssistant[]) {
+  async getAllAssistant(): Promise<TCustomAssistant[]> {
+    const assistants = await database.select().from(schema.customAssistants);
+    return assistants || [];
+  }
+
+  async removeAssistant(key: string): Promise<void> {
     await database
-      .insert(schema.assistants)
-      .values(assistants)
-      .onConflictDoUpdate({
-        target: schema.assistants.key,
-        set: {
-          name: sql`excluded.name`,
-          description: sql`excluded.description`,
-          baseModel: sql`excluded.baseModel`,
-          provider: sql`excluded.provider`,
-          systemPrompt: sql`excluded.systemPrompt`,
-          type: sql`excluded.type`,
-          iconURL: sql`excluded.iconURL`,
-        },
-      });
+      .delete(schema.customAssistants)
+      .where(eq(schema.customAssistants.key, key));
   }
 }
 
