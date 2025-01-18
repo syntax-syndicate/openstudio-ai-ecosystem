@@ -4,10 +4,10 @@ import { ChatMessages } from '@/app/(authenticated)/chat/components/messages';
 import {
   AssistantsProvider,
   ChatProvider,
-  CommandsProvider,
   PromptsProvider,
   useSessions,
 } from '@/context';
+import { Flex } from '@repo/design-system/components/ui/flex';
 import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
 
 const ChatSessionPage = () => {
@@ -16,16 +16,18 @@ const ChatSessionPage = () => {
   if (!activeSessionId) return <FullPageLoader label="Initializing chat" />;
   return (
     <ChatProvider sessionId={activeSessionId}>
-      <CommandsProvider>
-        <AssistantsProvider>
-          <PromptsProvider>
-            <div className="relative flex h-[100%] w-full flex-row overflow-hidden">
+      <AssistantsProvider>
+        <PromptsProvider>
+          {activeSessionId ? (
+            <Flex className="w-full" direction="col">
               <ChatMessages />
               <ChatInput />
-            </div>
-          </PromptsProvider>
-        </AssistantsProvider>
-      </CommandsProvider>
+            </Flex>
+          ) : (
+            <FullPageLoader label="Initializing chat" />
+          )}
+        </PromptsProvider>
+      </AssistantsProvider>
     </ChatProvider>
   );
 };

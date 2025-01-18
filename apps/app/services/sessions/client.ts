@@ -40,13 +40,18 @@ export class SessionsService {
   }
 
   async removeSessionById(id: string) {
-    await database
-      ?.delete(schema.chatSessions)
-      .where(eq(schema.chatSessions.id, id));
+    try {
+      this.messagesService.removeMessages(id);
+      const deletedSession = await database
+        ?.delete(schema.chatSessions)
+        .where(eq(schema.chatSessions.id, id))
+        .returning();
 
-    this.messagesService.removeMessages(id);
-    const session = await this.getSessionById(id);
-    return session;
+      const session = await this.getSessionById(id);
+      return session;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async createNewSession(): Promise<TChatSession | null> {
@@ -148,7 +153,8 @@ export class MessagesService {
   async removeMessages(parentId: string) {
     await database
       ?.delete(schema.chatMessages)
-      .where(eq(schema.chatMessages.parentId, parentId));
+      .where(eq(schema.chatMessages.parentId, parentId))
+      .returning();
   }
 }
 

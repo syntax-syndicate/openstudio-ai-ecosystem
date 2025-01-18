@@ -6,11 +6,9 @@ import { AIMessageError } from '@/app/(authenticated)/chat/components/messages/a
 import { AIRelatedQuestions } from '@/app/(authenticated)/chat/components/messages/ai/ai-related-questions';
 import { AISelectionProvider } from '@/app/(authenticated)/chat/components/messages/ai/ai-selection-provider';
 import { AIToolMessage } from '@/app/(authenticated)/chat/components/messages/ai/ai-tool-message';
-import { ToolBadge } from '@/app/(authenticated)/chat/components/tools/tool-badge';
 import { useChatContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
 import type { TChatMessage } from '@/types';
-import { Book02Icon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 
 export type TAIMessage = {
@@ -34,24 +32,24 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
   };
 
   return (
-    <div className="mt-6 flex w-full flex-col items-start md:flex-row">
-      {/* <Tooltip content={runConfig.assistant.name}>
-        <div className="p-2 md:px-3 md:py-2">
-          {getAssistantIcon(runConfig.assistant.key, 'sm')}
-        </div>
-      </Tooltip> */}
+    <div className="mt-2 flex w-full flex-row items-start justify-start">
+      <Flex className="flex-shrink-0">
+        {getAssistantIcon(runConfig.assistant.key, 'sm')}
+      </Flex>
       <Flex
         ref={messageRef}
         direction="col"
-        gap="xs"
+        gap="lg"
         items="start"
-        className="w-full flex-1"
+        className="w-full flex-1 px-3 pb-8"
       >
-        {tools?.map((tool) => (
-          <AIToolMessage tool={tool} key={tool.toolName} />
-        ))}
-
-        {rawAI && <ToolBadge icon={Book02Icon} text={'Answer'} />}
+        {!!tools?.length && (
+          <Flex className="w-full gap-1 pb-2" direction="col">
+            {tools?.map((tool) => (
+              <AIToolMessage tool={tool} key={tool.toolName} />
+            ))}
+          </Flex>
+        )}
 
         <AISelectionProvider onSelect={handleSelection}>
           <Mdx

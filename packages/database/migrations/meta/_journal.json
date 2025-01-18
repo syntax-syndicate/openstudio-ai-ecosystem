@@ -15,6 +15,13 @@
       "when": 1737086590401,
       "tag": "0001_simple_hardball",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737127535775,
+      "tag": "0002_loose_tombstone",
+      "breakpoints": true
     }
   ]
 }

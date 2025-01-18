@@ -9,6 +9,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from '@repo/design-system/components/ui/command';
 import {
   DropdownMenu,
@@ -38,10 +39,8 @@ export const PromptLibrary = ({
 }: TPromptLibrary) => {
   return (
     <Command>
-      <div className="w-full p-1">
-        <CommandInput placeholder="Search Prompts" />
-      </div>
-
+      <CommandInput placeholder="Search Prompts" />
+      <CommandSeparator />
       <div className="relative flex h-full w-full flex-col">
         <CommandEmpty className="flex w-full flex-col items-center justify-center gap-2 p-4 text-sm text-zinc-500">
           No prompts found

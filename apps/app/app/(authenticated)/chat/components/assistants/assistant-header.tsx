@@ -1,6 +1,5 @@
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
-import { Type } from '@repo/design-system/components/ui/text';
 import type { FC } from 'react';
 
 export type AssistantHeaderProps = {
@@ -18,18 +17,10 @@ export const AssistantHeader: FC<AssistantHeaderProps> = ({
       direction="row"
       justify="between"
       gap="md"
-      className="w-full px-2 py-2"
+      className="w-full py-2"
     >
-      <Flex direction="col" gap="sm">
-        <Flex items="center" gap="xs">
-          <Type weight="medium" size="sm">
-            Custom Assistant
-          </Type>
-        </Flex>
-      </Flex>
-
       <Button
-        size="sm"
+        className="w-full"
         onClick={() => {
           setOpenCreateAssistant(true);
         }}

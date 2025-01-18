@@ -1,7 +1,5 @@
 'use client';
 import { SearchFavicon } from '@/app/(authenticated)/chat/components/tools/search-favicon';
-import { ToolBadge } from '@/app/(authenticated)/chat/components/tools/tool-badge';
-import { Search01Icon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 
@@ -20,7 +18,6 @@ export const SearchResults = ({ searchResults, query }: TSearchResults) => {
   }
   return (
     <Flex direction="col" gap="md" className="w-full">
-      {query && <ToolBadge icon={Search01Icon} text={query} />}
       {Array.isArray(searchResults) && (
         <Flex
           gap="sm"
