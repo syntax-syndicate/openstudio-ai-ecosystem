@@ -17,11 +17,11 @@ export const ImageAttachment: FC<TImageAttachment> = ({
   if (!attachment?.base64) return null;
   return (
     <Flex className="pt-2 pr-2 pl-2 md:pl-3" gap="sm">
-      <div className="relative h-[60px] min-w-[60px] rounded-lg border border-black/10 shadow-md dark:border-white/10">
+      <div className="relative h-[60px] min-w-[60px] rounded-lg border border-black/10 shadow-sm dark:border-white/10">
         <Image
           src={attachment.base64}
           alt="uploaded image"
-          className="h-full w-full overflow-hidden rounded-lg object-cover"
+          className="h-full w-full overflow-hidden object-cover"
           width={0}
           height={0}
         />

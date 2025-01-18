@@ -11,21 +11,28 @@ import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import { PopOverConfirmProvider } from '@repo/design-system/components/ui/use-confirmation-popover';
 import { useQuery } from '@tanstack/react-query';
-import { Plus, PlusIcon, TrashIcon } from 'lucide-react';
+import { ChevronLeft, Plus, PlusIcon, TrashIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const AssistantPage = () => {
   const { push } = useRouter();
+  const { setActiveSessionId } = useSessions();
   const { assistantsQuery, removeAssistantMutation } = useAssistantUtils();
   const { addAssistantToSessionMutation } = useSessions();
   const { data, error } = useQuery({
     queryKey: ['remote-assistants'],
     queryFn: () => fetch('/api/assistants').then((res) => res.json()),
   });
+
+  useEffect(() => {
+    setActiveSessionId('');
+  }, []);
+
   const [openCreateAssistant, setOpenCreateAssistant] = useState(false);
   const remoteAssistants = data?.assistants || [];
   const localAssistants = assistantsQuery.data || [];
+
   const renderAssistant = (assistant: TCustomAssistant, canDelete: boolean) => {
     return (
       <div
@@ -41,9 +48,12 @@ const AssistantPage = () => {
         ) : (
           <ModelIcon type="assistants" size="lg" />
         )}
-        <Flex direction="col" items="center">
+        <Flex direction="col" items="center" className="w-full">
           <Type weight="medium">{assistant.name}</Type>
-          <Type textColor="secondary" className="line-clamp-2 text-center">
+          <Type
+            textColor="secondary"
+            className="line-clamp-2 w-full text-center"
+          >
             {assistant.description}
           </Type>
         </Flex>
@@ -97,10 +107,19 @@ const AssistantPage = () => {
   return (
     <>
       <Flex
-        className="w-full border-zinc-500/15 border-b bg-zinc-25 px-6 py-2.5"
+        className="w-full border-zinc-500/15 border-b bg-zinc-25 px-2 py-2.5"
         items="center"
         gap="sm"
       >
+        <Button
+          size="iconXS"
+          variant="ghost"
+          onClick={() => {
+            push('/chat');
+          }}
+        >
+          <ChevronLeft size={16} />
+        </Button>
         <Type size="base" weight="medium">
           {' '}
           AI Assistants
@@ -114,7 +133,7 @@ const AssistantPage = () => {
           className="w-full px-6 py-3"
         >
           <Type size="base" weight="medium">
-            Your assistants
+            Your Assistants
           </Type>
           <Button
             size="sm"
@@ -127,6 +146,7 @@ const AssistantPage = () => {
             Create assistant
           </Button>
         </Flex>
+
         <div className="grid w-full grid-cols-4 gap-3 px-6">
           {localAssistants?.map((assistant: TCustomAssistant) =>
             renderAssistant(assistant, true)
@@ -138,16 +158,20 @@ const AssistantPage = () => {
           )}
         </div>
       </Flex>
-      <Flex direction="col" className="mt-4 w-full">
-        <Type size="base" weight="medium" className="px-6 py-3">
-          Explore community assistants
-        </Type>
-        <div className="grid w-full grid-cols-4 gap-3 px-6">
-          {remoteAssistants.map((assistant: TCustomAssistant) =>
-            renderAssistant(assistant, false)
-          )}
-        </div>
-      </Flex>
+
+      {!!remoteAssistants?.length && (
+        <Flex direction="col" className="mt-4 w-full">
+          <Type size="base" weight="medium" className="px-6 py-3">
+            Explore More
+          </Type>
+
+          <div className="grid w-full grid-cols-4 gap-3 px-6">
+            {remoteAssistants.map((assistant: TCustomAssistant) =>
+              renderAssistant(assistant, false)
+            )}
+          </div>
+        </Flex>
+      )}
       <CreateAssistant
         open={openCreateAssistant}
         onOpenChange={setOpenCreateAssistant}
@@ -155,4 +179,5 @@ const AssistantPage = () => {
     </>
   );
 };
+
 export default AssistantPage;

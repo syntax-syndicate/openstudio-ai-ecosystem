@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/design-system/components/ui/dialog';
+import { useEffect } from 'react';
 
 export const ApiKeyModal = () => {
   const {
@@ -19,6 +20,13 @@ export const ApiKeyModal = () => {
     apiKeyModalProvider = 'openai',
     setApiKeyModalProvider,
   } = useRootContext();
+
+  useEffect(() => {
+    if (!apiKeyModalProvider) {
+      setApiKeyModalProvider('openai');
+    }
+  }, [apiKeyModalProvider]);
+
   return (
     <Dialog open={openApiKeyModal} onOpenChange={setOpenApiKeyModal}>
       <DialogContent

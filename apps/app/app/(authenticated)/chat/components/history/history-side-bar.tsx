@@ -21,13 +21,22 @@ import {
 } from 'lucide-react';
 import moment from 'moment';
 import { useTheme } from 'next-themes';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const HistorySidebar = () => {
-  const { sessions, createSession, isAllSessionLoading } = useSessions();
+  const pathname = usePathname();
+  const {
+    activeSessionId,
+    sessions,
+    createSession,
+    isAllSessionLoading,
+    removeAssistantFromSessionMutation,
+  } = useSessions();
   const { setIsCommandSearchOpen, setOpenApiKeyModal } = useRootContext();
   const { theme, setTheme } = useTheme();
   const { push } = useRouter();
+  const isAssistantPage = pathname.startsWith('/chat/assistants');
+  const isChatPage = pathname.startsWith('/chat');
 
   const groupedSessions: Record<string, TChatSession[]> = {
     examples: [],
@@ -94,7 +103,14 @@ export const HistorySidebar = () => {
           className="w-full pt-4 pb-2"
           gap="sm"
         >
-          <Button size="sm" className="w-full" onClick={createSession}>
+          <Button
+            size="sm"
+            className="w-full"
+            onClick={() => {
+              !isChatPage && push('/chat');
+              createSession();
+            }}
+          >
             <Plus size={14} strokeWidth={2} /> New Chat
           </Button>
           <Button
@@ -110,7 +126,7 @@ export const HistorySidebar = () => {
           </Button>
         </Flex>
         <Button
-          variant="ghost"
+          variant={isAssistantPage ? 'secondary' : 'ghost'}
           className="w-full justify-start gap-2 px-2"
           onClick={() => {
             push('/chat/assistants');
