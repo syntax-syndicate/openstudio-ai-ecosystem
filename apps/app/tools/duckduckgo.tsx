@@ -80,8 +80,8 @@ const duckduckGoToolDefinition: ToolDefinition = {
   renderComponent: ({ searchResults, query }) => {
     return <SearchResults searchResults={searchResults} query={query} />;
   },
-  loadingMessage: 'Searching on DuckDuckGo...',
-  successMessage: 'Search Results from DuckDuckGo',
+  loadingMessage: 'Searching on web...',
+  successMessage: 'Web Search Results',
   icon: Globe02Icon,
   compactIcon: Globe02Icon,
 };
