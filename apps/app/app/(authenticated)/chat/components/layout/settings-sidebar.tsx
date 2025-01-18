@@ -65,7 +65,7 @@ export const SettingsSidebar = () => {
     );
   };
   return (
-    <div className="relative flex h-[100dvh] w-[260px] flex-shrink-0 flex-row border-l">
+    <div className="relative flex h-[100dvh] w-[260px] flex-shrink-0 flex-row border-zinc-500/10 border-l">
       <Flex
         direction="col"
         gap="xs"

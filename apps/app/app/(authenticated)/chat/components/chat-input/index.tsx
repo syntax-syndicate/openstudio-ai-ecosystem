@@ -83,7 +83,7 @@ export const ChatInput = () => {
         <SelectedContext />
         <Flex
           direction="col"
-          className="w-full rounded-xl bg-zinc-50/95 backdrop-blur-sm dark:bg-zinc-700/95"
+          className="w-full rounded-xl border border-zinc-500/10 bg-white shadow-sm dark:bg-zinc-700/95"
         >
           <motion.div
             variants={slideUpVariant}
@@ -124,7 +124,7 @@ export const ChatInput = () => {
     <div className={chatInputBackgroundContainer}>
       <div
         className={cn(
-          'absolute right-0 bottom-0 left-0 h-[120px] bg-gradient-to-t from-40% from-white to-transparent dark:bg-zinc-800/50 dark:from-zinc-800',
+          'absolute right-0 bottom-0 left-0 h-[120px] bg-gradient-to-t from-40% from-zinc-25 to-transparent dark:bg-zinc-800/50 dark:from-zinc-800',
           isFreshSession &&
             'top-0 flex h-full flex-col items-center justify-center'
         )}
