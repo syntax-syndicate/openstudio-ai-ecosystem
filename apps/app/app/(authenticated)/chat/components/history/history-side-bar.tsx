@@ -1,5 +1,6 @@
 import { HistoryItem } from '@/app/(authenticated)/chat/components/history/history-item';
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import { configs } from '@/config/index';
 import { useRootContext } from '@/context/root';
 import { useSessions } from '@/context/sessions';
 import { sortSessions } from '@/helper/utils';
@@ -216,7 +217,7 @@ export const HistorySidebar = () => {
               textColor="secondary"
               className="px-1"
             >
-              v 0.0.1
+              v {configs.version}
             </Type>
           </Flex>
         </Flex>
