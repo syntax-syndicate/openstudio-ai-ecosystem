@@ -9,6 +9,7 @@ import { useRootContext } from '@/context/root';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Toaster } from '@repo/design-system/components/ui/toaster';
 import { cn } from '@repo/design-system/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 
 export type MainLayoutProps = {
@@ -29,9 +30,25 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       <div className="flex min-h-[100dvh] w-full flex-col overflow-hidden bg-zinc-50 md:flex-row dark:bg-zinc-900">
         <Sidebar />
         <Flex className="flex-1 gap-0 overflow-hidden">
-          {isChatPage && isSidebarOpen ? <HistorySidebar /> : null}
-          {isSettingsPage ? <SettingsSidebar /> : null}
-          <div className="flex-1 pt-2 pr-2">
+          <AnimatePresence mode="sync">
+            {isChatPage && isSidebarOpen && (
+              <motion.div
+                key="history-sidebar"
+                layoutId="sidebar"
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 'auto', opacity: 1 }}
+                exit={{ width: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <HistorySidebar />
+              </motion.div>
+            )}
+            {isSettingsPage && <SettingsSidebar />}
+          </AnimatePresence>
+          <motion.div
+            className="flex-1 pt-2 pr-2"
+            layout={isChatPage ? true : undefined}
+          >
             <div
               className={cn(
                 isSettingsPage ? settingsContainerClass : mainContainerClass
@@ -39,7 +56,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
             >
               {children}
             </div>
-          </div>
+          </motion.div>
           <ApiKeyModal />
           <CommandSearch />
         </Flex>
