@@ -17,6 +17,7 @@ import {
   useSidebar,
 } from '@repo/design-system/components/ui/sidebar';
 import { cn } from '@repo/design-system/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   AnchorIcon,
   FrameIcon,
@@ -170,43 +171,52 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
   const sidebar = useSidebar();
 
   return (
-    <>
-      <Sidebar variant="inset">
-        <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <div
-                className={cn(
-                  'h-[36px] overflow-hidden transition-all [&>div]:w-full',
-                  sidebar.open ? '' : '-mx-1'
-                )}
-              >
-                <OrganizationSwitcher
-                  hidePersonal
-                  afterSelectOrganizationUrl="/"
-                />
-              </div>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
+    <AnimatePresence>
+      <motion.div
+        key="main-sidebar"
+        layoutId="main-sidebar"
+        initial={{ width: 0, opacity: 1 }}
+        animate={{ width: 'auto', opacity: 1 }}
+        exit={{ width: 0, opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="hidden md:block"
+      >
+        <Sidebar variant="inset">
+          <SidebarHeader>
             <SidebarMenu>
-              {data.navMain.map((item) => (
-                <Collapsible
-                  key={item.title}
-                  asChild
-                  defaultOpen={item.isActive}
+              <SidebarMenuItem>
+                <div
+                  className={cn(
+                    'h-[36px] overflow-hidden transition-all [&>div]:w-full',
+                    sidebar.open ? '' : '-mx-1'
+                  )}
                 >
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip={item.title}>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                    {/* {item.items?.length ? (
+                  <OrganizationSwitcher
+                    hidePersonal
+                    afterSelectOrganizationUrl="/"
+                  />
+                </div>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarGroupLabel>Platform</SidebarGroupLabel>
+              <SidebarMenu>
+                {data.navMain.map((item) => (
+                  <Collapsible
+                    key={item.title}
+                    asChild
+                    defaultOpen={item.isActive}
+                  >
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip={item.title}>
+                        <a href={item.url}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </a>
+                      </SidebarMenuButton>
+                      {/* {item.items?.length ? (
                       <>
                         <CollapsibleTrigger asChild>
                           <SidebarMenuAction className="data-[state=open]:rotate-90">
@@ -229,12 +239,12 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
                         </CollapsibleContent>
                       </>
                     ) : null} */}
-                  </SidebarMenuItem>
-                </Collapsible>
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-          {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+                    </SidebarMenuItem>
+                  </Collapsible>
+                ))}
+              </SidebarMenu>
+            </SidebarGroup>
+            {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
             <SidebarGroupLabel>Projects</SidebarGroupLabel>
             <SidebarMenu>
               {data.projects.map((item) => (
@@ -282,7 +292,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroup> */}
-          {/* <SidebarGroup className="mt-auto">
+            {/* <SidebarGroup className="mt-auto">
             <SidebarGroupContent>
               <SidebarMenu>
                 {data.navSecondary.map((item) => (
@@ -298,26 +308,27 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup> */}
-        </SidebarContent>
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem className="flex items-center gap-2">
-              <UserButton
-                showName
-                appearance={{
-                  elements: {
-                    rootBox: 'flex overflow-hidden w-full',
-                    userButtonBox: 'flex-row-reverse',
-                    userButtonOuterIdentifier: 'truncate pl-0',
-                  },
-                }}
-              />
-              <ModeToggle />
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarMenu>
+              <SidebarMenuItem className="flex items-center gap-2">
+                <UserButton
+                  showName
+                  appearance={{
+                    elements: {
+                      rootBox: 'flex overflow-hidden w-full',
+                      userButtonBox: 'flex-row-reverse',
+                      userButtonOuterIdentifier: 'truncate pl-0',
+                    },
+                  }}
+                />
+                <ModeToggle />
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+      </motion.div>
       <SidebarInset>{children}</SidebarInset>
-    </>
+    </AnimatePresence>
   );
 };

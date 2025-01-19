@@ -1,6 +1,6 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { defaultPreferences } from '@/config';
-import { models, ollamaModelsSupportsTools, allPlugins } from '@/config/models';
+import { allPlugins, models, ollamaModelsSupportsTools } from '@/config/models';
 import { usePreferenceContext } from '@/context';
 import { useAssistantsQueries } from '@/services/assistants';
 import type { TAssistant, TModelItem, TModelKey } from '@/types';
