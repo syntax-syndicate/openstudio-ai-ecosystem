@@ -53,10 +53,10 @@ export default function Home() {
         items="center"
       >
         <Flex gap="sm" items="center">
-          <Button size="iconSm" variant="ghost">
+          <Button size="icon-sm" variant="ghost">
             <Github01Icon size={20} variant="solid" />
           </Button>
-          <Button size="iconSm" variant="ghost">
+          <Button size="icon-sm" variant="ghost">
             <NewTwitterEllipseIcon size={20} variant="solid" />
           </Button>
         </Flex>

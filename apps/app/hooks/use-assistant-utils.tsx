@@ -1,6 +1,6 @@
 import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
 import { defaultPreferences } from '@/config';
-import { models, ollamaModelsSupportsTools } from '@/config/models';
+import { models, ollamaModelsSupportsTools, allPlugins } from '@/config/models';
 import { usePreferenceContext } from '@/context';
 import { useAssistantsQueries } from '@/services/assistants';
 import type { TAssistant, TModelItem, TModelKey } from '@/types';
@@ -23,7 +23,7 @@ export const useAssistantUtils = () => {
           key: model.name,
           tokens: 128000,
           plugins: ollamaModelsSupportsTools.includes(model.name)
-            ? ['web_search', 'webpage_reader']
+            ? allPlugins
             : [],
           icon: 'ollama',
           provider: 'ollama',
