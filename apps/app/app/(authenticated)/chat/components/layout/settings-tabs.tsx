@@ -65,7 +65,7 @@ export const SettingsTabs = () => {
           <Icon
             size={14}
             strokeWidth={2}
-            className="opacity-50 dark:text-zinc-500"
+            className="opacity-50 dark:text-white"
           />
           <span className={cn('font-medium md:flex')}>{menu.name}</span>
         </Button>
