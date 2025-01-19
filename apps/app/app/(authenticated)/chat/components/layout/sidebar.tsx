@@ -25,7 +25,7 @@ export const NavbarItem = ({
   return (
     <Tooltip content={tooltip} side="right" sideOffset={4}>
       <Button
-        size="iconSm"
+        size="icon-sm"
         variant={isActive ? 'bordered' : 'ghost'}
         onClick={onClick}
       >

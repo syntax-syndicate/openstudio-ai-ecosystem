@@ -76,7 +76,7 @@ export const PromptLibrary = ({
                   <Flex className="flex-1" />
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="iconSm">
+                      <Button variant="ghost" size="icon-sm">
                         <DotsThree size={24} weight="bold" />
                       </Button>
                     </DropdownMenuTrigger>

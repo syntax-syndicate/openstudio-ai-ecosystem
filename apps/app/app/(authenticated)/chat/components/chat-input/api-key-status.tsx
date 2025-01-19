@@ -6,7 +6,7 @@ import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import { Plug } from 'lucide-react';
 
-export const ApiKeyInfo = () => {
+export const ApiKeyStatus = () => {
   const { setOpenApiKeyModal, setApiKeyModalProvider } = useRootContext();
   const { apiKeys, preferences } = usePreferenceContext();
   const { getAssistantByKey } = useAssistantUtils();

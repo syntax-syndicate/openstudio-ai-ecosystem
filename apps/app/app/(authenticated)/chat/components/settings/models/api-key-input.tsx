@@ -55,7 +55,7 @@ const ApiKeyInput: FC<TApiKeyInput> = ({
         )}
         <Button
           variant="ghost"
-          size="iconXS"
+          size="icon-xs"
           onClick={() => setShowKey(!showKey)}
         >
           {showKey ? (

@@ -1,5 +1,5 @@
 import { ChangeLogs } from '@/app/(authenticated)/chat/components/changelogs';
-import { ApiKeyInfo } from '@/app/(authenticated)/chat/components/chat-input/api-key-info';
+import { ApiKeyStatus } from '@/app/(authenticated)/chat/components/chat-input/api-key-status';
 import { ChatActions } from '@/app/(authenticated)/chat/components/chat-input/chat-actions';
 import { ChatEditor } from '@/app/(authenticated)/chat/components/chat-input/chat-editor';
 import { ChatFooter } from '@/app/(authenticated)/chat/components/chat-input/chat-footer';
@@ -209,7 +209,7 @@ export const ChatInput = () => {
                 </Button>
               )}
             </Flex>
-            <ApiKeyInfo />
+            <ApiKeyStatus />
           </Flex>
         )}
         {renderChatBottom()}

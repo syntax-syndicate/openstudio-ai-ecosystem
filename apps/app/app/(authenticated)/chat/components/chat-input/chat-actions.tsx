@@ -1,6 +1,5 @@
 import { AudioRecorder } from '@/app/(authenticated)/chat/components/chat-input/audio-recorder';
 import { ImageUpload } from '@/app/(authenticated)/chat/components/chat-input/image-upload';
-import { SpaceSelector } from '@/app/(authenticated)/chat/components/chat-input/space-selector';
 import { useChatContext, usePromptsContext } from '@/context';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -37,10 +36,10 @@ export const ChatActions = ({
           showIcon
           handleImageUpload={handleImageUpload}
         />
-        <SpaceSelector />
+        {/* <SpaceSelector /> */}
         <Tooltip content="Prompts">
           <Button
-            size="iconSm"
+            size="icon-sm"
             variant="ghost"
             onClick={() => {
               openPrompts();

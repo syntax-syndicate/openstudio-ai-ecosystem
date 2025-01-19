@@ -38,7 +38,7 @@ export const useAttachment = () => {
         <div className="relative flex h-[60px] min-w-[60px] items-center justify-center rounded-xl border border-white/5 shadow-md">
           <Pdf01Icon size={24} />
           <Button
-            size={'iconXS'}
+            size={'icon-xs'}
             variant="default"
             onClick={clearAttachment}
             className="absolute top-[-4px] right-[-4px] z-10 h-4 w-4 flex-shrink-0"

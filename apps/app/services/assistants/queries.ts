@@ -41,7 +41,6 @@ export const useAssistantsQueries = () => {
 
   const removeAssistantMutation = useMutation({
     mutationFn: async (key: string) => {
-      console.log('mutation key', key);
       await assistantService.removeAssistant(key);
     },
     onSuccess: () => {

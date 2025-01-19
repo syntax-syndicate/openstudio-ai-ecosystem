@@ -56,7 +56,7 @@ export const AudioRecorder: FC<TAudioRecorder> = ({ sendMessage }) => {
     <Flex>
       <Tooltip content="Record">
         <Button
-          size="iconSm"
+          size="icon-sm"
           variant="ghost"
           onClick={() => {
             startVoiceRecording();

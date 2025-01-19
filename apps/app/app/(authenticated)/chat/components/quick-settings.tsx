@@ -25,7 +25,7 @@ export const QuickSettings = () => {
     return (
       <Button
         variant="outlined"
-        size="iconXS"
+        size="icon-xs"
         rounded="lg"
         onClick={() => {
           updatePreferences({ [key]: defaultPreferences[key] });
@@ -42,7 +42,7 @@ export const QuickSettings = () => {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <Tooltip content="Configure Model">
         <PopoverTrigger asChild>
-          <Button variant="ghost" size="iconSm">
+          <Button variant="ghost" size="icon-sm">
             <Settings03Icon size={16} variant="stroke" strokeWidth="2" />
           </Button>
         </PopoverTrigger>

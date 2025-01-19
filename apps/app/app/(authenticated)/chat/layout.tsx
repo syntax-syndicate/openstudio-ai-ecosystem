@@ -1,4 +1,4 @@
-import { MainLayout } from '@/app/(authenticated)/chat/components/layout/main-layout';
+import { RootLayout } from '@/app/(authenticated)/chat/components/layout';
 import {
   PreferenceProvider,
   ReactQueryProvider,
@@ -35,7 +35,7 @@ export default function ChatLayout({
             <TooltipProvider>
               <PreferenceProvider>
                 <SessionsProvider>
-                  <MainLayout>{children}</MainLayout>
+                  <RootLayout>{children}</RootLayout>
                 </SessionsProvider>
               </PreferenceProvider>
             </TooltipProvider>
