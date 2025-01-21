@@ -1,7 +1,6 @@
 import { keys as analytics } from '@repo/analytics/keys';
-import { keys as auth } from '@repo/auth/keys';
 import { keys as collaboration } from '@repo/collaboration/keys';
-import { keys as database } from '@repo/database/keys';
+import { keys as database } from '@repo/backend/keys';
 import { keys as email } from '@repo/email/keys';
 import { keys as flags } from '@repo/feature-flags/keys';
 import { keys as core } from '@repo/next-config/keys';
@@ -14,7 +13,6 @@ import { z } from 'zod';
 
 export const env = createEnv({
   extends: [
-    auth(),
     analytics(),
     collaboration(),
     core(),
