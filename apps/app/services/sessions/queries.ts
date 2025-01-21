@@ -1,16 +1,29 @@
-import { messagesService, sessionsService } from '@/services/sessions/client';
+import {
+  addAssistantToSession,
+  addMessage,
+  addSessions,
+  clearSessions,
+  createNewSession,
+  getMessages,
+  getSessionById,
+  getSessions,
+  removeAssistantFromSession,
+  removeMessage,
+  removeSessionById,
+  setSession,
+  updateSession,
+} from '@/services/sessions/client';
 import type { TChatMessage, TChatSession } from '@/types';
-import type { TCustomAssistant } from '@repo/database/types';
+import type { TCustomAssistant } from '@repo/backend/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useChatSessionQueries = () => {
   const sessionsQuery = useQuery({
     queryKey: ['chat-sessions'],
-    queryFn: () => sessionsService.getSessions(),
+    queryFn: () => getSessions(),
   });
   const setSessionMutation = useMutation({
-    mutationFn: async (session: TChatSession) =>
-      await sessionsService.setSession(session),
+    mutationFn: async (session: TChatSession) => await setSession(session),
     onSuccess: () => {
       sessionsQuery.refetch();
     },
@@ -23,8 +36,8 @@ export const useChatSessionQueries = () => {
       parentId: string;
       message: TChatMessage;
     }) => {
-      await messagesService.addMessage(parentId, message);
-      const newMessages = await messagesService.getMessages(parentId);
+      await addMessage(parentId, message);
+      const newMessages = await getMessages(parentId);
       return newMessages;
     },
     onSuccess: () => {
@@ -39,15 +52,14 @@ export const useChatSessionQueries = () => {
       sessionId: string;
       session: Partial<Omit<TChatSession, 'id'>>;
     }) => {
-      await sessionsService.updateSession(sessionId, session);
+      await updateSession(sessionId, session);
     },
     onSuccess: () => {
       sessionsQuery.refetch();
     },
   });
   const removeSessionMutation = useMutation({
-    mutationFn: async (sessionId: string) =>
-      await sessionsService.removeSessionById(sessionId),
+    mutationFn: async (sessionId: string) => await removeSessionById(sessionId),
     onSuccess: () => {
       sessionsQuery.refetch();
     },
@@ -57,24 +69,24 @@ export const useChatSessionQueries = () => {
       queryKey: ['chat-session', id],
       queryFn: async () => {
         if (!id) return;
-        return await sessionsService.getSessionById(id);
+        return await getSessionById(id);
       },
       enabled: !!id,
     });
   const useMessagesQuery = (id: string) =>
     useQuery({
       queryKey: ['messages', id],
-      queryFn: () => messagesService.getMessages(id),
+      queryFn: () => getMessages(id),
       enabled: !!id,
     });
   const createNewSessionMutation = useMutation({
-    mutationFn: async () => await sessionsService.createNewSession(),
+    mutationFn: async () => await createNewSession(),
     onSuccess: () => {
       sessionsQuery.refetch();
     },
   });
   const clearSessionsMutation = useMutation({
-    mutationFn: async () => await sessionsService.clearSessions(),
+    mutationFn: async () => await clearSessions(),
     onSuccess: () => {
       sessionsQuery.refetch();
     },
@@ -87,12 +99,9 @@ export const useChatSessionQueries = () => {
       parentId: string;
       messageId: string;
     }) => {
-      const leftMessages = await messagesService.removeMessage(
-        parentId,
-        messageId
-      );
+      const leftMessages = await removeMessage(parentId, messageId);
       if (!leftMessages?.length) {
-        await sessionsService.removeSessionById(parentId);
+        await removeSessionById(parentId);
       }
     },
     onSuccess: () => {
@@ -101,7 +110,7 @@ export const useChatSessionQueries = () => {
   });
   const addSessionsMutation = useMutation({
     mutationFn: async (sessions: TChatSession[]) => {
-      return await sessionsService.addSessions(sessions);
+      return await addSessions(sessions);
     },
     onSuccess: () => {
       sessionsQuery.refetch();
@@ -110,7 +119,7 @@ export const useChatSessionQueries = () => {
 
   const addAssistantToSessionMutation = useMutation({
     mutationFn: async (assistant: TCustomAssistant) => {
-      return await sessionsService.addAssistantToSession(assistant);
+      return await addAssistantToSession(assistant);
     },
     onSuccess: () => {
       sessionsQuery.refetch();
@@ -118,7 +127,7 @@ export const useChatSessionQueries = () => {
   });
   const removeAssistantFromSessionMutation = useMutation({
     mutationFn: async (sessionId: string) => {
-      return await sessionsService.removeAssistantFromSession(sessionId);
+      return await removeAssistantFromSession(sessionId);
     },
     onSuccess: () => {
       sessionsQuery.refetch();

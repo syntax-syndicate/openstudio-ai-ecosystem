@@ -51,6 +51,5 @@ export async function POST(req: NextRequest) {
   }
   const markdownContent = turndownService.turndown(htmlContent);
 
-  console.log(markdownContent);
   return NextResponse.json({ text: markdownContent });
 }

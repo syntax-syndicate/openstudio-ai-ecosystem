@@ -1,46 +1,125 @@
-import { generateShortUUID } from '@/helper/utils';
+'use server';
 import type { TPrompt } from '@/types';
-import { database } from '@repo/database';
-import { schema } from '@repo/database/schema';
-import { eq, sql } from 'drizzle-orm';
+import { currentOrganizationId, currentUser } from '@repo/backend/auth/utils';
+import { database } from '@repo/backend/database';
+import { schema } from '@repo/backend/schema';
+import { and, eq, sql } from 'drizzle-orm';
 
-export class PromptsService {
-  async getPrompts(): Promise<TPrompt[]> {
-    const prompts = await database.select().from(schema.prompts);
-    return prompts || [];
-  }
+// Get all prompts for the current organization
+export async function getPrompts(): Promise<TPrompt[]> {
+  const organizationId = await currentOrganizationId();
+  if (!organizationId) return [];
 
-  async createPrompt(prompt: Omit<TPrompt, 'id'>): Promise<void> {
-    const newPrompt = { ...prompt, id: generateShortUUID() };
-    const result = await database.insert(schema.prompts).values(newPrompt);
-  }
-
-  async updatePrompt(
-    id: string,
-    prompt: Partial<Omit<TPrompt, 'id'>>
-  ): Promise<void> {
-    await database
-      .update(schema.prompts)
-      .set(prompt)
-      .where(eq(schema.prompts.id, id));
-  }
-
-  async deletePrompt(id: string): Promise<void> {
-    await database.delete(schema.prompts).where(eq(schema.prompts.id, id));
-  }
-
-  async addPrompts(prompts: TPrompt[]): Promise<void> {
-    await database
-      .insert(schema.prompts)
-      .values(prompts)
-      .onConflictDoUpdate({
-        target: schema.prompts.id,
-        set: {
-          name: sql`excluded.name`,
-          content: sql`excluded.content`,
-        },
-      });
-  }
+  return database
+    .select()
+    .from(schema.prompts)
+    .where(eq(schema.prompts.organizationId, organizationId));
 }
 
-export const promptsService = new PromptsService();
+// Create a new prompt
+export async function createPrompt(
+  prompt: Omit<TPrompt, 'id' | 'organizationId' | 'userId'>
+) {
+  const organizationId = await currentOrganizationId();
+  const user = await currentUser();
+
+  if (!organizationId || !user) throw new Error('Unauthorized');
+
+  return database
+    .insert(schema.prompts)
+    .values({
+      id: crypto.randomUUID(),
+      name: prompt.name,
+      content: prompt.content,
+      organizationId,
+      userId: user.id,
+    })
+    .returning();
+}
+
+// Update an existing prompt
+export async function updatePrompt(
+  id: string,
+  prompt: Partial<Omit<TPrompt, 'id' | 'organizationId' | 'userId'>>
+) {
+  const organizationId = await currentOrganizationId();
+  const user = await currentUser();
+
+  if (!organizationId || !user) throw new Error('Unauthorized');
+
+  return database
+    .update(schema.prompts)
+    .set({ name: prompt.name, content: prompt.content })
+    .where(
+      and(
+        eq(schema.prompts.id, id),
+        eq(schema.prompts.organizationId, organizationId)
+      )
+    )
+    .returning();
+}
+
+// Delete a prompt
+export async function deletePrompt(id: string) {
+  const organizationId = await currentOrganizationId();
+  const user = await currentUser();
+
+  if (!organizationId || !user) throw new Error('Unauthorized');
+
+  return database
+    .delete(schema.prompts)
+    .where(
+      and(
+        eq(schema.prompts.id, id),
+        eq(schema.prompts.organizationId, organizationId)
+      )
+    );
+}
+
+// Add or update multiple prompts
+export async function addPrompts(
+  prompts: Omit<TPrompt, 'organizationId' | 'userId'>[]
+): Promise<void> {
+  const organizationId = await currentOrganizationId();
+  const user = await currentUser();
+
+  if (!organizationId || !user) throw new Error('Unauthorized');
+
+  await database
+    .insert(schema.prompts)
+    .values(
+      prompts.map((prompt) => ({
+        ...prompt,
+        organizationId,
+        userId: user.id,
+      }))
+    )
+    .onConflictDoUpdate({
+      target: schema.prompts.id,
+      set: {
+        name: sql`excluded.name`,
+        content: sql`excluded.content`,
+        organizationId: sql`excluded.organization_id`,
+        userId: sql`excluded.user_id`,
+      },
+    });
+}
+
+// Get a prompt by ID
+export async function getPromptById(id: string): Promise<TPrompt | null> {
+  const organizationId = await currentOrganizationId();
+  if (!organizationId) return null;
+
+  const result = await database
+    .select()
+    .from(schema.prompts)
+    .where(
+      and(
+        eq(schema.prompts.id, id),
+        eq(schema.prompts.organizationId, organizationId)
+      )
+    )
+    .limit(1);
+
+  return result[0] || null;
+}

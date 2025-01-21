@@ -1,51 +1,119 @@
+'use server';
 import type { TAssistant } from '@/types';
-import { database } from '@repo/database';
-import { schema } from '@repo/database/schema';
-import type { TCustomAssistant } from '@repo/database/types';
-import { eq } from 'drizzle-orm';
+import { currentOrganizationId } from '@repo/backend/auth/utils';
+import { database } from '@repo/backend/database';
+import { schema } from '@repo/backend/schema';
+import type { TCustomAssistant } from '@repo/backend/types';
+import { and, eq } from 'drizzle-orm';
 
-export class AssistantService {
-  async getLegacyAssistants(): Promise<TAssistant[]> {
-    const assistants = await database.select().from(schema.assistants);
-    return assistants || [];
-  }
-
-  async createAssistant(
-    assistant: TCustomAssistant
-  ): Promise<TCustomAssistant | null> {
-    const newAssistant = await database
-      .insert(schema.customAssistants)
-      .values(assistant)
-      .returning();
-    return newAssistant?.[0] || null;
-  }
-
-  async addAssistants(assistants: TCustomAssistant[]): Promise<void> {
-    await database.insert(schema.customAssistants).values(assistants);
-  }
-
-  async updateAssistant(
-    key: string,
-    assistant: Partial<Omit<TCustomAssistant, 'key'>>
-  ): Promise<TCustomAssistant | null> {
-    const updatedAssistant = await database
-      .update(schema.customAssistants)
-      .set(assistant)
-      .where(eq(schema.customAssistants.key, key))
-      .returning();
-    return updatedAssistant?.[0] || null;
-  }
-
-  async getAllAssistant(): Promise<TCustomAssistant[]> {
-    const assistants = await database.select().from(schema.customAssistants);
-    return assistants || [];
-  }
-
-  async removeAssistant(key: string): Promise<void> {
-    await database
-      .delete(schema.customAssistants)
-      .where(eq(schema.customAssistants.key, key));
-  }
+// Get system-wide legacy assistants
+export async function getLegacyAssistants(): Promise<TAssistant[]> {
+  const assistants = await database.select().from(schema.assistants);
+  return assistants || [];
 }
 
-export const assistantService = new AssistantService();
+// Create a new custom assistant
+export async function createAssistant(
+  assistant: Omit<TCustomAssistant, 'organizationId'>
+): Promise<TCustomAssistant | null> {
+  const organizationId = await currentOrganizationId();
+  if (!organizationId) throw new Error('No organization found');
+
+  const newAssistant = await database
+    .insert(schema.customAssistants)
+    .values({
+      ...assistant,
+      organizationId,
+    })
+    .returning();
+  return newAssistant?.[0] || null;
+}
+
+// Add multiple custom assistants
+export async function addAssistants(
+  assistants: Omit<TCustomAssistant, 'organizationId'>[]
+): Promise<void> {
+  const organizationId = await currentOrganizationId();
+  if (!organizationId) throw new Error('No organization found');
+
+  await database.insert(schema.customAssistants).values(
+    assistants.map((assistant) => ({
+      ...assistant,
+      organizationId,
+    }))
+  );
+}
+
+// Update an existing custom assistant
+export async function updateAssistant(
+  key: string,
+  assistant: Partial<Omit<TCustomAssistant, 'key' | 'organizationId'>>
+): Promise<TCustomAssistant | null> {
+  const organizationId = await currentOrganizationId();
+  if (!organizationId) throw new Error('No organization found');
+
+  const updatedAssistant = await database
+    .update(schema.customAssistants)
+    .set(assistant)
+    .where(
+      and(
+        eq(schema.customAssistants.key, key),
+        eq(schema.customAssistants.organizationId, organizationId)
+      )
+    )
+    .returning();
+  return updatedAssistant?.[0] || null;
+}
+
+// Get all custom assistants for the current organization
+export async function getAllAssistants(): Promise<TCustomAssistant[]> {
+  const organizationId = await currentOrganizationId();
+  if (!organizationId) return [];
+
+  const assistants = await database
+    .select()
+    .from(schema.customAssistants)
+    .where(eq(schema.customAssistants.organizationId, organizationId));
+  return assistants || [];
+}
+
+// Get a specific custom assistant by key
+export async function getAssistantByKey(
+  key: string
+): Promise<TCustomAssistant | null> {
+  const organizationId = await currentOrganizationId();
+  if (!organizationId) return null;
+
+  const assistant = await database
+    .select()
+    .from(schema.customAssistants)
+    .where(
+      and(
+        eq(schema.customAssistants.key, key),
+        eq(schema.customAssistants.organizationId, organizationId)
+      )
+    )
+    .limit(1);
+  return assistant?.[0] || null;
+}
+
+// Remove a custom assistant
+export async function removeAssistant(key: string): Promise<void> {
+  const organizationId = await currentOrganizationId();
+  if (!organizationId) return;
+
+  await database
+    .delete(schema.customAssistants)
+    .where(
+      and(
+        eq(schema.customAssistants.key, key),
+        eq(schema.customAssistants.organizationId, organizationId)
+      )
+    );
+}
+
+// Helper function to verify assistant access
+export async function verifyAssistantAccess(key: string): Promise<boolean> {
+  const assistant = await getAssistantByKey(key);
+  return !!assistant;
+}

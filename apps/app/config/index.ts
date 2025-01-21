@@ -1,7 +1,6 @@
 import { constants } from '@/config/constants';
 import { docs } from '@/config/docs';
 import { examplePrompts } from '@/config/example-prompts';
-import { examples } from '@/config/examples';
 import { links } from '@/config/links';
 import { defaultPreferences } from '@/config/preferences';
 import * as prompts from '@/config/prompts';
@@ -22,5 +21,4 @@ export {
   models,
   docs,
   constants,
-  examples,
 };
