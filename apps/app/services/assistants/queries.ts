@@ -1,13 +1,19 @@
-import { assistantService } from '@/services/assistants/client';
-import type { TCustomAssistant } from '@repo/database/types';
+import type { TCustomAssistant } from '@repo/backend/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  addAssistants,
+  createAssistant,
+  getAllAssistants,
+  removeAssistant,
+  updateAssistant,
+} from './client';
 
 export const useAssistantsQueries = () => {
   const queryClient = useQueryClient();
 
   const assistantsQuery = useQuery({
     queryKey: ['custom-assistants'],
-    queryFn: () => assistantService.getAllAssistant(),
+    queryFn: () => getAllAssistants(),
   });
 
   const useOllamaModelsQuery = (baseUrl: string) =>
@@ -18,8 +24,8 @@ export const useAssistantsQueries = () => {
     });
 
   const createAssistantMutation = useMutation({
-    mutationFn: (assistant: TCustomAssistant) =>
-      assistantService.createAssistant(assistant),
+    mutationFn: (assistant: Omit<TCustomAssistant, 'organizationId'>) =>
+      createAssistant(assistant),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['custom-assistants'] });
       assistantsQuery.refetch();
@@ -32,7 +38,7 @@ export const useAssistantsQueries = () => {
     }: {
       key: string;
       assistant: Partial<Omit<TCustomAssistant, 'key'>>;
-    }) => assistantService.updateAssistant(key, assistant),
+    }) => updateAssistant(key, assistant),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['custom-assistants'] });
       assistantsQuery.refetch();
@@ -41,7 +47,7 @@ export const useAssistantsQueries = () => {
 
   const removeAssistantMutation = useMutation({
     mutationFn: async (key: string) => {
-      await assistantService.removeAssistant(key);
+      await removeAssistant(key);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['custom-assistants'] });
@@ -50,8 +56,7 @@ export const useAssistantsQueries = () => {
   });
 
   const addAssistantsMutation = useMutation({
-    mutationFn: (assistants: TCustomAssistant[]) =>
-      assistantService.addAssistants(assistants),
+    mutationFn: (assistants: TCustomAssistant[]) => addAssistants(assistants),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['custom-assistants'] });
       assistantsQuery.refetch();
