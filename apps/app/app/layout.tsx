@@ -1,4 +1,6 @@
 import '@repo/design-system/styles/globals.css';
+import { QueryProvider } from '@/providers/query-provider';
+import { AnalyticsProvider } from '@repo/analytics';
 import { DesignSystemProvider } from '@repo/design-system';
 import { fonts } from '@repo/design-system/lib/fonts';
 import { Toolbar } from '@repo/feature-flags/components/toolbar';
@@ -46,12 +48,13 @@ type RootLayoutProperties = {
 
 const RootLayout = ({ children }: RootLayoutProperties) => (
   <html lang="en" className={fonts} suppressHydrationWarning>
-    <head>
-      <link rel="icon" href="/favicon.ico" sizes="any" />
-    </head>
-    <body>
-      <DesignSystemProvider>{children}</DesignSystemProvider>
-      <Toolbar />
+    <body className="min-h-screen bg-backdrop">
+      <AnalyticsProvider>
+        <DesignSystemProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </DesignSystemProvider>
+        <Toolbar />
+      </AnalyticsProvider>
     </body>
   </html>
 );
