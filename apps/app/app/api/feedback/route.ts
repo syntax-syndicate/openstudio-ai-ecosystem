@@ -1,5 +1,5 @@
-import { database } from '@repo/database';
-import { feedbacks } from '@repo/database/schema';
+import { database } from '@repo/backend/database';
+import { feedbacks } from '@repo/backend/schema';
 import { type NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -10,11 +10,11 @@ export async function POST(req: NextRequest) {
       error: 'Feedback and feedback type are required',
     });
   }
-  await database.insert(feedbacks).values({
-    feedback,
-    feedbackType,
-    email,
-  });
+  // await database.insert(feedbacks).values({
+  //   feedback,
+  //   feedbackType,
+  //   email,
+  // });
 
   return NextResponse.json({ success: true });
 }
