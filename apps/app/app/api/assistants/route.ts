@@ -1,5 +1,5 @@
-import { database } from '@repo/database';
-import { schema } from '@repo/database/schema';
+import { database } from '@repo/backend/database';
+import { schema } from '@repo/backend/schema';
 import { type NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
