@@ -1,7 +1,6 @@
 import type { TPreferences } from '@/types';
 
-export const defaultPreferences: TPreferences = {
-  id: 1,
+export const defaultPreferences: Omit<TPreferences, 'id' | 'organizationId'> = {
   defaultAssistant: 'chathub',
   systemPrompt:
     "You're helpful assistant that can help me with my questions. Today is {{local_date}}.",

@@ -1,4 +1,4 @@
-import { LineChartComponent } from '@/app/(authenticated)/chat/components/tools/line-chart';
+import { LineChartComponent } from '@/app/(organization)/chat/components/tools/line-chart';
 import type { ToolDefinition, ToolExecutionContext } from '@/types';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { LineChart } from 'lucide-react';

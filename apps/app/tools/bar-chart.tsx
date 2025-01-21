@@ -1,4 +1,4 @@
-import { BarChartComponent } from '@/app/(authenticated)/chat/components/tools/bar-chart';
+import { BarChartComponent } from '@/app/(organization)/chat/components/tools/bar-chart';
 import type { ToolDefinition, ToolExecutionContext } from '@/types';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { BarChart } from 'lucide-react';

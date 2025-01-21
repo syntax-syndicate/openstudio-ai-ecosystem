@@ -12,7 +12,7 @@ export type ToolExecutionFunction = (
 export type ToolExecutionContext = {
   apiKeys: TApiKeys[];
   updateToolExecutionState: (state: ToolExecutionState) => void;
-  preferences: TPreferences;
+  preferences: TPreferences | Omit<TPreferences, 'id' | 'organizationId'>;
   updatePreferences?: (preferences: Record<string, any>) => void;
   model: TModelItem;
 };
@@ -27,7 +27,7 @@ export type ToolExecutionState = {
 
 export type ToolValidationContext = {
   apiKeys: TApiKeys[];
-  preferences: TPreferences;
+  preferences: TPreferences | Omit<TPreferences, 'id' | 'organizationId'>;
 };
 
 export type ToolDefinition = {

@@ -1,5 +1,5 @@
 import type { TAssistant, ToolExecutionState } from '@/types';
-import type { schema } from '@repo/database/schema';
+import type { schema } from '@repo/backend/schema';
 
 export const stopReasons = [
   'error',

@@ -38,7 +38,7 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
-    ariaTitle: string;
+    ariaTitle?: string;
   }
 >(({ className, children, ariaTitle, ...props }, ref) => (
   <DialogPortal>
@@ -51,9 +51,11 @@ const DialogContent = React.forwardRef<
       )}
       {...props}
     >
-      <VisuallyHidden.Root>
-        <DialogTitle>{ariaTitle}</DialogTitle>
-      </VisuallyHidden.Root>
+      {ariaTitle && (
+        <VisuallyHidden.Root>
+          <DialogTitle>{ariaTitle}</DialogTitle>
+        </VisuallyHidden.Root>
+      )}
       {children}
       <DialogPrimitive.Close className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full opacity-70 ring-offset-background transition-opacity hover:bg-zinc-500/20 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
         <X size={16} strokeWidth={2.5} />

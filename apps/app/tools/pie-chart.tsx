@@ -1,4 +1,4 @@
-import { PieChartComponent } from '@/app/(authenticated)/chat/components/tools/pie-chart';
+import { PieChartComponent } from '@/app/(organization)/chat/components/tools/pie-chart';
 import type { ToolDefinition, ToolExecutionContext } from '@/types';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { PieChart } from 'lucide-react';

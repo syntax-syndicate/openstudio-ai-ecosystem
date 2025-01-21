@@ -3,7 +3,7 @@ import { ollamaModelsSupportsTools } from '@/config/models';
 import { usePreferenceContext } from '@/context';
 import { constructPrompt } from '@/helper/promptUtil';
 import { modelService } from '@/services/models';
-import { messagesService } from '@/services/sessions/client';
+import { getMessages } from '@/services/sessions/client';
 import { RunnableSequence } from '@langchain/core/runnables';
 import type { ChatOllama } from '@langchain/ollama';
 import { StructuredOutputParser } from 'langchain/output_parsers';
@@ -27,7 +27,7 @@ export const useRelatedQuestions = () => {
     if (!preferences?.suggestRelatedQuestions) {
       return [];
     }
-    const messages = await messagesService.getMessages(sessionId);
+    const messages = await getMessages(sessionId);
     const message = messages.find((m) => m.id === messageId);
 
     if (!message?.rawHuman || !message?.rawAI) {
@@ -87,7 +87,7 @@ export const useRelatedQuestions = () => {
     if (!preferences?.suggestRelatedQuestions) {
       return [];
     }
-    const messages = await messagesService.getMessages(sessionId);
+    const messages = await getMessages(sessionId);
     const message = messages.find((m) => m.id === messageId);
 
     if (!message?.rawHuman || !message?.rawAI) {

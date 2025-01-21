@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@repo/analytics": "workspace:*",
-    "@repo/auth": "workspace:*",
     "@repo/design-system": "workspace:*",
     "@t3-oss/env-nextjs": "^0.11.1",
     "@vercel/flags": "^2.6.3",
