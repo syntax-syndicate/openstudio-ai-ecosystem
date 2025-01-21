@@ -1,4 +1,4 @@
-import type { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import type { ModelIcon } from '@/app/(organization)/chat/components/model-icon';
 import type { providers } from '@/config/models';
 import type { ToolKey } from '@/types/tools';
 import type { ComponentProps } from 'react';

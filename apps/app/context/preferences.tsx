@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { createContext, useContext } from 'react';
 
 export type TPreferenceContext = {
-  preferences: TPreferences;
+  preferences: Omit<TPreferences, 'id' | 'organizationId'>;
   isPreferencesReady: boolean;
   updatePreferences: (
     newPreferences: Partial<TPreferences>,
@@ -33,7 +33,7 @@ export type TPreferencesProvider = {
 };
 
 export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
-  const [preferences, setPreferences] = useState<TPreferences>();
+  const [preferences, setPreferences] = useState<Omit<TPreferences, 'id' | 'organizationId'>>();
   const [apiKeys, setApiKeys] = useState<TApiKeys[]>([]);
   const {
     preferencesQuery,
@@ -57,7 +57,7 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
   }, [apiKeysQuery.data]);
 
   const updatePreferences = async (
-    newPreferences: Partial<TPreferences>,
+    newPreferences: Partial<Omit<TPreferences, 'id' | 'organizationId'>>,
     onSuccess?: (preference: TPreferences) => void
   ) => {
     setPreferences((existing) => ({
@@ -66,11 +66,11 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
       ...newPreferences,
     }));
     setPreferencesMutation.mutate(
-      { id: 1, ...newPreferences },
+      { ...newPreferences },
       {
         onSuccess: (preference) => {
           preferencesQuery.refetch();
-          onSuccess && onSuccess(preference);
+          onSuccess && onSuccess(preference as TPreferences);
         },
       }
     );
@@ -79,7 +79,7 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
     setApiKeyMutation.mutate({ key, value });
   };
 
-  const updateApiKeys = (newApiKeys: TApiKeyInsert[]) => {
+  const updateApiKeys = (newApiKeys: TApiKeys[]) => {
     setApiKeys(newApiKeys);
   };
 

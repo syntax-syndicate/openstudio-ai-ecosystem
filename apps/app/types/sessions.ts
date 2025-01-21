@@ -1,6 +1,6 @@
 import type { useChatSessionQueries } from '@/services/sessions/queries';
 import type { TChatMessage } from '@/types';
-import type { TCustomAssistant } from '@repo/database/types';
+import type { TCustomAssistant } from '@repo/backend/types';
 
 export type TSessionsState = {
   activeSessionId?: string;
@@ -21,6 +21,8 @@ export type TChatSession = {
   isExample?: boolean | null;
   createdAt: Date | null;
   updatedAt: Date | null;
+  organizationId: string;
+  userId: string;
 };
 
 export type TSessionsProvider = {

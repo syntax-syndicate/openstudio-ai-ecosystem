@@ -1,4 +1,4 @@
-import { schema } from '@repo/database/schema';
+import { schema } from '@repo/backend/schema';
 import { createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 

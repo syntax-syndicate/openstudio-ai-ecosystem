@@ -5,8 +5,8 @@ import { injectPresetValues } from '@/helper/preset-prompt-values';
 import { constructMessagePrompt, constructPrompt } from '@/helper/promptUtil';
 import { generateShortUUID } from '@/helper/utils';
 import { modelService } from '@/services/models';
-import { preferencesService } from '@/services/preferences/client';
-import { messagesService, sessionsService } from '@/services/sessions/client';
+import { getApiKey } from '@/services/preferences/client';
+import { getMessages, getSessionById } from '@/services/sessions/client';
 import type { TLLMRunConfig, TProvider, TStopReason } from '@/types';
 import { useToast } from '@repo/design-system/hooks/use-toast';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
@@ -51,7 +51,7 @@ export const useLLMRunner = () => {
     const { sessionId, messageId, input, context, image, assistant } = config;
     const newMessageId = messageId || generateShortUUID();
     const modelKey = assistant.baseModel;
-    const session = await sessionsService.getSessionById(sessionId);
+    const session = await getSessionById(sessionId);
     if (!session) {
       setIsGenerating(false);
       toast({
@@ -61,7 +61,7 @@ export const useLLMRunner = () => {
       });
       return;
     }
-    const messages = await messagesService.getMessages(sessionId);
+    const messages = await getMessages(sessionId);
 
     const allPreviousMessages =
       messages?.filter((m) => m.id !== messageId) || [];
@@ -76,9 +76,7 @@ export const useLLMRunner = () => {
       throw new Error('Model not found');
     }
 
-    const apiKey = await preferencesService.getApiKey(
-      selectedModelKey.provider
-    );
+    const apiKey = await getApiKey(selectedModelKey.provider);
 
     if (
       !apiKey?.key &&

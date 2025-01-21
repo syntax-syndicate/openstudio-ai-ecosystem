@@ -23,3 +23,12 @@ export enum TStopReason {
   ContentFilter = 'content_filter',
   ToolCalls = 'tool_calls',
 }
+
+export type ApiKey = { 
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  provider: string;
+  key: string;
+  organizationId: string;
+};

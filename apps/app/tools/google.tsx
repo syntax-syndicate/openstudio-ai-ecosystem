@@ -1,4 +1,4 @@
-import { SearchResults } from '@/app/(authenticated)/chat/components/tools/search-results';
+import { SearchResults } from '@/app/(organization)/chat/components/tools/search-results';
 import { googleSearchPrompt } from '@/config/prompts';
 import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
 import { Globe02Icon } from '@hugeicons/react';

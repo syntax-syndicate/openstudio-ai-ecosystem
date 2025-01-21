@@ -1,6 +1,6 @@
 'use client';
-import { CreatePrompt } from '@/app/(authenticated)/chat/components/prompts/create-prompt';
-import { PromptLibrary } from '@/app/(authenticated)/chat/components/prompts/prompt-library';
+import { CreatePrompt } from '@/app/(organization)/chat/components/prompts/create-prompt';
+import { PromptLibrary } from '@/app/(organization)/chat/components/prompts/prompt-library';
 import { useChatContext } from '@/context/chat';
 import { usePromptsQueries } from '@/services/prompts';
 import type { TPrompt } from '@/types';

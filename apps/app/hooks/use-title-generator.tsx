@@ -1,7 +1,7 @@
 import { usePreferenceContext, useSessions } from '@/context';
 import { constructPrompt } from '@/helper/promptUtil';
 import { modelService } from '@/services/models';
-import { messagesService } from '@/services/sessions/client';
+import { getMessages } from '@/services/sessions/client';
 import type { TChatMessage } from '@/types';
 import { HumanMessage } from '@langchain/core/messages';
 import { RunnableSequence } from '@langchain/core/runnables';
@@ -22,7 +22,7 @@ export const useTitleGenerator = () => {
   const { updateSessionMutation } = useSessions();
 
   const generateTitleForSession = async (sessionId: string) => {
-    const messages = await messagesService.getMessages(sessionId);
+    const messages = await getMessages(sessionId);
 
     const firstMessage = messages?.[0];
     if (

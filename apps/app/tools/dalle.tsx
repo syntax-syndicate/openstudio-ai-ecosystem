@@ -1,4 +1,4 @@
-import { GeneratedImage } from '@/app/(authenticated)/chat/components/generated-image';
+import { GeneratedImage } from '@/app/(organization)/chat/components/generated-image';
 import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
 import { AiImageIcon } from '@hugeicons/react';
 import { DynamicStructuredTool } from '@langchain/core/tools';

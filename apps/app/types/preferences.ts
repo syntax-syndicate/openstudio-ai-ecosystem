@@ -1,5 +1,5 @@
 import type { TAssistant, TProvider, ToolKey } from '@/types';
-import type { schema } from '@repo/database/schema';
+import type { schema } from '@repo/backend/schema';
 
 export type TApiKeys = typeof schema.apiKeys.$inferSelect;
 export type TApiKeyInsert = typeof schema.apiKeys.$inferInsert;

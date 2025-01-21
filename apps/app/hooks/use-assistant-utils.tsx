@@ -1,4 +1,4 @@
-import { ModelIcon } from '@/app/(authenticated)/chat/components/model-icon';
+import { ModelIcon } from '@/app/(organization)/chat/components/model-icon';
 import { defaultPreferences } from '@/config';
 import { allPlugins, models, ollamaModelsSupportsTools } from '@/config/models';
 import { usePreferenceContext } from '@/context';
