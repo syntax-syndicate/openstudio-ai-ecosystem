@@ -1,0 +1,1 @@
+ALTER TABLE "organization" ALTER COLUMN "id" DROP DEFAULT;
