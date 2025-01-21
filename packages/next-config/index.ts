@@ -7,15 +7,15 @@ import type { NextConfig } from 'next';
 const otelRegex = /@opentelemetry\/instrumentation/;
 
 export const config: NextConfig = {
-  images: {
-    formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'img.clerk.com',
-      },
-    ],
-  },
+  // images: {
+  //   formats: ['image/avif', 'image/webp'],
+  //   remotePatterns: [
+  //     {
+  //       protocol: 'https',
+  //       hostname: 'img.clerk.com',
+  //     },
+  //   ],
+  // },
 
   // biome-ignore lint/suspicious/useAwait: rewrites is async
   async rewrites() {
@@ -41,6 +41,25 @@ export const config: NextConfig = {
     }
 
     config.ignoreWarnings = [{ module: otelRegex }];
+
+    const existingWebpack =
+      (config as any).webpack || ((config: any) => config);
+
+    // Apply existing webpack config
+    config = existingWebpack(config, { isServer });
+
+    // Add TypeScript loader configuration
+    config.module.rules.push({
+      test: /\.ts$/,
+      use: [
+        {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+          },
+        },
+      ],
+    });
 
     return config;
   },
