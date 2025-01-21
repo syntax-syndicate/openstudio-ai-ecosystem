@@ -1,117 +1,118 @@
+'use server';
+
 import { defaultPreferences } from '@/config';
 import { dataValidator } from '@/helper/validator';
-import { AssistantService } from '@/services/assistants';
-import { PreferenceService } from '@/services/preferences';
-import { PromptsService } from '@/services/prompts';
-import { MessagesService, SessionsService } from '@/services/sessions/client';
+import {
+  addAssistants,
+  getAllAssistants,
+  getLegacyAssistants,
+} from '@/services/assistants/client';
+import {
+  getApiKeys,
+  getPreferences,
+  setApiKeys,
+  setPreferences,
+} from '@/services/preferences/client';
+import { addPrompts } from '@/services/prompts/client';
+import {
+  addAllMessages,
+  addSessions,
+  getAllMessages,
+  getSessions,
+} from '@/services/sessions/client';
 import type { ExportData } from '@/types/export';
 import moment from 'moment';
 
-export class ExportService {
-  private messagesService: MessagesService;
-  private sessionsService: SessionsService;
-  private preferencesService: PreferenceService;
-  private assistantsService: AssistantService;
-  private promptsService: PromptsService;
+// Process data export
+export async function processExport(): Promise<ExportData> {
+  try {
+    const [
+      chatSessions,
+      allMessages,
+      userPreferences,
+      apiKeys,
+      legacyAssistants,
+      customAssistants,
+    ] = await Promise.all([
+      getSessions(),
+      getAllMessages(),
+      getPreferences(),
+      getApiKeys(),
+      getLegacyAssistants(),
+      getAllAssistants(),
+    ]);
 
-  constructor(
-    messagesService: MessagesService,
-    sessionsService: SessionsService,
-    preferencesService: PreferenceService,
-    assistantsService: AssistantService,
-    promptsService: PromptsService
-  ) {
-    this.messagesService = messagesService;
-    this.sessionsService = sessionsService;
-    this.preferencesService = preferencesService;
-    this.assistantsService = assistantsService;
-    this.promptsService = promptsService;
+    const exportData = {
+      preferences: { ...defaultPreferences, ...userPreferences },
+      apiKeys,
+      chatMessages: allMessages,
+      chatSessions: chatSessions.map((session) => ({
+        ...session,
+        isExample: session.isExample ?? false,
+        customAssistant: session.customAssistant ?? null,
+      })),
+      customAssistants,
+    };
+
+    // Validate data before export
+    await dataValidator.parseAsync(exportData);
+
+    return exportData;
+  } catch (error) {
+    console.error('Error processing export:', error);
+    throw error;
   }
+}
 
-  async processExport(): Promise<ExportData> {
-    try {
-      const chatSessions = await this.sessionsService.getSessions();
-      const messages = (await this.messagesService.getAllMessages()) || [];
+// Process data import
+export async function processImport(data: string): Promise<void> {
+  try {
+    const parsedData = dataValidator.parse(JSON.parse(data), {
+      errorMap: (issue: any, ctx: any) => {
+        return { message: ctx.defaultError };
+      },
+    });
 
-      const preferences = await this.preferencesService.getPreferences();
-      const apiKeys = await this.preferencesService.getApiKeys();
-      const assistants = await this.assistantsService.getLegacyAssistants();
-      const customAssistants = await this.assistantsService.getAllAssistant();
+    const {
+      chatSessions,
+      chatMessages,
+      preferences: userPreferences,
+      apiKeys,
+      prompts: userPrompts,
+      customAssistants,
+    } = parsedData;
 
-      dataValidator.parseAsync({
-        preferences: { ...defaultPreferences, ...preferences },
-        apiKeys,
-        chatMessages: messages,
-        chatSessions,
-        assistants,
-        customAssistants,
-      });
-
-      return {
-        preferences: { ...defaultPreferences, ...preferences },
-        apiKeys,
-        chatMessages: messages,
-        chatSessions: chatSessions.map((session) => ({
-          ...session,
-          isExample: session.isExample ?? false,
-          customAssistant: session.customAssistant ?? null,
-        })),
-        customAssistants,
-      };
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
-  async processImport(data: string) {
-    try {
-      const parsedData = dataValidator.parse(JSON.parse(data), {
-        errorMap: (issue: any, ctx: any) => {
-          return { message: ctx.defaultError };
-        },
-      });
-      const sessions = parsedData.chatSessions;
-      const messages = parsedData.chatMessages;
-      const preferences = parsedData.preferences;
-      const apiKeys = parsedData.apiKeys;
-      const prompts = parsedData.prompts;
-      const customAssistants = parsedData.customAssistants;
-
-      sessions &&
-        (await sessionsService.addSessions(
-          sessions?.map((session) => ({
+    // Process all imports in parallel
+    await Promise.all([
+      // Import sessions if they exist
+      chatSessions &&
+        addSessions(
+          chatSessions.map((session) => ({
             ...session,
             title: session.title ?? null,
             customAssistant: session.customAssistant ?? null,
             createdAt: moment(session.createdAt).toDate(),
             updatedAt: moment(session.updatedAt).toDate(),
           }))
-        ));
-      messages && (await this.messagesService.addAllMessages(messages));
-      prompts && (await this.promptsService.addPrompts(prompts));
-      preferences && (await preferencesService.setPreferences(preferences));
-      apiKeys && (await preferencesService.setApiKeys(apiKeys));
+        ),
 
-      customAssistants &&
-        (await assistantsService.addAssistants(customAssistants));
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+      // Import messages if they exist
+      chatMessages && addAllMessages(chatMessages),
+
+      // Import prompts if they exist
+      userPrompts && addPrompts(userPrompts),
+
+      // Import preferences if they exist
+      userPreferences && setPreferences(userPreferences),
+
+      // Import API keys if they exist
+      apiKeys && setApiKeys(apiKeys),
+
+      // Import custom assistants if they exist
+      customAssistants && addAssistants(customAssistants),
+    ]);
+  } catch (error) {
+    console.error('Error processing import:', error);
+    throw error;
   }
 }
-
-const messagesService = new MessagesService();
-const sessionsService = new SessionsService(messagesService);
-const preferencesService = new PreferenceService();
-const assistantsService = new AssistantService();
-const promptsService = new PromptsService();
-
-export const exportService = new ExportService(
-  messagesService,
-  sessionsService,
-  preferencesService,
-  assistantsService,
-  promptsService
-);
