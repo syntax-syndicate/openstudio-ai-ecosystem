@@ -1,11 +1,16 @@
 import { defaultPreferences } from '@/config';
-import type { TPreferences, TPreferencesState } from '@/types';
+import type { TApiKeys, TPreferences, TPreferencesState } from '@/types';
 import { create } from 'zustand';
 
 const initialState = {
-  preferences: defaultPreferences,
-  apiKeys: [] as { provider: string; key: string }[],
+  preferences: {
+    id: '',
+    organizationId: '',
+    ...defaultPreferences
+  } satisfies TPreferences,
+  apiKeys: [] as TApiKeys[],
 };
+
 export const createPreferencesStore = () =>
   create<TPreferencesState>((set, get) => ({
     ...initialState,
@@ -13,7 +18,7 @@ export const createPreferencesStore = () =>
       const existingPreferences = get().preferences;
       set({ preferences: { ...existingPreferences, ...preferences } });
     },
-    setApiKeys: (apiKeys: { provider: string; key: string }[]) => {
+    setApiKeys: (apiKeys: TApiKeys[]) => {
       set({ apiKeys });
     },
   }));
