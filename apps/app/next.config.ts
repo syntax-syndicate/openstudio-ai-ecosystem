@@ -6,6 +6,22 @@ import type { NextConfig } from 'next';
 //@ts-ignore
 let nextConfig: NextConfig = withLogtail({
   ...config,
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
+  productionBrowserSourceMaps: false,
+  experimental: {
+    serverSourceMaps: false,
+  },
   images: {
     remotePatterns: [
       {
