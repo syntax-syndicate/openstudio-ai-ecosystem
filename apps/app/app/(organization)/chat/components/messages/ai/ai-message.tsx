@@ -43,7 +43,9 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
             size="sm"
           />
         ) : (
-          <ModelIcon type="assistants" size="sm" />
+          // <ModelIcon type="assistants" size="sm" />
+          getAssistantIcon(runConfig.assistant.key ?? '', 'sm')
+          
         )}
       </Flex>
       <Flex
