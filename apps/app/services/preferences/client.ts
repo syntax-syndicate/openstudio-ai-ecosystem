@@ -20,7 +20,9 @@ export async function getApiKeys(): Promise<TApiKeys[]> {
 }
 
 // Get preferences for the current organization
-export async function getPreferences(): Promise<TPreferences | Omit<TPreferences, 'id' | 'organizationId'>> {
+export async function getPreferences(): Promise<
+  TPreferences | Omit<TPreferences, 'id' | 'organizationId'>
+> {
   const organizationId = await currentOrganizationId();
   if (!organizationId) return defaultPreferences;
 

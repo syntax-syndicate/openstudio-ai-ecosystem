@@ -24,7 +24,7 @@ export enum TStopReason {
   ToolCalls = 'tool_calls',
 }
 
-export type ApiKey = { 
+export type ApiKey = {
   id: string;
   createdAt: Date;
   updatedAt: Date;

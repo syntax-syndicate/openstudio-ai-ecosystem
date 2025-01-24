@@ -218,7 +218,6 @@ export async function createNewSession(): Promise<TChatSession | null> {
   const user = await currentUser();
 
   if (!organizationId || !user) return null;
-
   const sessions = await getSessions();
   const latestSession = sortSessions(sessions, 'createdAt')?.[0];
   const latestSessionMessages = await getMessages(latestSession?.id);
@@ -228,11 +227,10 @@ export async function createNewSession(): Promise<TChatSession | null> {
   }
 
   const newSession = await database
-    ?.insert(schema.chatSessions)
+    .insert(schema.chatSessions)
     .values({
       id: generateShortUUID(),
       title: 'Untitled',
-      createdAt: moment().toDate(),
       organizationId,
       userId: user.id,
     })
