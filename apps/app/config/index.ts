@@ -14,11 +14,4 @@ const configs = {
   heroVideo:
     'https://4sz5k3dpgfzlfzup.public.blob.vercel-storage.com/Build%20Your%20AI%20Chat%20Platform%20_%20ChatHub!%20_%20Next.js,%20OpenAI,%20Gemini,%20Claude,%20Ollama,%20Langchain%20_%20Intro%F0%9F%9A%80-S5FHJCnti4nM84ukVbZjplxrq3BRmm.mp4',
 };
-export {
-  configs,
-  defaultPreferences,
-  examplePrompts,
-  models,
-  docs,
-  constants,
-};
+export { configs, defaultPreferences, examplePrompts, models, docs, constants };
