@@ -6,6 +6,17 @@ export const currentUser = async () => {
   return data.user;
 };
 
+
+export const getUserByDomain = async (domain: string) => {
+  const client = await createClient();
+  const { data } = await client.auth.admin.listUsers({
+    perPage: 100_000,
+  });
+  return data.users.find((user) => user.user_metadata.domain === domain);
+};
+
+
+
 export const currentOrganizationId = async () => {
   const user = await currentUser();
   if (

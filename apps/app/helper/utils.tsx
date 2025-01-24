@@ -1,7 +1,12 @@
 import type { TChatMessage, TChatSession } from '@/types';
+import type { articles, projects } from '@repo/backend/schema';
 import moment from 'moment';
 import { customAlphabet } from 'nanoid';
+import { format } from 'date-fns';
 
+
+export type Article = typeof articles.$inferSelect;
+export type Project = typeof projects.$inferSelect;
 export const getRelativeDate = (date: string | Date) => {
   const today = moment().startOf('day');
   const inputDate = moment(date).startOf('day');
@@ -92,6 +97,14 @@ export function generateAndDownloadJson(data: any, filename: string) {
   document.body.removeChild(a);
 }
 
+export function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
 export async function imageUrlToBase64(imageUrl: string): Promise<string> {
   const response = await fetch(imageUrl);
   const blob = await response.blob();
@@ -114,3 +127,58 @@ export const formatTickerTime = (seconds: number): string => {
   const remainingSeconds = seconds % 60;
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
+
+export function sortArticles(articles: Article[], published?: string) {
+  return articles
+    .filter((a) => (published ? a.published!.toString() === published : a))
+    .sort((a, b) => Number(b.published) - Number(a.published));
+}
+
+export function sortProjects(projects: Project[], published?: string) {
+  return projects
+    .filter((p) => (published ? p.published!.toString() === published : p))
+    .sort((a, b) => Number(b.published) - Number(a.published));
+}
+
+export function getSearchParams(url: string) {
+  const params = Object.fromEntries(new URL(url).searchParams.entries());
+  return params;
+}
+
+export function jsonToFrontmatter(jsonData: object) {
+  const frontmatter = Object.entries(jsonData)
+    .map(([key, value]) => {
+      if (Array.isArray(value)) {
+        return `${key}:\n  - ${value.join("\n  - ")}`;
+      }
+      return `${key}: ${value}`;
+    })
+    .join("\n");
+
+  return `---\n${frontmatter}\n---\n\n`;
+}
+
+export function formatVerboseDate(date: Date) {
+  return format(date, "PPPPpppp");
+}
+
+
+export async function fetcher<JSON = any>(
+  input: RequestInfo,
+  init?: RequestInit,
+): Promise<JSON> {
+  const res = await fetch(input, init);
+
+  if (!res.ok) {
+    const error = await res.text();
+    const err = new Error(error) as any;
+    err.status = res.status;
+    throw err;
+  }
+
+  return res.json();
+}
+
+export const validDomainRegex = new RegExp(
+  /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/,
+);

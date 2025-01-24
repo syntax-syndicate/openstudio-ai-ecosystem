@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { sql } from 'drizzle-orm';
 import {
   boolean,
@@ -11,6 +10,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
@@ -23,6 +23,7 @@ import {
   type ToolKey,
   providers,
 } from './types';
+import { init } from '@paralleldrive/cuid2';
 
 const authSchema = pgSchema('auth');
 
@@ -31,7 +32,7 @@ export const Users = authSchema.table('users', {
 });
 
 export const organization = pgTable('organization', {
-  id: varchar('id').primaryKey().default(crypto.randomUUID()),
+  id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 191 }).notNull(),
   logoUrl: varchar('logoUrl', { length: 191 }),
   createdAt: timestamp('createdAt', { mode: 'date', precision: 6 })
@@ -75,7 +76,7 @@ export const providerEnum = pgEnum('provider', providers);
 export const prompts = pgTable(
   'prompts',
   {
-    id: text('id').primaryKey(),
+    id: uuid('id').primaryKey().defaultRandom(),
     name: text('name').notNull(),
     content: text('content').notNull(),
     organizationId: varchar('organization_id')
@@ -83,7 +84,7 @@ export const prompts = pgTable(
       .references(() => organization.id),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
-    userId: uuid('user_id')
+    userId: varchar('user_id')
       .notNull()
       .references(() => Users.id),
   },
@@ -124,11 +125,11 @@ export const chatSessions = pgTable(
 );
 
 export const chatMessages = pgTable('chat_messages', {
-  id: text('id').primaryKey(),
-  sessionId: text('session_id')
-    .$type<string>()
+  id: uuid('id').primaryKey().defaultRandom(),
+  sessionId: varchar('session_id')
+    .notNull()
     .references(() => chatSessions.id),
-  parentId: text('parent_id').$type<string>(),
+  parentId: varchar('parent_id'),
   image: text('image'),
   rawHuman: text('raw_human'),
   rawAI: text('raw_ai'),
@@ -222,7 +223,7 @@ export const feedbackTypeEnum = pgEnum('feedback_type', [
 ]);
 
 export const feedbacks = pgTable('feedbacks', {
-  id: uuid('id').defaultRandom().primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   feedback: text('feedback').notNull(),
   feedbackType: feedbackTypeEnum('feedback_type')
     .$type<(typeof feedbackTypeEnum.enumValues)[number]>()
@@ -231,10 +232,143 @@ export const feedbacks = pgTable('feedbacks', {
   organizationId: varchar('organization_id')
     .notNull()
     .references(() => organization.id),
-  userId: uuid('user_id').references(() => Users.id),
+  userId: varchar('user_id')
+    .references(() => Users.id),
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
+
+export const subscribers = pgTable(
+  'subscribers',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    email: varchar('email').notNull(),
+    name: varchar('name'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    userId: varchar('user_id')
+      .notNull()
+      .references(() => Users.id),
+  },
+  (table) => ({
+    userIdIdx: index('subscribers_user_id_idx').on(table.userId),
+  })
+);
+
+const createId = init({ length: 64, fingerprint: 'random-text' });
+
+export const articles = pgTable(
+  'articles',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    title: varchar('title').notNull(),
+    content: text('content'),
+    published: boolean('published').default(false),
+    slug: varchar('slug', {length: 64}).$defaultFn(() => createId()).notNull(),
+    views: integer('views').default(0),
+    lastNewsletterSentAt: timestamp('last_newsletter_sent_at'),
+    seoTitle: varchar('seo_title'),
+    seoDescription: varchar('seo_description'),
+    ogImage: varchar('og_image'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    publishedAt: timestamp('published_at').defaultNow().notNull(),
+    authorId: varchar('author_id')
+      .notNull()
+      .references(() => Users.id),
+    canonicalURL: varchar('canonical_url'),
+    organizationId: varchar('organization_id')
+      .notNull()
+      .references(() => organization.id),
+  },
+  (table) => ({
+    authorSlugUnique: uniqueIndex('articles_author_id_slug_unique').on(
+      table.authorId,
+      table.slug
+    ),
+    organizationIdIdx: index('articles_organization_id_idx').on(
+      table.organizationId
+    ),
+  })
+);
+
+export const projects = pgTable(
+  'projects',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    title: varchar('title').notNull(),
+    content: text('content'),
+    published: boolean('published').default(false),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    slug: text('slug').notNull(),
+    views: integer('views').default(0),
+    year: integer('year'),
+    description: text('description'),
+    url: varchar('url'),
+    seoTitle: varchar('seo_title'),
+    seoDescription: varchar('seo_description'),
+    ogImage: varchar('og_image'),
+    password: varchar('password'),
+    authorId: varchar('author_id')
+      .notNull()
+      .references(() => Users.id),
+    organizationId: varchar('organization_id')
+      .notNull()
+      .references(() => organization.id),
+  },
+  (table) => ({
+    authorSlugUnique: uniqueIndex('projects_author_id_slug_unique').on(
+      table.authorId,
+      table.slug
+    ),
+    organizationIdIdx: index('projects_organization_id_idx').on(
+      table.organizationId
+    ),
+  })
+);
+
+export const collections = pgTable(
+  'collections',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    name: varchar('name').notNull(),
+    authorId: varchar('author_id')
+      .notNull()
+      .references(() => Users.id),
+    organizationId: varchar('organization_id')
+      .notNull()
+      .references(() => organization.id),
+  },
+  (table) => ({
+    organizationIdIdx: index('collections_organization_id_idx').on(
+      table.organizationId
+    ),
+  })
+);
+
+export const bookmarks = pgTable(
+  'bookmarks',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    title: varchar('title').notNull(),
+    url: varchar('url').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    authorId: varchar('author_id')
+      .notNull()
+      .references(() => Users.id),
+    clicks: integer('clicks').default(0),
+    collectionId: uuid('collection_id').references(() => collections.id),
+    organizationId: varchar('organization_id')
+      .notNull()
+      .references(() => organization.id),
+  },
+  (table) => ({
+    organizationIdIdx: index('bookmarks_organization_id_idx').on(
+      table.organizationId
+    ),
+  })
+);
 
 export const organizationUpdateSchema: z.ZodTypeAny =
   createUpdateSchema(organization);
@@ -251,4 +385,9 @@ export const schema = {
   feedbacks,
   changelogs,
   customAssistants,
+  collections,
+  bookmarks,
+  projects,
+  articles,
+  subscribers,
 };

@@ -3,6 +3,7 @@ import {
   CogIcon,
   HomeIcon,
   MessageCircleIcon,
+  UserIcon,
 } from 'lucide-react';
 
 export type SidebarPage = {
@@ -18,6 +19,13 @@ export const home: SidebarPage = {
   label: 'Home',
   href: '/',
   active: (pathname) => pathname === '/',
+};
+
+export const minime: SidebarPage = {
+  icon: UserIcon,
+  label: 'Minime',
+  href: '/minime',
+  active: (pathname) => pathname === '/minime',
 };
 
 export const chat: SidebarPage = {

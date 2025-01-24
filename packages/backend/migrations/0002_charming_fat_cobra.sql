@@ -1,1 +1,0 @@
-ALTER TABLE "organization" ADD COLUMN "slug" varchar(191) NOT NULL;

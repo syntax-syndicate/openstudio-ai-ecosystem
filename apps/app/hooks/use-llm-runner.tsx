@@ -50,6 +50,28 @@ export const useLLMRunner = () => {
     setAbortController(currentAbortController);
     const { sessionId, messageId, input, context, image, assistant } = config;
     const newMessageId = messageId || generateShortUUID();
+
+
+    // editor?.commands.clearContent();
+    // setIsGenerating(true);
+    // setCurrentMessage({
+    //   runConfig: config,
+    //   id: newMessageId,
+    //   parentId: sessionId,
+    //   sessionId,
+    //   rawHuman: input || null,
+    //   stop: false,
+    //   stopReason: null,
+    //   rawAI: null,
+    //   image: image || null,
+    //   tools: [],
+    //   relatedQuestions: [],
+    //   createdAt: moment().toDate(),
+    //   isLoading: true,
+    //   errorMessage: null,
+    // });
+
+
     const modelKey = assistant.baseModel;
     const session = await getSessionById(sessionId);
     if (!session) {
@@ -61,6 +83,7 @@ export const useLLMRunner = () => {
       });
       return;
     }
+
     const messages = await getMessages(sessionId);
 
     const allPreviousMessages =

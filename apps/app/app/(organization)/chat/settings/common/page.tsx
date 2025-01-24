@@ -17,7 +17,9 @@ import type { ChangeEvent } from 'react';
 
 export default function CommonPage() {
   const { preferences, updatePreferences } = usePreferenceContext();
-  const renderResetToDefault = (key: keyof Omit<TPreferences, 'id' | 'organizationId'>) => (
+  const renderResetToDefault = (
+    key: keyof Omit<TPreferences, 'id' | 'organizationId'>
+  ) => (
     <Button
       variant="secondary"
       size="icon-xs"
@@ -146,7 +148,14 @@ export default function CommonPage() {
                     <Slider
                       className="my-2 w-[80px]"
                       value={[
-                        Number(preferences[setting.key as keyof Omit<TPreferences, 'id' | 'organizationId'>]),
+                        Number(
+                          preferences[
+                            setting.key as keyof Omit<
+                              TPreferences,
+                              'id' | 'organizationId'
+                            >
+                          ]
+                        ),
                       ]}
                       min={setting.min}
                       step={setting.step}
@@ -163,7 +172,12 @@ export default function CommonPage() {
                       size="sm"
                       className="w-[100px]"
                       value={
-                        preferences[setting.key as keyof Omit<TPreferences, 'id' | 'organizationId'>] as string
+                        preferences[
+                          setting.key as keyof Omit<
+                            TPreferences,
+                            'id' | 'organizationId'
+                          >
+                        ] as string
                       }
                       min={setting.min}
                       max={setting.max}
@@ -177,7 +191,12 @@ export default function CommonPage() {
                     />
                   </>
                 )}
-                {renderResetToDefault(setting.key as keyof Omit<TPreferences, 'id' | 'organizationId'>)}
+                {renderResetToDefault(
+                  setting.key as keyof Omit<
+                    TPreferences,
+                    'id' | 'organizationId'
+                  >
+                )}
               </Flex>
             </Flex>
           );

@@ -1,1 +1,0 @@
-ALTER TABLE "organization" ALTER COLUMN "id" SET DEFAULT '815224ed-b5ab-433a-abbf-f6a86b4f80ee';

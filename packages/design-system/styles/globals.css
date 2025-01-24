@@ -1,6 +1,10 @@
+/* @import "./editor.css";
+@import "./prose.css"; */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 @keyframes fade458 {
   from {
@@ -123,6 +127,16 @@
     --vaul-overlay-background-start: transparent;
     --vaul-overlay-background-end: rgba(0,0,0,.4)
 
+     --background-color: #f9f9f9;
+    --foreground: #000;
+    --gray-1: #838383;
+    --gray-2: #e0e0e0;
+    --gray-3: #f0f0f0;
+    --gray-4: #646464;
+    --blue: rgb(33, 146, 255);
+    --grass: #46a758;
+    --overlay: rgba(var(--foreground), 0.2);
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
 
@@ -222,6 +236,14 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --background-color: #1c1c1c;
+    --foreground: #fff;
+    --gray-1: #7b7b7b;
+    --gray-2: #313131;
+    --gray-3: #222222;
+    --gray-4: #8e8e8e;
+    --overlay: rgba(var(--background-color), 0.2);
   }
 }
 
@@ -232,6 +254,13 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  ::selection {
+    @apply bg-gray-2 text-gray-4;
+  }
+
+  hr {
+    @apply w-full border-gray-2;
   }
 }
 
@@ -248,6 +277,22 @@
   }
 }
 
+@layer components {
+  .section-container {
+    @apply flex w-full flex-col gap-2 text-sm;
+  }
+
+  .section-title {
+    @apply relative flex items-center justify-between text-base;
+  }
+  .section-title.link {
+    @apply -mx-2 rounded-md px-2 py-1 transition-colors hover:bg-gray-3;
+  }
+  .section-content {
+    @apply flex flex-col break-words pb-4;
+  }
+}
+
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -259,6 +304,13 @@
     /* IE and Edge */
     scrollbar-width: none;
     /* Firefox */
+  }
+
+  .no-user-select {
+    -user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
   }
 }
 

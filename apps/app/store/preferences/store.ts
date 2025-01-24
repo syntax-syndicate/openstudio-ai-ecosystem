@@ -6,7 +6,7 @@ const initialState = {
   preferences: {
     id: '',
     organizationId: '',
-    ...defaultPreferences
+    ...defaultPreferences,
   } satisfies TPreferences,
   apiKeys: [] as TApiKeys[],
 };

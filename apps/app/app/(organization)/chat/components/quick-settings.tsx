@@ -1,7 +1,6 @@
 import { defaultPreferences } from '@/config';
 import { usePreferenceContext } from '@/context/preferences';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
-import type { TPreferences } from '@/types';
 import { ArrowClockwise, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';

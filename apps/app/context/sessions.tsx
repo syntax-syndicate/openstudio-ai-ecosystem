@@ -32,7 +32,7 @@ export const SessionsProvider: FC<TSessionsProvider> = ({ children }) => {
 
   const createSession = async () => {
     try {
-      const data = await createNewSessionMutation.mutateAsync(undefined);
+      const data = await createNewSessionMutation.mutateAsync();
       if (data) {
         setActiveSessionId(data?.id);
       }

@@ -1,7 +1,7 @@
 'use client';
 import { defaultPreferences } from '@/config';
 import { usePreferencesQueries } from '@/services/preferences';
-import type { TApiKeyInsert, TApiKeys, TPreferences, TProvider } from '@/types';
+import type { TApiKeys, TPreferences, TProvider } from '@/types';
 import { useEffect, useState } from 'react';
 import { createContext, useContext } from 'react';
 
@@ -33,7 +33,8 @@ export type TPreferencesProvider = {
 };
 
 export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
-  const [preferences, setPreferences] = useState<Omit<TPreferences, 'id' | 'organizationId'>>();
+  const [preferences, setPreferences] =
+    useState<Omit<TPreferences, 'id' | 'organizationId'>>();
   const [apiKeys, setApiKeys] = useState<TApiKeys[]>([]);
   const {
     preferencesQuery,
