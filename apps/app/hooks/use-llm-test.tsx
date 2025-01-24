@@ -49,7 +49,6 @@ export const useLLMTest = () => {
           ],
         });
 
-
       if (data) {
         return true;
       }
