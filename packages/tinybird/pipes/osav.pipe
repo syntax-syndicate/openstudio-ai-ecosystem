@@ -1,0 +1,15 @@
+NODE total_analytics
+SQL >
+    % SELECT 
+        count() as visits
+    FROM osa
+    WHERE 1=1
+        {% if defined(userId) %}
+            AND userId = {{userId}}
+        {% end %}
+        {% if defined(page) %}
+            AND page = {{page}}
+        {% end %}
+        {% if defined(start) and defined(end) %}
+            AND timestamp BETWEEN parseDateTimeBestEffort({{start}}) AND parseDateTimeBestEffort({{end}})
+        {% end %}
