@@ -58,6 +58,7 @@
     "axios": "^1.7.9",
     "boring-avatars": "^1.11.2",
     "canvas": "^3.0.1",
+    "date-fns": "^4.1.0",
     "drizzle-orm": "^0.38.4",
     "drizzle-zod": "^0.6.1",
     "duck-duck-scrape": "^2.2.6",
