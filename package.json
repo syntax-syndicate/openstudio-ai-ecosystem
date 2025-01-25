@@ -30,7 +30,7 @@
     "ultracite": "^4.1.14"
   },
   "engines": {
-    "node": ">=18"
+    "node": "20.14.0"
   },
   "packageManager": "pnpm@9.15.2",
   "dependencies": {
