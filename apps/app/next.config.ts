@@ -3,7 +3,7 @@ import { config, withAnalyzer } from '@repo/next-config';
 import { withLogtail, withSentry } from '@repo/observability/next-config';
 import type { NextConfig } from 'next';
 
-//@ts-ignore
+
 let nextConfig: NextConfig = withLogtail({
   ...config,
   eslint: {
@@ -35,13 +35,13 @@ let nextConfig: NextConfig = withLogtail({
     ],
   },
 });
+//TODO: Add sentry and analyzer
+// if (env.VERCEL) {
+//   nextConfig = withSentry(nextConfig);
+// }
 
-if (env.VERCEL) {
-  nextConfig = withSentry(nextConfig);
-}
-
-if (env.ANALYZE === 'true') {
-  nextConfig = withAnalyzer(nextConfig);
-}
+// if (env.ANALYZE === 'true') {
+//   nextConfig = withAnalyzer(nextConfig);
+// }
 
 export default nextConfig;
