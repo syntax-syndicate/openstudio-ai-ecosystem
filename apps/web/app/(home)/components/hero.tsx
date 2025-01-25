@@ -16,7 +16,7 @@ export const Hero = async () => {
           <div>
             <Feed queries={[blog.latestPostQuery]} draft={draft.isEnabled}>
               {/* biome-ignore lint/suspicious/useAwait: "Server Actions must be async" */}
-              {async ([data]) => {
+              {async ([data]: any) => {
                 'use server';
 
                 return (
@@ -46,7 +46,7 @@ export const Hero = async () => {
             </p>
           </div>
           <div className="flex flex-row gap-3">
-            <Button size="lg" className="gap-4" variant="outline" asChild>
+            <Button size="lg" className="gap-4" variant="outlined" asChild>
               <Link href="/contact">
                 Get in touch <PhoneCall className="h-4 w-4" />
               </Link>

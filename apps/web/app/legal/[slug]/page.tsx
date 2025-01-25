@@ -36,7 +36,7 @@ export const generateMetadata = async ({
 export const generateStaticParams = async (): Promise<{ slug: string }[]> => {
   const posts = await legal.getPosts();
 
-  return posts.map(({ _slug }) => ({ slug: _slug }));
+  return posts.map(({ _slug }: any) => ({ slug: _slug }));
 };
 
 const LegalPage = async ({ params }: LegalPageProperties) => {
@@ -46,7 +46,7 @@ const LegalPage = async ({ params }: LegalPageProperties) => {
   return (
     <Feed queries={[legal.postQuery(slug)]} draft={draft.isEnabled}>
       {/* biome-ignore lint/suspicious/useAwait: "Server Actions must be async" */}
-      {async ([data]) => {
+      {async ([data]: any) => {
         'use server';
 
         const [page] = data.legalPages.items;
