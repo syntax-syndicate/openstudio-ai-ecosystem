@@ -1,13 +1,11 @@
-import { User } from "@repo/backend/auth";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Link from "next/link";
+import type { User } from '@repo/backend/auth';
 
 export default function Connect({ user }: { user: User }) {
-//   const links = getLinks(user);
+  //   const links = getLinks(user);
 
-//   if (links.every((link) => !link?.username?.length)) {
-//     return null;
-//   }
+  //   if (links.every((link) => !link?.username?.length)) {
+  //     return null;
+  //   }
   return (
     <dl className="section-container">
       <dt className="section-title">

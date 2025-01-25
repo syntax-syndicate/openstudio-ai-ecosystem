@@ -1,7 +1,7 @@
-import { deleteCollection, updateCollection } from "@/actions/collections";
-import { guard } from "@/lib/auth";
-import { collectionSchema } from "@/lib/validations/bookmark";
-import * as z from "zod";
+import { deleteCollection, updateCollection } from '@/actions/collections';
+import { guard } from '@/lib/auth';
+import { collectionSchema } from '@/lib/validations/bookmark';
+import * as z from 'zod';
 
 const routeContextSchema = z.object({
   params: z.object({
@@ -26,7 +26,7 @@ export const PATCH = guard(
       contextSchema: routeContextSchema,
       bodySchema: collectionSchema,
     },
-  },
+  }
 );
 
 export const DELETE = guard(
@@ -45,5 +45,5 @@ export const DELETE = guard(
     schemas: {
       contextSchema: routeContextSchema,
     },
-  },
+  }
 );

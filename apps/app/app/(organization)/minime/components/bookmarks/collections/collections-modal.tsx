@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Button from "@repo/design-system/components/minime/button";
+import type { Action } from '@/app/(organization)/minime/components/bookmarks/add-bookmark-or-collection';
+import type { Bookmark, Collection } from '@/helper/utils';
+import Button from '@repo/design-system/components/minime/button';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@repo/design-system/components/ui/dialog";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import CollectionOperations from "./collection-operations";
-import { Collection, Bookmark } from "@/helper/utils";
-import { Action } from "@/app/(organization)/minime/components/bookmarks/add-bookmark-or-collection";
+} from '@repo/design-system/components/ui/dialog';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import CollectionOperations from './collection-operations';
 
 type CollectionWithBookmarks = Collection & {
   bookmarks: Bookmark[] | null;
@@ -24,12 +24,13 @@ export default function CollectionsModal({
 }: {
   collections: CollectionWithBookmarks[];
 }) {
-  const action = (useSearchParams().get("action") as Action) || "";
-  const [showCollectionsModal, setShowCollectionsModal] =
-    useState<boolean>(!!action);
+  const action = (useSearchParams().get('action') as Action) || '';
+  const [showCollectionsModal, setShowCollectionsModal] = useState<boolean>(
+    !!action
+  );
 
   useEffect(() => {
-    if (action === "manageCollections") {
+    if (action === 'manageCollections') {
       setShowCollectionsModal(true);
     } else {
       setShowCollectionsModal(false);
@@ -52,7 +53,7 @@ export default function CollectionsModal({
         </DialogHeader>
 
         {collections.length ? (
-          <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-2  overflow-auto no-scrollbar">
+          <div className="no-scrollbar grid grid-cols-2 gap-2 overflow-auto max-sm:grid-cols-1">
             {collections.map((collection) => (
               <CollectionItem collection={collection} key={collection.id} />
             ))}
@@ -60,7 +61,7 @@ export default function CollectionsModal({
         ) : null}
 
         {!collections.length && (
-          <div className="text-gray-1 text-center">
+          <div className="text-center text-gray-1">
             You don&apos;t have any collection
           </div>
         )}
@@ -85,7 +86,7 @@ function CollectionItem({
   return (
     <div
       key={collection.id}
-      className="text-sm  p-2 flex justify-between group  transition-colors items-center border border-gray-2  text-gray-4 rounded-md"
+      className="group flex items-center justify-between rounded-md border border-gray-2 p-2 text-gray-4 text-sm transition-colors"
     >
       <div>
         <p className="text-secondary">{collection.name}</p>

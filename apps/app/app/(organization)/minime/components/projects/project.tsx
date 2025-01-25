@@ -12,14 +12,15 @@ interface Props {
   > & {
     isProtected: boolean;
   };
+  url: string;
 }
 
-export default function Project({ project, admin }: Props) {
+export default function Project({ project, admin, url }: Props) {
   const isPublished = project.published;
   return (
     <div className="-mx-2 group relative flex min-h-5 items-center justify-between rounded-md p-2 text-sm transition-colors hover:bg-gray-3 max-md:h-auto max-md:flex-col max-md:items-start">
       <Link
-        href={`/minime/projects/${admin ? project.id : project.slug}`}
+        href={`${url}/${admin ? project.id : project.slug}`}
         className="absolute top-0 left-0 h-full w-full py-2"
         aria-label={`${project.title}`}
       />
@@ -44,16 +45,14 @@ export default function Project({ project, admin }: Props) {
           )}
           {admin && (
             <>
-              <Link
-                href={`/minime/projects?published=${isPublished ? 'true' : 'false'}`}
-              >
+              <Link href={`${url}?published=${isPublished ? 'true' : 'false'}`}>
                 <Badge className="h-4 px-1 py-2 font-normal hover:bg-gray-2">
                   {isPublished ? 'Public' : 'Draft'}
                 </Badge>
               </Link>
 
               <AnalyticsBadge
-                href={`/minime/projects/${project.id}/analytics`}
+                href={`${url}/${project.id}/analytics`}
                 value={project.views ?? 0}
                 published={project.published ?? false}
                 index="views"

@@ -1,14 +1,14 @@
-"use server";
+'use server';
 
-import { getProjectById } from "@/actions/projects";
+import { getProjectById } from '@/actions/projects';
 
 export async function unlockProject(prev: any, data: FormData) {
-  const projectId = data.get("projectId") as string;
-  const pw = data.get("password") as string;
+  const projectId = data.get('projectId') as string;
+  const pw = data.get('password') as string;
   const project = await getProjectById(projectId);
   if (!project) {
     return {
-      error: "Project not found",
+      error: 'Project not found',
     };
   }
 
@@ -18,6 +18,6 @@ export async function unlockProject(prev: any, data: FormData) {
     };
   }
   return {
-    error: "Incorrect Password",
+    error: 'Incorrect Password',
   };
 }

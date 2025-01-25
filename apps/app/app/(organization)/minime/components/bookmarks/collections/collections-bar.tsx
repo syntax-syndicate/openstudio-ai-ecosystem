@@ -1,6 +1,6 @@
-import { cn } from "@repo/design-system/lib/utils";
-import Link from "next/link";
-import { Collection } from "@/helper/utils";
+import type { Collection } from '@/helper/utils';
+import { cn } from '@repo/design-system/lib/utils';
+import Link from 'next/link';
 
 export default function CollectionBar({
   collections,
@@ -14,8 +14,8 @@ export default function CollectionBar({
       <Link
         href="/minime/bookmarks"
         className={cn(
-          "rounded-md cursor-pointer  border w-max border-gray-2 py-0.5 px-1 text-xs text-gray-4",
-          !currentCollection ? "bg-gray-2 text-secondary" : "",
+          'w-max cursor-pointer rounded-md border border-gray-2 px-1 py-0.5 text-gray-4 text-xs',
+          currentCollection ? '' : 'bg-gray-2 text-secondary'
         )}
       >
         All
@@ -24,8 +24,8 @@ export default function CollectionBar({
         <Link
           href={`?collection=${item.name}`}
           className={cn(
-            "rounded-md cursor-pointer  border w-max border-gray-2 py-0.5 px-1 text-xs text-gray-4",
-            currentCollection === item.name ? "bg-gray-2 text-secondary" : "",
+            'w-max cursor-pointer rounded-md border border-gray-2 px-1 py-0.5 text-gray-4 text-xs',
+            currentCollection === item.name ? 'bg-gray-2 text-secondary' : ''
           )}
           key={item.id}
         >

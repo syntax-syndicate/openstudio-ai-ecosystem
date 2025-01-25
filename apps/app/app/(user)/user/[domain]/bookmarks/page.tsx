@@ -1,17 +1,17 @@
-import Bookmark from "@/app/(organization)/minime/components/bookmarks/bookmark";
-import CollectionBar from "@/app/(organization)/minime/components/bookmarks/collections/collections-bar";
-import NoBookmarksPlaceholder from "@/app/(organization)/minime/components/bookmarks/no-bookmarks-placeholder";
-import AppShell from "@/app/(organization)/minime/components/layout/app-shell";
-import AppHeader from "@/app/(organization)/minime/components/layout/app-header";
-import { getBookmarksByAuthor } from "@/actions/bookmarks";
-import { getCollectionsByAuthor } from "@/actions/collections";
-import { getUserByDomain } from "@repo/backend/auth/utils";
-import { Collection, sortBookmarks } from "@/helper/utils";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { getBookmarksByAuthor } from '@/actions/bookmarks';
+import { getCollectionsByAuthor } from '@/actions/collections';
+import Bookmark from '@/app/(organization)/minime/components/bookmarks/bookmark';
+import CollectionBar from '@/app/(organization)/minime/components/bookmarks/collections/collections-bar';
+import NoBookmarksPlaceholder from '@/app/(organization)/minime/components/bookmarks/no-bookmarks-placeholder';
+import AppHeader from '@/app/(organization)/minime/components/layout/app-header';
+import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
+import { type Collection, sortBookmarks } from '@/helper/utils';
+import { getUserByDomain } from '@repo/backend/auth/utils';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: "Bookmarks",
+  title: 'Bookmarks',
 };
 
 interface BookmarksPageProps {
@@ -42,7 +42,7 @@ export default async function Bookmarks({
     <AppShell>
       <AppHeader title="Bookmarks" />
       <CollectionBar collections={collections} currentCollection={collection} />
-      <div className="w-full flex flex-col">
+      <div className="flex w-full flex-col">
         {sortedBookmarks.map((bookmark) => (
           <Bookmark
             bookmark={bookmark}

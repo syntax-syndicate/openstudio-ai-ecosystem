@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Button from "@repo/design-system/components/minime/button";
-import useNavigation from "@/hooks/use-navigation";
+import useNavigation from '@/hooks/use-navigation';
+import Button from '@repo/design-system/components/minime/button';
+import { Icons } from '@repo/design-system/components/ui/icons';
 
 export default function CommandMenuToggle() {
   const setOpen = useNavigation((state) => state.setOpen);

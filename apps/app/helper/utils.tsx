@@ -1,5 +1,10 @@
 import type { TChatMessage, TChatSession } from '@/types';
-import type { articles, projects, collections, bookmarks } from '@repo/backend/schema';
+import type {
+  articles,
+  bookmarks,
+  collections,
+  projects,
+} from '@repo/backend/schema';
 import { format } from 'date-fns';
 import moment from 'moment';
 import { customAlphabet } from 'nanoid';
@@ -51,10 +56,10 @@ export const sortSessions = (
 
 export function sortBookmarks(
   bookmarks: BookmarkWithCollection[],
-  collection?: string | null,
+  collection?: string | null
 ) {
   return bookmarks.filter((b) =>
-    collection ? collection === b.collection?.name : b,
+    collection ? collection === b.collection?.name : b
   );
 }
 

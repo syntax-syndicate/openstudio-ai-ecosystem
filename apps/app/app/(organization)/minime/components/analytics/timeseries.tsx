@@ -11,7 +11,6 @@ export default function Timeseries() {
     queryKey: ['analytics', 'total', interval],
     queryFn: () => fetcher(`${basePath}/analytics/total?interval=${interval}`),
   });
-  console.log('total', total);
 
   const { data: timeseries, isLoading: isTimeseriesLoading } = useQuery<
     { start: string; value: number }[]

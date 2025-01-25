@@ -1,13 +1,13 @@
-import DeleteForm from "@/components/forms/delete-form";
-import ExportButton from "@/components/forms/export-button";
-import Form from "@/components/forms/form";
-import UploadImage from "@/components/forms/upload-image";
-import AppShell from "@/app/(organization)/minime/components/layout/app-shell";
-import AppHeader from "@/app/(organization)/minime/components/layout/app-header";
-import NavButton from "@/app/(organization)/minime/components/layout/nav-button";
-import { getProjectById } from "@/actions/projects";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { getProjectById } from '@/actions/projects';
+import AppHeader from '@/app/(organization)/minime/components/layout/app-header';
+import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
+import NavButton from '@/app/(organization)/minime/components/layout/nav-button';
+import DeleteForm from '@/components/forms/delete-form';
+import ExportButton from '@/components/forms/export-button';
+import Form from '@/components/forms/form';
+import UploadImage from '@/components/forms/upload-image';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 interface ProjectSettingsProps {
   params: {
@@ -15,7 +15,7 @@ interface ProjectSettingsProps {
   };
 }
 export const metadata: Metadata = {
-  title: "Settings",
+  title: 'Settings',
 };
 
 export default async function ProjectSettings({
@@ -30,7 +30,7 @@ export default async function ProjectSettings({
   const endpoint = `projects/${project[0].id}`;
   return (
     <AppShell>
-      <AppHeader className="justify-start text-lg font-medium">
+      <AppHeader className="justify-start font-medium text-lg">
         <NavButton
           href={`/minime/projects/${project[0].id}`}
           icon="arrowLeft"
@@ -46,8 +46,8 @@ export default async function ProjectSettings({
           description="This is the URL slug for this project."
           endpoint={endpoint}
           inputData={{
-            name: "slug",
-            placeholder: "my-project",
+            name: 'slug',
+            placeholder: 'my-project',
             defaultValue: project[0].slug,
           }}
         />
@@ -59,9 +59,9 @@ export default async function ProjectSettings({
           helpText="Please use 60 characters at maximum."
           endpoint={endpoint}
           textareaData={{
-            name: "description",
-            placeholder: "My new project",
-            defaultValue: project[0].description || "",
+            name: 'description',
+            placeholder: 'My new project',
+            defaultValue: project[0].description || '',
             maxLength: 60,
           }}
           required={false}
@@ -72,12 +72,12 @@ export default async function ProjectSettings({
           description="This will be the year of the project"
           endpoint={endpoint}
           inputData={{
-            type: "number",
+            type: 'number',
             max: new Date().getFullYear() + 20,
             min: 2000,
-            name: "year",
-            placeholder: "2025",
-            defaultValue: project[0].year || "",
+            name: 'year',
+            placeholder: '2025',
+            defaultValue: project[0].year || '',
           }}
         />
         <Form
@@ -86,9 +86,9 @@ export default async function ProjectSettings({
           helpText="Optional"
           endpoint={endpoint}
           inputData={{
-            name: "url",
-            placeholder: "https://example.com",
-            defaultValue: project[0].url || "",
+            name: 'url',
+            placeholder: 'https://example.com',
+            defaultValue: project[0].url || '',
           }}
           required={false}
         />
@@ -99,9 +99,9 @@ export default async function ProjectSettings({
           endpoint={endpoint}
           method="PATCH"
           inputData={{
-            name: "seoTitle",
-            placeholder: "My new project",
-            defaultValue: project[0].seoTitle || "",
+            name: 'seoTitle',
+            placeholder: 'My new project',
+            defaultValue: project[0].seoTitle || '',
             maxLength: 60,
           }}
           required={false}
@@ -113,9 +113,9 @@ export default async function ProjectSettings({
           helpText="Please use 160 characters at maximum."
           endpoint={endpoint}
           textareaData={{
-            name: "seoDescription",
-            placeholder: "My new project",
-            defaultValue: project[0].seoDescription || "",
+            name: 'seoDescription',
+            placeholder: 'My new project',
+            defaultValue: project[0].seoDescription || '',
             maxLength: 160,
           }}
           required={false}
@@ -135,10 +135,10 @@ export default async function ProjectSettings({
           endpoint={endpoint}
           required={false}
           inputData={{
-            type: "password",
-            name: "password",
-            placeholder: "password",
-            defaultValue: project[0].password || "",
+            type: 'password',
+            name: 'password',
+            placeholder: 'password',
+            defaultValue: project[0].password || '',
           }}
         />
         <Form title="Export" endpoint={`${endpoint}/export`} asChild>

@@ -1,17 +1,14 @@
-import AppShell from "@/app/(organization)/minime/components/layout/app-shell";
-import AppHeader from "@/app/(organization)/minime/components/layout/app-header";
-import NavButton from "@/app/(organization)/minime/components/layout/nav-button";
-import MDX from "@/app/(organization)/minime/components/markdown/mdx";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Badge } from "@repo/design-system/components/ui/badge";
-import { getProject, getProjectsByAuthor } from "@/actions/projects";
-import { getUserByDomain } from "@repo/backend/auth/utils";
-import { generateSEO } from "@/lib/utils";
-import type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import Protection from "./protection";
-import { getUserName } from "@repo/backend/auth/format";
+import { getProject } from '@/actions/projects';
+import AppHeader from '@/app/(organization)/minime/components/layout/app-header';
+import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
+import NavButton from '@/app/(organization)/minime/components/layout/nav-button';
+import MDX from '@/app/(organization)/minime/components/markdown/mdx';
+import { getUserByDomain } from '@repo/backend/auth/utils';
+import { Badge } from '@repo/design-system/components/ui/badge';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import Protection from './protection';
 
 export const revalidate = 60;
 
@@ -65,7 +62,7 @@ interface ProjectPageProps {
 // }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const {domain} = await params;
+  const { domain, slug } = await params;
   const domain_decoded = decodeURIComponent(domain);
   const user = await getUserByDomain(domain_decoded);
   if (!user) {
@@ -73,7 +70,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
   const project = await getProject({
     authorId: user.id,
-    slug: params.slug,
+    slug,
     published: true,
   });
 
@@ -85,12 +82,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <GoBack />
       <AppHeader
         title={project.title}
-        className="flex-row items-center justify-normal gap-1  [&_.title]:text-xl"
+        className="flex-row items-center justify-normal gap-1 [&_.title]:text-xl"
       >
         {project.url && (
           <Link
             href={project.url}
-            className="text-gray-4 hover:text-secondary transition-colors"
+            className="text-gray-4 transition-colors hover:text-secondary"
             target="_blank"
             aria-label={`Go to ${project.title}`}
           >
@@ -98,9 +95,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </Link>
         )}
       </AppHeader>
-      <div className="w-full flex-1 text-sm text-gray-4 flex items-center justify-between mb-4">
+      <div className="mb-4 flex w-full flex-1 items-center justify-between text-gray-4 text-sm">
         <p>{project.description}</p>
-        <Badge className="text-secondary bg-inherit font-medium ">
+        <Badge className="bg-inherit font-medium text-secondary ">
           {project.year}
         </Badge>
       </div>

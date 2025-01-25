@@ -1,6 +1,6 @@
-import { createCollection } from "@/actions/collections";
-import { guard } from "@/lib/auth";
-import { collectionSchema } from "@/lib/validations/bookmark";
+import { createCollection } from '@/actions/collections';
+import { guard } from '@/lib/auth';
+import { collectionSchema } from '@/lib/validations/bookmark';
 
 export const POST = guard(
   async ({ user, body }) => {
@@ -15,5 +15,5 @@ export const POST = guard(
     schemas: {
       bodySchema: collectionSchema,
     },
-  },
+  }
 );

@@ -1,4 +1,4 @@
-import MDX from "@/app/(organization)/minime/components/markdown/mdx";
+import MDX from '@/app/(organization)/minime/components/markdown/mdx';
 
 export default function About({ content }: { content?: string }) {
   if (!content?.trim()?.length) {

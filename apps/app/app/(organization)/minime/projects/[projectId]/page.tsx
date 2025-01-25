@@ -1,10 +1,10 @@
-import EditorPage from "@/app/(organization)/minime/components/editor/page";
-import EditorSkeleton from "@/app/(organization)/minime/components/editor/skeleton";
-import AppShell from "@/app/(organization)/minime/components/layout/app-shell";
-import { getProjectById } from "@/actions/projects";
-import { currentUser } from "@repo/backend/auth/utils";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { getProjectById } from '@/actions/projects';
+import EditorPage from '@/app/(organization)/minime/components/editor/page';
+import EditorSkeleton from '@/app/(organization)/minime/components/editor/skeleton';
+import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
+import { currentUser } from '@repo/backend/auth/utils';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface ProjectEditorPageProps {
   params: { projectId: string };

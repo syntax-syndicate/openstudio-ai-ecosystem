@@ -12,7 +12,7 @@ export async function updateSession(request: NextRequest) {
   //TODO: Later move to env variable
   // const userDomain = process.env.NEXT_PUBLIC_USER_DOMAIN as string;
   const userDomain = 'openstudio.co.in';
-  const appDomain = 'app.openstudio.tech'
+  const appDomain = 'app.openstudio.tech';
   const vercelDomain = '.vercel.app';
 
   let supabaseResponse = NextResponse.next({
@@ -42,14 +42,17 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  if (hostname.endsWith(`.${userDomain}`)) {
+  if (
+    hostname.endsWith(`.${userDomain}`) ||
+    url.pathname.includes(`localhost:3000/user/kuluruvineeth`)
+  ) {
     return NextResponse.rewrite(
       new URL(
-        `/user/${hostname.split(".")[0]}${path === "/" ? "" : path}${
-          url.searchParams ? searchParams : ""
+        `/user/${hostname.split('.')[0]}${path === '/' ? '' : path}${
+          url.searchParams ? searchParams : ''
         }`,
-        request.url,
-      ),
+        request.url
+      )
     );
   }
 

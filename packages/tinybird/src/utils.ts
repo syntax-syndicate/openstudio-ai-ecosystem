@@ -150,7 +150,6 @@ export async function getAnalytics({
     });
 
     const body = await res.json();
-    console.log('body', body);
     return body?.data;
   } catch (err) {
     return new Response(JSON.stringify(err), { status: 500 });
