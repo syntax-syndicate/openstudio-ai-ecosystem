@@ -179,3 +179,11 @@ export async function getArticleExport(
 
   return { content, filename };
 }
+
+
+// get articles export
+export async function getArticlesExport(authorId: string) {
+  const articlesData = await database.select().from(articles).where(eq(articles.authorId, authorId));
+  const data = await Promise.all(articlesData.map(async (article) => getArticleExport(article.id, authorId)));
+  return data;
+}
