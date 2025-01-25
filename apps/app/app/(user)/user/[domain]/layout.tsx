@@ -3,7 +3,7 @@ import Command from '@/app/(organization)/minime/components/layout/user-page-com
 import Watermark from '@/app/(user)/user/[domain]/components/watermark';
 import { generateSEO } from '@/lib/utils';
 import { getUserName } from '@repo/backend/auth/format';
-import { currentUser } from '@repo/backend/auth/utils';
+import { getUserByDomain } from '@repo/backend/auth/utils';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type React from 'react';
@@ -19,9 +19,8 @@ export async function generateMetadata({
   params,
 }: LayoutProps): Promise<Metadata | null> {
   const { domain } = await params;
-  //   const domain_decoded = decodeURIComponent(domain);
-  //   const user = await getUserByDomain(domain_decoded);
-  const user = await currentUser();
+  const domain_decoded = decodeURIComponent(domain);
+  const user = await getUserByDomain(domain_decoded);
   if (!user) {
     return notFound();
   }
@@ -50,9 +49,9 @@ export async function generateMetadata({
 
 export default async function UserLayout({ children, params }: LayoutProps) {
   const { domain } = await params;
-  //   const domain_decoded = decodeURIComponent(domain);
-  //   const user = await getUserByDomain(domain_decoded);
-  const user = await currentUser();
+  const domain_decoded = decodeURIComponent(domain);
+  const user = await getUserByDomain(domain_decoded);
+
   if (!user) {
     return notFound();
   }

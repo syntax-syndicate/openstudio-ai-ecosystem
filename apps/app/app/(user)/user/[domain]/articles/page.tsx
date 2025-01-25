@@ -3,7 +3,7 @@ import Article from '@/app/(organization)/minime/components/articles/article';
 import NoArticlesPlaceholder from '@/app/(organization)/minime/components/articles/no-articles-placeholder';
 import AppHeader from '@/app/(organization)/minime/components/layout/app-header';
 import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
-import { currentUser } from '@repo/backend/auth/utils';
+import { getUserByDomain } from '@repo/backend/auth/utils';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -18,8 +18,7 @@ interface ArticlesPageProps {
 export default async function ArticlesPage({ params }: ArticlesPageProps) {
   const { domain } = await params;
   const domain_decoded = decodeURIComponent(domain);
-  //   const user = await getUserByDomain(domain);
-  const user = await currentUser();
+  const user = await getUserByDomain(domain_decoded);
   if (!user) {
     return notFound();
   }

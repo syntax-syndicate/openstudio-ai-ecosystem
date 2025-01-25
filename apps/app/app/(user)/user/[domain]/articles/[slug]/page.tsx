@@ -4,7 +4,7 @@ import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
 import NavButton from '@/app/(organization)/minime/components/layout/nav-button';
 import MDX from '@/app/(organization)/minime/components/markdown/mdx';
 import { formatDate } from '@/helper/utils';
-import { currentUser } from '@repo/backend/auth/utils';
+import { getUserByDomain } from '@repo/backend/auth/utils';
 import moment from 'moment';
 import { notFound } from 'next/navigation';
 import readingTime from 'reading-time';
@@ -62,8 +62,7 @@ interface ArticlePageProps {
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { domain, slug } = await params;
   const domain_decoded = decodeURIComponent(domain);
-  //   const user = await getUserByDomain(domain_decoded);
-  const user = await currentUser();
+  const user = await getUserByDomain(domain_decoded);
   if (!user) {
     return notFound();
   }

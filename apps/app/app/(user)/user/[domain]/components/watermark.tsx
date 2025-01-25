@@ -1,10 +1,9 @@
 import type { User } from '@repo/backend/auth';
-import { currentUser } from '@repo/backend/auth/utils';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import Link from 'next/link';
 
 export default async function Watermark({ user }: { user: Pick<User, 'id'> }) {
-  const plan = await currentUser();
+  // const plan = await currentUser();
   // TODO: add pro plan
   //   if (plan?.user_metadata.isPro) {
   //     return null;
