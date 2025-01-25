@@ -4,7 +4,7 @@ import {
 } from '@/app/(organization)/minime/components/analytics';
 import AppHeader from '@/app/(organization)/minime/components/layout/app-header';
 import ExportButton from '@/components/forms/export-button';
-import { Button } from '@repo/design-system/components/ui/button';
+import Button from '@repo/design-system/components/minime/button';
 import {
   DropdownMenu,
   DropdownMenuContent,

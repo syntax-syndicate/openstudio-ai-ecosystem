@@ -18,7 +18,8 @@ export const metadata: Metadata = {
   title: 'Projects',
 };
 
-export default async function Projects({ searchParams: { published } }: Props) {
+export default async function Projects({ searchParams }: Props) {
+  const { published } = await searchParams;
   const projects = await getProjects();
   const sortedProjects = sortProjects(projects, published);
   return (

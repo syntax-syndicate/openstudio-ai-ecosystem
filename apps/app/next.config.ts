@@ -32,6 +32,10 @@ let nextConfig: NextConfig = withLogtail({
         protocol: 'https',
         hostname: 'jipwjptvxxtzbfsxzwuh.supabase.co',
       },
+      {
+        protocol: 'https',
+        hostname: 'icons.duckduckgo.com',
+      },
     ],
   },
 });
