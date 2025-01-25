@@ -1,16 +1,20 @@
-import { fetcher } from "@/helper/utils";
-import type { DomainStatus } from "@/types/minime";
-import { useQuery } from "@tanstack/react-query";
+import { fetcher } from '@/helper/utils';
+import type { DomainStatus } from '@/types/minime';
+import { useQuery } from '@tanstack/react-query';
 
 const useDomainStatus = (
-  domain: string | null,
+  domain: string | null
 ): {
   status: DomainStatus;
   domainRes: any;
   isLoading: boolean;
   mutate: () => void;
 } => {
-  const { data, refetch: mutate, isLoading } = useQuery({
+  const {
+    data,
+    refetch: mutate,
+    isLoading,
+  } = useQuery({
     queryKey: ['domain', domain],
     queryFn: () => fetcher(`/api/user/domain/${domain}`),
     enabled: !!domain,

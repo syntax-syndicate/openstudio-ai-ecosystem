@@ -1,7 +1,7 @@
-import { deleteArticle, updateArticle } from "@/actions/articles";
-import { guard } from "@/lib/auth";
-import { articlePatchSchema } from "@/lib/validations/article";
-import * as z from "zod";
+import { deleteArticle, updateArticle } from '@/actions/articles';
+import { guard } from '@/lib/auth';
+import { articlePatchSchema } from '@/lib/validations/article';
+import * as z from 'zod';
 
 const routeContextSchema = z.object({
   params: z.object({
@@ -10,7 +10,7 @@ const routeContextSchema = z.object({
 });
 
 export const PATCH = guard(
-  async ({ user,body, ctx }) => {
+  async ({ user, body, ctx }) => {
     try {
       const { articleId } = await ctx.params;
       await updateArticle(articleId, user, body);
@@ -25,7 +25,7 @@ export const PATCH = guard(
       contextSchema: routeContextSchema,
       bodySchema: articlePatchSchema,
     },
-  },
+  }
 );
 
 export const DELETE = guard(
@@ -44,5 +44,5 @@ export const DELETE = guard(
     schemas: {
       contextSchema: routeContextSchema,
     },
-  },
+  }
 );

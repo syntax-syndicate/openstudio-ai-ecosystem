@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { validDomainRegex } from "@/helper/utils";
+import { validDomainRegex } from '@/helper/utils';
 import {
   useParams,
   usePathname,
   useSelectedLayoutSegment,
-} from "next/navigation";
-import { useEffect } from "react";
+} from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Track() {
   const pathname = usePathname();
@@ -17,10 +17,10 @@ export default function Track() {
   const domain = decodeURIComponent(params.domain);
   const segment = useSelectedLayoutSegment();
   useEffect(() => {
-    fetch("/api/analytics/track", {
-      method: "POST",
+    fetch('/api/analytics/track', {
+      method: 'POST',
       body: JSON.stringify({
-        type: segment === "bookmarks" ? undefined : segment ?? undefined,
+        type: segment === 'bookmarks' ? undefined : (segment ?? undefined),
         page: pathname,
         slug: params?.slug ?? undefined,
         domain: validDomainRegex.test(domain) ? domain : undefined,

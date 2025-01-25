@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import NavButton from "@/app/(organization)/minime/components/layout/nav-button";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Button from "@repo/design-system/components/minime/button";
+import NavButton from '@/app/(organization)/minime/components/layout/nav-button';
+import { subscribeSchema } from '@/helper/validator';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Button from '@repo/design-system/components/minime/button';
 import {
   Dialog,
   DialogContent,
@@ -10,28 +11,27 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/design-system/components/ui/dialog";
-import { Input } from "@repo/design-system/components/ui/input";
-import { toast } from "@repo/design-system/hooks/use-toast";
-import { cn } from "@repo/design-system/lib/utils";
-import { subscribeSchema } from "@/helper/validator";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import type * as z from "zod";
+} from '@repo/design-system/components/ui/dialog';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { Input } from '@repo/design-system/components/ui/input';
+import { toast } from '@repo/design-system/hooks/use-toast';
+import { cn } from '@repo/design-system/lib/utils';
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import type * as z from 'zod';
 
 type FormData = z.infer<typeof subscribeSchema>;
 
 const feeds = [
   {
-    type: "rss",
-    title: "RSS",
-    href: "/feed",
+    type: 'rss',
+    title: 'RSS',
+    href: '/feed',
   },
   {
-    type: "atom",
-    title: "Atom",
-    href: "/feed?type=atom",
+    type: 'atom',
+    title: 'Atom',
+    href: '/feed?type=atom',
   },
 ] as const;
 
@@ -58,8 +58,8 @@ export default function Subscribe({
 
   const onSubmit = async (data: FormData) => {
     startTransition(async () => {
-      const res = await fetch("/api/subscribers", {
-        method: "POST",
+      const res = await fetch('/api/subscribers', {
+        method: 'POST',
         body: JSON.stringify({
           email: data.email,
           name: data.name,
@@ -67,17 +67,17 @@ export default function Subscribe({
         }),
       });
 
-      if (!res.ok) {
-        const text = await res.text();
-        toast({
-          title: "Something went wrong",
-          description: text,
-        });
-      } else {
+      if (res.ok) {
         setIsOpen(false);
         reset();
         toast({
-          title: "You are now subscribed",
+          title: 'You are now subscribed',
+        });
+      } else {
+        const text = await res.text();
+        toast({
+          title: 'Something went wrong',
+          description: text,
         });
       }
     });
@@ -86,17 +86,17 @@ export default function Subscribe({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          variant={compact ? "secondary" : "default"}
-          size={compact ? "icon" : "sm"}
+          variant={compact ? 'secondary' : 'default'}
+          size={compact ? 'icon' : 'sm'}
         >
-          {compact ? <Icons.rss size={15} /> : "Subscribe"}
+          {compact ? <Icons.rss size={15} /> : 'Subscribe'}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="items-center">Subscribe</DialogTitle>
         </DialogHeader>
-        <div className="flex gap-2 justify-between">
+        <div className="flex justify-between gap-2">
           {feeds.map((feed) => (
             <NavButton
               href={feed.href}
@@ -116,8 +116,8 @@ export default function Subscribe({
             <Button
               variant="secondary"
               className={cn(
-                "w-full h-16",
-                showSubscribeForm && "text-secondary bg-gray-2",
+                'h-16 w-full',
+                showSubscribeForm && 'bg-gray-2 text-secondary'
               )}
               onClick={() => setShowSubscribeForm((prev) => !prev)}
             >
@@ -137,10 +137,10 @@ export default function Subscribe({
                 type="text"
                 placeholder="Enter your name"
                 disabled={isLoading}
-                {...register("name")}
+                {...register('name')}
               />
               {errors.name && (
-                <p className="text-xs font-bold text-danger">
+                <p className="font-bold text-danger text-xs">
                   {errors.name.message}
                 </p>
               )}
@@ -148,10 +148,10 @@ export default function Subscribe({
                 type="email"
                 placeholder="Enter your email"
                 disabled={isLoading}
-                {...register("email")}
+                {...register('email')}
               />
               {errors.email && (
-                <p className="text-xs font-bold text-danger">
+                <p className="font-bold text-danger text-xs">
                   {errors.email.message}
                 </p>
               )}

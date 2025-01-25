@@ -1,11 +1,8 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Icons } from "@repo/design-system/components/ui/icons";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createClient } from '@repo/backend/auth/client';
+import { Button } from '@repo/design-system/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -14,21 +11,24 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/design-system/components/ui/dialog";
-import { toast } from "@repo/design-system/components/ui/use-toast";
-import { Input } from "@repo/design-system/components/ui/input";
-import { Button } from "@repo/design-system/components/ui/button";
-import { createClient } from '@repo/backend/auth/client';
+} from '@repo/design-system/components/ui/dialog';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { Input } from '@repo/design-system/components/ui/input';
+import { toast } from '@repo/design-system/components/ui/use-toast';
 import { handleError } from '@repo/design-system/lib/handle-error';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 export default function DeleteForm({
   type,
   title,
   description,
   endpoint,
   keyword,
-  redirectPath = "/",
+  redirectPath = '/',
 }: {
-  type?: "user";
+  type?: 'user';
   title: string;
   description?: string;
   endpoint: string;
@@ -50,7 +50,6 @@ export default function DeleteForm({
     resolver: zodResolver(deleteFormSchema),
   });
 
-
   const handleSignOut = async () => {
     try {
       const client = await createClient();
@@ -66,16 +65,15 @@ export default function DeleteForm({
     }
   };
 
-
   return (
     <div className="overflow-hidden rounded-md border border-danger">
       <div className="flex flex-col gap-1 p-4">
         <h1>{title}</h1>
-        <p className="text-sm text-gray-4">
+        <p className="text-gray-4 text-sm">
           This action is not reversible, so please continue with caution.
         </p>
       </div>
-      <footer className="flex h-auto flex-row items-center justify-end border-t border-danger  px-4 py-2">
+      <footer className="flex h-auto flex-row items-center justify-end border-danger border-t px-4 py-2">
         <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
           <DialogTrigger asChild>
             <Button variant="destructive" size="sm">
@@ -95,24 +93,24 @@ export default function DeleteForm({
               onSubmit={handleSubmit(async () => {
                 startTransition(async () => {
                   const res = await fetch(`/api${endpoint}`, {
-                    method: "DELETE",
+                    method: 'DELETE',
                   });
-                  if (!res.ok) {
-                    const err = await res.text();
-                    toast({
-                      title: "Something went wrong",
-                      description: err,
-                    });
-                  } else {
+                  if (res.ok) {
                     setShowDeleteModal(false);
                     toast({
-                      title: "Deleted",
+                      title: 'Deleted',
                     });
-                    if (type && type === "user") {
+                    if (type && type === 'user') {
                       return handleSignOut();
                     }
                     router.push(redirectPath);
                     router.refresh();
+                  } else {
+                    const err = await res.text();
+                    toast({
+                      title: 'Something went wrong',
+                      description: err,
+                    });
                   }
                 });
               })}
@@ -123,10 +121,10 @@ export default function DeleteForm({
                 autoComplete="off"
                 autoCapitalize="off"
                 autoCorrect="off"
-                {...register("keyword")}
+                {...register('keyword')}
               />
               {errors.keyword && (
-                <b className="text-xs text-danger">{errors.keyword.message}</b>
+                <b className="text-danger text-xs">{errors.keyword.message}</b>
               )}
             </form>
             <DialogFooter>
@@ -145,7 +143,7 @@ export default function DeleteForm({
               >
                 {isDeleting ? (
                   <>
-                    <Icons.spinner size={18} className="animate-spin" />{" "}
+                    <Icons.spinner size={18} className="animate-spin" />{' '}
                     Deleting
                   </>
                 ) : (

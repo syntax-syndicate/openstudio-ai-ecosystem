@@ -1,6 +1,6 @@
-import { NextRequest } from "next/server";
-import { siteConfig } from "@/config/site";
-import type { Metadata } from "next";
+import { siteConfig } from '@/config/site';
+import type { Metadata } from 'next';
+import type { NextRequest } from 'next/server';
 
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -8,18 +8,18 @@ export function capitalize(str: string) {
 
 export function detectBot(req: NextRequest) {
   const url = req.nextUrl;
-  if (url.searchParams.get("bot")) return true;
-  const ua = req.headers.get("User-Agent");
+  if (url.searchParams.get('bot')) return true;
+  const ua = req.headers.get('User-Agent');
   if (ua) {
     return /bot|chatgpt|facebookexternalhit|WhatsApp|google|baidu|bing|msn|duckduckbot|teoma|slurp|yandex|MetaInspector/i.test(
-      ua,
+      ua
     );
   }
   return false;
 }
 
 export function getInitials(input: string): string {
-  const splitted = input.split(" ");
+  const splitted = input.split(' ');
   const [first, last] =
     splitted?.length > 1
       ? [splitted[0].charAt(0), splitted[1].charAt(0)]
@@ -36,40 +36,40 @@ export function generateSEO({
   icons = {
     shortcut: [
       {
-        media: "(prefers-color-scheme: light)",
-        rel: "icon",
-        type: "image/x-icon",
-        url: "/favicon-light.ico",
-        href: "/favicon-light.ico",
+        media: '(prefers-color-scheme: light)',
+        rel: 'icon',
+        type: 'image/x-icon',
+        url: '/favicon-light.ico',
+        href: '/favicon-light.ico',
       },
       {
-        media: "(prefers-color-scheme: dark)",
-        rel: "icon",
-        type: "image/x-icon",
-        url: "/favicon.ico",
-        href: "/favicon.ico",
+        media: '(prefers-color-scheme: dark)',
+        rel: 'icon',
+        type: 'image/x-icon',
+        url: '/favicon.ico',
+        href: '/favicon.ico',
       },
     ],
     icon: [
       {
-        rel: "icon",
-        type: "image/png",
-        sizes: "32x32",
-        url: "/favicon-32x32.png",
-        media: "(prefers-color-scheme: light)",
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        url: '/favicon-32x32.png',
+        media: '(prefers-color-scheme: light)',
       },
       {
-        rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-        url: "/favicon-16x16.png",
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        url: '/favicon-16x16.png',
       },
     ],
     apple: [
       {
-        rel: "apple-touch-icon",
-        sizes: "32x32",
-        url: "/apple-touch-icon.png",
+        rel: 'apple-touch-icon',
+        sizes: '32x32',
+        url: '/apple-touch-icon.png',
       },
     ],
   },
@@ -85,7 +85,7 @@ export function generateSEO({
   seoTitle?: string;
   image?: string;
   siteName?: string;
-  icons?: Metadata["icons"];
+  icons?: Metadata['icons'];
   url?: string;
   noIndex?: boolean;
   canonicalURL?: string;
@@ -99,7 +99,7 @@ export function generateSEO({
       ? {
           title: {
             default: title,
-            template: template ? `%s / ${template}` : "",
+            template: template ? `%s / ${template}` : '',
           },
         }
       : {
@@ -107,8 +107,8 @@ export function generateSEO({
         }),
     description,
     openGraph: {
-      type: "website",
-      locale: "en_US",
+      type: 'website',
+      locale: 'en_US',
       title: seoTitle || title,
       description,
       images: [
@@ -122,7 +122,7 @@ export function generateSEO({
     twitter: {
       title: seoTitle || title,
       description,
-      card: "summary_large_image",
+      card: 'summary_large_image',
       images: [
         {
           url: image,
@@ -137,15 +137,15 @@ export function generateSEO({
       canonical: canonicalURL || url,
       ...(feeds && {
         types: {
-          "application/rss+xml": [
+          'application/rss+xml': [
             {
-              title: "RSS Feed",
+              title: 'RSS Feed',
               url: feeds.rss,
             },
           ],
-          "application/atom+xml": [
+          'application/atom+xml': [
             {
-              title: "Atom Feed",
+              title: 'Atom Feed',
               url: feeds.atom,
             },
           ],

@@ -73,12 +73,8 @@
           "name": "api_keys_organization_id_organization_id_fk",
           "tableFrom": "api_keys",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -240,12 +236,8 @@
           "tableFrom": "articles",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -253,12 +245,8 @@
           "name": "articles_organization_id_organization_id_fk",
           "tableFrom": "articles",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -331,9 +319,7 @@
         "assistants_key_unique": {
           "name": "assistants_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key"
-          ]
+          "columns": ["key"]
         }
       },
       "policies": {},
@@ -426,12 +412,8 @@
           "tableFrom": "bookmarks",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -439,12 +421,8 @@
           "name": "bookmarks_collection_id_collections_id_fk",
           "tableFrom": "bookmarks",
           "tableTo": "collections",
-          "columnsFrom": [
-            "collection_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["collection_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -452,12 +430,8 @@
           "name": "bookmarks_organization_id_organization_id_fk",
           "tableFrom": "bookmarks",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -620,12 +594,8 @@
           "name": "chat_messages_session_id_chat_sessions_id_fk",
           "tableFrom": "chat_messages",
           "tableTo": "chat_sessions",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["session_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -729,12 +699,8 @@
           "name": "chat_sessions_organization_id_organization_id_fk",
           "tableFrom": "chat_sessions",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -743,12 +709,8 @@
           "tableFrom": "chat_sessions",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -812,12 +774,8 @@
           "tableFrom": "collections",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -825,12 +783,8 @@
           "name": "collections_organization_id_organization_id_fk",
           "tableFrom": "collections",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -894,12 +848,8 @@
           "name": "custom_assistants_organization_id_organization_id_fk",
           "tableFrom": "custom_assistants",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -909,9 +859,7 @@
         "custom_assistants_key_unique": {
           "name": "custom_assistants_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key"
-          ]
+          "columns": ["key"]
         }
       },
       "policies": {},
@@ -981,12 +929,8 @@
           "name": "feedbacks_organization_id_organization_id_fk",
           "tableFrom": "feedbacks",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -995,12 +939,8 @@
           "tableFrom": "feedbacks",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1204,12 +1144,8 @@
           "name": "preferences_organization_id_organization_id_fk",
           "tableFrom": "preferences",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1219,9 +1155,7 @@
         "preferences_organization_id_unique": {
           "name": "preferences_organization_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "organization_id"
-          ]
+          "columns": ["organization_id"]
         }
       },
       "policies": {},
@@ -1384,12 +1318,8 @@
           "tableFrom": "projects",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1397,12 +1327,8 @@
           "name": "projects_organization_id_organization_id_fk",
           "tableFrom": "projects",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1500,12 +1426,8 @@
           "name": "prompts_organization_id_organization_id_fk",
           "tableFrom": "prompts",
           "tableTo": "organization",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1514,12 +1436,8 @@
           "tableFrom": "prompts",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1590,12 +1508,8 @@
           "tableFrom": "subscribers",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1611,48 +1525,27 @@
     "public.assistant_type": {
       "name": "assistant_type",
       "schema": "public",
-      "values": [
-        "base",
-        "custom"
-      ]
+      "values": ["base", "custom"]
     },
     "public.dalle_image_quality": {
       "name": "dalle_image_quality",
       "schema": "public",
-      "values": [
-        "standard",
-        "hd"
-      ]
+      "values": ["standard", "hd"]
     },
     "public.dalle_image_size": {
       "name": "dalle_image_size",
       "schema": "public",
-      "values": [
-        "1024x1024",
-        "1792x1024",
-        "1024x1792"
-      ]
+      "values": ["1024x1024", "1792x1024", "1024x1792"]
     },
     "public.feedback_type": {
       "name": "feedback_type",
       "schema": "public",
-      "values": [
-        "positive",
-        "neutral",
-        "negative"
-      ]
+      "values": ["positive", "neutral", "negative"]
     },
     "public.provider": {
       "name": "provider",
       "schema": "public",
-      "values": [
-        "chathub",
-        "openai",
-        "anthropic",
-        "gemini",
-        "ollama",
-        "groq"
-      ]
+      "values": ["chathub", "openai", "anthropic", "gemini", "ollama", "groq"]
     },
     "public.stop_reason": {
       "name": "stop_reason",
@@ -1669,10 +1562,7 @@
     "public.web_search_engine": {
       "name": "web_search_engine",
       "schema": "public",
-      "values": [
-        "google",
-        "duckduckgo"
-      ]
+      "values": ["google", "duckduckgo"]
     }
   },
   "schemas": {},

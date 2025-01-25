@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { getDomainFromURL } from "@repo/design-system/lib/utils";
-import Image from "next/image";
-import { useState } from "react";
-import { Icons } from "@repo/design-system/components/ui/icons";
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { getDomainFromURL } from '@repo/design-system/lib/utils';
+import Image from 'next/image';
+import { useState } from 'react';
 
 export default function Favicon({
   url,
@@ -22,7 +22,7 @@ export default function Favicon({
         <Icons.globe
           width={size}
           height={size}
-          className="text-gray-1 relative flex z-10"
+          className="relative z-10 flex text-gray-1"
         />
       </div>
     );
@@ -30,11 +30,11 @@ export default function Favicon({
   return (
     <Image
       src={
-        url.includes("flagcdn")
+        url.includes('flagcdn')
           ? url
           : `https://icons.duckduckgo.com/ip3/${getDomainFromURL(url)}.ico`
       }
-      alt={alt || "icon"}
+      alt={alt || 'icon'}
       className="z-10"
       width={size}
       height={size}

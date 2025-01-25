@@ -1,14 +1,10 @@
-"use client";
+'use client';
 
-import { userPageConfig } from "@/config/user-page";
-import useNavigation from "@/hooks/use-navigation";
-import { User } from "@repo/backend/auth";
-import { useTheme } from "next-themes";
-import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect } from "react";
-import ClientOnly from "@repo/design-system/components/minime/client-only";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Button from "@repo/design-system/components/minime/button";
+import { userPageConfig } from '@/config/user-page';
+import useNavigation from '@/hooks/use-navigation';
+import type { User } from '@repo/backend/auth';
+import Button from '@repo/design-system/components/minime/button';
+import ClientOnly from '@repo/design-system/components/minime/client-only';
 import {
   CommandDialog,
   CommandEmpty,
@@ -16,31 +12,35 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/design-system/components/ui/command";
-import NavButton from "./nav-button";
+} from '@repo/design-system/components/ui/command';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { useTheme } from 'next-themes';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCallback, useEffect } from 'react';
+import NavButton from './nav-button';
 
 export default function UserPageCommand({ user }: { user: User }) {
   const { isOpen, toggle, setOpen } = useNavigation();
   const router = useRouter();
   const pathname = usePathname();
   const { setTheme, theme } = useTheme();
-//   const links = getLinks(user);
+  //   const links = getLinks(user);
 
   useEffect(() => {
     const keyDown = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         toggle();
       }
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         setOpen(false);
       }
     };
 
-    document.addEventListener("keydown", keyDown);
+    document.addEventListener('keydown', keyDown);
 
     return () => {
-      document.removeEventListener("keydown", keyDown);
+      document.removeEventListener('keydown', keyDown);
     };
   }, [isOpen, setOpen, toggle]);
 
@@ -49,9 +49,9 @@ export default function UserPageCommand({ user }: { user: User }) {
       command();
       setOpen(false);
     },
-    [setOpen],
+    [setOpen]
   );
-  const ThemeIcon = Icons[theme === "dark" ? "sun" : "moon"];
+  const ThemeIcon = Icons[theme === 'dark' ? 'sun' : 'moon'];
 
   return (
     <ClientOnly>
@@ -76,11 +76,11 @@ export default function UserPageCommand({ user }: { user: User }) {
           <CommandGroup heading="General">
             <CommandItem
               onSelect={() =>
-                runCommand(() => setTheme(theme === "dark" ? "light" : "dark"))
+                runCommand(() => setTheme(theme === 'dark' ? 'light' : 'dark'))
               }
             >
-              <ThemeIcon size={18} /> Switch to{" "}
-              {theme === "dark" ? "light" : "dark"}
+              <ThemeIcon size={18} /> Switch to{' '}
+              {theme === 'dark' ? 'light' : 'dark'}
             </CommandItem>
           </CommandGroup>
           {/* {links.some((link) => link.username) && (
@@ -109,9 +109,9 @@ export default function UserPageCommand({ user }: { user: User }) {
           )} */}
         </CommandList>
       </CommandDialog>
-      {pathname !== "/" && (
-        <nav className="fixed w-full h-dvh pointer-events-none flex flex-col items-start max-md:justify-end left-0 top-0">
-          <div className="z-50 w-[700px] max-md:pl-4.4 py-4.4 max-md:w-full mx-auto pointer-events-auto flex gap-1 items-center">
+      {pathname !== '/' && (
+        <nav className="pointer-events-none fixed top-0 left-0 flex h-dvh w-full flex-col items-start max-md:justify-end">
+          <div className="pointer-events-auto z-50 mx-auto flex w-[700px] items-center gap-1 py-4.4 max-md:w-full max-md:pl-4.4">
             <NavButton
               href="/"
               className="size-4.5"

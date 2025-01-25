@@ -1,23 +1,26 @@
-"use client";
-import { Icon } from "@/types/minime";
-import { VariantProps } from "@repo/design-system/lib/utils";
-import ky from "ky";
-import { useTransition } from "react";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Button, buttonVariants } from "@repo/design-system/components/ui/button";
-import { toast } from "@repo/design-system/components/ui/use-toast";
+'use client';
+import type { Icon } from '@/types/minime';
+import {
+  Button,
+  type buttonVariants,
+} from '@repo/design-system/components/ui/button';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { toast } from '@repo/design-system/components/ui/use-toast';
+import type { VariantProps } from '@repo/design-system/lib/utils';
+import ky from 'ky';
+import { useTransition } from 'react';
 
 interface ExportButtonProps {
   endpoint: string;
   text: string;
-  buttonVariant?: VariantProps<typeof buttonVariants>["variant"];
+  buttonVariant?: VariantProps<typeof buttonVariants>['variant'];
   icon?: Icon;
 }
 
 export default function ExportButton({
   endpoint,
   icon,
-  buttonVariant = "secondary",
+  buttonVariant = 'secondary',
   text,
 }: ExportButtonProps) {
   const [pending, startTransition] = useTransition();
@@ -28,17 +31,17 @@ export default function ExportButton({
       if (!res.ok) {
         const err = await res.text();
         toast({
-          variant: "destructive",
-          title: "Something went wrong.",
+          variant: 'destructive',
+          title: 'Something went wrong.',
           description: err,
         });
       }
 
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       const filename =
-        res.headers.get("Content-Disposition")?.split("=")[1] || "export";
+        res.headers.get('Content-Disposition')?.split('=')[1] || 'export';
 
       a.href = url;
       a.download = filename;
@@ -59,7 +62,7 @@ export default function ExportButton({
         <Icons.spinner size={16} className="animate-spin" />
       ) : (
         <Icon size={16} />
-      )}{" "}
+      )}{' '}
       {text}
     </Button>
   );

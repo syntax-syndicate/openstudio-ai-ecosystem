@@ -7,7 +7,6 @@ import { AIMessageError } from '@/app/(organization)/chat/components/messages/ai
 import { AIRelatedQuestions } from '@/app/(organization)/chat/components/messages/ai/ai-related-questions';
 import { AISelectionProvider } from '@/app/(organization)/chat/components/messages/ai/ai-selection-provider';
 import { AIToolMessage } from '@/app/(organization)/chat/components/messages/ai/ai-tool-message';
-import { ModelIcon } from '@/app/(organization)/chat/components/model-icon';
 import { useChatContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
 import type { TChatMessage } from '@/types';
@@ -45,7 +44,6 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
         ) : (
           // <ModelIcon type="assistants" size="sm" />
           getAssistantIcon(runConfig.assistant.key ?? '', 'sm')
-          
         )}
       </Flex>
       <Flex

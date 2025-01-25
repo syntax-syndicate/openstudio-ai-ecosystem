@@ -1,8 +1,8 @@
-import { cn } from "@repo/design-system/lib/utils";
-import type React from "react";
-import type { SetStateAction } from "react";
-import { Button } from "@repo/design-system/components/ui/button";
-import { Skeleton } from "@repo/design-system/components/ui/skeleton";
+import { Button } from '@repo/design-system/components/ui/button';
+import { Skeleton } from '@repo/design-system/components/ui/skeleton';
+import { cn } from '@repo/design-system/lib/utils';
+import type React from 'react';
+import type { SetStateAction } from 'react';
 
 interface Props {
   children: React.ReactNode;
@@ -26,15 +26,15 @@ export default function Card({
   return (
     <div
       className={cn(
-        "h-[200px] flex flex-col  rounded-md border border-gray-2 dark:border-gray-3",
-        className,
+        'flex h-[200px] flex-col rounded-md border border-gray-2 dark:border-gray-3',
+        className
       )}
     >
-      <header className="rounded-se-md rounded-t-md h-5  flex items-center justify-between  border-b border-gray-2 dark:border-gray-3 p-2 backdrop-blur-md">
+      <header className="flex h-5 items-center justify-between rounded-t-md rounded-se-md border-gray-2 border-b p-2 backdrop-blur-md dark:border-gray-3">
         {loading ? (
-          <Skeleton className="w-32 h-4" />
+          <Skeleton className="h-4 w-32" />
         ) : (
-          <h3 className="text-sm font-medium">{title}</h3>
+          <h3 className="font-medium text-sm">{title}</h3>
         )}
         {tabs && (
           <div className="flex gap-1">
@@ -43,10 +43,10 @@ export default function Card({
                 title={tab}
                 variant="ghost"
                 className={cn(
-                  "h-4.4 text-xs",
+                  'h-4.4 text-xs',
                   tab.toLowerCase() === activeTab
-                    ? "bg-gray-3 text-secondary"
-                    : "",
+                    ? 'bg-gray-3 text-secondary'
+                    : ''
                 )}
                 onClick={() => setTab?.(tab.toLowerCase())}
                 key={i}

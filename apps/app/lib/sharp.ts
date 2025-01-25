@@ -1,4 +1,4 @@
-import sharp from "sharp";
+import sharp from 'sharp';
 
 export async function getBlurDataURL(src?: string, url?: string) {
   const res = await fetch(url ?? `${process.env.NEXT_PUBLIC_URL}${src}`);
@@ -8,5 +8,5 @@ export async function getBlurDataURL(src?: string, url?: string) {
     .png({ quality: 30 })
     .toBuffer({ resolveWithObject: true });
 
-  return `data:image/png;base64,${data.toString("base64")}`;
+  return `data:image/png;base64,${data.toString('base64')}`;
 }

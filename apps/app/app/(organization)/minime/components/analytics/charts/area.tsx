@@ -1,3 +1,4 @@
+import type { IndexProps } from '@/app/(organization)/minime/components/analytics';
 import {
   Area,
   AreaChart as RechartsChart,
@@ -5,19 +6,18 @@ import {
   ResponsiveContainer,
   XAxis,
   YAxis,
-} from "recharts";
-import type { IndexProps } from "@/app/(organization)/minime/components/analytics";
+} from 'recharts';
 
 export default function AreaChart({
   data,
-  index = "visitors",
+  index = 'visitors',
 }: {
   data: { start: string; value: number }[];
   index?: IndexProps;
 }) {
   if (data.every((d) => d.value === 0)) {
     return (
-      <div className="h-72 grid place-items-center text-sm text-gray-4">
+      <div className="grid h-72 place-items-center text-gray-4 text-sm">
         No data yet
       </div>
     );
@@ -54,14 +54,14 @@ export default function AreaChart({
         />
         <RechartsTooltip
           content={<Tooltip />}
-          cursor={{ stroke: "var(--gray-2)" }}
+          cursor={{ stroke: 'var(--gray-2)' }}
         />
         <Area
           type="monotone"
           dataKey={index}
           stroke="var(--gray-2)"
           fill="var(--gray-3)"
-          activeDot={{ stroke: "var(--gray-1)", fill: "var(--gray-1)" }}
+          activeDot={{ stroke: 'var(--gray-1)', fill: 'var(--gray-1)' }}
         />
       </RechartsChart>
     </ResponsiveContainer>
@@ -71,7 +71,7 @@ export default function AreaChart({
 function Tooltip({ payload, active }: any) {
   if (active && payload && payload.length) {
     return (
-      <div className="flex min-w-20 flex-col  gap-1 rounded-md border border-gray-2  bg-gray-3 px-3 py-2">
+      <div className="flex min-w-20 flex-col gap-1 rounded-md border border-gray-2 bg-gray-3 px-3 py-2">
         <b className="text-gray-4">{payload[0].payload.start}</b>
         <p className="text-gray-1">
           <b>{payload?.[0]?.value}</b> {payload?.[0]?.name}

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { cn } from "@repo/design-system/lib/utils";
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import * as React from "react";
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import { cn } from '@repo/design-system/lib/utils';
+import * as React from 'react';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -11,15 +11,15 @@ const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, align = "end", sideOffset = 4, ...props }, ref) => (
+>(({ className, align = 'end', sideOffset = 4, ...props }, ref) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Content
       ref={ref}
       align={align}
       sideOffset={sideOffset}
       className={cn(
-        "data-[side=top]:animate-slideTopAndFade  data-[side=right]:animate-slideLeftAndFade data-[side=left]:animate-slideRightAndFade flex min-w-[120px] flex-col gap-1 rounded-lg border border-gray-2  bg-gray-3 p-1 will-change-[opacity,transform] z-50 data-[side=bottom]:animate-slideDownAndFade",
-        className,
+        'z-50 flex min-w-[120px] flex-col gap-1 rounded-lg border border-gray-2 bg-gray-3 p-1 will-change-[opacity,transform] data-[side=bottom]:animate-slideDownAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideTopAndFade',
+        className
       )}
       {...props}
     />
@@ -34,8 +34,8 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "flex cursor-pointer flex-row  items-center gap-2 rounded-md h-4.5 p-2  text-xs outline-none transition-colors  hover:bg-gray-2",
-      className,
+      'flex h-4.5 cursor-pointer flex-row items-center gap-2 rounded-md p-2 text-xs outline-none transition-colors hover:bg-gray-2',
+      className
     )}
     {...props}
   />
@@ -48,7 +48,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn("-mx-1 -mr-1 h-px bg-gray-2 ", className)}
+    className={cn('-mx-1 -mr-1 h-px bg-gray-2 ', className)}
     {...props}
   />
 ));

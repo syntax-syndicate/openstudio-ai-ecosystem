@@ -1,8 +1,8 @@
+import { getSearchParams } from '@/helper/utils';
+import type { User } from '@repo/backend/auth';
 import { currentOrganizationId, currentUser } from '@repo/backend/auth/utils';
 import { redirect } from 'next/navigation';
-import type { User } from '@repo/backend/auth';
-import * as z from 'zod';
-import { getSearchParams } from '@/helper/utils';
+import type * as z from 'zod';
 
 export const handleAuthedState = async (): Promise<void> => {
   const [user, organizationId] = await Promise.all([
@@ -18,8 +18,6 @@ export const handleAuthedState = async (): Promise<void> => {
     redirect('/setup');
   }
 };
-
-
 
 export const guard = <
   TBody extends z.ZodType,
@@ -52,7 +50,7 @@ export const guard = <
       contextSchema?: TContext;
       searchParamsSchema?: TParams;
     };
-  } = {},
+  } = {}
 ) => {
   return async (req: Request, context: any) => {
     const user = await currentUser();

@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import "@repo/design-system/styles/editor.css";
-import { EditorContent, useEditor } from "@tiptap/react";
-import { useRouter } from "next/navigation";
-import type { Dispatch, SetStateAction } from "react";
-import TextareaAutosize from "react-textarea-autosize";
-import { useDebouncedCallback } from "use-debounce";
-import { toast } from "@repo/design-system/hooks/use-toast";
-import BubbleMenu from "./components/bubble-menu";
-import { TiptapExtensions } from "./extensions";
-import { handleImagePaste } from "./extensions/upload-image";
+import '@repo/design-system/styles/editor.css';
+import { toast } from '@repo/design-system/hooks/use-toast';
+import { EditorContent, useEditor } from '@tiptap/react';
+import { useRouter } from 'next/navigation';
+import type { Dispatch, SetStateAction } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
+import { useDebouncedCallback } from 'use-debounce';
+import BubbleMenu from './components/bubble-menu';
+import { TiptapExtensions } from './extensions';
+import { handleImagePaste } from './extensions/upload-image';
 interface Props {
   endpoint: string;
-  method: "PUT" | "PATCH";
+  method: 'PUT' | 'PATCH';
   content?: any;
   title: string;
   setSaving: Dispatch<SetStateAction<boolean>>;
@@ -51,7 +51,7 @@ export default function Editor({
       if (!res.ok) {
         const err = await res.text();
         toast({
-          title: "Something went wrong.",
+          title: 'Something went wrong.',
           description: err,
         });
       }
@@ -60,13 +60,13 @@ export default function Editor({
         setSaving(false);
       }, 700);
     },
-    1000,
+    1000
   );
 
   return (
     <div className="flex flex-col gap-2">
       <TextareaAutosize
-        className="resize-none border-0 bg-transparent line-clamp-none text-xl font-medium outline-none placeholder:text-gray-1"
+        className="line-clamp-none resize-none border-0 bg-transparent font-medium text-xl outline-none placeholder:text-gray-1"
         placeholder="Title"
         defaultValue={title}
         maxLength={70}
@@ -77,7 +77,7 @@ export default function Editor({
           });
         }}
       />
-      <div className="prose-base relative  w-full flex-1  prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-headings:font-normal prose-hr:my-4  prose-headings:mb-4 prose-headings:mt-8 ">
+      <div className="prose-base relative prose-hr:my-4 prose-headings:mt-8 prose-headings:mb-4 w-full flex-1 prose-headings:font-normal prose-h1:text-xl prose-h2:text-lg prose-h3:text-base ">
         {editor && <BubbleMenu editor={editor} />}
         <EditorContent editor={editor} />
       </div>

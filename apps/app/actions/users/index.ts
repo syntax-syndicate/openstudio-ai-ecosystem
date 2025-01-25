@@ -1,21 +1,18 @@
 'use server';
 
+import { addDomain, removeDomain } from '@/lib/domains';
+import type { User } from '@repo/backend/auth';
 import { createClient } from '@repo/backend/auth/server';
-import { removeDomain, addDomain } from '@/lib/domains';
-import { User } from '@repo/backend/auth';
 import { parseError } from '@repo/observability/error';
 
-export async function updateDomain(
-    user: User,
-    domain?: string | null
-){
-    try {
+export async function updateDomain(user: User, domain?: string | null) {
+  try {
     const supabase = await createClient();
 
     if (domain === null) {
       await Promise.all([
         supabase.auth.admin.updateUserById(user.id, {
-          user_metadata: { domain: null }
+          user_metadata: { domain: null },
         }),
         removeDomain(user.user_metadata.domain as string),
       ]);
@@ -29,7 +26,7 @@ export async function updateDomain(
       }
       await Promise.all([
         supabase.auth.admin.updateUserById(user.id, {
-          user_metadata: { domain }
+          user_metadata: { domain },
         }),
         addDomain(domain),
       ]);
@@ -42,16 +39,12 @@ export async function updateDomain(
   }
 }
 
-
-export async function updateUsername(
-  user: User,
-  username: string
-) {
+export async function updateUsername(user: User, username: string) {
   try {
     const supabase = await createClient();
-    
+
     await supabase.auth.admin.updateUserById(user.id, {
-      user_metadata: { username }
+      user_metadata: { username },
     });
 
     return new Response(null, { status: 200 });
@@ -60,8 +53,3 @@ export async function updateUsername(
     return new Response(message, { status: 400 });
   }
 }
-
-
-
-
-

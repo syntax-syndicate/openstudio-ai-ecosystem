@@ -1,17 +1,17 @@
-import { updateDomain } from "@/actions/users";
-import { guard } from "@/lib/auth";
-import { validDomainRegex } from "@/helper/utils";
-import * as z from "zod";
+import { updateDomain } from '@/actions/users';
+import { validDomainRegex } from '@/helper/utils';
+import { guard } from '@/lib/auth';
+import * as z from 'zod';
 
 const bodySchema = z.object({
   domain: z
     .string()
-    .regex(validDomainRegex, "Invalid domain")
+    .regex(validDomainRegex, 'Invalid domain')
     .optional()
     .nullable()
     .refine(
-      (value) => !value?.includes("openstudio.co.in"),
-      "You cannot use this domain as your own custom domain.",
+      (value) => !value?.includes('openstudio.co.in'),
+      'You cannot use this domain as your own custom domain.'
     ),
 });
 
@@ -24,9 +24,9 @@ export const POST = guard(
     }
   },
   {
-    requiredPlan: "Pro",
+    requiredPlan: 'Pro',
     schemas: {
       bodySchema,
     },
-  },
+  }
 );

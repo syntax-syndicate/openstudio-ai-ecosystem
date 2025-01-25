@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { appConfig } from "@/config/links";
-import { usePathname } from "next/navigation";
-import AppHeader from "./app-header";
-import NavButton from "./nav-button";
+import { appConfig } from '@/config/links';
+import { usePathname } from 'next/navigation';
+import AppHeader from './app-header';
+import NavButton from './nav-button';
 
 export default function SettingsNav() {
   const path = usePathname();
   const current = appConfig.settingsNav.find((item) => item.href === path);
   return (
     <AppHeader
-      title={current?.title || "Settings"}
-      className="gap-3 max-md:mb-2  max-[480px]:flex-col max-[480px]:items-start"
+      title={current?.title || 'Settings'}
+      className="gap-3 max-md:mb-2 max-[480px]:flex-col max-[480px]:items-start"
     >
       <nav className="flex flex-row gap-2">
         {appConfig.settingsNav.map((link) => (
@@ -20,7 +20,7 @@ export default function SettingsNav() {
             key={link.title}
             size="sm"
             buttonClassname={
-              link.href === path ? "!bg-gray-2 !text-secondary" : ""
+              link.href === path ? '!bg-gray-2 !text-secondary' : ''
             }
             buttonVariant="ghost"
           >

@@ -1,5 +1,5 @@
-import type { PutBlobResult } from "@repo/storage";
-import { StorageFolders } from "./constants";
+import type { PutBlobResult } from '@repo/storage';
+import type { StorageFolders } from './constants';
 
 type Response = {
   error?: string;
@@ -7,25 +7,25 @@ type Response = {
 };
 export async function uploadFile(
   file: File,
-  folder?: (typeof StorageFolders)[number],
+  folder?: (typeof StorageFolders)[number]
 ): Promise<Response> {
-  const res = await fetch("/api/assets", {
-    method: "PUT",
+  const res = await fetch('/api/assets', {
+    method: 'PUT',
     body: file,
     headers: {
-      "content-type": file.type,
-      "storage-folder": folder ?? "",
+      'content-type': file.type,
+      'storage-folder': folder ?? '',
     },
   });
 
   if (!res.ok) {
     if (res.status === 413) {
       return {
-        error: "You exceeded the file size. Up to 4MB",
+        error: 'You exceeded the file size. Up to 4MB',
       };
     }
     return {
-      error: "Something went wrong",
+      error: 'Something went wrong',
     };
   }
 

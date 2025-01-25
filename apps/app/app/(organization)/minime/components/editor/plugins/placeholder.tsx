@@ -1,5 +1,5 @@
-import { type EditorState, Plugin } from "@tiptap/pm/state";
-import { Decoration, DecorationSet } from "@tiptap/pm/view";
+import { type EditorState, Plugin } from '@tiptap/pm/state';
+import { Decoration, DecorationSet } from '@tiptap/pm/view';
 
 const Placeholder = new Plugin({
   state: {
@@ -13,10 +13,10 @@ const Placeholder = new Plugin({
       const action = tr.getMeta(this);
       if (action?.add) {
         const { id, pos, src } = action.add;
-        const widget = document.createElement("div");
-        widget.className = "image-placeholder";
-        widget.dataset.type = "img-placeholder";
-        const img = document.createElement("img");
+        const widget = document.createElement('div');
+        widget.className = 'image-placeholder';
+        widget.dataset.type = 'img-placeholder';
+        const img = document.createElement('img');
         img.src = src;
         widget.appendChild(img);
         const deco = Decoration.widget(pos, widget, {
@@ -25,11 +25,7 @@ const Placeholder = new Plugin({
         set = set.add(tr.doc, [deco]);
       } else if (action?.remove) {
         set = set.remove(
-          set.find(
-            undefined,
-            undefined,
-            (spec) => spec.id === action.remove.id,
-          ),
+          set.find(undefined, undefined, (spec) => spec.id === action.remove.id)
         );
       }
       return set;

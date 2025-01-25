@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { cn } from "@repo/design-system/lib/utils";
-import { useRouter } from "next/navigation";
-import type React from "react";
-import { type FormEvent, useMemo, useState, useTransition } from "react";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Button } from "@repo/design-system/components/ui/button";
-import { Textarea } from "@repo/design-system/components/ui/textarea";
-import { toast } from "@repo/design-system/components/ui/use-toast";
-import Input from "@repo/design-system/components/minime/input";
+import Input from '@repo/design-system/components/minime/input';
+import { Button } from '@repo/design-system/components/ui/button';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { Textarea } from '@repo/design-system/components/ui/textarea';
+import { toast } from '@repo/design-system/components/ui/use-toast';
+import { cn } from '@repo/design-system/lib/utils';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { type FormEvent, useMemo, useState, useTransition } from 'react';
 
 interface FormProps {
   title: string;
   description?: string;
-  type?: "input" | "textarea";
+  type?: 'input' | 'textarea';
   helpText?: string;
   inputData?: React.InputHTMLAttributes<HTMLInputElement>;
   textareaData?: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
   endpoint: string;
-  method?: "PATCH";
+  method?: 'PATCH';
   required?: boolean;
   prefix?: string;
   suffix?: string;
@@ -27,8 +27,8 @@ interface FormProps {
 }
 
 export default function Form({
-  type = "input",
-  method = "PATCH",
+  type = 'input',
+  method = 'PATCH',
   endpoint,
   title,
   description,
@@ -44,13 +44,13 @@ export default function Form({
   const [saving, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [value, setValue] = useState(
-    inputData?.defaultValue || textareaData?.defaultValue || "",
+    inputData?.defaultValue || textareaData?.defaultValue || ''
   );
   const router = useRouter();
   const disabledButton = useMemo(() => {
     return (
       saving ||
-      (!required ? false : !value) ||
+      (required ? !value : false) ||
       inputData?.defaultValue === value ||
       textareaData?.defaultValue === value
     );
@@ -69,31 +69,31 @@ export default function Form({
       const res = await fetch(`/api/${endpoint}`, {
         method,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           [(textareaData?.name || inputData?.name) as string]:
-            inputData?.type === "number"
+            inputData?.type === 'number'
               ? Number(value)
               : value.toString().trim().length
                 ? value
                 : null,
         }),
       });
-      if (!res.ok) {
+      if (res.ok) {
+        router.refresh();
+
+        toast({
+          title: 'Saved',
+        });
+      } else {
         if (res.status === 422) {
           const error = await res.text();
           setError(error);
         }
         toast({
-          title: "Something went wrong.",
-          variant: "destructive",
-        });
-      } else {
-        router.refresh();
-
-        toast({
-          title: "Saved",
+          title: 'Something went wrong.',
+          variant: 'destructive',
         });
       }
     });
@@ -106,13 +106,13 @@ export default function Form({
     >
       <div className="flex flex-col gap-1 p-4">
         <h1>{title}</h1>
-        <p className="text-sm text-gray-4">{description}</p>
+        <p className="text-gray-4 text-sm">{description}</p>
         {!asChild && (
           <div className="mt-2">
-            {type === "input" ? (
+            {type === 'input' ? (
               <div className="flex items-center">
                 {prefix && (
-                  <span className="h-5 rounded-l-md bg-gray-3 flex items-center justify-center px-2 border border-gray-2 border-r-0 text-sm text-gray-4">
+                  <span className="flex h-5 items-center justify-center rounded-l-md border border-gray-2 border-r-0 bg-gray-3 px-2 text-gray-4 text-sm">
                     {prefix}
                   </span>
                 )}
@@ -121,15 +121,15 @@ export default function Form({
                   value={value}
                   autoComplete="off"
                   className={cn(
-                    "w-[250px] max-md:w-full",
-                    prefix ? "rounded-l-none " : "",
-                    suffix ? "rounded-r-none" : "",
+                    'w-[250px] max-md:w-full',
+                    prefix ? 'rounded-l-none ' : '',
+                    suffix ? 'rounded-r-none' : ''
                   )}
                   onChange={(e) => setValue(e.target.value)}
                   {...inputData}
                 />
                 {suffix && (
-                  <span className="h-5 rounded-r-md bg-gray-3 flex items-center justify-center px-2 border border-gray-2 border-l-0 text-sm text-gray-4">
+                  <span className="flex h-5 items-center justify-center rounded-r-md border border-gray-2 border-l-0 bg-gray-3 px-2 text-gray-4 text-sm">
                     {suffix}
                   </span>
                 )}
@@ -148,8 +148,8 @@ export default function Form({
         )}
         {asChild && children}
       </div>
-      <footer className="flex h-auto flex-row items-center   justify-between border-t border-gray-2 bg-gray-3 px-4 py-2">
-        <div className={cn("text-sm text-gray-4", error ? "text-danger" : "")}>
+      <footer className="flex h-auto flex-row items-center justify-between border-gray-2 border-t bg-gray-3 px-4 py-2">
+        <div className={cn('text-gray-4 text-sm', error ? 'text-danger' : '')}>
           {error || helpText}
         </div>
 
@@ -157,7 +157,7 @@ export default function Form({
           type="submit"
           size="sm"
           disabled={disabledButton}
-          className={cn(asChild && "invisible")}
+          className={cn(asChild && 'invisible')}
         >
           {saving ? (
             <>

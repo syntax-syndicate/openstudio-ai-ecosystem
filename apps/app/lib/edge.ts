@@ -1,6 +1,6 @@
-import { eq, and, sql } from 'drizzle-orm';
 import { database } from '@repo/backend/database';
-import { bookmarks, projects, articles } from '@repo/backend/schema';
+import { articles, bookmarks, projects } from '@repo/backend/schema';
+import { and, eq, sql } from 'drizzle-orm';
 
 // export async function getUserViaEdge(
 //   username?: string,
@@ -78,55 +78,40 @@ import { bookmarks, projects, articles } from '@repo/backend/schema';
 
 export async function incrementBookmarkClicksViaEdge(
   bookmarkId: string,
-  authorId: string,
+  authorId: string
 ) {
   return await database
     .update(bookmarks)
     .set({
       clicks: sql`${bookmarks.clicks} + 1`,
     })
-    .where(
-      and(
-        eq(bookmarks.id, bookmarkId),
-        eq(bookmarks.authorId, authorId)
-      )
-    )
+    .where(and(eq(bookmarks.id, bookmarkId), eq(bookmarks.authorId, authorId)))
     .returning();
 }
 
 export async function incrementProjectViewsViaEdge(
   slug: string,
-  authorId: string,
+  authorId: string
 ) {
   return await database
     .update(projects)
     .set({
       views: sql`${projects.views} + 1`,
     })
-    .where(
-      and(
-        eq(projects.slug, slug),
-        eq(projects.authorId, authorId)
-      )
-    )
+    .where(and(eq(projects.slug, slug), eq(projects.authorId, authorId)))
     .returning();
 }
 
 export async function incrementArticleViewsViaEdge(
   slug: string,
-  authorId: string,
+  authorId: string
 ) {
   return await database
     .update(articles)
     .set({
       views: sql`${articles.views} + 1`,
     })
-    .where(
-      and(
-        eq(articles.slug, slug),
-        eq(articles.authorId, authorId)
-      )
-    )
+    .where(and(eq(articles.slug, slug), eq(articles.authorId, authorId)))
     .returning();
 }
 
@@ -144,12 +129,7 @@ export async function isArticleExist(slug: string, authorId: string) {
   const count = await database
     .select({ count: sql<number>`count(*)` })
     .from(articles)
-    .where(
-      and(
-        eq(articles.authorId, authorId),
-        eq(articles.slug, slug)
-      )
-    );
+    .where(and(eq(articles.authorId, authorId), eq(articles.slug, slug)));
 
   return count[0].count > 0;
 }
@@ -158,12 +138,7 @@ export async function isProjectExist(slug: string, authorId: string) {
   const count = await database
     .select({ count: sql<number>`count(*)` })
     .from(projects)
-    .where(
-      and(
-        eq(projects.authorId, authorId),
-        eq(projects.slug, slug)
-      )
-    );
+    .where(and(eq(projects.authorId, authorId), eq(projects.slug, slug)));
 
   return count[0].count > 0;
 }

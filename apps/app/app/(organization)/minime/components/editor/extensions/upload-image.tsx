@@ -1,7 +1,7 @@
-import { toast } from "@repo/design-system/components/ui/use-toast";
-import { uploadFile } from "@/lib/upload";
-import type { EditorView } from "@tiptap/pm/view";
-import { Placeholder, findPlaceholder } from "../plugins/placeholder";
+import { uploadFile } from '@/lib/upload';
+import { toast } from '@repo/design-system/components/ui/use-toast';
+import type { EditorView } from '@tiptap/pm/view';
+import { Placeholder, findPlaceholder } from '../plugins/placeholder';
 
 export async function uploadImg(file: File, view: EditorView) {
   const id = {};
@@ -20,7 +20,7 @@ export async function uploadImg(file: File, view: EditorView) {
     view.dispatch(tr);
   };
 
-  if (!file.type.includes("image/")) {
+  if (!file.type.includes('image/')) {
     return;
   }
   if (file.size / 1024 / 1024 > 20) {
@@ -28,21 +28,21 @@ export async function uploadImg(file: File, view: EditorView) {
   }
 
   toast({
-    title: "Uploading image...",
+    title: 'Uploading image...',
   });
 
-  const { error, url } = await uploadFile(file, "editor-uploads");
+  const { error, url } = await uploadFile(file, 'editor-uploads');
 
   if (error) {
     return toast({
-      title: "Something went wrong.",
+      title: 'Something went wrong.',
       description: error,
-      variant: "destructive",
+      variant: 'destructive',
     });
   }
 
   toast({
-    title: "Uploaded.",
+    title: 'Uploaded.',
   });
 
   const pos = findPlaceholder(view.state, id);
@@ -55,9 +55,9 @@ export async function uploadImg(file: File, view: EditorView) {
         pos,
         view.state.schema.nodes.image.create({
           src: url,
-        }),
+        })
       )
-      .setMeta(Placeholder, { remove: { id } }),
+      .setMeta(Placeholder, { remove: { id } })
   );
 }
 

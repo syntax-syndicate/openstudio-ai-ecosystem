@@ -1,15 +1,13 @@
-import AppShell from "@/app/(organization)/minime/components/layout/app-shell";
-import AppHeader from "@/app/(organization)/minime/components/layout/app-header";
-import NavButton from "@/app/(organization)/minime/components/layout/nav-button";
-import MDX from "@/app/(organization)/minime/components/markdown/mdx";
-import { getArticle, getArticlesByAuthor } from "@/actions/articles";
-import { currentUser, getUserByDomain } from "@repo/backend/auth/utils";
-import { formatDate } from "@/helper/utils";
-import { generateSEO } from "@/lib/utils";
-import moment from "moment";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import readingTime from "reading-time";
+import { getArticle } from '@/actions/articles';
+import AppHeader from '@/app/(organization)/minime/components/layout/app-header';
+import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
+import NavButton from '@/app/(organization)/minime/components/layout/nav-button';
+import MDX from '@/app/(organization)/minime/components/markdown/mdx';
+import { formatDate } from '@/helper/utils';
+import { currentUser } from '@repo/backend/auth/utils';
+import moment from 'moment';
+import { notFound } from 'next/navigation';
+import readingTime from 'reading-time';
 export const revalidate = 60;
 
 interface ArticlePageProps {
@@ -64,8 +62,8 @@ interface ArticlePageProps {
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { domain, slug } = await params;
   const domain_decoded = decodeURIComponent(domain);
-//   const user = await getUserByDomain(domain_decoded);
-  const user = await currentUser()
+  //   const user = await getUserByDomain(domain_decoded);
+  const user = await currentUser();
   if (!user) {
     return notFound();
   }
@@ -83,10 +81,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <GoBack />
       <AppHeader
         title={article[0].title}
-        className="gap-2 flex-col items-start mb-4 [&_.title]:text-xl"
+        className="mb-4 flex-col items-start gap-2 [&_.title]:text-xl"
       >
-        <div className="w-full flex flex-row justify-between items-center gap-2 text-sm text-gray-4">
-          <div className="flex gap-2 items-center">
+        <div className="flex w-full flex-row items-center justify-between gap-2 text-gray-4 text-sm">
+          <div className="flex items-center gap-2">
             <p>
               {`${formatDate(article[0].publishedAt)} ( ${moment(article[0].publishedAt).fromNow()} )`}
             </p>

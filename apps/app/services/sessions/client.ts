@@ -7,7 +7,6 @@ import { database } from '@repo/backend/database';
 import { schema } from '@repo/backend/schema';
 import type { TCustomAssistant } from '@repo/backend/types';
 import { and, asc, eq } from 'drizzle-orm';
-import moment from 'moment';
 
 // Message-related functions
 export async function getAllMessages(): Promise<TChatMessage[]> {
