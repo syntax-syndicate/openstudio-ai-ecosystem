@@ -1,11 +1,18 @@
 import type { TChatMessage, TChatSession } from '@/types';
-import type { articles, projects } from '@repo/backend/schema';
+import type { articles, projects, collections, bookmarks } from '@repo/backend/schema';
 import { format } from 'date-fns';
 import moment from 'moment';
 import { customAlphabet } from 'nanoid';
 
 export type Article = typeof articles.$inferSelect;
 export type Project = typeof projects.$inferSelect;
+export type Collection = typeof collections.$inferSelect;
+export type Bookmark = typeof bookmarks.$inferSelect;
+
+export type BookmarkWithCollection = Bookmark & {
+  collection: Collection | null;
+};
+
 export const getRelativeDate = (date: string | Date) => {
   const today = moment().startOf('day');
   const inputDate = moment(date).startOf('day');
@@ -41,6 +48,15 @@ export const sortSessions = (
 ) => {
   return sessions.sort((a, b) => moment(b[sortBy]).diff(moment(a[sortBy])));
 };
+
+export function sortBookmarks(
+  bookmarks: BookmarkWithCollection[],
+  collection?: string | null,
+) {
+  return bookmarks.filter((b) =>
+    collection ? collection === b.collection?.name : b,
+  );
+}
 
 export const isValidUrl = (url: string) => {
   try {
