@@ -1,8 +1,6 @@
-"use client";
-import { Collection } from "@/helper/utils";
-import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
-import { Icons } from "@repo/design-system/components/ui/icons";
+'use client';
+import type { Collection } from '@/helper/utils';
+import Button from '@repo/design-system/components/minime/button';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -10,16 +8,18 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@repo/design-system/components/ui/alert-dialog";
-import Button from "@repo/design-system/components/minime/button";
+} from '@repo/design-system/components/ui/alert-dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/design-system/components/ui/dropdown-menu";
+} from '@repo/design-system/components/ui/dropdown-menu';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { useRouter } from 'next/navigation';
+import { type FormEvent, useState } from 'react';
 
-import { toast } from "@repo/design-system/components/ui/use-toast";
-import AddEditBookmarkModal, { type Bookmark } from "./add-edit-bookmark-modal";
+import { toast } from '@repo/design-system/components/ui/use-toast';
+import AddEditBookmarkModal, { type Bookmark } from './add-edit-bookmark-modal';
 
 interface Props {
   bookmark: Bookmark;
@@ -28,13 +28,13 @@ interface Props {
 
 async function deleteBookmark(bookmarkId: string) {
   const response = await fetch(`/api/bookmarks/${bookmarkId}`, {
-    method: "DELETE",
+    method: 'DELETE',
   });
 
   if (!response?.ok) {
     toast({
-      title: "Something went wrong.",
-      description: "Your post was not deleted. Please try again.",
+      title: 'Something went wrong.',
+      description: 'Your post was not deleted. Please try again.',
     });
   }
 
@@ -111,7 +111,7 @@ export default function BookmarkOperations({ bookmark, collections }: Props) {
             >
               {isDeleteLoading ? (
                 <>
-                  <Icons.spinner size={15} className="animate-spin" />{" "}
+                  <Icons.spinner size={15} className="animate-spin" />{' '}
                   Deleting...
                 </>
               ) : (

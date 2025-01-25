@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Button from "@repo/design-system/components/minime/button";
+import type { Collection } from '@/helper/utils';
+import Button from '@repo/design-system/components/minime/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/design-system/components/ui/dropdown-menu";
-import { toast } from "@repo/design-system/components/ui/use-toast";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import AddEditCollectionModal from "./add-edit-collection-modal";
-import { Collection } from "@/helper/utils";
+} from '@repo/design-system/components/ui/dropdown-menu';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { toast } from '@repo/design-system/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import AddEditCollectionModal from './add-edit-collection-modal';
 
 async function deleteCollection(collectionId: string) {
   const response = await fetch(`/api/bookmarks/collections/${collectionId}`, {
-    method: "DELETE",
+    method: 'DELETE',
   });
 
   if (!response?.ok) {
     toast({
-      title: "Something went wrong.",
-      description: "Your collection was not deleted. Please try again.",
+      title: 'Something went wrong.',
+      description: 'Your collection was not deleted. Please try again.',
     });
   }
 
@@ -54,7 +54,7 @@ export default function CollectionOperations({
         <Button
           size="sm"
           variant="destructive"
-          className="justify-start border-0 gap-2"
+          className="justify-start gap-2 border-0"
           disabled={isDeleteLoading}
           onClick={async (e) => {
             e.preventDefault();
@@ -64,7 +64,7 @@ export default function CollectionOperations({
             router.refresh();
             if (deleted) {
               toast({
-                title: "Collection deleted",
+                title: 'Collection deleted',
               });
             }
           }}

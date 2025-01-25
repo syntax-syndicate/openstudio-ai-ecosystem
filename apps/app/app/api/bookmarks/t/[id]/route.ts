@@ -1,6 +1,6 @@
-import { recordClick } from "@/lib/tinybird";
-import type { NextRequest } from "next/server";
-import * as z from "zod";
+import { recordClick } from '@/lib/tinybird';
+import type { NextRequest } from 'next/server';
+import * as z from 'zod';
 
 // export const runtime = "edge";
 
@@ -12,7 +12,7 @@ const routeContextSchema = z.object({
 
 export async function GET(
   req: NextRequest,
-  context: z.infer<typeof routeContextSchema>,
+  context: z.infer<typeof routeContextSchema>
 ) {
   const { id } = await context.params;
   const ctx = routeContextSchema.safeParse(context);

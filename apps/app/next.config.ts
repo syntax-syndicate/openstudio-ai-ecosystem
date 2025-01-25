@@ -1,10 +1,8 @@
-import { env } from '@/env';
-import { config, withAnalyzer } from '@repo/next-config';
-import { withLogtail, withSentry } from '@repo/observability/next-config';
+import { config } from '@repo/next-config';
+import { withLogtail } from '@repo/observability/next-config';
 import type { NextConfig } from 'next';
 
-
-let nextConfig: NextConfig = withLogtail({
+const nextConfig: NextConfig = withLogtail({
   ...config,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -37,6 +35,22 @@ let nextConfig: NextConfig = withLogtail({
         hostname: 'icons.duckduckgo.com',
       },
     ],
+  },
+
+  async redirects() {
+    return [
+      {
+        source: '/:id',
+        has: [
+          {
+            type: 'host',
+            value: 'go.openstudio.co.in',
+          },
+        ],
+        destination: `https://go.openstudio.co.in/api/bookmarks/t/:id`,
+        permanent: false,
+      },
+    ];
   },
 });
 //TODO: Add sentry and analyzer

@@ -1,13 +1,13 @@
-"use server";
-import { ExportResponse } from "@/types/minime";
-import { json2csv } from "json-2-csv";
-import { database } from "@repo/backend/database";
-import { bookmarks, collections } from "@repo/backend/schema";
-import { formatVerboseDate } from "@/helper/utils";
-import { currentUser } from "@repo/backend/auth/utils";
-import { and, desc, eq } from "drizzle-orm";
-import { bookmarkSchema } from "@/lib/validations/bookmark";
-import { z } from "zod";
+'use server';
+import { formatVerboseDate } from '@/helper/utils';
+import type { bookmarkSchema } from '@/lib/validations/bookmark';
+import type { ExportResponse } from '@/types/minime';
+import { currentUser } from '@repo/backend/auth/utils';
+import { database } from '@repo/backend/database';
+import { bookmarks, collections } from '@repo/backend/schema';
+import { and, desc, eq } from 'drizzle-orm';
+import { json2csv } from 'json-2-csv';
+import type { z } from 'zod';
 
 type BookmarkSchema = z.infer<typeof bookmarkSchema>;
 
@@ -23,7 +23,7 @@ export async function getBookmarksByAuthor(author: string, limit?: number) {
       authorId: bookmarks.authorId,
       organizationId: bookmarks.organizationId,
       collectionId: bookmarks.collectionId,
-      collection: collections
+      collection: collections,
     })
     .from(bookmarks)
     .leftJoin(collections, eq(bookmarks.collectionId, collections.id))
@@ -56,7 +56,7 @@ export async function getBookmarks(limit?: number) {
 
 export async function getBookmarksByCollection(collectionName: string) {
   const user = await currentUser();
-  
+
   return await database
     .select({
       id: bookmarks.id,
@@ -70,7 +70,9 @@ export async function getBookmarksByCollection(collectionName: string) {
     .where(
       and(
         eq(bookmarks.authorId, user!.id),
-        collectionName !== "all" ? eq(collections.name, collectionName) : undefined
+        collectionName !== 'all'
+          ? eq(collections.name, collectionName)
+          : undefined
       )
     );
 }
@@ -80,17 +82,14 @@ export async function getBookmarkById(bookmarkId: string) {
   return await database
     .select()
     .from(bookmarks)
-    .where(
-      and(
-        eq(bookmarks.id, bookmarkId),
-        eq(bookmarks.authorId, user!.id)
-      )
-    )
+    .where(and(eq(bookmarks.id, bookmarkId), eq(bookmarks.authorId, user!.id)))
     .limit(1)
     .then((res) => res[0] || null);
 }
 
-export async function getBookmarksExport(authorId: string): Promise<ExportResponse> {
+export async function getBookmarksExport(
+  authorId: string
+): Promise<ExportResponse> {
   const bookmarksData = await database
     .select({
       title: bookmarks.title,
@@ -116,16 +115,15 @@ export async function getBookmarksExport(authorId: string): Promise<ExportRespon
         updatedAt: formatVerboseDate(updatedAt),
         collectionName: collection?.name ?? null,
       };
-    }),
+    })
   );
 
   return { filename, content };
 }
 
-
 //create bookmark
 export async function createBookmark(authorId: string, body: BookmarkSchema) {
-    const user = await currentUser();
+  const user = await currentUser();
   return await database.insert(bookmarks).values({
     title: body.title,
     url: body.url,
@@ -135,25 +133,39 @@ export async function createBookmark(authorId: string, body: BookmarkSchema) {
   });
 }
 
-
 //update bookmark
-export async function updateBookmark(bookmarkId: string, authorId: string, body: BookmarkSchema) {
-  return await database.update(bookmarks).set({
-    title: body.title,
-    url: body.url,
-    collectionId: body.collection,
-  }).where(and(eq(bookmarks.id, bookmarkId), eq(bookmarks.authorId, authorId)));
+export async function updateBookmark(
+  bookmarkId: string,
+  authorId: string,
+  body: BookmarkSchema
+) {
+  return await database
+    .update(bookmarks)
+    .set({
+      title: body.title,
+      url: body.url,
+      collectionId: body.collection,
+    })
+    .where(and(eq(bookmarks.id, bookmarkId), eq(bookmarks.authorId, authorId)));
 }
 
 // delete bookmark
 export async function deleteBookmark(bookmarkId: string, authorId: string) {
-  const bookmark = await database.delete(bookmarks).where(and(eq(bookmarks.id, bookmarkId), eq(bookmarks.authorId, authorId))).returning();
+  const bookmark = await database
+    .delete(bookmarks)
+    .where(and(eq(bookmarks.id, bookmarkId), eq(bookmarks.authorId, authorId)))
+    .returning();
   return bookmark[0].id;
 }
 
-
 //verify bookmark access
-export async function verifyBookmarkAccess(bookmarkId: string, authorId: string) {
-  const bookmark = await database.select({ count: bookmarks.id }).from(bookmarks).where(and(eq(bookmarks.id, bookmarkId), eq(bookmarks.authorId, authorId)));
+export async function verifyBookmarkAccess(
+  bookmarkId: string,
+  authorId: string
+) {
+  const bookmark = await database
+    .select({ count: bookmarks.id })
+    .from(bookmarks)
+    .where(and(eq(bookmarks.id, bookmarkId), eq(bookmarks.authorId, authorId)));
   return bookmark.length > 0;
 }

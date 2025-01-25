@@ -1,7 +1,7 @@
-import Article from "@/app/(organization)/minime/components/articles/article";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Link from "next/link";
-import { Article as ArticleProps } from "@/helper/utils";
+import Article from '@/app/(organization)/minime/components/articles/article';
+import type { Article as ArticleProps } from '@/helper/utils';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import Link from 'next/link';
 
 export default function Articles({ articles }: { articles: ArticleProps[] }) {
   if (!articles.length) {
@@ -13,7 +13,7 @@ export default function Articles({ articles }: { articles: ArticleProps[] }) {
       <dt className="section-title link group">
         <Link
           href="/articles"
-          className="absolute w-full h-full"
+          className="absolute h-full w-full"
           aria-label="View All Articles"
         />
         <h3>Writing</h3>
@@ -25,7 +25,7 @@ export default function Articles({ articles }: { articles: ArticleProps[] }) {
 
       <dd className="section-content">
         {articles.map((article) => (
-          <Article article={article} key={article.id} />
+          <Article article={article} key={article.id} url="/articles" />
         ))}
       </dd>
     </dl>

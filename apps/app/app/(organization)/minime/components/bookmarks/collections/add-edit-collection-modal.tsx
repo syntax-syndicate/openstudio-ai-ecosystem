@@ -1,5 +1,8 @@
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Button from "@repo/design-system/components/minime/button";
+import type { Collection } from '@/helper/utils';
+import { collectionSchema } from '@/lib/validations/bookmark';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Button from '@repo/design-system/components/minime/button';
+import Input from '@repo/design-system/components/minime/input';
 import {
   Dialog,
   DialogContent,
@@ -7,17 +10,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/design-system/components/ui/dialog";
-import Input from "@repo/design-system/components/minime/input";
-import { toast } from "@repo/design-system/components/ui/use-toast";
-import { cn } from "@repo/design-system/lib/utils";
-import { collectionSchema } from "@/lib/validations/bookmark";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import type * as z from "zod";
-import { Collection } from "@/helper/utils";
+} from '@repo/design-system/components/ui/dialog';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { toast } from '@repo/design-system/components/ui/use-toast';
+import { cn } from '@repo/design-system/lib/utils';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import type * as z from 'zod';
 
 type CollectionFormData = z.infer<typeof collectionSchema>;
 
@@ -38,7 +38,7 @@ export default function AddEditCollectionModal({
 
   useEffect(() => {
     if (!showAddEditCollectionModal && open) {
-      router.push("/minime/bookmarks");
+      router.push('/minime/bookmarks');
     }
   }, [showAddEditCollectionModal, open]);
 
@@ -46,24 +46,24 @@ export default function AddEditCollectionModal({
     useMemo(() => {
       if (edit && collection) {
         return {
-          title: "Edit collection",
+          title: 'Edit collection',
           endpoint: `/api/bookmarks/collections/${collection.id}`,
-          method: "PATCH",
-          successMessage: "Collection has been saved.",
+          method: 'PATCH',
+          successMessage: 'Collection has been saved.',
           buttonText: {
-            default: "Save",
-            loading: "Saving",
+            default: 'Save',
+            loading: 'Saving',
           },
         };
       }
       return {
-        title: "New collection",
-        endpoint: "/api/bookmarks/collections",
-        method: "POST",
-        successMessage: "Collection has been created.",
+        title: 'New collection',
+        endpoint: '/api/bookmarks/collections',
+        method: 'POST',
+        successMessage: 'Collection has been created.',
         buttonText: {
-          default: "Create",
-          loading: "Creating",
+          default: 'Create',
+          loading: 'Creating',
         },
       };
     }, [edit, collection]);
@@ -93,7 +93,7 @@ export default function AddEditCollectionModal({
     const body = await res.text();
     if (!res?.ok) {
       return toast({
-        title: "Something went wrong.",
+        title: 'Something went wrong.',
         description: body,
       });
     }
@@ -113,7 +113,7 @@ export default function AddEditCollectionModal({
         <Button
           size="sm"
           variant="ghost"
-          className={cn("gap-2 justify-start")}
+          className={cn('justify-start gap-2')}
           aria-label={title}
         >
           {edit ? (
@@ -140,11 +140,11 @@ export default function AddEditCollectionModal({
             type="text"
             placeholder="Name"
             autoComplete="off"
-            {...register("name")}
+            {...register('name')}
             disabled={isLoading}
           />
           {errors?.name && (
-            <b className="text-xs text-danger">{errors.name.message}</b>
+            <b className="text-danger text-xs">{errors.name.message}</b>
           )}
         </form>
         <DialogFooter>

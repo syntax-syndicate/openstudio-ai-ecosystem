@@ -1,6 +1,6 @@
-import * as z from "zod";
-import { URLRegex } from "@repo/design-system/lib/utils";
-import { validDomainRegex } from "@/helper/utils";
+import { validDomainRegex } from '@/helper/utils';
+import { URLRegex } from '@repo/design-system/lib/utils';
+import * as z from 'zod';
 
 export const collectionSchema = z.object({
   name: z.string().min(1).max(20),
@@ -18,7 +18,7 @@ export const bookmarkFormSchema = z.object({
     .string()
     .refine(
       (value) => validDomainRegex.test(value) || URLRegex.test(value),
-      "Enter valid domain or URL",
+      'Enter valid domain or URL'
     ),
   collection: z.string().min(1).nullable().optional(),
 });

@@ -1,18 +1,18 @@
-import AddBookmarkOrCollection from "@/app/(organization)/minime/components/bookmarks/add-bookmark-or-collection";
-import Bookmark from "@/app/(organization)/minime/components/bookmarks/bookmark";
-import CollectionBar from "@/app/(organization)/minime/components/bookmarks/collections/collections-bar";
-import Collections from "@/app/(organization)/minime/components/bookmarks/collections/collections-modal";
-import NoBookmarksPlaceholder from "@/app/(organization)/minime/components/bookmarks/no-bookmarks-placeholder";
-import AppShell from "@/app/(organization)/minime/components/layout/app-shell";
-import AppHeader from "@/app/(organization)/minime/components/layout/app-header";
-import { getBookmarks } from "@/actions/bookmarks";
-import { getCollections } from "@/actions/collections";
-import { BookmarkWithCollection, sortBookmarks } from "@/helper/utils";
-import { Collection } from "@/helper/utils";
-import type { Metadata } from "next";
+import { getBookmarks } from '@/actions/bookmarks';
+import { getCollections } from '@/actions/collections';
+import AddBookmarkOrCollection from '@/app/(organization)/minime/components/bookmarks/add-bookmark-or-collection';
+import Bookmark from '@/app/(organization)/minime/components/bookmarks/bookmark';
+import CollectionBar from '@/app/(organization)/minime/components/bookmarks/collections/collections-bar';
+import Collections from '@/app/(organization)/minime/components/bookmarks/collections/collections-modal';
+import NoBookmarksPlaceholder from '@/app/(organization)/minime/components/bookmarks/no-bookmarks-placeholder';
+import AppHeader from '@/app/(organization)/minime/components/layout/app-header';
+import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
+import { sortBookmarks } from '@/helper/utils';
+import type { Collection } from '@/helper/utils';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Bookmarks",
+  title: 'Bookmarks',
 };
 
 interface BookmarksPageProps {
@@ -21,15 +21,12 @@ interface BookmarksPageProps {
   };
 }
 
-export default async function Bookmarks({
-  searchParams,
-}: BookmarksPageProps) {
+export default async function Bookmarks({ searchParams }: BookmarksPageProps) {
   const { collection } = await searchParams;
   const [bookmarks, collections] = await Promise.all([
     getBookmarks(),
     getCollections(),
   ]);
-  console.log(collections);
   const sortedBookmarks = sortBookmarks(bookmarks, collection);
 
   return (

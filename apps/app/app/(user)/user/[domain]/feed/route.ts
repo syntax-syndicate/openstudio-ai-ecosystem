@@ -1,13 +1,13 @@
-import { getArticlesByAuthor } from "@/actions/articles";
-import { getBookmarksByAuthor } from "@/actions/bookmarks";
-import { getProjectsByAuthor } from "@/actions/projects";
-import { getUserByDomain } from "@repo/backend/auth/utils";
-import { getSearchParams } from "@/helper/utils";
-import { Article, Project } from "@/helper/utils";
-import { Feed } from "feed";
-import { getUserName } from "@repo/backend/auth/format";
+import { getArticlesByAuthor } from '@/actions/articles';
+import { getBookmarksByAuthor } from '@/actions/bookmarks';
+import { getProjectsByAuthor } from '@/actions/projects';
+import { getSearchParams } from '@/helper/utils';
+import type { Article, Project } from '@/helper/utils';
+import { getUserName } from '@repo/backend/auth/format';
+import { getUserByDomain } from '@repo/backend/auth/utils';
+import { Feed } from 'feed';
 
-type Post = Article | Omit<Project, "password">;
+type Post = Article | Omit<Project, 'password'>;
 
 function isPostArticle(post: Post): post is Article {
   return (post as Article).publishedAt !== undefined;
@@ -15,10 +15,10 @@ function isPostArticle(post: Post): post is Article {
 
 export async function GET(
   req: Request,
-  context: { params: { domain: string } },
+  context: { params: { domain: string } }
 ) {
-  const { type = "rss" } = getSearchParams(req.url) as {
-    type?: "rss" | "atom";
+  const { type = 'rss' } = getSearchParams(req.url) as {
+    type?: 'rss' | 'atom';
   };
   const user = await getUserByDomain(context.params.domain);
   if (!user) {
@@ -34,9 +34,9 @@ export async function GET(
     id,
     title: name,
     link: id,
-    description: user.user_metadata.about ?? "",
-    image: user.user_metadata.ogImage ?? "",
-    favicon: user.user_metadata.image ?? "",
+    description: user.user_metadata.about ?? '',
+    image: user.user_metadata.ogImage ?? '',
+    favicon: user.user_metadata.image ?? '',
     copyright: `All rights reserved ${new Date().getFullYear()}, ${name}`,
     feedLinks: {
       atom: `${id}/feed?type=atom`,
@@ -53,7 +53,7 @@ export async function GET(
   const posts = [...articles, ...projects];
   posts.forEach((post) => {
     const isArticle = isPostArticle(post);
-    const postId = `${id}/${isArticle ? "articles" : "projects"}/${post.slug}`;
+    const postId = `${id}/${isArticle ? 'articles' : 'projects'}/${post.slug}`;
     const publishedAt = isArticle ? post.publishedAt : post.createdAt;
     feed.addItem({
       id: postId,
@@ -67,7 +67,7 @@ export async function GET(
       image: post.ogImage!,
       category: [
         {
-          name: isArticle ? "Articles" : "Projects",
+          name: isArticle ? 'Articles' : 'Projects',
         },
       ],
     });
@@ -87,15 +87,15 @@ export async function GET(
       published: updatedAt,
       category: [
         {
-          name: "Bookmarks",
+          name: 'Bookmarks',
         },
       ],
     });
   });
 
-  return new Response(type === "atom" ? feed.atom1() : feed.rss2(), {
+  return new Response(type === 'atom' ? feed.atom1() : feed.rss2(), {
     headers: {
-      "Content-Type": "application/rss+xml; charset=utf-8",
+      'Content-Type': 'application/rss+xml; charset=utf-8',
     },
   });
 }

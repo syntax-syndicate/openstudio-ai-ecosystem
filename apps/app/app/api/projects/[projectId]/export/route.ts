@@ -1,6 +1,6 @@
-import { guard } from "@/lib/auth";
-import { getProjectExport } from "@/actions/projects";
-import * as z from "zod";
+import { getProjectExport } from '@/actions/projects';
+import { guard } from '@/lib/auth';
+import * as z from 'zod';
 
 const contextSchema = z.object({
   params: z.object({
@@ -9,18 +9,15 @@ const contextSchema = z.object({
 });
 
 export const GET = guard(
-  async ({
-    user,
-    ctx,
-  }) => {
+  async ({ user, ctx }) => {
     try {
       const { projectId } = await ctx.params;
       const { filename, content } = await getProjectExport(projectId, user.id);
 
       return new Response(content, {
         headers: {
-          "Content-Type": "application/markdown",
-          "Content-Disposition": `attachment; filename=${filename}`,
+          'Content-Type': 'application/markdown',
+          'Content-Disposition': `attachment; filename=${filename}`,
         },
       });
     } catch (err) {
@@ -35,5 +32,5 @@ export const GET = guard(
     schemas: {
       contextSchema,
     },
-  },
+  }
 );

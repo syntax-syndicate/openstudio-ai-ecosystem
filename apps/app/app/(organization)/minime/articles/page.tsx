@@ -29,7 +29,12 @@ export default async function Articles({ searchParams }: Props) {
       <PostsFilter segment="minime/articles" current={published} />
       <div>
         {sortedArticles.map((article) => (
-          <Article article={article} key={article.id} admin />
+          <Article
+            article={article}
+            key={article.id}
+            url="/minime/articles"
+            admin
+          />
         ))}
         {!sortedArticles.length && <NoArticlesPlaceholder description />}
       </div>

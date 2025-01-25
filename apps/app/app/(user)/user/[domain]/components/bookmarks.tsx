@@ -1,9 +1,11 @@
-import Bookmark from "@/app/(organization)/minime/components/bookmarks/bookmark";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Link from "next/link";
-import { BookmarkWithCollection, Collection } from "@/helper/utils";
+import Bookmark from '@/app/(organization)/minime/components/bookmarks/bookmark';
+import type { BookmarkWithCollection, Collection } from '@/helper/utils';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import Link from 'next/link';
 
-export default function Bookmarks({ bookmarks }: { bookmarks: BookmarkWithCollection[] }) {
+export default function Bookmarks({
+  bookmarks,
+}: { bookmarks: BookmarkWithCollection[] }) {
   if (!bookmarks.length) {
     return null;
   }
@@ -12,7 +14,7 @@ export default function Bookmarks({ bookmarks }: { bookmarks: BookmarkWithCollec
       <dt className="section-title link group">
         <Link
           href="/bookmarks"
-          className="absolute w-full h-full "
+          className="absolute h-full w-full "
           aria-label="View All Bookmarks"
         />
         <h3>Bookmarks</h3>

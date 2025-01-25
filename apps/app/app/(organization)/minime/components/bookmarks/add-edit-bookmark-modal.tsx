@@ -1,14 +1,9 @@
-"use client";
-import { URLRegex } from "@repo/design-system/lib/utils";
-import { cn } from "@repo/design-system/lib/utils";
-import { bookmarkFormSchema } from "@/lib/validations/bookmark";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import type * as z from "zod";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Button from "@repo/design-system/components/minime/button";
+'use client';
+import type { Bookmark as BookmarkType, Collection } from '@/helper/utils';
+import { bookmarkFormSchema } from '@/lib/validations/bookmark';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Button from '@repo/design-system/components/minime/button';
+import Input from '@repo/design-system/components/minime/input';
 import {
   Dialog,
   DialogContent,
@@ -16,21 +11,26 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/design-system/components/ui/dialog";
-import Input from "@repo/design-system/components/minime/input";
+} from '@repo/design-system/components/ui/dialog';
+import { Icons } from '@repo/design-system/components/ui/icons';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/design-system/components/ui/select";
-import { toast } from "@repo/design-system/components/ui/use-toast";
-import { Collection, Bookmark as BookmarkType } from "@/helper/utils";
+} from '@repo/design-system/components/ui/select';
+import { toast } from '@repo/design-system/components/ui/use-toast';
+import { URLRegex } from '@repo/design-system/lib/utils';
+import { cn } from '@repo/design-system/lib/utils';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import type * as z from 'zod';
 
 type FormData = z.infer<typeof bookmarkFormSchema>;
 
-export type Bookmark = Pick<BookmarkType, "id" | "title" | "url"> & {
+export type Bookmark = Pick<BookmarkType, 'id' | 'title' | 'url'> & {
   collection?: Collection;
 };
 
@@ -52,24 +52,24 @@ export default function AddEditBookmarkModal({
 
   useEffect(() => {
     if (!showAddEditBookmarkModal && open) {
-      router.push("/minime/bookmarks");
+      router.push('/minime/bookmarks');
     }
   }, [showAddEditBookmarkModal, open]);
 
   const { title, endpoint, method, successMessage } = useMemo(() => {
     if (edit && bookmark) {
       return {
-        title: "Edit bookmark",
+        title: 'Edit bookmark',
         endpoint: `/api/bookmarks/${bookmark.id}`,
-        method: "PATCH",
-        successMessage: "Bookmark has been saved.",
+        method: 'PATCH',
+        successMessage: 'Bookmark has been saved.',
       };
     }
     return {
-      title: "Add bookmark",
-      endpoint: "/api/bookmarks",
-      method: "POST",
-      successMessage: "Bookmark has been added.",
+      title: 'Add bookmark',
+      endpoint: '/api/bookmarks',
+      method: 'POST',
+      successMessage: 'Bookmark has been added.',
     };
   }, [edit, bookmark]);
 
@@ -97,7 +97,7 @@ export default function AddEditBookmarkModal({
         url: URLRegex.test(data.domain)
           ? data.domain
           : `https://${data.domain}`,
-        collection: data?.collection === "all" ? null : data.collection,
+        collection: data?.collection === 'all' ? null : data.collection,
       }),
     });
 
@@ -105,7 +105,7 @@ export default function AddEditBookmarkModal({
     const body = await res.text();
     if (!res?.ok) {
       return toast({
-        title: "Something went wrong.",
+        title: 'Something went wrong.',
         description: body,
       });
     }
@@ -127,7 +127,7 @@ export default function AddEditBookmarkModal({
         <Button
           size="sm"
           variant="ghost"
-          className={cn("gap-2 justify-start")}
+          className={cn('justify-start gap-2')}
           aria-label={title}
         >
           {edit ? (
@@ -154,19 +154,19 @@ export default function AddEditBookmarkModal({
             type="text"
             placeholder="Title"
             autoComplete="off"
-            {...register("title")}
+            {...register('title')}
             disabled={isLoading}
           />
           {errors?.title && (
-            <b className="text-xs text-danger">{errors.title.message}</b>
+            <b className="text-danger text-xs">{errors.title.message}</b>
           )}
           <Input
             placeholder="Domain or URL"
             disabled={isLoading}
-            {...register("domain")}
+            {...register('domain')}
           />
           {errors?.domain && (
-            <b className="text-xs text-danger">{errors.domain.message}</b>
+            <b className="text-danger text-xs">{errors.domain.message}</b>
           )}
 
           <Controller

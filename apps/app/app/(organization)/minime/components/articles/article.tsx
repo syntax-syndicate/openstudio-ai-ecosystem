@@ -16,14 +16,15 @@ interface Props {
     | 'published'
     | 'publishedAt'
   >;
+  url: string;
 }
 
-export default async function Article({ article, admin }: Props) {
+export default async function Article({ article, admin, url }: Props) {
   const isPublished = article.published;
   return (
     <div className="-mx-2 group relative flex min-h-5 items-center justify-between rounded-md p-2 text-sm transition-colors hover:bg-gray-3 max-md:h-auto max-md:flex-col max-md:items-start">
       <Link
-        href={`/minime/articles/${admin ? article.id : article.slug}`}
+        href={`${url}/${admin ? article.id : article.slug}`}
         aria-label={`${article.title}`}
         className="absolute top-0 left-0 h-full w-full"
       />
@@ -39,15 +40,13 @@ export default async function Article({ article, admin }: Props) {
       {admin && (
         <div className="flex justify-end max-md:mt-2 max-md:w-full ">
           <div className="z-10 flex items-center gap-1">
-            <Link
-              href={`/minime/articles?published=${isPublished ? 'true' : 'false'}`}
-            >
+            <Link href={`${url}?published=${isPublished ? 'true' : 'false'}`}>
               <Badge className="h-4 px-1 py-2 font-normal hover:bg-gray-2">
                 {isPublished ? 'Public' : 'Draft'}
               </Badge>
             </Link>
             <AnalyticsBadge
-              href={`/minime/articles/${article.id}/analytics`}
+              href={`${url}/${article.id}/analytics`}
               value={article.views!}
               published={article.published!}
               index="views"

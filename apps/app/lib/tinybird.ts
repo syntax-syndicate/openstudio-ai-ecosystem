@@ -69,8 +69,6 @@ export async function track({
         : isProjectExist(slug, authorId)
       : null;
 
-    console.log('isPost', isPost);
-    console.log('isPostExist', isPostExist);
 
     if (isPost && !isPostExist) {
       return new Response(null, { status: 404 });

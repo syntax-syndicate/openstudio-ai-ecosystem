@@ -1,15 +1,15 @@
-import { verifyProjectAccess } from "@/actions/projects";
+import { verifyProjectAccess } from '@/actions/projects';
+import { guard } from '@/lib/auth';
+import { database } from '@repo/backend/database';
+import { projects } from '@repo/backend/schema';
 import {
   ZodAnalyticsProperty,
   analyticsSearchParamsSchema,
   getAnalytics,
-} from "@repo/tinybird/src/utils";
-import { guard } from "@/lib/auth";
-import { database } from "@repo/backend/database";
-import { projects } from "@repo/backend/schema";
-import { NextResponse } from "next/server";
-import * as z from "zod";
-import { and, eq } from "drizzle-orm";
+} from '@repo/tinybird/src/utils';
+import { and, eq } from 'drizzle-orm';
+import { NextResponse } from 'next/server';
+import * as z from 'zod';
 
 const routeContextSchema = z.object({
   params: z.object({
@@ -19,17 +19,16 @@ const routeContextSchema = z.object({
 });
 
 export const GET = guard(
-  async ({
-    user,
-    ctx,
-    searchParams: { interval },
-  }) => {
+  async ({ user, ctx, searchParams: { interval } }) => {
     try {
       const { projectId, property } = await ctx.params;
-      const project = await database.select().from(projects).where(and(eq(projects.id, projectId), eq(projects.authorId, user.id)));
+      const project = await database
+        .select()
+        .from(projects)
+        .where(and(eq(projects.id, projectId), eq(projects.authorId, user.id)));
 
       if (!project) {
-        return new Response("Project not found", {
+        return new Response('Project not found', {
           status: 404,
         });
       }
@@ -51,10 +50,10 @@ export const GET = guard(
     }
   },
   {
-    requiredPlan: "Pro",
+    requiredPlan: 'Pro',
     schemas: {
       contextSchema: routeContextSchema,
       searchParamsSchema: analyticsSearchParamsSchema,
     },
-  },
+  }
 );

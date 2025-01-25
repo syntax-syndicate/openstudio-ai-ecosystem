@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Button from "@repo/design-system/components/minime/button";
-import Input from "@repo/design-system/components/minime/input";
-import type * as React from "react";
-import { useFormState, useFormStatus } from "react-dom";
-import { unlockProject } from "./action";
-import {Project} from "@/helper/utils";
-import { User } from "@repo/backend/auth";
+import type { Project } from '@/helper/utils';
+import type { User } from '@repo/backend/auth';
+import Button from '@repo/design-system/components/minime/button';
+import Input from '@repo/design-system/components/minime/input';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import type * as React from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
+import { unlockProject } from './action';
 
 export default function Protection({
   project,
   user,
   children,
 }: {
-  project: Pick<Project, "id"> & {
+  project: Pick<Project, 'id'> & {
     isProtected: boolean;
   };
-  user: Pick<User, "user_metadata">;
+  user: Pick<User, 'user_metadata'>;
   children: React.ReactNode;
 }) {
   const [state, formAction] = useFormState(unlockProject, {
@@ -25,10 +25,10 @@ export default function Protection({
   });
   if (!state.unlocked && project.isProtected) {
     return (
-      <div className="w-[300px] mx-auto flex flex-col gap-2 max-md:mt-10">
-        <p className="text-sm text-gray-4">
-          <b className="text-secondary">{user.user_metadata.username}</b> has made this
-          project protected, please enter the password to continue.
+      <div className="mx-auto flex w-[300px] flex-col gap-2 max-md:mt-10">
+        <p className="text-gray-4 text-sm">
+          <b className="text-secondary">{user.user_metadata.username}</b> has
+          made this project protected, please enter the password to continue.
         </p>
         <form action={formAction} className="flex flex-col gap-2">
           <input type="hidden" name="projectId" value={project.id} />
@@ -36,9 +36,9 @@ export default function Protection({
             type="password"
             name="password"
             placeholder="Enter password"
-            className={state?.error ? "focus:border-danger border-danger" : ""}
+            className={state?.error ? 'border-danger focus:border-danger' : ''}
           />
-          {state?.error && <b className="text-xs text-danger">{state.error}</b>}
+          {state?.error && <b className="text-danger text-xs">{state.error}</b>}
           <FormButton />
         </form>
       </div>

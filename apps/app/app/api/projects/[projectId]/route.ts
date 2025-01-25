@@ -27,7 +27,7 @@ export const PATCH = guard(
       contextSchema: routeContextSchema,
       bodySchema: projectPatchSchema,
     },
-  },
+  }
 );
 
 export const DELETE = guard(
@@ -46,5 +46,5 @@ export const DELETE = guard(
     schemas: {
       contextSchema: routeContextSchema,
     },
-  },
+  }
 );

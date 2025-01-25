@@ -31,7 +31,7 @@ export default async function ArticlesPage({ params }: ArticlesPageProps) {
       </AppHeader>
       <div>
         {articles.map((article) => (
-          <Article article={article} key={article.id} />
+          <Article article={article} key={article.id} url="/articles" />
         ))}
         {!articles.length && <NoArticlesPlaceholder />}
       </div>

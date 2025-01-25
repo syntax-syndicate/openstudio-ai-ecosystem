@@ -1,13 +1,13 @@
-import { guard } from "@/lib/auth";
-import { getBookmarksExport } from "@/actions/bookmarks";
+import { getBookmarksExport } from '@/actions/bookmarks';
+import { guard } from '@/lib/auth';
 
 export const GET = guard(async ({ user }) => {
   try {
     const { filename, content } = await getBookmarksExport(user.id);
     return new Response(content, {
       headers: {
-        "Content-Type": "application/csv",
-        "Content-Disposition": `attachment; filename=${filename}`,
+        'Content-Type': 'application/csv',
+        'Content-Disposition': `attachment; filename=${filename}`,
       },
     });
   } catch (err) {

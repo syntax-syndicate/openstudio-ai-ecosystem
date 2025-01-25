@@ -1,12 +1,12 @@
-import { verifyBookmarkAccess } from "@/actions/bookmarks";
+import { verifyBookmarkAccess } from '@/actions/bookmarks';
+import { guard } from '@/lib/auth';
 import {
   ZodAnalyticsProperty,
   analyticsSearchParamsSchema,
   getBookmarkAnalytics,
-} from "@repo/tinybird/src/utils";
-import { guard } from "@/lib/auth";
-import { NextResponse } from "next/server";
-import * as z from "zod";
+} from '@repo/tinybird/src/utils';
+import { NextResponse } from 'next/server';
+import * as z from 'zod';
 
 const routeContextSchema = z.object({
   params: z.object({
@@ -16,11 +16,7 @@ const routeContextSchema = z.object({
 });
 
 export const GET = guard(
-  async ({
-    user,
-    ctx,
-    searchParams: { interval },
-  }) => {
+  async ({ user, ctx, searchParams: { interval } }) => {
     try {
       const { bookmarkId, property } = await ctx.params;
       if (!(await verifyBookmarkAccess(bookmarkId, user.id))) {
@@ -39,10 +35,10 @@ export const GET = guard(
     }
   },
   {
-    requiredPlan: "Pro",
+    requiredPlan: 'Pro',
     schemas: {
       contextSchema: routeContextSchema,
       searchParamsSchema: analyticsSearchParamsSchema,
     },
-  },
+  }
 );

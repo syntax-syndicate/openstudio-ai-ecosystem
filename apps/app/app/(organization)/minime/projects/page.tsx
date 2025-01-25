@@ -32,7 +32,14 @@ export default async function Projects({ searchParams }: Props) {
         {sortedProjects.map(({ password, ...rest }) => {
           const project = { ...rest, isProtected: !!password };
 
-          return <Project project={project} key={project.id} admin />;
+          return (
+            <Project
+              project={project}
+              key={project.id}
+              url="/minime/projects"
+              admin
+            />
+          );
         })}
         {!sortedProjects.length && <NoProjectsPlaceholder description />}
       </div>

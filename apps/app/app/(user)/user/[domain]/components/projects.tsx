@@ -1,9 +1,9 @@
-import Project from "@/app/(organization)/minime/components/projects/project";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import Link from "next/link";
-import { Project as ProjectProps } from "@/helper/utils";
+import Project from '@/app/(organization)/minime/components/projects/project';
+import type { Project as ProjectProps } from '@/helper/utils';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import Link from 'next/link';
 
-type ProjectType = Omit<ProjectProps, "password"> & { isProtected: boolean };
+type ProjectType = Omit<ProjectProps, 'password'> & { isProtected: boolean };
 
 export default function Projects({ projects }: { projects: ProjectType[] }) {
   if (!projects.length) {
@@ -14,7 +14,7 @@ export default function Projects({ projects }: { projects: ProjectType[] }) {
       <dt className="section-title link group">
         <Link
           href="/projects"
-          className="absolute w-full h-full "
+          className="absolute h-full w-full "
           aria-label="View All Projects"
         />
         <h3>Projects</h3>
@@ -25,7 +25,7 @@ export default function Projects({ projects }: { projects: ProjectType[] }) {
       </dt>
       <dd className="section-content">
         {projects.map((project) => (
-          <Project project={project} key={project.id} />
+          <Project project={project} key={project.id} url="/projects" />
         ))}
       </dd>
     </dl>

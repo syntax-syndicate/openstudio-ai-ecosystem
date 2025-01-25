@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
     }
 
     const { page, type, slug, domain, username } = body.data;
-    console.log(page, type, slug, domain, username);
     return await track({
       req,
       page,
