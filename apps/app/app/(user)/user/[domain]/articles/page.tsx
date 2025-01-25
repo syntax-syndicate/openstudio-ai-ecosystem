@@ -1,15 +1,14 @@
-import Article from "@/app/(organization)/minime/components/articles/article";
-import NoArticlesPlaceholder from "@/app/(organization)/minime/components/articles/no-articles-placeholder";
-import AppShell from "@/app/(organization)/minime/components/layout/app-shell";
-import AppHeader from "@/app/(organization)/minime/components/layout/app-header";
-import { getArticlesByAuthor } from "@/actions/articles";
-import { currentUser, getUserByDomain } from "@repo/backend/auth/utils";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import Subscribe from "./components/subscribe";
+import { getArticlesByAuthor } from '@/actions/articles';
+import Article from '@/app/(organization)/minime/components/articles/article';
+import NoArticlesPlaceholder from '@/app/(organization)/minime/components/articles/no-articles-placeholder';
+import AppHeader from '@/app/(organization)/minime/components/layout/app-header';
+import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
+import { currentUser } from '@repo/backend/auth/utils';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: "Writing",
+  title: 'Writing',
 };
 interface ArticlesPageProps {
   params: {

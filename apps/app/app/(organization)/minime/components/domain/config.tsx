@@ -5,7 +5,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/design-system/components/ui/table";
+} from '@repo/design-system/components/ui/table';
 
 export function Config({
   type,

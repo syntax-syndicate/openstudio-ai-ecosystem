@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import Button from "@repo/design-system/components/minime/button";
+import Editor from '@/app/(organization)/minime/components/editor';
+import NavButton from '@/app/(organization)/minime/components/layout/nav-button';
+import type { Article, Project } from '@/helper/utils';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
+import type { Icon } from '@/types/minime';
+import type { User } from '@repo/backend/auth';
+import Button from '@repo/design-system/components/minime/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/design-system/components/minime/dropdown-menu";
-import { toast } from "@repo/design-system/hooks/use-toast";
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import type { Icon } from "@/types/minime";
-import Link from "next/link";
-import { useState } from "react";
-import Editor from "@/app/(organization)/minime/components/editor";
-import NavButton from "@/app/(organization)/minime/components/layout/nav-button";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import PublishButton from "./publish-button";
-import { Article, Project } from "@/helper/utils";
-import { User } from "@repo/backend/auth";
+} from '@repo/design-system/components/minime/dropdown-menu';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { toast } from '@repo/design-system/hooks/use-toast';
+import Link from 'next/link';
+import { useState } from 'react';
+import PublishButton from './publish-button';
 
 export type Post = Article | Project;
 
 export interface EditorPageProps {
   post: Post;
-  type: "articles" | "projects";
+  type: 'articles' | 'projects';
   user: User;
 }
 
@@ -43,24 +43,24 @@ export default function EditorPage({ post, type, user }: EditorPageProps) {
     : `https://${user.user_metadata.username}.${process.env.NEXT_PUBLIC_USER_DOMAIN}/${type}/${post.slug}`;
   const actions: PostAction[] = [
     {
-      title: "Settings",
+      title: 'Settings',
       href: `${postPath}/settings`,
-      icon: "settings",
+      icon: 'settings',
     },
     {
-      title: "Analytics",
+      title: 'Analytics',
       href: `${postPath}/analytics`,
-      icon: "areaChart",
+      icon: 'areaChart',
     },
     {
-      title: "Copy link",
-      icon: "link",
+      title: 'Copy link',
+      icon: 'link',
       command: () =>
         post.published
           ? copy(postURL)
-              .then(() => toast({ title: "Copied" }))
+              .then(() => toast({ title: 'Copied' }))
               .catch((err) =>
-                toast({ title: "Something went wrong", description: err }),
+                toast({ title: 'Something went wrong', description: err })
               )
           : toast({
               title: `You must publish this ${type.slice(0, -1)} to copy URL`,
@@ -128,7 +128,7 @@ export default function EditorPage({ post, type, user }: EditorPageProps) {
             icon="arrowUpRight"
           />
         )}
-        <span className="flex h-4.5 w-max flex-row items-center gap-1 self-end rounded-md text-xs text-gray-4">
+        <span className="flex h-4.5 w-max flex-row items-center gap-1 self-end rounded-md text-gray-4 text-xs">
           {saving ? (
             <>
               <Icons.spinner className="animate-spin" size={15} /> Saving

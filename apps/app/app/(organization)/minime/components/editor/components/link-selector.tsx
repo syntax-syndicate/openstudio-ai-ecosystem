@@ -1,17 +1,17 @@
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Button } from "@repo/design-system/components/ui/button";
-import { Input } from "@repo/design-system/components/ui/input";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@repo/design-system/components/ui/button';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { Input } from '@repo/design-system/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/design-system/components/ui/popover";
-import { cn } from "@repo/design-system/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { Editor } from "@tiptap/core";
-import type { Dispatch, SetStateAction } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+} from '@repo/design-system/components/ui/popover';
+import { cn } from '@repo/design-system/lib/utils';
+import type { Editor } from '@tiptap/core';
+import type { Dispatch, SetStateAction } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
 interface LinkSelectorProps {
   editor: Editor;
@@ -37,14 +37,14 @@ export default function LinkSelector({
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(linkSchema),
-    defaultValues: { link: editor.getAttributes("link").href },
+    defaultValues: { link: editor.getAttributes('link').href },
   });
 
   const onSubmit = (data: FormData) => {
     editor
       .chain()
       .focus()
-      .extendMarkRange("link")
+      .extendMarkRange('link')
       .setLink({ href: data.link })
       .run();
     setIsOpen(false);
@@ -53,22 +53,22 @@ export default function LinkSelector({
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger
         className={cn(
-          "rounded-md p-1 size-4.5 flex justify-center items-center text-sm data-[state=open]:bg-gray-2",
-          editor.getAttributes("link").href ? "bg-gray-2" : "",
+          'flex size-4.5 items-center justify-center rounded-md p-1 text-sm data-[state=open]:bg-gray-2',
+          editor.getAttributes('link').href ? 'bg-gray-2' : ''
         )}
         onClick={() => setIsOpen(true)}
       >
         <Icons.link size={15} />
       </PopoverTrigger>
       <PopoverContent align="start" className="mt-1">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full gap-1 flex">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex w-full gap-1">
           <Input
             type="url"
             placeholder="url"
-            className={cn("h-4.5", errors?.link ? "border-danger" : "")}
-            {...register("link")}
+            className={cn('h-4.5', errors?.link ? 'border-danger' : '')}
+            {...register('link')}
           />
-          {editor.getAttributes("link").href ? (
+          {editor.getAttributes('link').href ? (
             <Button
               type="button"
               onClick={() => {

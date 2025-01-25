@@ -1,4 +1,4 @@
-import { EmptyPlaceholder } from "@repo/design-system/components/ui/empty-placeholder";
+import { EmptyPlaceholder } from '@repo/design-system/components/ui/empty-placeholder';
 
 export default function NoProjectsPlaceholder({
   description = false,

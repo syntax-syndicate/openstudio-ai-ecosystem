@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { tb } from "./client";
+import { z } from 'zod';
+import { tb } from './client';
 
 // First schema for OSA (Open Studio Analytics)
 const tinybirdOSA = z.object({
@@ -26,13 +26,13 @@ const tinybirdOSA = z.object({
   cpu_architecture: z.string(),
   bot: z.string(),
   referer: z.string(),
-  referer_url: z.string()
+  referer_url: z.string(),
 });
 
 export type TinybirdOSA = z.infer<typeof tinybirdOSA>;
 
 export const publishOSA = tb.buildIngestEndpoint({
-  datasource: "osa",
+  datasource: 'osa',
   event: tinybirdOSA,
 });
 
@@ -59,12 +59,14 @@ const tinybirdBookmarkAnalytics = z.object({
   cpu_architecture: z.string(),
   bot: z.string(),
   referer: z.string(),
-  referer_url: z.string()
+  referer_url: z.string(),
 });
 
-export type TinybirdBookmarkAnalytics = z.infer<typeof tinybirdBookmarkAnalytics>;
+export type TinybirdBookmarkAnalytics = z.infer<
+  typeof tinybirdBookmarkAnalytics
+>;
 
 export const publishBookmarkAnalytics = tb.buildIngestEndpoint({
-  datasource: "osb",
+  datasource: 'osb',
   event: tinybirdBookmarkAnalytics,
 });

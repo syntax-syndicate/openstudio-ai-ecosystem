@@ -1,6 +1,6 @@
-import { guard } from "@/lib/auth";
-import { updateUsername } from "@/actions/users";
-import { updateUserSchema } from "@/helper/validator";
+import { updateUsername } from '@/actions/users';
+import { updateUserSchema } from '@/helper/validator';
+import { guard } from '@/lib/auth';
 
 export const PATCH = guard(
   async ({ user, body }) => {
@@ -16,5 +16,5 @@ export const PATCH = guard(
     schemas: {
       bodySchema: updateUserSchema,
     },
-  },
+  }
 );

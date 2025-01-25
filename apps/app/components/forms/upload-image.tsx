@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import type { StorageFolders } from "@/lib/constants";
-import { uploadFile } from "@/lib/upload";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Button } from "@repo/design-system/components/ui/button";
-import { toast } from "@repo/design-system/components/ui/use-toast";
+import type { StorageFolders } from '@/lib/constants';
+import { uploadFile } from '@/lib/upload';
+import { Button } from '@repo/design-system/components/ui/button';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { toast } from '@repo/design-system/components/ui/use-toast';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
 
 interface Props {
   title: string;
   description: string;
   helpText: string;
   endpoint: string;
-  method?: "PATCH";
+  method?: 'PATCH';
   defaultValue?: string | null;
   name?: string;
   folder?: (typeof StorageFolders)[number];
@@ -25,7 +25,7 @@ export default function UploadImage({
   description,
   helpText,
   endpoint,
-  method = "PATCH",
+  method = 'PATCH',
   defaultValue = null,
   folder,
   name,
@@ -46,17 +46,17 @@ export default function UploadImage({
     if (fileRes.error) {
       setSaving(false);
       return toast({
-        title: "Something went wrong.",
+        title: 'Something went wrong.',
         description: fileRes.error,
-        variant: "destructive",
+        variant: 'destructive',
       });
     }
-    inputRef.current.value = "";
+    inputRef.current.value = '';
 
     const res = await fetch(`/api/${endpoint}`, {
       method,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         [name as string]: fileRes.url ?? null,
@@ -66,21 +66,21 @@ export default function UploadImage({
 
     if (!res?.ok) {
       return toast({
-        title: "Something went wrong.",
+        title: 'Something went wrong.',
       });
     }
     router.refresh();
 
     return toast({
-      title: "Your image has been uploaded",
+      title: 'Your image has been uploaded',
     });
   }
   return (
     <div className="overflow-hidden rounded-md border border-gray-2">
-      <div className="flex flex-col justify-between  gap-3 p-4 ">
+      <div className="flex flex-col justify-between gap-3 p-4 ">
         <div className="flex flex-col gap-1">
           <h1>{title}</h1>
-          <p className="text-sm text-gray-4">{description}</p>
+          <p className="text-gray-4 text-sm">{description}</p>
         </div>
 
         <div className="flex flex-row gap-2">
@@ -125,13 +125,13 @@ export default function UploadImage({
 
                 if (!res?.ok) {
                   return toast({
-                    title: "Something went wrong.",
+                    title: 'Something went wrong.',
                   });
                 }
                 router.refresh();
 
                 return toast({
-                  title: "Your image has been removed",
+                  title: 'Your image has been removed',
                 });
               }}
             >
@@ -161,8 +161,8 @@ export default function UploadImage({
           />
         )}
       </div>
-      <footer className="flex h-auto flex-row items-center justify-between border-t border-gray-2 bg-gray-3 px-4 py-2">
-        <div className="py-1 text-sm text-gray-4">{helpText}</div>
+      <footer className="flex h-auto flex-row items-center justify-between border-gray-2 border-t bg-gray-3 px-4 py-2">
+        <div className="py-1 text-gray-4 text-sm">{helpText}</div>
       </footer>
     </div>
   );

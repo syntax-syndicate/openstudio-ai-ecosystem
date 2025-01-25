@@ -1,13 +1,13 @@
-import { Icons } from "@repo/design-system/components/ui/icons";
+import { Icons } from '@repo/design-system/components/ui/icons';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/design-system/components/ui/popover";
-import { cn } from "@repo/design-system/lib/utils";
-import type { Editor } from "@tiptap/core";
-import type { Dispatch, SetStateAction } from "react";
-import type { BubbleMenuItem } from "./bubble-menu";
+} from '@repo/design-system/components/ui/popover';
+import { cn } from '@repo/design-system/lib/utils';
+import type { Editor } from '@tiptap/core';
+import type { Dispatch, SetStateAction } from 'react';
+import type { BubbleMenuItem } from './bubble-menu';
 
 interface LinkSelectorProps {
   editor: Editor;
@@ -22,62 +22,62 @@ export default function NodeSelector({
 }: LinkSelectorProps) {
   const items: BubbleMenuItem[] = [
     {
-      name: "Text",
+      name: 'Text',
       icon: Icons.textIcon,
       command: () =>
-        editor.chain().focus().toggleNode("paragraph", "paragraph").run(),
+        editor.chain().focus().toggleNode('paragraph', 'paragraph').run(),
       isActive:
-        editor.isActive("paragraph") &&
-        !editor.isActive("bulletList") &&
-        !editor.isActive("orderedList"),
+        editor.isActive('paragraph') &&
+        !editor.isActive('bulletList') &&
+        !editor.isActive('orderedList'),
     },
     {
-      name: "Heading 1",
+      name: 'Heading 1',
       icon: Icons.heading1,
       command: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-      isActive: editor.isActive("heading", { level: 1 }),
+      isActive: editor.isActive('heading', { level: 1 }),
     },
     {
-      name: "Heading 2",
+      name: 'Heading 2',
       icon: Icons.heading2,
       command: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-      isActive: editor.isActive("heading", { level: 2 }),
+      isActive: editor.isActive('heading', { level: 2 }),
     },
     {
-      name: "Heading 3",
+      name: 'Heading 3',
       icon: Icons.heading3,
       command: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
-      isActive: editor.isActive("heading", { level: 3 }),
+      isActive: editor.isActive('heading', { level: 3 }),
     },
     {
-      name: "Bullet List",
+      name: 'Bullet List',
       icon: Icons.listOrdered,
       command: () => editor.chain().focus().toggleBulletList().run(),
-      isActive: editor.isActive("bulletList"),
+      isActive: editor.isActive('bulletList'),
     },
     {
-      name: "Numbered List",
+      name: 'Numbered List',
       icon: Icons.listOrdered,
       command: () => editor.chain().focus().toggleOrderedList().run(),
-      isActive: editor.isActive("orderedList"),
+      isActive: editor.isActive('orderedList'),
     },
     {
-      name: "Quote",
+      name: 'Quote',
       icon: Icons.textQuote,
       command: () =>
         editor
           .chain()
           .focus()
-          .toggleNode("paragraph", "paragraph")
+          .toggleNode('paragraph', 'paragraph')
           .toggleBlockquote()
           .run(),
-      isActive: editor.isActive("blockquote"),
+      isActive: editor.isActive('blockquote'),
     },
     {
-      name: "Code Block",
+      name: 'Code Block',
       icon: Icons.code,
       command: () => editor.chain().focus().toggleCodeBlock().run(),
-      isActive: editor.isActive("codeBlock"),
+      isActive: editor.isActive('codeBlock'),
     },
   ];
 
@@ -100,8 +100,8 @@ export default function NodeSelector({
           return (
             <button
               className={cn(
-                "flex w-full flex-row items-center gap-2 rounded-md px-2 py-1 text-xs transition-colors hover:bg-gray-2",
-                item.isActive ? "bg-gray-2" : "",
+                'flex w-full flex-row items-center gap-2 rounded-md px-2 py-1 text-xs transition-colors hover:bg-gray-2',
+                item.isActive ? 'bg-gray-2' : ''
               )}
               key={i}
               onClick={() => {

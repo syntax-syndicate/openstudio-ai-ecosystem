@@ -1,13 +1,13 @@
-import DeleteForm from "@/components/forms/delete-form";
-import ExportButton from "@/components/forms/export-button";
-import Form from "@/components/forms/form";
-import UploadImage from "@/components/forms/upload-image";
-import AppShell from "@/app/(organization)/minime/components/layout/app-shell";
-import AppHeader from "@/app/(organization)/minime/components/layout/app-header";
-import NavButton from "@/app/(organization)/minime/components/layout/nav-button";
-import { getArticleById } from "@/actions/articles";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { getArticleById } from '@/actions/articles';
+import AppHeader from '@/app/(organization)/minime/components/layout/app-header';
+import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
+import NavButton from '@/app/(organization)/minime/components/layout/nav-button';
+import DeleteForm from '@/components/forms/delete-form';
+import ExportButton from '@/components/forms/export-button';
+import Form from '@/components/forms/form';
+import UploadImage from '@/components/forms/upload-image';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 interface ArticleSettingsProps {
   params: {
@@ -16,7 +16,7 @@ interface ArticleSettingsProps {
 }
 
 export const metadata: Metadata = {
-  title: "Settings",
+  title: 'Settings',
 };
 
 export default async function ArticleSettings({
@@ -30,7 +30,7 @@ export default async function ArticleSettings({
   const endpoint = `minime/articles/${article[0].id}`;
   return (
     <AppShell>
-      <AppHeader className="justify-start text-lg font-medium">
+      <AppHeader className="justify-start font-medium text-lg">
         <NavButton
           href={`/${endpoint}`}
           icon="arrowLeft"
@@ -46,8 +46,8 @@ export default async function ArticleSettings({
           description="This is the URL slug for this article."
           endpoint={endpoint}
           inputData={{
-            name: "slug",
-            placeholder: "my-article",
+            name: 'slug',
+            placeholder: 'my-article',
             defaultValue: article[0].slug,
           }}
         />
@@ -55,9 +55,9 @@ export default async function ArticleSettings({
           title="Publish time"
           endpoint={endpoint}
           inputData={{
-            name: "publishedAt",
-            type: "date",
-            "aria-label": "Article published time",
+            name: 'publishedAt',
+            type: 'date',
+            'aria-label': 'Article published time',
             defaultValue: article[0].publishedAt.toISOString().slice(0, 10),
           }}
         />
@@ -67,9 +67,9 @@ export default async function ArticleSettings({
           helpText="Please use 60 characters at maximum."
           endpoint={endpoint}
           inputData={{
-            name: "seoTitle",
-            placeholder: "My new article",
-            defaultValue: article[0].seoTitle || "",
+            name: 'seoTitle',
+            placeholder: 'My new article',
+            defaultValue: article[0].seoTitle || '',
             maxLength: 60,
           }}
           required={false}
@@ -81,9 +81,9 @@ export default async function ArticleSettings({
           helpText="Please use 160 characters at maximum."
           endpoint={endpoint}
           textareaData={{
-            name: "seoDescription",
-            placeholder: "Short description",
-            defaultValue: article[0].seoDescription || "",
+            name: 'seoDescription',
+            placeholder: 'Short description',
+            defaultValue: article[0].seoDescription || '',
             maxLength: 160,
           }}
           required={false}
@@ -102,13 +102,17 @@ export default async function ArticleSettings({
           description="Set the canonical URL here if your article was first published elsewhere."
           endpoint={endpoint}
           inputData={{
-            name: "canonicalURL",
-            placeholder: "https://example.com/post-title",
-            defaultValue: article[0].canonicalURL || "",
+            name: 'canonicalURL',
+            placeholder: 'https://example.com/post-title',
+            defaultValue: article[0].canonicalURL || '',
           }}
           required={false}
         />
-        <Form title="Export" endpoint={`articles/${article[0].id}/export`} asChild>
+        <Form
+          title="Export"
+          endpoint={`articles/${article[0].id}/export`}
+          asChild
+        >
           <ExportButton
             text="Export article"
             icon="download"

@@ -1,13 +1,13 @@
-import { track } from "@/lib/tinybird";
-import type { NextRequest } from "next/server";
-import * as z from "zod";
+import { track } from '@/lib/tinybird';
+import type { NextRequest } from 'next/server';
+import * as z from 'zod';
 
 // export const runtime = "edge";
 
 const eventSchema = z.object({
-  page: z.string().min(1).startsWith("/"),
+  page: z.string().min(1).startsWith('/'),
   slug: z.string().min(1).optional(),
-  type: z.enum(["articles", "projects"]).optional(),
+  type: z.enum(['articles', 'projects']).optional(),
   domain: z.string().min(1).optional(),
   username: z.string().min(1).optional(),
 });

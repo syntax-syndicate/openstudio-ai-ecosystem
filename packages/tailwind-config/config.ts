@@ -42,20 +42,20 @@ export const config: Config = {
         gray: {
           1: {
             DEFAULT: '#838383',
-            dark: '#7b7b7b'
+            dark: '#7b7b7b',
           },
           2: {
             DEFAULT: '#e0e0e0',
-            dark: '#313131'
+            dark: '#313131',
           },
           3: {
             DEFAULT: '#f0f0f0',
-            dark: '#222222'
+            dark: '#222222',
           },
           4: {
             DEFAULT: '#646464',
-            dark: '#8e8e8e'
-          }
+            dark: '#8e8e8e',
+          },
         },
         border: 'hsl(var(--border) / <alpha-value>)',
         input: 'hsl(var(--input) / <alpha-value>)',
@@ -114,15 +114,15 @@ export const config: Config = {
         },
       },
       fontSize: {
-        xs: "0.8rem",
-        sm: "0.875rem",
-        base: "1rem",
-        lg: "1.115rem",
-        xl: "1.25rem",
-        "2xl": "1.563rem",
-        "3xl": "1.953rem",
-        "4xl": "2.441rem",
-        "5xl": "3.052rem",
+        xs: '0.8rem',
+        sm: '0.875rem',
+        base: '1rem',
+        lg: '1.115rem',
+        xl: '1.25rem',
+        '2xl': '1.563rem',
+        '3xl': '1.953rem',
+        '4xl': '2.441rem',
+        '5xl': '3.052rem',
       },
       fontWeight: {
         normal: '400',

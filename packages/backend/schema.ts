@@ -1,3 +1,4 @@
+import { init } from '@paralleldrive/cuid2';
 import { sql } from 'drizzle-orm';
 import {
   boolean,
@@ -23,7 +24,6 @@ import {
   type ToolKey,
   providers,
 } from './types';
-import { init } from '@paralleldrive/cuid2';
 
 const authSchema = pgSchema('auth');
 
@@ -232,8 +232,7 @@ export const feedbacks = pgTable('feedbacks', {
   organizationId: varchar('organization_id')
     .notNull()
     .references(() => organization.id),
-  userId: varchar('user_id')
-    .references(() => Users.id),
+  userId: varchar('user_id').references(() => Users.id),
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
@@ -263,7 +262,9 @@ export const articles = pgTable(
     title: varchar('title').notNull(),
     content: text('content'),
     published: boolean('published').default(false),
-    slug: varchar('slug', {length: 64}).$defaultFn(() => createId()).notNull(),
+    slug: varchar('slug', { length: 64 })
+      .$defaultFn(() => createId())
+      .notNull(),
     views: integer('views').default(0),
     lastNewsletterSentAt: timestamp('last_newsletter_sent_at'),
     seoTitle: varchar('seo_title'),

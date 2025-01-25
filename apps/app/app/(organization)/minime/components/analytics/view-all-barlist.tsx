@@ -1,14 +1,17 @@
-import { capitalize } from "@repo/design-system/lib/utils";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Button } from "@repo/design-system/components/ui/button";
+import {
+  type Bar,
+  BarListItem,
+} from '@/app/(organization)/minime/components/analytics/bar-list';
+import { Button } from '@repo/design-system/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/design-system/components/ui/dialog";
-import { type Bar, BarListItem } from "@/app/(organization)/minime/components/analytics/bar-list";
+} from '@repo/design-system/components/ui/dialog';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { capitalize } from '@repo/design-system/lib/utils';
 
 export default function ViewAllBarlist({
   data,
@@ -20,7 +23,7 @@ export default function ViewAllBarlist({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="absolute items-center bg-gradient-to-t outline-0 from-gray-3 to-transparent rounded-b-md bottom-0 z-30 flex py-1 w-full justify-center">
+        <div className="absolute bottom-0 z-30 flex w-full items-center justify-center rounded-b-md bg-gradient-to-t from-gray-3 to-transparent py-1 outline-0">
           <Button
             className="rounded-full"
             size="sm"
@@ -35,7 +38,7 @@ export default function ViewAllBarlist({
         <DialogHeader>
           <DialogTitle>{capitalize(title)}</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-2  max-h-[600px] overflow-y-auto no-scrollbar">
+        <div className="no-scrollbar flex max-h-[600px] flex-col gap-2 overflow-y-auto">
           {data?.map((item) => (
             <BarListItem
               className="hover:bg-gray-2"

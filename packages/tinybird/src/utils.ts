@@ -1,61 +1,61 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const analyticsEndpoint = {
   analytics: {
-    primary: "osap",
-    timeseries: "osat",
-    total: "osav",
+    primary: 'osap',
+    timeseries: 'osat',
+    total: 'osav',
   },
   bookmarks: {
-    primary: "osbp",
-    timeseries: "osbt",
-    total: "osbc",
+    primary: 'osbp',
+    timeseries: 'osbt',
+    total: 'osbc',
   },
 } as const;
 
 export const analyticsSources = {
-  analytics: "osa",
-  bookmarks: "osb",
+  analytics: 'osa',
+  bookmarks: 'osb',
 } as const;
 
 export const INTERVALS = [
   {
-    display: "Last hour",
-    value: "1h",
+    display: 'Last hour',
+    value: '1h',
   },
   {
-    display: "Last 24 hours",
-    value: "24h",
+    display: 'Last 24 hours',
+    value: '24h',
   },
   {
-    display: "Last 7 days",
-    value: "7d",
+    display: 'Last 7 days',
+    value: '7d',
   },
   {
-    display: "Last 30 days",
-    value: "30d",
+    display: 'Last 30 days',
+    value: '30d',
   },
   {
-    display: "Last 3 months",
-    value: "90d",
+    display: 'Last 3 months',
+    value: '90d',
   },
   {
-    display: "All Time",
-    value: "all",
+    display: 'All Time',
+    value: 'all',
   },
 ];
 
-export type IntervalProps = "1h" | "24h" | "7d" | "30d" | "90d" | "all";
+export type IntervalProps = '1h' | '24h' | '7d' | '30d' | '90d' | 'all';
 export const analyticsProperties = [
-  "total",
-  "timeseries",
-  "page",
-  "country",
-  "city",
-  "device",
-  "os",
-  "browser",
-  "referer",
+  'total',
+  'timeseries',
+  'page',
+  'country',
+  'city',
+  'device',
+  'os',
+  'browser',
+  'referer',
 ] as const;
 
 export type PropertyProps = (typeof analyticsProperties)[number];
@@ -63,35 +63,35 @@ export type PropertyProps = (typeof analyticsProperties)[number];
 export const ZodAnalyticsProperty = z.enum([...analyticsProperties]);
 
 export const intervalData = {
-  "1h": {
+  '1h': {
     startDate: new Date(Date.now() - 3600000),
-    granularity: "minute",
+    granularity: 'minute',
   },
-  "24h": {
+  '24h': {
     startDate: new Date(Date.now() - 86400000),
-    granularity: "hour",
+    granularity: 'hour',
   },
-  "7d": {
+  '7d': {
     startDate: new Date(Date.now() - 604800000),
-    granularity: "day",
+    granularity: 'day',
   },
-  "30d": {
+  '30d': {
     startDate: new Date(Date.now() - 2592000000),
-    granularity: "day",
+    granularity: 'day',
   },
-  "90d": {
+  '90d': {
     startDate: new Date(Date.now() - 7776000000),
-    granularity: "month",
+    granularity: 'month',
   },
   all: {
-    startDate: new Date("2025-01-01"),
-    granularity: "month",
+    startDate: new Date('2025-01-01'),
+    granularity: 'month',
   },
 };
 
 export const IntervalZod = z
   .enum(Object.keys(intervalData) as [keyof typeof intervalData])
-  .default("7d")
+  .default('7d')
   .optional();
 
 export const analyticsSearchParamsSchema = z.object({
@@ -100,7 +100,7 @@ export const analyticsSearchParamsSchema = z.object({
 
 export async function getAnalytics({
   page,
-  interval = "7d",
+  interval = '7d',
   property,
   userId,
 }: {
@@ -110,37 +110,37 @@ export async function getAnalytics({
   userId: string;
 }) {
   try {
-    const endpoint = getEndpoint(property, "analytics");
+    const endpoint = getEndpoint(property, 'analytics');
     const url = new URL(
-      `${process.env.TINYBIRD_API_URL}/v0/pipes/${endpoint}.json`,
+      `${process.env.TINYBIRD_API_URL}/v0/pipes/${endpoint}.json`
     );
 
-    url.searchParams.append("type", property);
+    url.searchParams.append('type', property);
     if (page) {
-      url.searchParams.append("page", page);
+      url.searchParams.append('page', page);
     }
-    url.searchParams.append("userId", userId);
+    url.searchParams.append('userId', userId);
 
     if (interval) {
       url.searchParams.append(
-        "start",
+        'start',
         intervalData[interval].startDate
           .toISOString()
-          .replace("T", " ")
-          .replace("Z", "")
-          .slice(0, 19),
+          .replace('T', ' ')
+          .replace('Z', '')
+          .slice(0, 19)
       );
       url.searchParams.append(
-        "end",
+        'end',
         new Date(Date.now())
           .toISOString()
-          .replace("T", " ")
-          .replace("Z", "")
-          .slice(0, 19),
+          .replace('T', ' ')
+          .replace('Z', '')
+          .slice(0, 19)
       );
       url.searchParams.append(
-        "granularity",
-        intervalData[interval].granularity,
+        'granularity',
+        intervalData[interval].granularity
       );
     }
     const res = await fetch(url.toString(), {
@@ -150,7 +150,7 @@ export async function getAnalytics({
     });
 
     const body = await res.json();
-    console.log("body", body);
+    console.log('body', body);
     return body?.data;
   } catch (err) {
     return new Response(JSON.stringify(err), { status: 500 });
@@ -160,37 +160,37 @@ export async function getAnalytics({
 export async function getBookmarkAnalytics({
   id,
   property,
-  interval = "7d",
+  interval = '7d',
 }: {
   id: string;
   property: PropertyProps;
   interval?: IntervalProps;
 }) {
-  const endpoint = getEndpoint(property, "bookmarks");
+  const endpoint = getEndpoint(property, 'bookmarks');
 
   const url = new URL(
-    `${process.env.TINYBIRD_API_URL}/v0/pipes/${endpoint}.json`,
+    `${process.env.TINYBIRD_API_URL}/v0/pipes/${endpoint}.json`
   );
-  url.searchParams.append("id", id);
-  url.searchParams.append("type", property);
+  url.searchParams.append('id', id);
+  url.searchParams.append('type', property);
   if (interval) {
     url.searchParams.append(
-      "start",
+      'start',
       intervalData[interval].startDate
         .toISOString()
-        .replace("T", " ")
-        .replace("Z", "")
-        .slice(0, 19),
+        .replace('T', ' ')
+        .replace('Z', '')
+        .slice(0, 19)
     );
     url.searchParams.append(
-      "end",
+      'end',
       new Date(Date.now())
         .toISOString()
-        .replace("T", " ")
-        .replace("Z", "")
-        .slice(0, 19),
+        .replace('T', ' ')
+        .replace('Z', '')
+        .slice(0, 19)
     );
-    url.searchParams.append("granularity", intervalData[interval].granularity);
+    url.searchParams.append('granularity', intervalData[interval].granularity);
   }
 
   const res = await fetch(url.toString(), {
@@ -206,9 +206,9 @@ export async function getBookmarkAnalytics({
 
 export function getEndpoint(
   property: PropertyProps,
-  source: keyof typeof analyticsEndpoint,
+  source: keyof typeof analyticsEndpoint
 ) {
-  if (property === "timeseries" || property === "total") {
+  if (property === 'timeseries' || property === 'total') {
     return analyticsEndpoint[source][property];
   }
 

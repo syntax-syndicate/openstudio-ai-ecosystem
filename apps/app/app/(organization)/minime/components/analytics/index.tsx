@@ -1,16 +1,12 @@
-"use client";
+'use client';
 
-import type { IntervalProps, intervalData } from "@repo/tinybird/src/utils";
-import { useSearchParams } from "next/navigation";
-import { createContext } from "react";
-import Devices from "@/app/(organization)/minime/components/analytics/devices";
-import StatsHeader from "@/app/(organization)/minime/components/analytics/header";
-import Locations from "@/app/(organization)/minime/components/analytics/locations";
-import Referrers from "@/app/(organization)/minime/components/analytics/referer";
-import Timeseries from "@/app/(organization)/minime/components/analytics/timeseries";
-import Pages from "@/app/(organization)/minime/components/analytics/top-pages";
+import StatsHeader from '@/app/(organization)/minime/components/analytics/header';
+import Timeseries from '@/app/(organization)/minime/components/analytics/timeseries';
+import type { IntervalProps, intervalData } from '@repo/tinybird/src/utils';
+import { useSearchParams } from 'next/navigation';
+import { createContext } from 'react';
 
-export type IndexProps = "visitors" | "views" | "clicks";
+export type IndexProps = 'visitors' | 'views' | 'clicks';
 export type Interval = keyof typeof intervalData;
 
 export const AnalyticsContext = createContext<{
@@ -18,16 +14,16 @@ export const AnalyticsContext = createContext<{
   interval: Interval;
   index?: IndexProps;
 }>({
-  basePath: "",
-  interval: "7d",
-  index: "visitors",
+  basePath: '',
+  interval: '7d',
+  index: 'visitors',
 });
 
 export default function Analytics({
   basePath,
   pages,
   title,
-  index = "visitors",
+  index = 'visitors',
   headerClassname,
 }: {
   basePath: string;
@@ -37,7 +33,7 @@ export default function Analytics({
   headerClassname?: string;
 }) {
   const searchParams = useSearchParams();
-  const interval = (searchParams?.get("interval") as IntervalProps) || "7d";
+  const interval = (searchParams?.get('interval') as IntervalProps) || '7d';
 
   return (
     <AnalyticsContext.Provider

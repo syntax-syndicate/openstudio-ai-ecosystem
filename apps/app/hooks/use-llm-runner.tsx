@@ -51,7 +51,6 @@ export const useLLMRunner = () => {
     const { sessionId, messageId, input, context, image, assistant } = config;
     const newMessageId = messageId || generateShortUUID();
 
-
     // editor?.commands.clearContent();
     // setIsGenerating(true);
     // setCurrentMessage({
@@ -70,7 +69,6 @@ export const useLLMRunner = () => {
     //   isLoading: true,
     //   errorMessage: null,
     // });
-
 
     const modelKey = assistant.baseModel;
     const session = await getSessionById(sessionId);

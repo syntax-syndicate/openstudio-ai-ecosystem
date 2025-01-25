@@ -1,7 +1,7 @@
-import Link from "next/link";
-import type { IndexProps } from "@/app/(organization)/minime/components/analytics";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Badge } from "@repo/design-system/components/ui/badge";
+import type { IndexProps } from '@/app/(organization)/minime/components/analytics';
+import { Badge } from '@repo/design-system/components/ui/badge';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import Link from 'next/link';
 
 export function AnalyticsBadge({
   href,
@@ -15,10 +15,10 @@ export function AnalyticsBadge({
   published?: boolean;
 }) {
   if (published || value > 0) {
-    const Icon = Icons[index === "clicks" ? "mousePointerClick" : "bar"];
+    const Icon = Icons[index === 'clicks' ? 'mousePointerClick' : 'bar'];
     return (
       <Link href={href}>
-        <Badge className="h-4 min-w-max flex gap-1 hover:bg-gray-2 px-1 font-normal">
+        <Badge className="flex h-4 min-w-max gap-1 px-1 font-normal hover:bg-gray-2">
           <Icon size={14} /> <p>{`${value} ${index}`}</p>
         </Badge>
       </Link>

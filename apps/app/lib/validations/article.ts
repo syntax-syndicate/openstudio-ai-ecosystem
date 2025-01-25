@@ -1,4 +1,4 @@
-import * as z from "zod";
+import * as z from 'zod';
 
 export const articleCreateSchema = z.object({
   title: z.string().min(1),

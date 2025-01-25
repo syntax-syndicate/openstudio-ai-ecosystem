@@ -1,12 +1,12 @@
-import { guard } from "@/lib/auth";
-import { validDomainRegex } from "@/helper/utils";
+import { validDomainRegex } from '@/helper/utils';
+import { guard } from '@/lib/auth';
 import {
   getDomainConfig,
   getDomainResponse,
   verifyDomain,
-} from "@/lib/domains";
-import type { DomainStatus } from "@/types/minime";
-import * as z from "zod";
+} from '@/lib/domains';
+import type { DomainStatus } from '@/types/minime';
+import * as z from 'zod';
 
 const routeContextSchema = z.object({
   params: z.object({
@@ -27,21 +27,21 @@ export const GET = guard(
         getDomainResponse(domain),
         getDomainConfig(domain),
       ]);
-      let status: DomainStatus = "Valid Configuration";
-      if (domainRes?.error?.code === "not_found") {
-        status = "Domain not found";
+      let status: DomainStatus = 'Valid Configuration';
+      if (domainRes?.error?.code === 'not_found') {
+        status = 'Domain not found';
       } else if (domainRes.error) {
-        status = "Unknown Error";
+        status = 'Unknown Error';
       } else if (!domainRes.verified) {
-        status = "Pending Verification";
+        status = 'Pending Verification';
         const res = await verifyDomain(domain);
         if (res?.verified) {
-          status = "Valid Configuration";
+          status = 'Valid Configuration';
         }
       } else if (config.misconfigured) {
-        status = "Invalid Configuration";
+        status = 'Invalid Configuration';
       } else {
-        status = "Valid Configuration";
+        status = 'Valid Configuration';
       }
       domainRes.projectId = undefined;
 
@@ -51,9 +51,9 @@ export const GET = guard(
     }
   },
   {
-    requiredPlan: "Pro",
+    requiredPlan: 'Pro',
     schemas: {
       contextSchema: routeContextSchema,
     },
-  },
+  }
 );

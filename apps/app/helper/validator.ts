@@ -74,14 +74,13 @@ export const dataValidator = z.object({
   customAssistants: z.array(customAssistantSchema).optional(),
 });
 
-
 export const subscribeSchema = z.object({
   name: z.string().min(1).max(48),
   email: z.string().email(),
 });
 
 export const validUsernameRegex = new RegExp(/^[a-zA-Z0-9]+$/);
-const notAllowedUsernames = ["app", "go", "www"];
+const notAllowedUsernames = ['app', 'go', 'www'];
 
 export const updateUserSchema = z
   .object({
@@ -89,12 +88,12 @@ export const updateUserSchema = z
     username: z
       .string()
       .toLowerCase()
-      .regex(validUsernameRegex, "You can only use letters and numbers")
+      .regex(validUsernameRegex, 'You can only use letters and numbers')
       .min(1)
       .max(36)
       .refine(
         (value) => !notAllowedUsernames.includes(value),
-        "Username is not available",
+        'Username is not available'
       ),
     title: z.string().max(32).nullable(),
     about: z.string().max(400).nullable(),

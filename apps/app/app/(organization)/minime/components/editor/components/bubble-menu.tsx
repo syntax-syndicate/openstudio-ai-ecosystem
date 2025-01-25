@@ -1,11 +1,11 @@
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Button } from "@repo/design-system/components/ui/button";
-import { cn } from "@repo/design-system/lib/utils";
-import type { Editor } from "@tiptap/core";
-import { BubbleMenu as TipTapBubbleMenu } from "@tiptap/react";
-import { useState } from "react";
-import LinkSelector from "./link-selector";
-import NodeSelector from "./node-selector";
+import { Button } from '@repo/design-system/components/ui/button';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { cn } from '@repo/design-system/lib/utils';
+import type { Editor } from '@tiptap/core';
+import { BubbleMenu as TipTapBubbleMenu } from '@tiptap/react';
+import { useState } from 'react';
+import LinkSelector from './link-selector';
+import NodeSelector from './node-selector';
 
 export interface BubbleMenuItem {
   name: string;
@@ -17,26 +17,26 @@ export interface BubbleMenuItem {
 export default function BubbleMenu({ editor }: { editor: Editor }) {
   const items: BubbleMenuItem[] = [
     {
-      name: "bold",
-      isActive: editor.isActive("bold"),
+      name: 'bold',
+      isActive: editor.isActive('bold'),
       command: () => editor.chain().focus().toggleBold().run(),
       icon: Icons.bold,
     },
     {
-      name: "italic",
-      isActive: editor.isActive("italic"),
+      name: 'italic',
+      isActive: editor.isActive('italic'),
       command: () => editor.chain().focus().toggleItalic().run(),
       icon: Icons.italic,
     },
     {
-      name: "strike",
-      isActive: editor.isActive("strike"),
+      name: 'strike',
+      isActive: editor.isActive('strike'),
       command: () => editor.chain().focus().toggleStrike().run(),
       icon: Icons.strike,
     },
     {
-      name: "code",
-      isActive: editor.isActive("code"),
+      name: 'code',
+      isActive: editor.isActive('code'),
       command: () => editor.chain().focus().toggleCode().run(),
       icon: Icons.code,
     },
@@ -57,7 +57,7 @@ export default function BubbleMenu({ editor }: { editor: Editor }) {
         },
       }}
       shouldShow={({ editor }) => {
-        if (editor.isActive("image")) {
+        if (editor.isActive('image')) {
           return false;
         }
         return editor.view.state.selection.content().size > 0;
@@ -84,7 +84,7 @@ export default function BubbleMenu({ editor }: { editor: Editor }) {
             variant="ghost"
             size="icon"
             onClick={item.command}
-            className={cn(item.isActive ? "bg-gray-2 text-secondary" : "")}
+            className={cn(item.isActive ? 'bg-gray-2 text-secondary' : '')}
             key={i}
           >
             <Icon size={15} />

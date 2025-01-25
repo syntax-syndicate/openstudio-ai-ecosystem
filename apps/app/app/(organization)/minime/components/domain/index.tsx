@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { validDomainRegex } from "@/helper/utils";
-import { cn, getSubdomain } from "@repo/design-system/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useMemo, useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Button } from "@repo/design-system/components/ui/button";
-import { Input } from "@repo/design-system/components/ui/input";
-import { toast } from "@repo/design-system/components/ui/use-toast";
-import { Config } from "./config";
-import useDomainStatus from "./use-domain-status";
+import { validDomainRegex } from '@/helper/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@repo/design-system/components/ui/button';
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { Input } from '@repo/design-system/components/ui/input';
+import { toast } from '@repo/design-system/components/ui/use-toast';
+import { cn, getSubdomain } from '@repo/design-system/lib/utils';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { Config } from './config';
+import useDomainStatus from './use-domain-status';
 
 const domainFormSchema = z.object({
   domain: z.string().optional().nullable(),
@@ -42,7 +42,7 @@ export default function CustomDomain({
     mutate,
   } = useDomainStatus(currentDomain);
 
-  const watchDomain = watch("domain");
+  const watchDomain = watch('domain');
   const disabledButton = useMemo(() => {
     return (
       currentDomain === watchDomain ||
@@ -56,8 +56,8 @@ export default function CustomDomain({
   const onSubmit = async (data: FormData) => {
     setError(null);
     startTransition(async () => {
-      const res = await fetch("/api/user/domain", {
-        method: "POST",
+      const res = await fetch('/api/user/domain', {
+        method: 'POST',
         body: JSON.stringify({
           domain: data.domain?.length ? data.domain : null,
         }),
@@ -71,46 +71,46 @@ export default function CustomDomain({
           setError(error);
         } else {
           toast({
-            title: "Something went wrong.",
+            title: 'Something went wrong.',
             description: error,
-            variant: "destructive",
+            variant: 'destructive',
           });
         }
       }
     });
   };
   const unconfigured =
-    (status === "Invalid Configuration" || status === "Pending Verification") &&
+    (status === 'Invalid Configuration' || status === 'Pending Verification') &&
     !error &&
     currentDomain;
   const subdomain = getSubdomain(domainRes?.name, domainRes?.apexName);
   const txtVerification =
-    status === "Pending Verification" &&
-    domainRes.verification.find((x: any) => x.type === "TXT");
+    status === 'Pending Verification' &&
+    domainRes.verification.find((x: any) => x.type === 'TXT');
 
   return (
     <form
-      className="overflow-hidden rounded-md relative border border-gray-2"
+      className="relative overflow-hidden rounded-md border border-gray-2"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-1 p-4">
         <div className="flex flex-col gap-1">
           <h1>Custom domain</h1>
-          <p className="text-sm text-gray-4">
+          <p className="text-gray-4 text-sm">
             The custom domain for your page.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 mt-2">
+        <div className="mt-2 flex items-center gap-2">
           <Input
             type="text"
-            className={cn("w-[250px] max-[250px]:w-full")}
+            className={cn('w-[250px] max-[250px]:w-full')}
             autoComplete="off"
             placeholder="yourdomain.com"
-            {...register("domain")}
+            {...register('domain')}
           />
-          {(status === "Valid Configuration" || pending || isLoading) && (
-            <span className="w-max block bg-gray-3 p-1 rounded-full">
+          {(status === 'Valid Configuration' || pending || isLoading) && (
+            <span className="block w-max rounded-full bg-gray-3 p-1">
               {pending || isLoading ? (
                 <Icons.spinner size={18} className="animate-spin text-gray-1" />
               ) : (
@@ -120,7 +120,7 @@ export default function CustomDomain({
           )}
           {unconfigured && (
             <span
-              className="block bg-gray-3  text-gray-1 p-1 rounded-full cursor-pointer"
+              className="block cursor-pointer rounded-full bg-gray-3 p-1 text-gray-1"
               onClick={mutate}
             >
               {pending ? (
@@ -128,7 +128,7 @@ export default function CustomDomain({
               ) : (
                 <Icons.refreshCw
                   size={18}
-                  className={pending ? "animate-spin" : ""}
+                  className={pending ? 'animate-spin' : ''}
                 />
               )}
             </span>
@@ -138,11 +138,11 @@ export default function CustomDomain({
 
       {unconfigured && (
         <div className="p-4 pt-0">
-          <p className="font-bold text-sm flex items-center gap-1 text-danger">
-            {pending && <Icons.spinner size={18} className="animate-spin" />}{" "}
+          <p className="flex items-center gap-1 font-bold text-danger text-sm">
+            {pending && <Icons.spinner size={18} className="animate-spin" />}{' '}
             {status}
           </p>
-          <p className="text-xs text-gray-4">
+          <p className="text-gray-4 text-xs">
             Your domain requires configuration. Please update your DNS records
             with the information below and wait up to 24 hours for the changes
             to propagate.
@@ -152,23 +152,23 @@ export default function CustomDomain({
               type={txtVerification.type}
               name={txtVerification.domain.slice(
                 0,
-                txtVerification.domain.length - domainRes.apexName.length - 1,
+                txtVerification.domain.length - domainRes.apexName.length - 1
               )}
               value={txtVerification.value}
             />
           ) : (
             <Config
-              type={subdomain ? "CNAME" : "A"}
-              name={subdomain ? subdomain : "@"}
-              value={subdomain ? "cname.openstudio.co.in." : "76.76.21.21"}
+              type={subdomain ? 'CNAME' : 'A'}
+              name={subdomain ? subdomain : '@'}
+              value={subdomain ? 'cname.openstudio.co.in.' : '76.76.21.21'}
             />
           )}
         </div>
       )}
 
-      <footer className="flex h-auto flex-row items-center justify-between border-t border-gray-2 bg-gray-3 px-4 py-2">
-        <div className={cn("text-sm text-gray-4", error ? "text-danger" : "")}>
-          {status === "Valid Configuration" && "Your domain is approved."}
+      <footer className="flex h-auto flex-row items-center justify-between border-gray-2 border-t bg-gray-3 px-4 py-2">
+        <div className={cn('text-gray-4 text-sm', error ? 'text-danger' : '')}>
+          {status === 'Valid Configuration' && 'Your domain is approved.'}
           {error && error}
         </div>
         <Button type="submit" size="sm" disabled={disabledButton}>

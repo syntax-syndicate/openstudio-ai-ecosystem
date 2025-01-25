@@ -1,13 +1,13 @@
-import { getBlurDataURL } from "@/lib/sharp";
-import { cn } from "@repo/design-system/lib/utils";
-import "@repo/design-system/styles/prose.css";
+import { getBlurDataURL } from '@/lib/sharp';
+import { cn } from '@repo/design-system/lib/utils';
+import '@repo/design-system/styles/prose.css';
 import type {
   MDXComponents,
   MDXRemoteOptions,
-} from "next-mdx-remote-client/rsc";
-import { MDXRemote } from "next-mdx-remote-client/rsc";
-import Image from "next/image";
-import remarkGfm from "remark-gfm";
+} from 'next-mdx-remote-client/rsc';
+import { MDXRemote } from 'next-mdx-remote-client/rsc';
+import Image from 'next/image';
+import remarkGfm from 'remark-gfm';
 
 const mdxRemoteOptions: MDXRemoteOptions = {
   mdxOptions: {
@@ -25,7 +25,7 @@ const mdxComponents: MDXComponents = {
         width={0}
         height={0}
         sizes="100vw"
-        className="w-full h-auto"
+        className="h-auto w-full"
         blurDataURL={blurDataURL}
         placeholder="blur"
         quality={80}
@@ -54,7 +54,7 @@ export default async function MDX({
   className?: string;
 }) {
   return (
-    <div className={cn("prose dark:prose-invert", className)}>
+    <div className={cn('prose dark:prose-invert', className)}>
       <MDXRemote
         source={source}
         components={mdxComponents}

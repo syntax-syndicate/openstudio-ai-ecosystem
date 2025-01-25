@@ -1,9 +1,9 @@
-import { cn } from "@repo/design-system/lib/utils";
-import Favicon from "@/app/(organization)/minime/components/bookmarks/bookmark-favicon";
-import { EmptyPlaceholder } from "@repo/design-system/components/ui/empty-placeholder";
-import { Skeleton } from "@repo/design-system/components/ui/skeleton";
-import ViewAllBarlist from "./view-all-barlist";
-import type { JSX } from "react";
+import Favicon from '@/app/(organization)/minime/components/bookmarks/bookmark-favicon';
+import { EmptyPlaceholder } from '@repo/design-system/components/ui/empty-placeholder';
+import { Skeleton } from '@repo/design-system/components/ui/skeleton';
+import { cn } from '@repo/design-system/lib/utils';
+import type { JSX } from 'react';
+import ViewAllBarlist from './view-all-barlist';
 
 export type Bar = {
   name: string;
@@ -22,20 +22,20 @@ export default function BarList({ data, title, loading }: Props) {
   return (
     <div
       className={cn(
-        "relative flex-1 w-full",
-        data && data?.length > 2 ? "overflow-hidden" : "",
+        'relative w-full flex-1',
+        data && data?.length > 2 ? 'overflow-hidden' : ''
       )}
     >
-      <div className="p-2 flex flex-col">
+      <div className="flex flex-col p-2">
         {loading && (
           <div className="flex flex-col gap-2">
             {[...new Array(3).fill(true)].map((_, i) => (
-              <Skeleton className={cn("h-4.5")} key={i} />
+              <Skeleton className={cn('h-4.5')} key={i} />
             ))}
           </div>
         )}
 
-        <div className="flex-1 flex flex-col gap-2  ">
+        <div className="flex flex-1 flex-col gap-2 ">
           {!loading &&
             data?.map((item) => (
               <BarListItem item={item} key={item.name} total={data[0].value} />
@@ -43,7 +43,7 @@ export default function BarList({ data, title, loading }: Props) {
         </div>
 
         {!data?.length && !loading && (
-          <EmptyPlaceholder className="min-h-max  border-0 text-gray-4">
+          <EmptyPlaceholder className="min-h-max border-0 text-gray-4">
             <EmptyPlaceholder.Title className="text-sm">
               No data yet
             </EmptyPlaceholder.Title>
@@ -66,12 +66,12 @@ export const BarListItem = ({
 }) => {
   return (
     <Comp
-      as={item.href ? "Link" : "div"}
+      as={item.href ? 'Link' : 'div'}
       href={item.href}
       target="_blank"
       className={cn(
-        "relative flex min-h-[30px] h-4.5 w-full  items-center justify-between overflow-hidden rounded-md  px-2 py-1 transition-colors hover:bg-gray-3",
-        className,
+        'relative flex h-4.5 min-h-[30px] w-full items-center justify-between overflow-hidden rounded-md px-2 py-1 transition-colors hover:bg-gray-3',
+        className
       )}
     >
       <div className="flex flex-1 items-center gap-2">
@@ -79,12 +79,12 @@ export const BarListItem = ({
           style={{
             width: `${(item.value / total) * 100}%`,
           }}
-          className="absolute left-0 top-0 z-[1] h-full rounded-md  bg-[#8d8d8d21]"
+          className="absolute top-0 left-0 z-[1] h-full rounded-md bg-[#8d8d8d21]"
         />
         {item.icon && (
           <Favicon url={item.icon} alt={`${item.icon} icon`} size={18} />
         )}
-        <div className="text-sm truncate">{item.name}</div>
+        <div className="truncate text-sm">{item.name}</div>
       </div>
 
       <span>{item.value}</span>

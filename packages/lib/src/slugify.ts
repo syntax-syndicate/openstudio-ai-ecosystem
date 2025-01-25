@@ -12,7 +12,6 @@ export const slugifyLax = (text: string): string =>
     remove: /@/g,
   });
 
-
 export function slugifyv2(title?: string) {
   if (title) {
     return slug(title, {

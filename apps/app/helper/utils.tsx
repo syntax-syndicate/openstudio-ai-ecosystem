@@ -1,9 +1,8 @@
 import type { TChatMessage, TChatSession } from '@/types';
 import type { articles, projects } from '@repo/backend/schema';
+import { format } from 'date-fns';
 import moment from 'moment';
 import { customAlphabet } from 'nanoid';
-import { format } from 'date-fns';
-
 
 export type Article = typeof articles.$inferSelect;
 export type Project = typeof projects.$inferSelect;
@@ -149,23 +148,22 @@ export function jsonToFrontmatter(jsonData: object) {
   const frontmatter = Object.entries(jsonData)
     .map(([key, value]) => {
       if (Array.isArray(value)) {
-        return `${key}:\n  - ${value.join("\n  - ")}`;
+        return `${key}:\n  - ${value.join('\n  - ')}`;
       }
       return `${key}: ${value}`;
     })
-    .join("\n");
+    .join('\n');
 
   return `---\n${frontmatter}\n---\n\n`;
 }
 
 export function formatVerboseDate(date: Date) {
-  return format(date, "PPPPpppp");
+  return format(date, 'PPPPpppp');
 }
-
 
 export async function fetcher<JSON = any>(
   input: RequestInfo,
-  init?: RequestInit,
+  init?: RequestInit
 ): Promise<JSON> {
   const res = await fetch(input, init);
 
@@ -180,5 +178,5 @@ export async function fetcher<JSON = any>(
 }
 
 export const validDomainRegex = new RegExp(
-  /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/,
+  /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/
 );

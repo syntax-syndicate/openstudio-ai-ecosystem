@@ -17,32 +17,32 @@ export const createRateLimiter = (props: Omit<RatelimitConfig, 'redis'>) =>
 export const rateLimit = {
   bookmark: new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(1, "1 h"),
-    prefix: "clicks",
+    limiter: Ratelimit.slidingWindow(1, '1 h'),
+    prefix: 'clicks',
     analytics: true,
   }),
   analytics: new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(1, "5 h"),
-    prefix: "analytics",
+    limiter: Ratelimit.slidingWindow(1, '5 h'),
+    prefix: 'analytics',
     analytics: true,
   }),
   subscribe: new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(5, "5 h"),
-    prefix: "subscribe",
+    limiter: Ratelimit.slidingWindow(5, '5 h'),
+    prefix: 'subscribe',
     analytics: true,
   }),
   newsletter: new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(2, "1 d"),
-    prefix: "newsletter",
+    limiter: Ratelimit.slidingWindow(2, '1 d'),
+    prefix: 'newsletter',
     analytics: true,
   }),
   protection: new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(10, "1 h"),
-    prefix: "unlock",
+    limiter: Ratelimit.slidingWindow(10, '1 h'),
+    prefix: 'unlock',
     analytics: true,
   }),
 };

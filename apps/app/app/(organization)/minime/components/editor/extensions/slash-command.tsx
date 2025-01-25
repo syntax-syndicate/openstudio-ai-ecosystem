@@ -1,11 +1,11 @@
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { cn } from "@repo/design-system/lib/utils";
-import { Extension } from "@tiptap/core";
-import { type Editor, ReactRenderer } from "@tiptap/react";
-import Suggestion from "@tiptap/suggestion";
-import { useCallback, useEffect, useRef, useState } from "react";
-import tippy from "tippy.js";
-import getSuggestions from "./suggestions";
+import { Icons } from '@repo/design-system/components/ui/icons';
+import { cn } from '@repo/design-system/lib/utils';
+import { Extension } from '@tiptap/core';
+import { type Editor, ReactRenderer } from '@tiptap/react';
+import Suggestion from '@tiptap/suggestion';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import tippy from 'tippy.js';
+import getSuggestions from './suggestions';
 
 interface SlashCommandExtensionProps {
   editor: Editor;
@@ -19,12 +19,12 @@ interface CommandItemProps {
 }
 
 const Command = Extension.create({
-  name: "slash-command",
+  name: 'slash-command',
 
   addOptions() {
     return {
       suggestion: {
-        char: "/",
+        char: '/',
         command: ({ editor, range, props }: SlashCommandExtensionProps) => {
           props.command({ editor, range });
         },
@@ -72,29 +72,29 @@ const CommandList = ({
       const item = items[index];
       command(item);
     },
-    [command, items],
+    [command, items]
   );
 
   useEffect(() => {
-    const navigationKeys = ["ArrowUp", "ArrowDown", "Enter"];
+    const navigationKeys = ['ArrowUp', 'ArrowDown', 'Enter'];
     const onKeyDown = (e: KeyboardEvent) => {
       if (navigationKeys.includes(e.key)) {
         e.preventDefault();
-        if (e.key === "ArrowUp") {
+        if (e.key === 'ArrowUp') {
           setSelectedIndex((selectedIndex + items.length - 1) % items.length);
         }
-        if (e.key === "ArrowDown") {
+        if (e.key === 'ArrowDown') {
           setSelectedIndex((selectedIndex + 1) % items.length);
         }
-        if (e.key === "Enter") {
+        if (e.key === 'Enter') {
           selectItem(selectedIndex);
         }
         return false;
       }
     };
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener('keydown', onKeyDown);
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, [items, selectedIndex, setSelectedIndex, selectItem]);
 
@@ -106,7 +106,7 @@ const CommandList = ({
     <div
       id="slash-command"
       ref={commandList}
-      className="z-50 flex  min-w-[250px] no-scrollbar flex-col gap-1 overflow-auto rounded-lg  bg-gray-3 p-1"
+      className="no-scrollbar z-50 flex min-w-[250px] flex-col gap-1 overflow-auto rounded-lg bg-gray-3 p-1"
     >
       {items.map((item: CommandItemProps, index: number) => {
         const ItemIcon = Icons[item.icon];
@@ -114,8 +114,8 @@ const CommandList = ({
           <button
             onClick={() => selectItem(index)}
             className={cn(
-              "flex flex-row items-center outline-0 select-none  text-sm gap-2 rounded-md px-2 py-1 transition-colors hover:bg-gray-2 focus:bg-gray-3",
-              selectedIndex === index ? "bg-gray-2 " : "",
+              'flex select-none flex-row items-center gap-2 rounded-md px-2 py-1 text-sm outline-0 transition-colors hover:bg-gray-2 focus:bg-gray-3',
+              selectedIndex === index ? 'bg-gray-2 ' : ''
             )}
             key={index}
           >
@@ -124,7 +124,7 @@ const CommandList = ({
         );
       })}
       {!items.length && (
-        <b className="text-xs px-2 py-1 text-gray-1">No results</b>
+        <b className="px-2 py-1 text-gray-1 text-xs">No results</b>
       )}
     </div>
   );
@@ -142,14 +142,14 @@ const renderItems = () => {
       });
 
       // @ts-ignore
-      popup = tippy("body", {
+      popup = tippy('body', {
         getReferenceClientRect: props.clientRect,
         appendTo: () => document.body,
         content: component.element,
         showOnCreate: true,
         interactive: true,
-        trigger: "manual",
-        placement: "bottom-start",
+        trigger: 'manual',
+        placement: 'bottom-start',
       });
     },
     onUpdate: (props: { editor: Editor; clientRect: DOMRect }) => {
@@ -160,12 +160,12 @@ const renderItems = () => {
       });
     },
     onKeyDown: (props: { event: KeyboardEvent }) => {
-      if (props.event.key === "Escape") {
+      if (props.event.key === 'Escape') {
         popup?.[0].hide();
 
         return true;
       }
-      if (props.event.key === "Enter") {
+      if (props.event.key === 'Enter') {
         return true;
       }
 

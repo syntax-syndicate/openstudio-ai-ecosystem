@@ -1,18 +1,18 @@
-import { ipAddress } from "@vercel/edge";
-import { type NextRequest, NextResponse, userAgent } from "next/server";
-import { analyticsSources } from "@repo/tinybird/src/utils";
 import {
   getBookmarkViaEdge,
-//   getUserViaEdge,
+  //   getUserViaEdge,
   incrementArticleViewsViaEdge,
   incrementBookmarkClicksViaEdge,
   incrementProjectViewsViaEdge,
   isArticleExist,
   isProjectExist,
-} from "@/lib/edge";
-import { rateLimit } from "@repo/rate-limit";
-import { capitalize, detectBot } from "@/lib/utils";
-import { currentUser } from "@repo/backend/auth/utils";
+} from '@/lib/edge';
+import { capitalize, detectBot } from '@/lib/utils';
+import { currentUser } from '@repo/backend/auth/utils';
+import { rateLimit } from '@repo/rate-limit';
+import { analyticsSources } from '@repo/tinybird/src/utils';
+import { ipAddress } from '@vercel/edge';
+import { type NextRequest, NextResponse, userAgent } from 'next/server';
 
 export async function track({
   req,
@@ -24,7 +24,7 @@ export async function track({
 }: {
   req: NextRequest;
   page: string;
-  type?: "articles" | "projects";
+  type?: 'articles' | 'projects';
   slug?: string;
   username?: string;
   domain?: string;
@@ -35,11 +35,11 @@ export async function track({
     if (isBot) {
       return new Response(null, { status: 406 });
     }
-    const referer = req.headers.get("referer");
+    const referer = req.headers.get('referer');
 
     const geo = (req as any).geo;
     const ua = userAgent(req);
-    const ip = ipAddress(req) || "0.0.0.0";
+    const ip = ipAddress(req) || '0.0.0.0';
 
     // if (process.env.VERCEL === "1") {
     //   const { success } = await rateLimit.analytics.limit(
@@ -64,13 +64,13 @@ export async function track({
     const authorId = user.id;
     const isPost = type && slug;
     const isPostExist = isPost
-      ? type === "articles"
+      ? type === 'articles'
         ? isArticleExist(slug, authorId)
         : isProjectExist(slug, authorId)
       : null;
 
-    console.log("isPost", isPost);
-    console.log("isPostExist", isPostExist);
+    console.log('isPost', isPost);
+    console.log('isPostExist', isPostExist);
 
     if (isPost && !isPostExist) {
       return new Response(null, { status: 404 });
@@ -84,72 +84,73 @@ export async function track({
               headers: {
                 Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
               },
-              method: "POST",
+              method: 'POST',
               body: JSON.stringify({
-                userId: authorId || "Unknown",
+                userId: authorId || 'Unknown',
                 timestamp: new Date(Date.now()).toISOString(),
-                domain: domain ?? "_root",
+                domain: domain ?? '_root',
                 page,
                 ip,
-                country: geo?.country || "Unknown",
-                city: geo?.city || "Unknown",
-                region: geo?.region || "Unknown",
-                latitude: geo?.latitude || "Unknown",
-                longitude: geo?.longitude || "Unknown",
-                ua: ua.ua || "Unknown", // ua
-                browser: ua.browser.name || "Unknown",
-                browser_version: ua.browser.version || "Unknown",
-                engine: ua.engine.name || "Unknown",
-                engine_version: ua.engine.version || "Unknown",
-                os: ua.os.name || "Unknown",
-                os_version: ua.os.version || "Unknown",
-                device: ua.device.type ? capitalize(ua.device.type) : "Desktop",
-                device_vendor: ua.device.vendor || "Unknown",
-                device_model: ua.device.model || "Unknown",
-                cpu_architecture: ua.cpu?.architecture || "Unknown",
+                country: geo?.country || 'Unknown',
+                city: geo?.city || 'Unknown',
+                region: geo?.region || 'Unknown',
+                latitude: geo?.latitude || 'Unknown',
+                longitude: geo?.longitude || 'Unknown',
+                ua: ua.ua || 'Unknown', // ua
+                browser: ua.browser.name || 'Unknown',
+                browser_version: ua.browser.version || 'Unknown',
+                engine: ua.engine.name || 'Unknown',
+                engine_version: ua.engine.version || 'Unknown',
+                os: ua.os.name || 'Unknown',
+                os_version: ua.os.version || 'Unknown',
+                device: ua.device.type ? capitalize(ua.device.type) : 'Desktop',
+                device_vendor: ua.device.vendor || 'Unknown',
+                device_model: ua.device.model || 'Unknown',
+                cpu_architecture: ua.cpu?.architecture || 'Unknown',
                 bot: ua.isBot.toString(),
-                referer: referer ? new URL(referer).hostname : "(direct)",
-                referer_url: referer || "(direct)",
+                referer: referer ? new URL(referer).hostname : '(direct)',
+                referer_url: referer || '(direct)',
               }),
-            },
+            }
           )
-        : fetch( //TODO: remove this
+        : fetch(
+            //TODO: remove this
             `${process.env.TINYBIRD_API_URL}/v0/events?name=${analyticsSources.analytics}`,
             {
               headers: {
                 Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
               },
-              method: "POST",
+              method: 'POST',
               body: JSON.stringify({
-                userId: authorId || "Unknown",
+                userId: authorId || 'Unknown',
                 timestamp: new Date(Date.now()).toISOString(),
-                domain: domain ?? "_root",
+                domain: domain ?? '_root',
                 page,
                 ip,
-                country: geo?.country || "Unknown",
-                city: geo?.city || "Unknown",
-                region: geo?.region || "Unknown",
-                latitude: geo?.latitude || "Unknown",
-                longitude: geo?.longitude || "Unknown",
-                ua: ua.ua || "Unknown", // ua
-                browser: ua.browser.name || "Unknown",
-                browser_version: ua.browser.version || "Unknown",
-                engine: ua.engine.name || "Unknown",
-                engine_version: ua.engine.version || "Unknown",
-                os: ua.os.name || "Unknown",
-                os_version: ua.os.version || "Unknown",
-                device: ua.device.type ? capitalize(ua.device.type) : "Desktop",
-                device_vendor: ua.device.vendor || "Unknown",
-                device_model: ua.device.model || "Unknown",
-                cpu_architecture: ua.cpu?.architecture || "Unknown",
+                country: geo?.country || 'Unknown',
+                city: geo?.city || 'Unknown',
+                region: geo?.region || 'Unknown',
+                latitude: geo?.latitude || 'Unknown',
+                longitude: geo?.longitude || 'Unknown',
+                ua: ua.ua || 'Unknown', // ua
+                browser: ua.browser.name || 'Unknown',
+                browser_version: ua.browser.version || 'Unknown',
+                engine: ua.engine.name || 'Unknown',
+                engine_version: ua.engine.version || 'Unknown',
+                os: ua.os.name || 'Unknown',
+                os_version: ua.os.version || 'Unknown',
+                device: ua.device.type ? capitalize(ua.device.type) : 'Desktop',
+                device_vendor: ua.device.vendor || 'Unknown',
+                device_model: ua.device.model || 'Unknown',
+                cpu_architecture: ua.cpu?.architecture || 'Unknown',
                 bot: ua.isBot.toString(),
-                referer: referer ? new URL(referer).hostname : "(direct)",
-                referer_url: referer || "(direct)",
+                referer: referer ? new URL(referer).hostname : '(direct)',
+                referer_url: referer || '(direct)',
               }),
-            },
+            }
           ),
       isPost
-        ? type === "articles"
+        ? type === 'articles'
           ? incrementArticleViewsViaEdge(slug, authorId)
           : incrementProjectViewsViaEdge(slug, authorId)
         : null,
@@ -169,7 +170,7 @@ export async function recordClick(req: NextRequest, bookmarkId: string) {
     if (isBot) {
       return new Response(null, { status: 406 });
     }
-    const ip = ipAddress(req) || "0.0.0.0";
+    const ip = ipAddress(req) || '0.0.0.0';
 
     const bookmark = await getBookmarkViaEdge(bookmarkId);
 
@@ -178,9 +179,9 @@ export async function recordClick(req: NextRequest, bookmarkId: string) {
     }
 
     const url = bookmark.url;
-    if (process.env.VERCEL === "1") {
+    if (process.env.VERCEL === '1') {
       const { success } = await rateLimit.bookmark.limit(
-        `click:${ip}:${bookmarkId}`,
+        `click:${ip}:${bookmarkId}`
       );
 
       if (!success) {
@@ -196,7 +197,7 @@ export async function recordClick(req: NextRequest, bookmarkId: string) {
     }
     const geo = (req as any).geo;
     const ua = userAgent(req);
-    const referer = req.headers.get("referer");
+    const referer = req.headers.get('referer');
     await Promise.all([
       user.user_metadata.isPro
         ? fetch(
@@ -205,65 +206,66 @@ export async function recordClick(req: NextRequest, bookmarkId: string) {
               headers: {
                 Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
               },
-              method: "POST",
+              method: 'POST',
               body: JSON.stringify({
                 timestamp: new Date(Date.now()).toISOString(),
                 bookmarkId,
                 ip,
-                country: geo?.country || "Unknown",
-                city: geo?.city || "Unknown",
-                region: geo?.region || "Unknown",
-                latitude: geo?.latitude || "Unknown",
-                longitude: geo?.longitude || "Unknown",
-                ua: ua.ua || "Unknown",
-                browser: ua.browser.name || "Unknown",
-                browser_version: ua.browser.version || "Unknown",
-                engine: ua.engine.name || "Unknown",
-                engine_version: ua.engine.version || "Unknown",
-                os: ua.os.name || "Unknown",
-                os_version: ua.os.version || "Unknown",
-                device: ua.device.type ? capitalize(ua.device.type) : "Desktop",
-                device_vendor: ua.device.vendor || "Unknown",
-                device_model: ua.device.model || "Unknown",
-                cpu_architecture: ua.cpu?.architecture || "Unknown",
+                country: geo?.country || 'Unknown',
+                city: geo?.city || 'Unknown',
+                region: geo?.region || 'Unknown',
+                latitude: geo?.latitude || 'Unknown',
+                longitude: geo?.longitude || 'Unknown',
+                ua: ua.ua || 'Unknown',
+                browser: ua.browser.name || 'Unknown',
+                browser_version: ua.browser.version || 'Unknown',
+                engine: ua.engine.name || 'Unknown',
+                engine_version: ua.engine.version || 'Unknown',
+                os: ua.os.name || 'Unknown',
+                os_version: ua.os.version || 'Unknown',
+                device: ua.device.type ? capitalize(ua.device.type) : 'Desktop',
+                device_vendor: ua.device.vendor || 'Unknown',
+                device_model: ua.device.model || 'Unknown',
+                cpu_architecture: ua.cpu?.architecture || 'Unknown',
                 bot: ua.isBot.toString(),
-                referer: referer ? new URL(referer).hostname : "(direct)",
-                referer_url: referer || "(direct)",
+                referer: referer ? new URL(referer).hostname : '(direct)',
+                referer_url: referer || '(direct)',
               }),
-            },
+            }
           )
-        : fetch( //TODO: remove this
+        : fetch(
+            //TODO: remove this
             `${process.env.TINYBIRD_API_URL}/v0/events?name=${analyticsSources.bookmarks}`,
             {
               headers: {
                 Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
               },
-              method: "POST",
+              method: 'POST',
               body: JSON.stringify({
                 timestamp: new Date(Date.now()).toISOString(),
                 bookmarkId,
                 ip,
-                country: geo?.country || "Unknown",
-                city: geo?.city || "Unknown",
-                region: geo?.region || "Unknown",
-                latitude: geo?.latitude || "Unknown",
-                longitude: geo?.longitude || "Unknown",
-                ua: ua.ua || "Unknown",
-                browser: ua.browser.name || "Unknown",
-                browser_version: ua.browser.version || "Unknown",
-                engine: ua.engine.name || "Unknown",
-                engine_version: ua.engine.version || "Unknown",
-                os: ua.os.name || "Unknown",
-                os_version: ua.os.version || "Unknown",
-                device: ua.device.type ? capitalize(ua.device.type) : "Desktop",
-                device_vendor: ua.device.vendor || "Unknown",
-                device_model: ua.device.model || "Unknown",
-                cpu_architecture: ua.cpu?.architecture || "Unknown",
+                country: geo?.country || 'Unknown',
+                city: geo?.city || 'Unknown',
+                region: geo?.region || 'Unknown',
+                latitude: geo?.latitude || 'Unknown',
+                longitude: geo?.longitude || 'Unknown',
+                ua: ua.ua || 'Unknown',
+                browser: ua.browser.name || 'Unknown',
+                browser_version: ua.browser.version || 'Unknown',
+                engine: ua.engine.name || 'Unknown',
+                engine_version: ua.engine.version || 'Unknown',
+                os: ua.os.name || 'Unknown',
+                os_version: ua.os.version || 'Unknown',
+                device: ua.device.type ? capitalize(ua.device.type) : 'Desktop',
+                device_vendor: ua.device.vendor || 'Unknown',
+                device_model: ua.device.model || 'Unknown',
+                cpu_architecture: ua.cpu?.architecture || 'Unknown',
                 bot: ua.isBot.toString(),
-                referer: referer ? new URL(referer).hostname : "(direct)",
-                referer_url: referer || "(direct)",
+                referer: referer ? new URL(referer).hostname : '(direct)',
+                referer_url: referer || '(direct)',
               }),
-            },
+            }
           ),
       incrementBookmarkClicksViaEdge(bookmarkId, user.id),
     ]);
