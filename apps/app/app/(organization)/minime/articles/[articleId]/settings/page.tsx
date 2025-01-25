@@ -27,12 +27,12 @@ export default async function ArticleSettings({
   if (!article) {
     return notFound();
   }
-  const endpoint = `minime/articles/${article[0].id}`;
+  const endpoint = `articles/${article[0].id}`;
   return (
     <AppShell>
       <AppHeader className="justify-start font-medium text-lg">
         <NavButton
-          href={`/${endpoint}`}
+          href={`/minime/articles/${article[0].id}`}
           icon="arrowLeft"
           className="mr-2"
           size="icon"

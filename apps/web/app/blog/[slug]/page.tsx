@@ -45,7 +45,7 @@ export const generateMetadata = async ({
 export const generateStaticParams = async (): Promise<{ slug: string }[]> => {
   const posts = await blog.getPosts();
 
-  return posts.map(({ _slug }) => ({ slug: _slug }));
+  return posts.map(({ _slug }: any) => ({ slug: _slug }));
 };
 
 const BlogPost = async ({ params }: BlogPostProperties) => {
@@ -55,7 +55,7 @@ const BlogPost = async ({ params }: BlogPostProperties) => {
   return (
     <Feed queries={[blog.postQuery(slug)]} draft={draft.isEnabled}>
       {/* biome-ignore lint/suspicious/useAwait: "Server Actions must be async" */}
-      {async ([data]) => {
+      {async ([data]: any) => {
         'use server';
 
         const [page] = data.blog.posts.items;

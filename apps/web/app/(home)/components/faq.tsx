@@ -26,7 +26,7 @@ export const FAQ = () => (
               </p>
             </div>
             <div className="">
-              <Button className="gap-4" variant="outline" asChild>
+              <Button className="gap-4" variant="outlined" asChild>
                 <Link href="/contact">
                   Any questions? Reach out <PhoneCall className="h-4 w-4" />
                 </Link>

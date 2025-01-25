@@ -27,7 +27,7 @@ const Pricing = () => (
               <span className="text-4xl">$40</span>
               <span className="text-muted-foreground text-sm"> / month</span>
             </p>
-            <Button variant="outline" className="mt-8 gap-4" asChild>
+            <Button variant="outlined" className="mt-8 gap-4" asChild>
               <Link href={env.NEXT_PUBLIC_APP_URL}>
                 Try it <MoveRight className="h-4 w-4" />
               </Link>
@@ -59,7 +59,7 @@ const Pricing = () => (
               <span className="text-4xl">$40</span>
               <span className="text-muted-foreground text-sm"> / month</span>
             </p>
-            <Button variant="outline" className="mt-8 gap-4" asChild>
+            <Button variant="outlined" className="mt-8 gap-4" asChild>
               <Link href="/contact">
                 Contact us <PhoneCall className="h-4 w-4" />
               </Link>

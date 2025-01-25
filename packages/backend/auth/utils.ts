@@ -11,7 +11,23 @@ export const getUserByDomain = async (domain: string) => {
   const { data } = await client.auth.admin.listUsers({
     perPage: 100_000,
   });
-  return data.users.find((user) => user.user_metadata.domain === domain);
+  return data.users.find(
+    (user) =>
+      user.user_metadata.domain === domain ||
+      user.user_metadata.username === domain
+  );
+};
+
+export const getAllUserDomains = async () => {
+  const client = await createClient();
+  const { data } = await client.auth.admin.listUsers({
+    perPage: 100_000,
+  });
+  // return only domain and username
+  return data.users.map((user) => ({
+    domain: user.user_metadata.domain,
+    username: user.user_metadata.username,
+  }));
 };
 
 export const currentOrganizationId = async () => {

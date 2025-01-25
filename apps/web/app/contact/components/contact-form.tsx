@@ -71,7 +71,7 @@ export const ContactForm = () => {
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      variant="outline"
+                      variant="outlined"
                       className={cn(
                         'w-full max-w-sm justify-start text-left font-normal',
                         !date && 'text-muted-foreground'
