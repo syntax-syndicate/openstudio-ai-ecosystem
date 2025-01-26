@@ -36,7 +36,7 @@ export default function NavButton({
     <Link
       href={href}
       className={cn(
-        'flex w-max items-center gap-1 text-gray-4 text-xs transition-colors hover:text-secondary',
+        'flex w-max items-center gap-1 text-gray-4 text-xs transition-colors',
         className,
         direction === 'ltr' ? 'flex-row-reverse' : ''
       )}

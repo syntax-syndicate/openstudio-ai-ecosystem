@@ -49,7 +49,7 @@ export default function UserNav({ user, segment }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="size-4.5 rounded-lg border-2 border-transparent bg-gray-2 outline-none data-[state=open]:border-gray-2"
+        className="size-4.5 rounded-lg border-2 border-transparent outline-none data-[state=open]:border-gray-2"
         aria-label={getUserName(user!) as string}
       >
         <Avatar>
@@ -68,7 +68,7 @@ export default function UserNav({ user, segment }: Props) {
             href={
               user?.user_metadata.domain
                 ? `https://${user.user_metadata.domain}`
-                : `https://${user?.user_metadata.username}.openstudio.tech`
+                : `https://${user?.user_metadata.username}.openstudio.co.in`
             }
             target="_blank"
           >
@@ -83,7 +83,7 @@ export default function UserNav({ user, segment }: Props) {
         <DropdownMenuItem asChild>
           <Link
             href={'/minime/settings'}
-            className={segment === 'settings' ? 'bg-gray-2 text-secondary' : ''}
+            className={segment === 'settings' ? 'bg-gray-2' : ''}
           >
             <Icons.settings size={15} /> Settings
           </Link>

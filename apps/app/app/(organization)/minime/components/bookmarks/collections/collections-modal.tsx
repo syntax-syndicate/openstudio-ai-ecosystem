@@ -89,7 +89,7 @@ function CollectionItem({
       className="group flex items-center justify-between rounded-md border border-gray-2 p-2 text-gray-4 text-sm transition-colors"
     >
       <div>
-        <p className="text-secondary">{collection.name}</p>
+        <p className="">{collection.name}</p>
         <b className="text-xs">{collection.bookmarks?.length} bookmarks</b>
       </div>
       <CollectionOperations collection={collection} />

@@ -1,5 +1,5 @@
 import type { IndexProps } from '@/app/(organization)/minime/components/analytics';
-import { Badge } from '@repo/design-system/components/ui/badge';
+import { Badge } from '@repo/design-system/components/minime/badge';
 import { Icons } from '@repo/design-system/components/ui/icons';
 import Link from 'next/link';
 

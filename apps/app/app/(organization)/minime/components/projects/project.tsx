@@ -25,7 +25,7 @@ export default function Project({ project, admin, url }: Props) {
         aria-label={`${project.title}`}
       />
       <div className="flex flex-1 items-start gap-1 max-md:flex-col">
-        <span className="w-10 truncate text-left text-gray-4 transition-colors group-hover:text-secondary">
+        <span className="w-10 truncate text-left text-gray-4 transition-colors group-hover:text-gray-4">
           {project.year}
         </span>
         <div className="flex w-full flex-1 flex-col">
