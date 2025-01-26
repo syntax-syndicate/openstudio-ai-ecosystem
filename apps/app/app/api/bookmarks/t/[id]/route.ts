@@ -14,13 +14,17 @@ export async function GET(
   req: NextRequest,
   context: z.infer<typeof routeContextSchema>
 ) {
-  const { id } = await context.params;
-  const ctx = routeContextSchema.safeParse(context);
+  const contextPromise = await context;
+  const ctx = routeContextSchema.safeParse({
+    params: {
+      id: contextPromise.params.id,
+    },
+  });
   if (!ctx.success) {
     return new Response(ctx.error.issues[0].message, {
       status: 422,
     });
   }
 
-  return recordClick(req, id);
+  return recordClick(req, ctx.data.params.id);
 }
