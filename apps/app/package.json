@@ -29,6 +29,7 @@
     "@repo/backend": "workspace:*",
     "@repo/collaboration": "workspace:*",
     "@repo/design-system": "workspace:*",
+    "@repo/email": "workspace:^",
     "@repo/feature-flags": "workspace:*",
     "@repo/lib": "workspace:*",
     "@repo/next-config": "workspace:*",

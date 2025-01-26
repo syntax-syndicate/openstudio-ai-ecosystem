@@ -50,6 +50,17 @@ const nextConfig: NextConfig = withLogtail({
         destination: `https://go.openstudio.co.in/api/bookmarks/t/:id`,
         permanent: false,
       },
+      // {
+      //   source: '/:id',
+      //   has: [
+      //     {
+      //       type: 'host',
+      //       value: 'http://localhost:3000',
+      //     },
+      //   ],
+      //   destination: `http://localhost:3000/api/bookmarks/t/:id`,
+      //   permanent: false,
+      // },
     ];
   },
 });
