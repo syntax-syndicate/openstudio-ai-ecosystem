@@ -24,7 +24,7 @@ export default function Bookmark({
     <div className="-mx-2 relative flex min-h-5 items-center gap-4 rounded-md p-2 text-sm transition-colors hover:bg-gray-3 max-md:h-auto max-md:flex-col max-md:items-start max-md:gap-1">
       <Link
         aria-label={`Visit ${bookmark?.title}`}
-        href={`https://openstudio.co.in/${bookmark.id}`}
+        href={`https://go.openstudio.co.in/${bookmark.id}`}
         className="absolute top-0 left-0 h-full w-full py-2"
         target="_blank"
         prefetch={false}
