@@ -29,33 +29,33 @@ export const appConfig: AppConfig = {
       href: '/minime/bookmarks',
       icon: 'bookmark',
     },
-    {
-      title: 'Analytics',
-      href: '/minime/analytics',
-      icon: 'areaChart',
-    },
+    // {
+    //   title: 'Analytics',
+    //   href: '/minime/analytics',
+    //   icon: 'areaChart',
+    // },
   ],
   settingsNav: [
     {
       title: 'General',
       href: '/minime/settings',
     },
-    {
-      title: 'Links',
-      href: '/minime/settings/links',
-    },
-    {
-      title: 'SEO',
-      href: '/minime/settings/seo',
-    },
+    // {
+    //   title: 'Links',
+    //   href: '/minime/settings/links',
+    // },
+    // {
+    //   title: 'SEO',
+    //   href: '/minime/settings/seo',
+    // },
     {
       title: 'Subscribers',
       href: '/minime/settings/subscribers',
     },
-    {
-      title: 'Billing',
-      href: '/minime/settings/billing',
-    },
+    // {
+    //   title: 'Billing',
+    //   href: '/minime/settings/billing',
+    // },
   ],
   filters: {
     postsFilter: [

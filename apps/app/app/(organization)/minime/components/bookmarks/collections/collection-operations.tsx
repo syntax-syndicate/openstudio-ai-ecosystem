@@ -44,7 +44,7 @@ export default function CollectionOperations({
           size="icon"
           variant="ghost"
           aria-label="Delete or edit collection"
-          className="size-4.4 data-[state=open]:bg-gray-2 data-[state=open]:text-secondary"
+          className="size-4.4 data-[state=open]:bg-gray-2"
         >
           <Icons.more size={15} />
         </Button>

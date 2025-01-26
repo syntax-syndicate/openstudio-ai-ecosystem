@@ -22,18 +22,18 @@ import type * as z from 'zod';
 
 type FormData = z.infer<typeof subscribeSchema>;
 
-const feeds = [
-  {
-    type: 'rss',
-    title: 'RSS',
-    href: '/feed',
-  },
-  {
-    type: 'atom',
-    title: 'Atom',
-    href: '/feed?type=atom',
-  },
-] as const;
+// const feeds = [
+//   {
+//     type: 'rss',
+//     title: 'RSS',
+//     href: '/feed',
+//   },
+//   {
+//     type: 'atom',
+//     title: 'Atom',
+//     href: '/feed?type=atom',
+//   },
+// ] as const;
 
 export default function Subscribe({
   newsletter = false,
@@ -97,7 +97,7 @@ export default function Subscribe({
           <DialogTitle className="items-center">Subscribe</DialogTitle>
         </DialogHeader>
         <div className="flex justify-between gap-2">
-          {feeds.map((feed) => (
+          {/* {feeds.map((feed) => (
             <NavButton
               href={feed.href}
               buttonVariant="secondary"
@@ -111,7 +111,7 @@ export default function Subscribe({
             >
               {feed.title}
             </NavButton>
-          ))}
+          ))} */}
           {newsletter && (
             <Button
               variant="secondary"

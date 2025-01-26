@@ -14,8 +14,8 @@ export default async function Watermark({ user }: { user: Pick<User, 'id'> }) {
       target="_blank"
       aria-label="Powered by Open Studio"
     >
-      <Badge className="fixed right-4.4 bottom-4.4 border border-gray-2 font-normal text-gray-4 text-xs ">
-        Powered by Open Studio
+      <Badge className="fixed right-4 bottom-4 border border-gray-2 font-normal text-gray-4 text-xs ">
+        Powered by Open Studio Minime
       </Badge>
     </Link>
   );

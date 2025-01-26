@@ -13,7 +13,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@repo/design-system/components/ui/dropdown-menu';
+} from '@repo/design-system/components/minime/dropdown-menu';
 import { Icons } from '@repo/design-system/components/ui/icons';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';

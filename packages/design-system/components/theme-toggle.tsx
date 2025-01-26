@@ -25,7 +25,7 @@ export default function ThemeToggle({
     return (
       <p
         onClick={toggle}
-        className="w-max cursor-pointer text-gray-4 text-xs transition-colors hover:text-secondary"
+        className="w-max cursor-pointer text-gray-4 text-xs transition-colors"
       >
         {text}
       </p>
@@ -36,7 +36,7 @@ export default function ThemeToggle({
     <Button
       onClick={toggle}
       className={cn(
-        'justify-start gap-2 text-secondary hover:text-secondary dark:[&_.moon-icon]:hidden [&_.sun-icon]:hidden dark:[&_.sun-icon]:inline',
+        'justify-start gap-2 dark:[&_.moon-icon]:hidden [&_.sun-icon]:hidden dark:[&_.sun-icon]:inline w-full',
         compact ? 'justify-center text-gray-4' : '',
         className
       )}

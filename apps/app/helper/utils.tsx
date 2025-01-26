@@ -4,6 +4,7 @@ import type {
   bookmarks,
   collections,
   projects,
+  subscribers,
 } from '@repo/backend/schema';
 import { format } from 'date-fns';
 import moment from 'moment';
@@ -13,6 +14,7 @@ export type Article = typeof articles.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Collection = typeof collections.$inferSelect;
 export type Bookmark = typeof bookmarks.$inferSelect;
+export type Subscriber = typeof subscribers.$inferSelect;
 
 export type BookmarkWithCollection = Bookmark & {
   collection: Collection | null;

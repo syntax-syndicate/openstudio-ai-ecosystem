@@ -18,8 +18,8 @@ export default function AppNav({ links, user }: Props) {
   const segment = useSelectedLayoutSegment();
   return (
     <div className="flex w-full items-center justify-between ">
-      <Link href="/articles" className="text-secondary" aria-label="Go to home">
-        <Icons.logo size={30} />
+      <Link href="/minime" className="flex items-center gap-2" aria-label="Go to home">
+        <Icons.logo size={30} /> Minime
       </Link>
 
       <div className="flex gap-2">
@@ -31,7 +31,7 @@ export default function AppNav({ links, user }: Props) {
               size="sm"
               buttonClassname={
                 link.href.endsWith(segment === null ? '/' : segment)
-                  ? 'bg-gray-2 text-secondary'
+                  ? 'bg-gray-2'
                   : ''
               }
               buttonVariant="ghost"

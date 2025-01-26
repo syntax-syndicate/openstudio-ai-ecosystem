@@ -1,6 +1,5 @@
 import {
   getBookmarkViaEdge,
-  //   getUserViaEdge,
   incrementArticleViewsViaEdge,
   incrementBookmarkClicksViaEdge,
   incrementProjectViewsViaEdge,
@@ -8,7 +7,7 @@ import {
   isProjectExist,
 } from '@/lib/edge';
 import { capitalize, detectBot } from '@/lib/utils';
-import { currentUser } from '@repo/backend/auth/utils';
+import { getUserByUsername, getUserById, getUserByDomain } from '@repo/backend/auth/utils';
 import { rateLimit } from '@repo/rate-limit';
 import { analyticsSources } from '@repo/tinybird/src/utils';
 import { ipAddress } from '@vercel/edge';
@@ -41,23 +40,20 @@ export async function track({
     const ua = userAgent(req);
     const ip = ipAddress(req) || '0.0.0.0';
 
-    // if (process.env.VERCEL === "1") {
-    //   const { success } = await rateLimit.analytics.limit(
-    //     `track:${ip}:${domain ?? username}:${page}`,
-    //   );
+    if (process.env.VERCEL === "1") {
+      const { success } = await rateLimit.analytics.limit(
+        `track:${ip}:${domain ?? username}:${page}`,
+      );
 
-    //   if (!success) {
-    //     return new Response(null, { status: 200 });
-    //   }
-    // } else {
-    //   return new Response(null, { status: 200 });
-    // }
+      if (!success) {
+        return new Response(null, { status: 200 });
+      }
+    } else {
+      return new Response(null, { status: 200 });
+    }
 
-    // const user = await getUserViaEdge(username, domain);
-    // if (!user) {
-    //   return new Response(null, { status: 404 });
-    // }
-    const user = await currentUser();
+    
+    const user = await getUserByDomain(username ?? domain!);
     if (!user) {
       return new Response(null, { status: 404 });
     }
@@ -171,7 +167,6 @@ export async function recordClick(req: NextRequest, bookmarkId: string) {
     const ip = ipAddress(req) || '0.0.0.0';
 
     const bookmark = await getBookmarkViaEdge(bookmarkId);
-
     if (!bookmark) {
       return new Response(null, { status: 404 });
     }
@@ -188,8 +183,7 @@ export async function recordClick(req: NextRequest, bookmarkId: string) {
     } else {
       return NextResponse.redirect(url);
     }
-    // const user = await getUserViaEdge(undefined, undefined, bookmark.authorId);
-    const user = await currentUser();
+    const user = await getUserById(bookmark.authorId);
     if (!user) {
       return new Response(null, { status: 404 });
     }

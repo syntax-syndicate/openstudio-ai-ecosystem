@@ -137,7 +137,7 @@ export default function PublishButton({
                 </Tooltip>
               </TooltipProvider>
               <NavButton
-                href="/settings/subscribers"
+                href="/minime/settings/subscribers"
                 buttonVariant="ghost"
                 buttonClassname="gap-2"
                 direction="ltr"

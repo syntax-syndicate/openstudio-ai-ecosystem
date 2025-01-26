@@ -1,5 +1,5 @@
 import type { Bookmark as BookmarkType, Collection } from '@/helper/utils';
-import { Badge } from '@repo/design-system/components/ui/badge';
+import { Badge } from '@repo/design-system/components/minime/badge';
 import { getDomainFromURL } from '@repo/design-system/lib/utils';
 import Link from 'next/link';
 import Balancer from 'react-wrap-balancer';
@@ -24,7 +24,7 @@ export default function Bookmark({
     <div className="-mx-2 relative flex min-h-5 items-center gap-4 rounded-md p-2 text-sm transition-colors hover:bg-gray-3 max-md:h-auto max-md:flex-col max-md:items-start max-md:gap-1">
       <Link
         aria-label={`Visit ${bookmark?.title}`}
-        href={`https://go.openstudio.co.in/${bookmark.id}`}
+        href={`https://openstudio.co.in/${bookmark.id}`}
         className="absolute top-0 left-0 h-full w-full py-2"
         target="_blank"
         prefetch={false}
@@ -50,7 +50,7 @@ export default function Bookmark({
             </Link>
           )}
           {admin && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-6">
               <AnalyticsBadge
                 href={`/minime/bookmarks/${bookmark.id}/analytics`}
                 value={bookmark.clicks || 0}
