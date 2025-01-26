@@ -221,9 +221,9 @@ export async function createNewSession(): Promise<TChatSession | null> {
   const latestSession = sortSessions(sessions, 'createdAt')?.[0];
   const latestSessionMessages = await getMessages(latestSession?.id);
 
-  if (latestSession && latestSessionMessages?.length === 0) {
-    return latestSession;
-  }
+  // if (latestSession && latestSessionMessages?.length === 0) {
+  //   return latestSession;
+  // }
 
   const newSession = await database
     .insert(schema.chatSessions)
