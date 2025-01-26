@@ -55,6 +55,7 @@ export const ChatInput = () => {
     const props = getAssistantByKey(preferences.defaultAssistant);
     if (!props || !session) return;
     setIsInitialized(true);
+    editor?.commands.clearContent();
     invokeModel({
       input,
       context,
