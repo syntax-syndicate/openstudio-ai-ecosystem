@@ -7,6 +7,7 @@ import { database } from '@repo/backend/database';
 import { schema } from '@repo/backend/schema';
 import type { TCustomAssistant } from '@repo/backend/types';
 import { and, asc, eq } from 'drizzle-orm';
+import { nanoid } from 'nanoid';
 
 // Message-related functions
 export async function getAllMessages(): Promise<TChatMessage[]> {
@@ -99,7 +100,7 @@ export async function getSessions(): Promise<TChatSession[]> {
   }
 
   return (
-    database
+    await database
       .select()
       .from(schema.chatSessions)
       .where(
@@ -107,7 +108,7 @@ export async function getSessions(): Promise<TChatSession[]> {
           eq(schema.chatSessions.organizationId, organizationId),
           eq(schema.chatSessions.userId, user.id)
         )
-      ) || []
+      )
   );
 }
 
@@ -213,29 +214,41 @@ export async function removeSessionById(
 }
 
 export async function createNewSession(): Promise<TChatSession | null> {
-  const organizationId = await currentOrganizationId();
-  const user = await currentUser();
+  try {
+    const organizationId = await currentOrganizationId();
+    const user = await currentUser();
 
-  if (!organizationId || !user) return null;
-  const sessions = await getSessions();
-  const latestSession = sortSessions(sessions, 'createdAt')?.[0];
-  const latestSessionMessages = await getMessages(latestSession?.id);
+    if (!organizationId || !user) {
+      console.log('Missing organizationId or user');
+      return null;
+    }
 
-  // if (latestSession && latestSessionMessages?.length === 0) {
-  //   return latestSession;
-  // }
+    const sessions = await getSessions();
+    const latestSession = sortSessions(sessions, 'createdAt')?.[0];
+    
+    if (latestSession?.id) {
+      const latestSessionMessages = await getMessages(latestSession.id);
+      if (latestSessionMessages?.length === 0) {
+        return latestSession;
+      }
+    }
 
-  const newSession = await database
-    .insert(schema.chatSessions)
-    .values({
-      id: generateShortUUID(),
-      title: 'Untitled',
-      organizationId,
-      userId: user.id,
-    })
-    .returning();
+    const newSession = await database
+      .insert(schema.chatSessions)
+      .values({
+        id: generateShortUUID(),
+        title: 'Untitled',
+        organizationId,
+        userId: user.id
+      })
+      .returning();
 
-  return newSession?.[0] || null;
+    return newSession?.[0] || null;
+    
+  } catch (error) {
+    console.error('Error creating new session:', error);
+    throw error;
+  }
 }
 
 export async function clearSessions(): Promise<void> {

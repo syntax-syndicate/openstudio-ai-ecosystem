@@ -125,7 +125,7 @@ export const chatSessions = pgTable(
 );
 
 export const chatMessages = pgTable('chat_messages', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: text('id').primaryKey(),
   sessionId: varchar('session_id')
     .notNull()
     .references(() => chatSessions.id),
