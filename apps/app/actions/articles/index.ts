@@ -1,6 +1,6 @@
 'use server';
 
-import { formatVerboseDate, jsonToFrontmatter } from '@/helper/utils';
+import { formatDate, formatVerboseDate, jsonToFrontmatter } from '@/helper/utils';
 import type {
   articleCreateSchema,
   articlePatchSchema,
@@ -13,6 +13,13 @@ import { articles } from '@repo/backend/schema';
 import { slugifyv2 } from '@repo/lib/src/slugify';
 import { and, desc, eq } from 'drizzle-orm';
 import type { z } from 'zod';
+import { resend } from '@repo/email';
+import Newsletter, { NewsletterProps } from '@repo/email/templates/newsletter';
+import {Article} from "@/helper/utils";
+import { getSubscribersByUserId } from '../subscribers';
+import { rateLimit } from '@repo/rate-limit';
+import { getUserName } from '@repo/backend/auth/format';
+import { nanoid } from 'nanoid';
 
 type ArticleCreateSchema = z.infer<typeof articleCreateSchema>;
 type ArticlePatchSchema = z.infer<typeof articlePatchSchema>;
@@ -190,4 +197,80 @@ export async function getArticlesExport(authorId: string) {
     articlesData.map(async (article) => getArticleExport(article.id, authorId))
   );
   return data;
+}
+
+// get 
+export async function getArticleByAuthor(articleId: string, authorId: string) {
+  return await database
+    .select()
+    .from(articles)
+    .where(and(eq(articles.id, articleId), eq(articles.authorId, authorId)));
+}
+
+export async function sendNewsletter(
+  article: Article,
+  user: User,
+) {
+  const { success } = await rateLimit.newsletter.limit(
+    `newsletter:${user.id}:${article.id}`,
+  );
+
+  if (!success) {
+    return new Response(
+      "You can send newsletters a maximum of 2 times a day.",
+      { status: 429 },
+    );
+  }
+
+  const emails = await getSubscribersByUserId(user.id);
+
+  if (emails.length) {
+    await Promise.all([
+      ...emails.map((e) => {
+        sendNewsletterEmail({
+          from: `${user?.user_metadata.username} from OpenStudio Minime <notify@openstudio.tech>`,
+          to: e.email,
+          subject: "I shared a new article.",
+          newsletter: {
+            title: article.title,
+            author: user.user_metadata.username || getUserName(user),
+            articleURL: user.user_metadata.domain
+              ? `https://${user.user_metadata.domain}/articles/${article.slug}`
+              : `https://${user.user_metadata.username}.openstudio.co.in/articles/${article.slug}`,
+            published: formatDate(article.publishedAt),
+            subId: e.id,
+          },
+        });
+      }),
+      database.update(articles).set({
+        lastNewsletterSentAt: new Date(),
+      }).where(eq(articles.id, article.id))
+    ]);
+
+    return new Response(null, { status: 200 });
+  }
+  return new Response("You don't have any subscribers", { status: 400 });
+}
+
+
+export async function sendNewsletterEmail({
+  from,
+  to,
+  subject,
+  newsletter,
+}: {
+  from: string;
+  to: string;
+  subject: string;
+  newsletter: NewsletterProps;
+}) {
+  return await resend.emails.send({
+    from,
+    to,
+    subject,
+    react: Newsletter(newsletter),
+    headers: {
+      "X-Entity-Ref-ID": nanoid(),
+    },
+  });
 }
