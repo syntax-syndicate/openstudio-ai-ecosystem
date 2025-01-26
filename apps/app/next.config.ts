@@ -47,7 +47,7 @@ const nextConfig: NextConfig = withLogtail({
             value: 'go.openstudio.co.in',
           },
         ],
-        destination: `https://go.openstudio.co.in/api/bookmarks/t/:id`,
+        destination: `https://app.openstudio.tech/api/bookmarks/t/:id`,
         permanent: false,
       },
       // {

@@ -7,10 +7,10 @@ import {
   isProjectExist,
 } from '@/lib/edge';
 import { capitalize, detectBot } from '@/lib/utils';
-import { getUserByUsername, getUserById, getUserByDomain } from '@repo/backend/auth/utils';
+import { getUserById, getUserByDomain } from '@repo/backend/auth/utils';
 import { rateLimit } from '@repo/rate-limit';
 import { analyticsSources } from '@repo/tinybird/src/utils';
-import { ipAddress } from '@vercel/edge';
+import { geolocation, ipAddress } from '@vercel/edge';
 import { type NextRequest, NextResponse, userAgent } from 'next/server';
 
 export async function track({
@@ -36,7 +36,7 @@ export async function track({
     }
     const referer = req.headers.get('referer');
 
-    const geo = (req as any).geo;
+    const geo = geolocation(req);
     const ua = userAgent(req);
     const ip = ipAddress(req) || '0.0.0.0';
 
@@ -187,7 +187,7 @@ export async function recordClick(req: NextRequest, bookmarkId: string) {
     if (!user) {
       return new Response(null, { status: 404 });
     }
-    const geo = (req as any).geo;
+    const geo = geolocation(req);
     const ua = userAgent(req);
     const referer = req.headers.get('referer');
     await Promise.all([
