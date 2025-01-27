@@ -6,6 +6,7 @@ import AppShell from '@/app/(organization)/minime/components/layout/app-shell';
 import { getUserByDomain } from '@repo/backend/auth/utils';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Subscribe from './components/subscribe';
 
 export const metadata: Metadata = {
   title: 'Writing',
@@ -27,7 +28,7 @@ export default async function ArticlesPage({ params }: ArticlesPageProps) {
   return (
     <AppShell>
       <AppHeader title="Articles">
-        {/* <Subscribe username={user.user_metadata.username} newsletter={user.user_metadata.newsletter} /> */}
+        <Subscribe username={user.user_metadata.username} newsletter={user.user_metadata.newsletter} />
       </AppHeader>
       <div>
         {articles.map((article) => (

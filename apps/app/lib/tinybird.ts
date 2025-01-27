@@ -40,17 +40,18 @@ export async function track({
     const ua = userAgent(req);
     const ip = ipAddress(req) || '0.0.0.0';
 
-    if (process.env.VERCEL === "1") {
-      const { success } = await rateLimit.analytics.limit(
-        `track:${ip}:${domain ?? username}:${page}`,
-      );
+    //TODO: uncomment this later
+    // if (process.env.VERCEL === "1") {
+    //   const { success } = await rateLimit.analytics.limit(
+    //     `track:${ip}:${domain ?? username}:${page}`,
+    //   );
 
-      if (!success) {
-        return new Response(null, { status: 200 });
-      }
-    } else {
-      return new Response(null, { status: 200 });
-    }
+    //   if (!success) {
+    //     return new Response(null, { status: 200 });
+    //   }
+    // } else {
+    //   return new Response(null, { status: 200 });
+    // }
 
     
     const user = await getUserByDomain(username ?? domain!);
