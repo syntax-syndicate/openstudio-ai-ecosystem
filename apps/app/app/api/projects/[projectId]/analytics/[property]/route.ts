@@ -40,7 +40,7 @@ export const GET = guard(
       const data = await getAnalytics({
         property,
         interval,
-        page: `/user/kuluruvineeth/projects/${project[0].slug}`, //TODO: change to user slug like /projects/project-slug
+        page: `/projects/${project[0].slug}`,
         userId: user.id,
       });
 

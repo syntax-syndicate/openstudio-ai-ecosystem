@@ -34,6 +34,10 @@ const nextConfig: NextConfig = withLogtail({
         protocol: 'https',
         hostname: 'icons.duckduckgo.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'flagcdn.com',
+      },
     ],
   },
 

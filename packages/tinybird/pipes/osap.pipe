@@ -1,32 +1,87 @@
 NODE primary_analytics
 SQL >
     %
-    SELECT 
-        (
-        {% if defined(type) %}
-            {% if type == 'page' %}page{% end %}
-            {% if type == 'country' %}country{% end %}
-            {% if type == 'city' %}city{% end %}
-            {% if type == 'device' %}device{% end %}
-            {% if type == 'os' %}os{% end %}
-            {% if type == 'browser' %}browser{% end %}
-            {% if type == 'referer' %}referer{% end %}
-        {% else %}
-            page
-        {% end %}
-        ) as dimension,
-        count() as visits
-    FROM osa
-    WHERE 1=1
-        {% if defined(userId) %}
-            AND userId = {{String(userId)}}
-        {% end %}
-        {% if defined(page) %}
-            AND page = {{String(page)}}
-        {% end %}
-        {% if defined(start) and defined(end) %}
-            AND timestamp BETWEEN {{DateTime64(start)}} AND {{DateTime64(end)}}
-        {% end %}
-    GROUP BY dimension
-    ORDER BY visits DESC
-    LIMIT 100
+    {% if defined(type) and type == 'device' %}
+        SELECT 
+            device,
+            os,
+            browser,
+            count() as value
+        FROM osa
+        WHERE 1=1
+            {% if defined(userId) %}
+                AND userId = {{String(userId)}}
+            {% end %}
+            {% if defined(page) %}
+                AND page = {{String(page)}}
+            {% end %}
+            {% if defined(start) and defined(end) %}
+                AND timestamp BETWEEN parseDateTimeBestEffort({{start}}) AND parseDateTimeBestEffort({{end}})
+            {% end %}
+        GROUP BY device, os, browser
+        ORDER BY value DESC
+        LIMIT 100
+    {% elif defined(type) and type == 'country' %}
+        SELECT 
+            country,
+            city,
+            count() as value
+        FROM osa
+        WHERE 1=1
+            {% if defined(userId) %}
+                AND userId = {{String(userId)}}
+            {% end %}
+            {% if defined(page) %}
+                AND page = {{String(page)}}
+            {% end %}
+            {% if defined(start) and defined(end) %}
+                AND timestamp BETWEEN parseDateTimeBestEffort({{start}}) AND parseDateTimeBestEffort({{end}})
+            {% end %}
+        GROUP BY country, city
+        ORDER BY value DESC
+        LIMIT 100
+    {% elif defined(type) and type == 'page' %}
+        SELECT 
+            page,
+            count() as value
+        FROM osa
+        WHERE 1=1
+            {% if defined(userId) %}
+                AND userId = {{String(userId)}}
+            {% end %}
+            {% if defined(page) %}
+                AND page = {{String(page)}}
+            {% end %}
+            {% if defined(start) and defined(end) %}
+                AND timestamp BETWEEN parseDateTimeBestEffort({{start}}) AND parseDateTimeBestEffort({{end}})
+            {% end %}
+        GROUP BY page
+        ORDER BY value DESC
+        LIMIT 100
+    {% else %}
+        SELECT 
+            (
+            {% if defined(type) %}
+                {% if type == 'os' %}os{% end %}
+                {% if type == 'browser' %}browser{% end %}
+                {% if type == 'referer' %}referer{% end %}
+            {% else %}
+                page
+            {% end %}
+            ) as dimension,
+            count() as value
+        FROM osa
+        WHERE 1=1
+            {% if defined(userId) %}
+                AND userId = {{String(userId)}}
+            {% end %}
+            {% if defined(page) %}
+                AND page = {{String(page)}}
+            {% end %}
+            {% if defined(start) and defined(end) %}
+                AND timestamp BETWEEN parseDateTimeBestEffort({{start}}) AND parseDateTimeBestEffort({{end}})
+            {% end %}
+        GROUP BY dimension
+        ORDER BY value DESC
+        LIMIT 100
+    {% end %}

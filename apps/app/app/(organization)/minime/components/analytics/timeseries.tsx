@@ -3,6 +3,8 @@ import { fetcher } from '@/helper/utils';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useContext } from 'react';
 import Card from './card';
+import AreaChart from  "./charts/area";
+import {Icons} from "@repo/design-system/components/ui/icons"
 
 export default function Timeseries() {
   const { interval, basePath, index } = useContext(AnalyticsContext);
@@ -56,7 +58,7 @@ export default function Timeseries() {
       loading={isLoading}
       className="h-auto"
     >
-      {/* {isTimeseriesLoading ? (
+      {isTimeseriesLoading ? (
         <div className="h-72 flex justify-center items-center">
           <Icons.spinner className="animate-spin text-gray-1" size={18} />
         </div>
@@ -74,7 +76,7 @@ export default function Timeseries() {
           }
           index={index}
         />
-      )} */}
+      )}
       <></>
     </Card>
   );

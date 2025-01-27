@@ -2,18 +2,18 @@ NODE timeseries
 SQL >
     %
     SELECT 
-        {% if defined(granularity) %}
-            CASE '{{granularity}}'
+        {% if defined(interval) %}
+            CASE interval
                 WHEN 'minute' THEN toStartOfMinute(timestamp)
                 WHEN 'hour' THEN toStartOfHour(timestamp)
                 WHEN 'day' THEN toStartOfDay(timestamp)
+                WHEN 'week' THEN toStartOfWeek(timestamp)
                 WHEN 'month' THEN toStartOfMonth(timestamp)
-                ELSE toStartOfDay(timestamp)
             END
         {% else %}
             toStartOfDay(timestamp)
-        {% end %} as date,
-        count() as visits
+        {% end %} as start,
+        count() as value
     FROM osa
     WHERE 1=1
         {% if defined(userId) %}
@@ -23,7 +23,7 @@ SQL >
             AND page = {{page}}
         {% end %}
         {% if defined(start) and defined(end) %}
-            AND timestamp BETWEEN {{DateTime64(start)}} AND {{DateTime64(end)}}
+            AND timestamp BETWEEN parseDateTimeBestEffort({{start}}) AND parseDateTimeBestEffort({{end}})
         {% end %}
-    GROUP BY date
-    ORDER BY date ASC
+    GROUP BY start
+    ORDER BY start ASC

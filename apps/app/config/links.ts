@@ -29,11 +29,11 @@ export const appConfig: AppConfig = {
       href: '/minime/bookmarks',
       icon: 'bookmark',
     },
-    // {
-    //   title: 'Analytics',
-    //   href: '/minime/analytics',
-    //   icon: 'areaChart',
-    // },
+    {
+      title: 'Analytics',
+      href: '/minime/analytics',
+      icon: 'areaChart',
+    },
   ],
   settingsNav: [
     {

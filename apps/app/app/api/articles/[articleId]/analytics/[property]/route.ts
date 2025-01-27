@@ -39,7 +39,7 @@ export const GET = guard(
       const data = await getAnalytics({
         property,
         interval,
-        page: `/user/kuluruvineeth/articles/${article[0].slug}`, //TODO: change to user slug like /articles/article-slug
+        page: `/articles/${article[0].slug}`,
         userId: user.id,
       });
       return NextResponse.json(data);
