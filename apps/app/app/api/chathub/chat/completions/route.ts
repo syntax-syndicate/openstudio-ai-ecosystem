@@ -24,15 +24,15 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const response = await axios({
     method: 'POST',
-    url: process.env.OPENAI_API_URL,
+    url: process.env.GROQ_API_URL,
     headers: {
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
       'Content-Type': 'application/json',
       Accept: 'text/event-stream',
     },
     data: {
       ...body,
-      model: 'gpt-4o-mini',
+      model: 'deepseek-r1-distill-llama-70b',
       stream: true,
     },
     responseType: 'stream',
