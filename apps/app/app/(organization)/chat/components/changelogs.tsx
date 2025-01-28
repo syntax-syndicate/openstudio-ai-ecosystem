@@ -44,7 +44,12 @@ export const ChangeLogs = ({ open, setOpen }: ChangelogsProps) => {
             <Flame size={20} /> What&apos;s new
           </Type>
         </Flex>
-        {changelogs?.map((changelog) => (
+        <Flex>
+          <Type>
+            Work In Progress 🚧
+          </Type>
+        </Flex>
+        {/* {changelogs?.map((changelog) => (
           <Flex
             key={changelog.id}
             className="px-6 py-4"
@@ -95,7 +100,7 @@ export const ChangeLogs = ({ open, setOpen }: ChangelogsProps) => {
               />
             </Flex>
           </Flex>
-        ))}
+        ))} */}
       </DialogContent>
     </Dialog>
   );

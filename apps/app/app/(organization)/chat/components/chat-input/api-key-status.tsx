@@ -33,7 +33,7 @@ export const ApiKeyStatus = () => {
           className="text-teal-600"
           onClick={() => {
             window.location.href =
-              window.location.origin + '/chat/settings/llms';
+              window.location.origin + '/chat/settings/llms/openai';
           }}
         >
           Manage API Keys

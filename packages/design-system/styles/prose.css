@@ -1,9 +1,9 @@
 .prose {
-  @apply min-w-full text-secondary prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-normal prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-code:before:hidden prose-code:after:hidden prose-hr:my-4;
+  @apply min-w-full prose-headings:mb-4 prose-headings:mt-8 prose-headings:font-normal prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-code:before:hidden prose-code:after:hidden prose-hr:my-4;
 }
 
 .prose a {
-  @apply cursor-pointer font-normal text-secondary underline-offset-2;
+  @apply cursor-pointer font-normal underline-offset-2;
 }
 
 .prose blockquote {
@@ -11,19 +11,19 @@
 }
 
 .prose pre {
-  @apply rounded-lg border border-gray-2 bg-gray-3 text-secondary;
+  @apply rounded-lg border border-gray-2 bg-gray-3;
 }
 
 .prose pre code {
-  @apply border-0 bg-inherit p-0 text-secondary;
+  @apply border-0 bg-inherit p-0;
 }
 
 .prose code {
-  @apply rounded-lg border border-gray-2 bg-gray-3 px-1 py-0.5 font-normal text-secondary;
+  @apply rounded-lg border border-gray-2 bg-gray-3 px-1 py-0.5 font-normal;
 }
 
 .prose ul {
-  @apply list-outside list-disc text-secondary marker:text-gray-1;
+  @apply list-outside list-disc marker:text-gray-1;
 }
 
 .prose ul > li {
@@ -31,11 +31,11 @@
 }
 
 .prose ol {
-  @apply list-outside list-decimal text-secondary marker:text-gray-1;
+  @apply list-outside list-decimal marker:text-gray-1;
 }
 
 .prose ol > li {
-  @apply list-outside list-decimal leading-6 text-secondary marker:text-gray-1;
+  @apply list-outside list-decimal leading-6 marker:text-gray-1;
 }
 
 .prose ul[class="contains-task-list"] li[class="task-list-item"] {

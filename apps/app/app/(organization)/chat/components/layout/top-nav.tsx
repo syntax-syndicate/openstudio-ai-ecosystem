@@ -87,7 +87,7 @@ export const TopNav = ({
             <Github size={16} />
             <span className="hidden md:block">Star on Github</span>
           </Button>
-          <Button
+          {/* <Button
             variant="bordered"
             size="sm"
             onClick={() => {
@@ -96,7 +96,7 @@ export const TopNav = ({
           >
             <FlagIcon size={16} className="block md:hidden" />
             <span className="hidden md:block">Feedback</span>
-          </Button>
+          </Button> */}
         </Flex>
       </Flex>
       {renderModal()}

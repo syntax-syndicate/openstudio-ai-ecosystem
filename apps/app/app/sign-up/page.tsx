@@ -24,7 +24,7 @@ const SignUpPage = async () => {
         <div className="w-full max-w-[400px] space-y-8">
           <Logo className="mx-auto h-12 w-12" />
           <SignupForm />
-          <Prose>
+          {/* <Prose>
             <p className="text-center text-muted-foreground text-sm">
               <Balancer>
                 By signing in, you agree to our{' '}
@@ -38,7 +38,7 @@ const SignUpPage = async () => {
                 .
               </Balancer>
             </p>
-          </Prose>
+          </Prose> */}
         </div>
       </div>
       <div className="hidden h-full w-full items-start justify-center overflow-hidden bg-background lg:flex">
