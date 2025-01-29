@@ -20,7 +20,9 @@ const Home = async () => {
       <div className="space-y-2">
         <Greeting firstName={user.user_metadata?.first_name} />
         <MDX source={`Welcome to Open Studio (Never Complete) - Open for scope and flexibility Let's keep it this way for now.
-          - ChatHub - Nothing new Just explore for now with DeepSeek R1
+          - First App - ChatHub (a drop of open studio's oceantic vision) - Nothing new Just explore for now with DeepSeek R1
+          - Second App Coming Up Soon - MiniMe - A simple way to present your professional profile with your own simple website (default to username.openstudio.co.in - option to configure your own domain) (About, Articles (with newsletter subscription), Projects, etc) 
+          - Many more apps coming soon - Rapidly iterating on the apps and features
           - Planning to add all of projects: (https://www.youtube.com/@kuluruvineeth)
           - What do you guys think?
           - Really value your feedback🙏

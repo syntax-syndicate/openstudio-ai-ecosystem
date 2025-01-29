@@ -1,16 +1,17 @@
 export const examplePrompts = [
   {
-    name: 'Top-rated Restaurants',
-    content: 'What are the top-rated restaurants in ::city::?',
-  },
-  {
-    name: 'Generate a SQL query',
+    name: 'When Build in India for the world?',
     content:
-      'Generate a SQL query to ::count and sort unique logins in the last month::',
+      'Dream to reality, when are we building in ::India:: for the world?',
   },
   {
-    name: 'Search for coding solutions',
-    content: 'Search for solutions to ::specific coding error::',
+    name: 'Till now what great tech companies are built in India?',
+    content:
+      'Till now what great tech companies are built in ::India::?',
+  },
+  {
+    name: 'Where is India vs US/China/Russia/Europe?',
+    content: 'Where is ::India:: vs US/China/Russia/Europe? in detailed tabular format',
   },
   {
     name: 'Recent news in city',

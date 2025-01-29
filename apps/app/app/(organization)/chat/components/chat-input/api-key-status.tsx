@@ -22,7 +22,7 @@ export const ApiKeyStatus = () => {
         <Type
           size="xs"
           textColor="secondary"
-          className="rounded-full bg-zinc-50 px-3 py-1.5 text-center"
+          className="rounded-full bg-zinc-50 px-3 py-1.5 text-center dark:bg-zinc-800"
         >
           OpenStudio ChatHub is free to use with limited access, bring your own
           API key for unlimited access.
