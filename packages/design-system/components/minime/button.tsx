@@ -14,8 +14,7 @@ const buttonVariants = cva(
           'border border-gray-2 text-danger enabled:hover:border-danger enabled:hover:bg-danger enabled:hover:text-primary',
         secondary:
           'border border-gray-2 bg-gray-3 text-gray-4 enabled:hover:bg-gray-2 enabled:hover:text-secondary',
-        ghost:
-          'enabled:hover:!bg-gray-2 text-gray-4',
+        ghost: 'enabled:hover:!bg-gray-2 text-gray-4',
         primary:
           'bg-secondary text-primary opacity-100 transition-opacity hover:opacity-80',
       },

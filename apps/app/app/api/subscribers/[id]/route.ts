@@ -1,6 +1,6 @@
-import { deleteSubscriber } from "@/actions/subscribers";
-import { guard } from "@/lib/auth";
-import * as z from "zod";
+import { deleteSubscriber } from '@/actions/subscribers';
+import { guard } from '@/lib/auth';
+import * as z from 'zod';
 
 const routeContextSchema = z.object({
   params: z.object({
@@ -20,5 +20,5 @@ export const DELETE = guard(
       return new Response(null, { status: 500 });
     }
   },
-  { requiredPlan: "Pro", schemas: { contextSchema: routeContextSchema } },
+  { requiredPlan: 'Pro', schemas: { contextSchema: routeContextSchema } }
 );

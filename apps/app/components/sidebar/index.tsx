@@ -106,11 +106,9 @@ export const Sidebar = ({ user, organization }: SidebarProps) => {
               General
             </SidebarGroupLabel>
             <SidebarMenu>
-              {[navigation.home, navigation.chat].map(
-                (item) => (
-                  <SidebarItem key={item.label} {...item} />
-                )
-              )}
+              {[navigation.home, navigation.chat].map((item) => (
+                <SidebarItem key={item.label} {...item} />
+              ))}
             </SidebarMenu>
           </SidebarGroup>
           {user.user_metadata.organization_role !== OpenStudioRole.Member && (

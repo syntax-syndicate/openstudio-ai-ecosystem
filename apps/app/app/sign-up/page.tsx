@@ -1,10 +1,7 @@
 import { handleAuthedState } from '@/lib/auth';
-import { Link } from '@repo/design-system/components/link';
 import { Logo } from '@repo/design-system/components/logo';
-import { Prose } from '@repo/design-system/components/prose';
 import { createMetadata } from '@repo/seo/metadata';
 import type { Metadata } from 'next';
-import { Balancer } from 'react-wrap-balancer';
 import { SignupForm } from './components/form';
 
 const title = 'Sign Up';

@@ -7,7 +7,7 @@ import {
   isProjectExist,
 } from '@/lib/edge';
 import { capitalize, detectBot } from '@/lib/utils';
-import { getUserById, getUserByDomain } from '@repo/backend/auth/utils';
+import { getUserByDomain, getUserById } from '@repo/backend/auth/utils';
 import { rateLimit } from '@repo/rate-limit';
 import { analyticsSources } from '@repo/tinybird/src/utils';
 import { geolocation, ipAddress } from '@vercel/edge';
@@ -53,7 +53,6 @@ export async function track({
     //   return new Response(null, { status: 200 });
     // }
 
-    
     const user = await getUserByDomain(username ?? domain!);
     if (!user) {
       return new Response(null, { status: 404 });
@@ -65,7 +64,6 @@ export async function track({
         ? isArticleExist(slug, authorId)
         : isProjectExist(slug, authorId)
       : null;
-
 
     if (isPost && !isPostExist) {
       return new Response(null, { status: 404 });

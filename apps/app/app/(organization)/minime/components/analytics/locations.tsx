@@ -1,29 +1,29 @@
+import { fetcher } from '@/helper/utils';
+import { countries } from '@/types/minime';
+import { useQuery } from '@tanstack/react-query';
 import { useContext, useState } from 'react';
 import { AnalyticsContext } from '.';
-import Card from './card';
-import { useQuery } from '@tanstack/react-query';
-import { fetcher } from '@/helper/utils';
 import BarList from './bar-list';
-import { countries } from '@/types/minime';
+import Card from './card';
 export type LocationsTabs = 'country' | 'city';
 
 export default function Locations() {
   const [tab, setTab] = useState<LocationsTabs>('country');
   const { basePath, interval } = useContext(AnalyticsContext);
 
-    const { data, isLoading } = useQuery<
-      {
-        country: string;
-        city: string;
-        value: number;
-      }[]
-    >({
-      queryKey: ["analytics", "locations", interval],
-      queryFn: () =>
-        fetcher(
-          `${basePath}/analytics/${tab.toLowerCase()}?interval=${interval}`,
-        ),
-    });
+  const { data, isLoading } = useQuery<
+    {
+      country: string;
+      city: string;
+      value: number;
+    }[]
+  >({
+    queryKey: ['analytics', 'locations', interval],
+    queryFn: () =>
+      fetcher(
+        `${basePath}/analytics/${tab.toLowerCase()}?interval=${interval}`
+      ),
+  });
 
   return (
     <Card

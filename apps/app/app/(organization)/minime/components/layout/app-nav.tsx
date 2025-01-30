@@ -18,7 +18,11 @@ export default function AppNav({ links, user }: Props) {
   const segment = useSelectedLayoutSegment();
   return (
     <div className="flex w-full items-center justify-between ">
-      <Link href="/minime" className="flex items-center gap-2" aria-label="Go to home">
+      <Link
+        href="/minime"
+        className="flex items-center gap-2"
+        aria-label="Go to home"
+      >
         <Icons.logo size={30} /> Minime
       </Link>
 

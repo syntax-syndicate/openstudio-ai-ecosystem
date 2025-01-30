@@ -1,7 +1,7 @@
-import { sendNewsletter } from "@/actions/articles";
-import { guard } from "@/lib/auth";
-import { getArticleByAuthor } from "@/actions/articles";
-import * as z from "zod";
+import { sendNewsletter } from '@/actions/articles';
+import { getArticleByAuthor } from '@/actions/articles';
+import { guard } from '@/lib/auth';
+import * as z from 'zod';
 
 const contextSchema = z.object({
   params: z.object({
@@ -21,13 +21,13 @@ export const POST = guard(
 
       if (!article[0].published) {
         return new Response(
-          "You must publish this article to send newsletter",
-          { status: 400 },
+          'You must publish this article to send newsletter',
+          { status: 400 }
         );
       }
 
       if (!user.user_metadata.newsletter) {
-        return new Response("Newsletter function is not active", {
+        return new Response('Newsletter function is not active', {
           status: 400,
         });
       }
@@ -38,9 +38,9 @@ export const POST = guard(
     }
   },
   {
-    requiredPlan: "Pro",
+    requiredPlan: 'Pro',
     schemas: {
       contextSchema,
     },
-  },
+  }
 );

@@ -1,65 +1,55 @@
-"use server";
-import type * as z from "zod";
-import { database } from "@repo/backend/database";
-import { eq, and, desc } from "drizzle-orm";
-import { subscribers } from "@repo/backend/schema";
-import type { subscribeSchema } from "@/lib/validations/subscribe";
-import { formatVerboseDate } from "@/helper/utils";
-import { json2csv } from "json-2-csv";
-import { ExportResponse } from "@/types/minime";
+'use server';
+import { formatVerboseDate } from '@/helper/utils';
+import type { subscribeSchema } from '@/lib/validations/subscribe';
+import type { ExportResponse } from '@/types/minime';
+import { database } from '@repo/backend/database';
+import { subscribers } from '@repo/backend/schema';
+import { and, desc, eq } from 'drizzle-orm';
+import { json2csv } from 'json-2-csv';
+import type * as z from 'zod';
 
 type SubscriberSchema = z.infer<typeof subscribeSchema>;
 
 export async function createSubscriber(userId: string, data: SubscriberSchema) {
-  const [newSubscriber] = await database.insert(subscribers)
-    .values({ 
-      name: data.name, 
-      email: data.email, 
-      userId 
+  const [newSubscriber] = await database
+    .insert(subscribers)
+    .values({
+      name: data.name,
+      email: data.email,
+      userId,
     })
     .returning();
   return newSubscriber;
 }
 
 export async function deleteSubscriber(subscriberId: string, userId: string) {
-  const [deletedSubscriber] = await database.delete(subscribers)
+  const [deletedSubscriber] = await database
+    .delete(subscribers)
     .where(
-      and(
-        eq(subscribers.id, subscriberId),
-        eq(subscribers.userId, userId)
-      )
+      and(eq(subscribers.id, subscriberId), eq(subscribers.userId, userId))
     )
     .returning();
   return deletedSubscriber.id;
 }
 
 export async function isSubscriberExist(email: string, userId: string) {
-  const count = await database.select()
+  const count = await database
+    .select()
     .from(subscribers)
-    .where(
-      and(
-        eq(subscribers.userId, userId),
-        eq(subscribers.email, email)
-      )
-    )
+    .where(and(eq(subscribers.userId, userId), eq(subscribers.email, email)));
   return count.length > 0;
 }
 
 export async function verifySubscriberAccess(id: string, userId: string) {
-  const count = await database.select()
+  const count = await database
+    .select()
     .from(subscribers)
-    .where(
-      and(
-        eq(subscribers.id, id),
-        eq(subscribers.userId, userId)
-      )
-    )
+    .where(and(eq(subscribers.id, id), eq(subscribers.userId, userId)));
   return count.length > 0;
 }
 
-
 export async function getSubscibersExport(
-  userId: string,
+  userId: string
 ): Promise<ExportResponse> {
   const subscribersList = await database
     .select({
@@ -75,12 +65,11 @@ export async function getSubscibersExport(
   const content = json2csv(
     subscribersList.map(({ createdAt, ...subscriber }) => {
       return { ...subscriber, subscribedAt: formatVerboseDate(createdAt) };
-    }),
+    })
   );
 
   return { filename, content };
 }
-
 
 export async function getSubscribersByUserId(userId: string) {
   return await database

@@ -1,6 +1,3 @@
-
-import React from "react";
-
 import {
   Body,
   Container,
@@ -10,10 +7,8 @@ import {
   Html,
   Link,
   Preview,
-  Tailwind,
   Text,
-} from "@react-email/components";
-
+} from '@react-email/components';
 
 export type NewsletterProps = {
   title: string;
@@ -24,11 +19,11 @@ export type NewsletterProps = {
 };
 
 export default function Newsletter({
-  title = "Test article",
-  author = "Author",
-  articleURL = "https://openstudio.co.in",
-  published = "Jan 26, 2025",
-  subId = "subId",
+  title = 'Test article',
+  author = 'Author',
+  articleURL = 'https://openstudio.co.in',
+  published = 'Jan 26, 2025',
+  subId = 'subId',
 }: NewsletterProps) {
   return (
     <Html>
@@ -37,8 +32,8 @@ export default function Newsletter({
           fontFamily="Ubuntu"
           fallbackFontFamily="sans-serif"
           webFont={{
-            url: "https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgoKfw72nU6AFw.woff2",
-            format: "woff2",
+            url: 'https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgoKfw72nU6AFw.woff2',
+            format: 'woff2',
           }}
           fontWeight={400}
           fontStyle="normal"
@@ -53,8 +48,8 @@ export default function Newsletter({
             href={articleURL}
             style={{
               ...text,
-              fontSize: "18px",
-              fontWeight: "bold",
+              fontSize: '18px',
+              fontWeight: 'bold',
             }}
           >
             {title}
@@ -62,9 +57,9 @@ export default function Newsletter({
           <Text
             style={{
               ...text,
-              marginTop: "10px",
-              color: "#606060",
-              fontWeight: "bold",
+              marginTop: '10px',
+              color: '#606060',
+              fontWeight: 'bold',
             }}
           >
             {published}
@@ -74,7 +69,11 @@ export default function Newsletter({
           </Link>
 
           <Text style={footer}>
-            <Link href="https://app.openstudio.tech" target="_blank" style={link}>
+            <Link
+              href="https://app.openstudio.tech"
+              target="_blank"
+              style={link}
+            >
               app.openstudio.tech
             </Link>
             <Link
@@ -82,7 +81,7 @@ export default function Newsletter({
               target="_blank"
               style={{
                 ...link,
-                float: "right",
+                float: 'right',
               }}
             >
               unsubscribe
@@ -95,48 +94,48 @@ export default function Newsletter({
 }
 
 const main = {
-  backgroundColor: "#ffffff",
-  fontFamily: "Ubuntu",
+  backgroundColor: '#ffffff',
+  fontFamily: 'Ubuntu',
 };
 
 const container = {
-  paddingLeft: "12px",
-  paddingRight: "12px",
-  margin: "0 auto",
+  paddingLeft: '12px',
+  paddingRight: '12px',
+  margin: '0 auto',
 };
 
 const h1 = {
-  color: "#333",
-  fontSize: "22px",
-  fontWeight: "bold",
-  margin: "40px 0",
-  padding: "0",
+  color: '#333',
+  fontSize: '22px',
+  fontWeight: 'bold',
+  margin: '40px 0',
+  padding: '0',
 };
 
 const button = {
-  display: "block",
-  padding: "10px",
-  fontSize: "14px",
-  backgroundColor: "#f4f4f4",
-  borderRadius: "5px",
-  color: "#000000",
+  display: 'block',
+  padding: '10px',
+  fontSize: '14px',
+  backgroundColor: '#f4f4f4',
+  borderRadius: '5px',
+  color: '#000000',
 };
 
 const link = {
-  color: "#606060",
-  fontSize: "14px",
-  textDecoration: "underline",
+  color: '#606060',
+  fontSize: '14px',
+  textDecoration: 'underline',
 };
 
 const text = {
-  color: "#333",
-  fontSize: "14px",
-  margin: "20px 0",
+  color: '#333',
+  fontSize: '14px',
+  margin: '20px 0',
 };
 
 const footer = {
-  color: "#606060",
-  fontSize: "12px",
-  lineHeight: "22px",
-  margin: "24px 0px",
+  color: '#606060',
+  fontSize: '12px',
+  lineHeight: '22px',
+  margin: '24px 0px',
 };
