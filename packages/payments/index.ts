@@ -1,9 +1,12 @@
 import 'server-only';
-import Stripe from 'stripe';
+import { lemonSqueezySetup } from '@lemonsqueezy/lemonsqueezy.js';
 import { keys } from './keys';
 
-export const stripe = new Stripe(keys().STRIPE_SECRET_KEY, {
-  apiVersion: '2024-11-20.acacia',
+lemonSqueezySetup({
+  apiKey: keys().LEMON_SQUEEZY_API_KEY,
+  onError: (error) => {
+    console.error('Lemon Squeezy error:', error);
+  },
 });
 
-export type { Stripe } from 'stripe';
+export * from '@lemonsqueezy/lemonsqueezy.js';
