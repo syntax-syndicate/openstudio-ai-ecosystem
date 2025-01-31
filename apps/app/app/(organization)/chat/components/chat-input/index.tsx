@@ -15,6 +15,7 @@ import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils, useImageAttachment } from '@/hooks';
 import { useChatEditor } from '@/hooks/use-editor';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
+import { TChatMessage } from '@/types';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -24,6 +25,7 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { generateShortUUID } from '@/helper/utils';
 
 export const ChatInput = () => {
   const { store, isReady, refetch } = useChatContext();
@@ -33,6 +35,8 @@ export const ChatInput = () => {
   const { getAssistantByKey, getAssistantIcon } = useAssistantUtils();
   const { invokeModel } = useLLMRunner();
   const { editor } = useChatEditor();
+  const currentMessage = store((state) => state.currentMessage);
+  const setCurrentMessage = store((state) => state.setCurrentMessage);
   const session = store((state) => state.session);
   const isInitialized = store((state) => state.isInitialized);
   const setIsInitialized = store((state) => state.setIsInitialized);
@@ -65,6 +69,85 @@ export const ChatInput = () => {
     });
     clearAttachment();
   };
+
+//   const sendMessage = async (input: string) => {
+//   if (!isReady || !session) return;
+  
+//   const assistantKeys = preferences.defaultAssistants || [preferences.defaultAssistant];
+//   const assistants = assistantKeys
+//     .map(key => getAssistantByKey(key))
+//     .filter(props => props?.assistant);
+
+//   if (!assistants.length) return;
+  
+//   setIsInitialized(true);
+//   editor?.commands.clearContent();
+
+//   // Create single message with initial state for all assistants
+//   const messageId = generateShortUUID();
+//   const message = {
+//     id: messageId,
+//     parentId: session.id,
+//     sessionId: session.id,
+//     rawHuman: input,
+//     rawAI: null,
+//     tools: [],
+//     stop: false,
+//     stopReason: null,
+//     relatedQuestions: [],
+//     runConfig: {
+//     context,
+//     input,
+//     image: attachment?.base64,
+//     sessionId: session.id,
+//     messageId,
+//     assistant: assistants[0]?.assistant // Primary assistant
+//   },
+//     runConfigs: assistants.map(props => ({
+//       context,
+//       input,
+//       image: attachment?.base64,
+//       sessionId: session.id,
+//       messageId,
+//       assistant: props!.assistant
+//     })),
+//     aiResponses: assistants.map(props => ({
+//       assistant: props!.assistant,
+//       rawAI: '',
+//       tools: [],
+//       relatedQuestions: [],
+//       stopReason: null,
+//       errorMessage: null,
+//       isLoading: true,
+//       createdAt: new Date()
+//     })),
+//     image: attachment?.base64 || null,
+//     createdAt: new Date(),
+//     isLoading: true,
+//     errorMessage: null
+//   };
+
+//   setCurrentMessage(message as TChatMessage);
+//     // Add a small delay to let state update
+//   await new Promise(resolve => setTimeout(resolve, 0));
+//   console.log("Store state after set:", store.getState().currentMessage); 
+//   // Start all streams
+//   assistants.forEach(props => 
+//     invokeModel({
+//       messageId,
+//       input,
+//       context,
+//       image: attachment?.base64,
+//       sessionId: session.id,
+//       assistant: props!.assistant
+//     })
+//   );
+
+//   clearAttachment();
+// };
+
+
+
 
   const chatInputBackgroundContainer = cn(
     'absolute right-0 bottom-0 left-0 flex w-full flex-col items-center justify-end gap-2 px-4 pb-1 md:px-4',

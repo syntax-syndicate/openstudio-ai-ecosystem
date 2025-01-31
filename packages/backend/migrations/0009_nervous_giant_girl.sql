@@ -1,0 +1,1 @@
+ALTER TABLE "preferences" ADD COLUMN "default_assistants" json NOT NULL;

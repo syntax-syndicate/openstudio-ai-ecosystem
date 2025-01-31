@@ -102,6 +102,7 @@ export const useLLMRunner = () => {
       stop: false,
       stopReason: null,
       rawAI: null,
+      aiResponses: [],
       image: image || null,
       tools: [],
       relatedQuestions: [],

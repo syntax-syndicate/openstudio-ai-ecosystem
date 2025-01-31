@@ -18,6 +18,8 @@ export const models = [
   'gemini-pro',
   'gemini-1.5-flash-latest',
   'gemini-1.5-pro-latest',
+  'gemini-2.0-flash-exp',
+  'gemini-2.0-flash-thinking-exp',
   'phi3:latest',
   'llama3-groq-70b-8192-tool-use-preview',
 ] as const;
