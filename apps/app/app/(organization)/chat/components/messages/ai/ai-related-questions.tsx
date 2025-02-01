@@ -9,16 +9,19 @@ import { Flex } from '@repo/design-system/components/ui/flex';
 import { StaggerContainer } from '@repo/design-system/components/ui/stagger-container';
 import { Type } from '@repo/design-system/components/ui/text';
 import { motion } from 'framer-motion';
+import { useMemo } from 'react';
 import type { FC } from 'react';
 
 export type TAIRelatedQuestions = {
   message: TChatMessage;
+  modelId?: string;
   show: boolean;
 };
 
 export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
   message,
   show,
+  modelId,
 }) => {
   const { refetch, store } = useChatContext();
   const isGenerating = store((state) => state.isGenerating);
@@ -26,19 +29,48 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
   const { getAssistantByKey } = useAssistantUtils();
   const { invokeModel } = useLLMRunner();
 
-  const handleOnClick = (question: string) => {
-    const assistant = preferences.defaultAssistant;
+  // Filter to get specific AI response
+  const targetResponse = useMemo(() => {
+    if (!modelId) return message; // Fallback for single-assistant
+    return message.aiResponses?.find((r) => r.assistant.key === modelId);
+  }, [message, modelId]);
 
-    const props = getAssistantByKey(assistant);
-    if (!props?.assistant) {
-      return;
-    }
-    message.sessionId &&
+  // const handleOnClick = (question: string) => {
+  //   const assistant = preferences.defaultAssistant;
+
+  //   const props = getAssistantByKey(assistant);
+  //   if (!props?.assistant) {
+  //     return;
+  //   }
+  //   message.sessionId &&
+  //     invokeModel({
+  //       input: question,
+  //       sessionId: message.sessionId,
+  //       assistant: props.assistant,
+  //     });
+  // };
+
+  // Get questions from filtered response
+  // const hasQuestions = targetResponse?.relatedQuestions?.length > 0;
+
+  const handleOnClick = (question: string) => {
+    // Get all configured assistants
+    const assistants = preferences.defaultAssistants
+      ? preferences.defaultAssistants
+          .map((key) => getAssistantByKey(key))
+          .filter(Boolean)
+      : [getAssistantByKey(preferences.defaultAssistant)].filter(Boolean);
+
+    if (!assistants.length || !message.sessionId) return;
+
+    // Invoke model for each assistant
+    assistants.forEach((assistantProps) => {
       invokeModel({
         input: question,
-        sessionId: message.sessionId,
-        assistant: props.assistant,
+        sessionId: message.sessionId!,
+        assistant: assistantProps!.assistant,
       });
+    });
   };
 
   if (

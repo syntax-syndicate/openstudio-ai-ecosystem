@@ -18,12 +18,12 @@ import {
 import { createUpdateSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 import {
+  type TAIResponse,
   type TCustomAssistant,
   type TLLMRunConfig,
   type ToolExecutionState,
   type ToolKey,
   providers,
-  type TAIResponse,
 } from './types';
 
 const authSchema = pgSchema('auth');

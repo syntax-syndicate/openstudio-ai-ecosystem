@@ -1,4 +1,6 @@
+import type { TAssistant } from '@/types/assistants';
 import type { TChatState } from '@/types/chat';
+import type { TAIResponse } from '@/types/messages';
 import { create } from 'zustand';
 
 const initialState = {
@@ -28,9 +30,61 @@ export const createChatStore = () =>
     updateCurrentMessage: (message) => {
       const { currentMessage } = get();
       if (currentMessage) {
-        const newMessage = { ...currentMessage, ...message };
-        set({ currentMessage: { ...currentMessage, ...newMessage } });
+        // Handle multiple AI responses
+        const newAiResponses = message.aiResponses
+          ? [...(currentMessage.aiResponses || []), ...message.aiResponses]
+          : currentMessage.aiResponses;
+
+        set({
+          currentMessage: {
+            ...currentMessage,
+            ...message,
+            aiResponses: newAiResponses,
+          },
+        });
       }
+    },
+    // Add new action for parallel updates
+    updateAssistantResponse: (
+      assistant: TAssistant,
+      content: string,
+      isComplete: boolean,
+      isLoading: boolean
+    ) => {
+      const { currentMessage } = get();
+      if (!currentMessage) return;
+
+      const existingResponseIndex = currentMessage.aiResponses?.findIndex(
+        (response) => response.assistant.key === assistant.key
+      );
+
+      const baseResponse: TAIResponse = {
+        assistant,
+        rawAI: content,
+        tools: [],
+        relatedQuestions: [],
+        stopReason: null,
+        errorMessage: null,
+        isLoading: isLoading,
+        createdAt: new Date(),
+        isComplete,
+      };
+
+      const updatedAiResponses =
+        existingResponseIndex !== undefined && existingResponseIndex !== -1
+          ? currentMessage.aiResponses?.map((response, index) =>
+              index === existingResponseIndex
+                ? { ...response, rawAI: content }
+                : response
+            )
+          : [...(currentMessage.aiResponses || []), baseResponse];
+
+      set({
+        currentMessage: {
+          ...currentMessage,
+          aiResponses: updatedAiResponses || [],
+        },
+      });
     },
     setIsInitialized: (isInitialized) => set({ isInitialized }),
     removeLastMessage: () => {

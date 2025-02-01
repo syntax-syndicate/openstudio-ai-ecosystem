@@ -45,7 +45,6 @@ export const AssistantModal: FC<TAssitantModal> = ({
 
   const baseAssistants = assistants?.filter((a) => a.type === 'base');
 
-
   const selectedAssistants = preferences.defaultAssistants?.map((key) =>
     getAssistantByKey(key)
   );
@@ -84,20 +83,25 @@ export const AssistantModal: FC<TAssitantModal> = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="bordered" size="sm" className="gap-1 pr-3 pl-1.5">
-          {selectedAssistants?.filter(Boolean).length ? selectedAssistants?.filter(Boolean).map((assistant) => {
-            return (
-              <Flex gap="sm" items="center" key={assistant?.assistant.key}>
-                {getAssistantIcon(assistant?.assistant.key || 'chathub', 'sm')}
-                {assistant?.assistant.name}
-              </Flex>
-            );
-          }) :
+          {selectedAssistants?.filter(Boolean).length ? (
+            selectedAssistants?.filter(Boolean).map((assistant) => {
+              return (
+                <Flex gap="sm" items="center" key={assistant?.assistant.key}>
+                  {getAssistantIcon(
+                    assistant?.assistant.key || 'chathub',
+                    'sm'
+                  )}
+                  {assistant?.assistant.name}
+                </Flex>
+              );
+            })
+          ) : (
             // <Flex gap="sm" items="center">
             //   {getAssistantIcon(selectedAssistant?.assistant.key || 'chathub', 'sm')}
             //   {selectedAssistant?.assistant.name}
             // </Flex>
             <></>
-          }
+          )}
           <ChevronDown size={14} strokeWidth="2" />
         </Button>
       </PopoverTrigger>

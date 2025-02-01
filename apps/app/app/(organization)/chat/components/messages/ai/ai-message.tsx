@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { CustomAssistantAvatar } from '@/app/(organization)/chat/components/custom-assistant-avatar';
 import { Mdx } from '@/app/(organization)/chat/components/mdx';
@@ -7,24 +7,47 @@ import { AIMessageError } from '@/app/(organization)/chat/components/messages/ai
 import { AIRelatedQuestions } from '@/app/(organization)/chat/components/messages/ai/ai-related-questions';
 import { AISelectionProvider } from '@/app/(organization)/chat/components/messages/ai/ai-selection-provider';
 import { AIToolMessage } from '@/app/(organization)/chat/components/messages/ai/ai-tool-message';
-import { useChatContext } from '@/context';
+import { useChatContext, usePreferenceContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
-import type { TChatMessage } from '@/types';
+import type { TAssistant, TChatMessage } from '@/types';
 import { Flex } from '@repo/design-system/components/ui/flex';
+
 export type TAIMessage = {
   message: TChatMessage;
   isLast: boolean;
+  assistant?: TAssistant;
 };
 
-export const AIMessage = ({ message, isLast }: TAIMessage) => {
-  const { id, rawAI, isLoading, stopReason, tools, runConfig, stop } = message;
-
+export const AIMessage = ({
+  message,
+  isLast,
+  assistant,
+  modelId,
+}: TAIMessage & { modelId?: string }) => {
   const { store } = useChatContext();
   const session = store((state) => state.session);
   const editor = store((state) => state.editor);
   const setContextValue = store((state) => state.setContext);
   const messageRef = useRef<HTMLDivElement>(null);
   const { getAssistantIcon } = useAssistantUtils();
+  const { preferences } = usePreferenceContext();
+  const targetResponse = useMemo(() => {
+    if (!modelId) return message; // Fallback for single-assistant
+    return message.aiResponses?.find((r) => r.assistant.key === modelId);
+  }, [message, modelId]);
+
+  // const {
+  //   rawAI = '',
+  //   tools = [],
+  //   isLoading = false,
+  //   stopReason = message.stopReason,
+  //   isComplete = false
+  // } = targetResponse
+
+  const { runConfig, stop, id } = message;
+
+  if (!targetResponse) return null;
+  const multipleAssistants = preferences.defaultAssistants?.length ?? 0 > 1;
 
   const handleSelection = (value: string) => {
     setContextValue(value);
@@ -43,7 +66,7 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
           />
         ) : (
           // <ModelIcon type="assistants" size="sm" />
-          getAssistantIcon(runConfig.assistant.key ?? '', 'sm')
+          getAssistantIcon(modelId ?? runConfig?.assistant?.key ?? '', 'sm')
         )}
       </Flex>
       <Flex
@@ -53,9 +76,9 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
         items="start"
         className="min-w-0 flex-grow pb-8"
       >
-        {!!tools?.length && (
+        {!!message?.tools?.length && (
           <Flex className="w-full gap-1 pb-2" direction="col">
-            {tools?.map((tool) => (
+            {message?.tools?.map((tool) => (
               <AIToolMessage tool={tool} key={tool.toolName} />
             ))}
           </Flex>
@@ -63,18 +86,21 @@ export const AIMessage = ({ message, isLast }: TAIMessage) => {
 
         <AISelectionProvider onSelect={handleSelection}>
           <Mdx
-            message={rawAI ?? undefined}
-            animate={!!isLoading}
+            message={targetResponse?.rawAI ?? undefined}
+            animate={!!message?.isLoading}
             messageId={id}
           />
         </AISelectionProvider>
-        {stop && (
+        {message.stop && (
           <AIMessageError
-            stopReason={stopReason ?? undefined}
+            stopReason={message.stopReason ?? undefined}
             message={message}
           />
         )}
-        <AIMessageActions message={message} canRegenerate={message && isLast} />
+        <AIMessageActions
+          message={message}
+          canRegenerate={multipleAssistants === 1 ? message && isLast : false}
+        />
         <AIRelatedQuestions message={message} show={message && isLast} />
       </Flex>
     </div>

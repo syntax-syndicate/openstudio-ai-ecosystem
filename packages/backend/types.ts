@@ -70,4 +70,5 @@ export type TAIResponse = {
   errorMessage: string | null;
   isLoading: boolean;
   createdAt: Date;
+  isComplete: boolean;
 };

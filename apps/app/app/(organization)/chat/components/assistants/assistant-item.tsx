@@ -7,8 +7,8 @@ import { Badge } from '@repo/design-system/components/ui/badge';
 import { CommandItem } from '@repo/design-system/components/ui/command';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
-import { Eye, ToyBrick, Check } from 'lucide-react';
 import { toast } from '@repo/design-system/components/ui/use-toast';
+import { Check, Eye, ToyBrick } from 'lucide-react';
 
 export type TAssistantItem = {
   assistant: TAssistant;
@@ -20,25 +20,28 @@ export const AssistantItem = ({ assistant, onSelect }: TAssistantItem) => {
   const { getAssistantByKey, getAssistantIcon } = useAssistantUtils();
   const assistantProps = getAssistantByKey(assistant.key);
   const model = assistantProps?.model;
-  const isSelected = preferences.defaultAssistants 
-    ? preferences.defaultAssistants.includes(assistant.key) 
+  const isSelected = preferences.defaultAssistants
+    ? preferences.defaultAssistants.includes(assistant.key)
     : preferences.defaultAssistant === assistant.key;
 
-  // max we can have is 3 assistants
-  const maxAssistants = 3;
+  // max we can have is 2 assistants
+  const maxAssistants = 2;
   const handleSelect = () => {
     if (isSelected) {
       // Remove from defaultAssistants if already selected
-      const updatedAssistants = preferences.defaultAssistants?.filter(
-        (key) => key !== assistant.key
-      ) || [];
-      
+      const updatedAssistants =
+        preferences.defaultAssistants?.filter((key) => key !== assistant.key) ||
+        [];
+
       updatePreferences(
         {
           // If we're removing the current defaultAssistant, set it to the first remaining assistant
-          defaultAssistant: preferences.defaultAssistant === assistant.key
-            ? updatedAssistants.length > 0 ? updatedAssistants[0] : 'chathub'
-            : preferences.defaultAssistant,
+          defaultAssistant:
+            preferences.defaultAssistant === assistant.key
+              ? updatedAssistants.length > 0
+                ? updatedAssistants[0]
+                : 'chathub'
+              : preferences.defaultAssistant,
           defaultAssistants: updatedAssistants,
           maxTokens: defaultPreferences.maxTokens,
         },
@@ -46,17 +49,22 @@ export const AssistantItem = ({ assistant, onSelect }: TAssistantItem) => {
       );
     } else {
       // Check if we've already reached the maximum number of assistants
-      if (!preferences.defaultAssistants || preferences.defaultAssistants?.length >= maxAssistants) {
+      if (
+        !preferences.defaultAssistants ||
+        preferences.defaultAssistants?.length >= maxAssistants
+      ) {
         toast({
           title: 'Error',
-          description: 'You can only select 3 assistants',
+          description: 'Beta feature: You can only select 2 assistants',
           variant: 'destructive',
         });
         return; // Don't add if we've reached the limit
       }
       // Add new selection, ensuring defaultAssistant is first in the array
       const updatedAssistants = [
-        ...(preferences.defaultAssistants?.filter((key) => key !== assistant.key) || []),
+        ...(preferences.defaultAssistants?.filter(
+          (key) => key !== assistant.key
+        ) || []),
         assistant.key,
       ];
 
@@ -89,7 +97,9 @@ export const AssistantItem = ({ assistant, onSelect }: TAssistantItem) => {
         <div className="flex flex-1"></div>
 
         <Flex gap="md" items="center">
-          {isSelected && <Check size={16} className="text-green-500" strokeWidth={1.5} />}
+          {isSelected && (
+            <Check size={16} className="text-green-500" strokeWidth={1.5} />
+          )}
           {!!model?.vision && (
             <Eye size={16} strokeWidth={1.5} className="text-zinc-500" />
           )}

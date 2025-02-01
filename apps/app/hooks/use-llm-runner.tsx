@@ -51,6 +51,8 @@ export const useLLMRunner = () => {
     const { sessionId, messageId, input, context, image, assistant } = config;
     const newMessageId = messageId || generateShortUUID();
 
+    store.getState().updateAssistantResponse(config.assistant, '', false, true);
+
     const modelKey = assistant.baseModel;
     const session = await getSessionById(sessionId);
     if (!session) {
@@ -201,6 +203,14 @@ export const useLLMRunner = () => {
               },
               handleLLMNewToken: async (token: string) => {
                 streamedMessage += token;
+                store
+                  .getState()
+                  .updateAssistantResponse(
+                    config.assistant,
+                    streamedMessage,
+                    false,
+                    true
+                  );
                 updateCurrentMessage({
                   isLoading: true,
                   rawAI: streamedMessage,
@@ -231,6 +241,15 @@ export const useLLMRunner = () => {
                   (value) => hasError[value]
                 ) as TStopReason;
 
+                store
+                  .getState()
+                  .updateAssistantResponse(
+                    config.assistant,
+                    streamedMessage,
+                    false,
+                    false
+                  );
+
                 updateCurrentMessage({
                   isLoading: false,
                   rawHuman: input,
@@ -245,6 +264,15 @@ export const useLLMRunner = () => {
         }
       );
 
+      store
+        .getState()
+        .updateAssistantResponse(
+          config.assistant,
+          stream?.content || stream?.output?.[0]?.text || stream?.output,
+          true,
+          false
+        );
+
       updateCurrentMessage({
         rawHuman: input,
         rawAI: stream?.content || stream?.output?.[0]?.text || stream?.output,
@@ -253,6 +281,10 @@ export const useLLMRunner = () => {
         stop: true,
         stopReason: 'finish',
       });
+      console.log(
+        'assistant response',
+        store.getState().currentMessage?.aiResponses
+      );
     } catch (err) {
       updateCurrentMessage({
         isLoading: false,
