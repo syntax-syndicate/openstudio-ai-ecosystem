@@ -281,10 +281,6 @@ export const useLLMRunner = () => {
         stop: true,
         stopReason: 'finish',
       });
-      console.log(
-        'assistant response',
-        store.getState().currentMessage?.aiResponses
-      );
     } catch (err) {
       updateCurrentMessage({
         isLoading: false,

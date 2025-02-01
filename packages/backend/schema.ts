@@ -175,7 +175,10 @@ export const preferences = pgTable('preferences', {
     .unique()
     .references(() => organization.id),
   defaultAssistant: text('default_assistant').notNull(),
-  defaultAssistants: json('default_assistants').$type<string[]>(),
+  // add default chathub
+  defaultAssistants: json('default_assistants')
+    .$type<string[]>()
+    .default(['chathub']),
   systemPrompt: text('system_prompt').notNull(),
   messageLimit: integer('message_limit').notNull(),
   temperature: decimal('temperature').notNull(),

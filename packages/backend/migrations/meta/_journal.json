@@ -78,6 +78,13 @@
       "when": 1738217602773,
       "tag": "0010_puzzling_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1738395951258,
+      "tag": "0011_brown_iron_fist",
+      "breakpoints": true
     }
   ]
 }
