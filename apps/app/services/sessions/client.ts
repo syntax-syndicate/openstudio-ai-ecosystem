@@ -7,7 +7,6 @@ import { database } from '@repo/backend/database';
 import { schema } from '@repo/backend/schema';
 import type { TCustomAssistant } from '@repo/backend/types';
 import { and, asc, eq } from 'drizzle-orm';
-import { nanoid } from 'nanoid';
 
 // Message-related functions
 export async function getAllMessages(): Promise<TChatMessage[]> {
@@ -99,17 +98,15 @@ export async function getSessions(): Promise<TChatSession[]> {
     return [];
   }
 
-  return (
-    await database
-      .select()
-      .from(schema.chatSessions)
-      .where(
-        and(
-          eq(schema.chatSessions.organizationId, organizationId),
-          eq(schema.chatSessions.userId, user.id)
-        )
+  return await database
+    .select()
+    .from(schema.chatSessions)
+    .where(
+      and(
+        eq(schema.chatSessions.organizationId, organizationId),
+        eq(schema.chatSessions.userId, user.id)
       )
-  );
+    );
 }
 
 export async function setSession(
@@ -225,7 +222,7 @@ export async function createNewSession(): Promise<TChatSession | null> {
 
     const sessions = await getSessions();
     const latestSession = sortSessions(sessions, 'createdAt')?.[0];
-    
+
     if (latestSession?.id) {
       const latestSessionMessages = await getMessages(latestSession.id);
       if (latestSessionMessages?.length === 0) {
@@ -239,12 +236,11 @@ export async function createNewSession(): Promise<TChatSession | null> {
         id: generateShortUUID(),
         title: 'Untitled',
         organizationId,
-        userId: user.id
+        userId: user.id,
       })
       .returning();
 
     return newSession?.[0] || null;
-    
   } catch (error) {
     console.error('Error creating new session:', error);
     throw error;

@@ -1,6 +1,10 @@
-import ExportButton from "@/components/forms/export-button";
-import { Icons } from "@repo/design-system/components/ui/icons";
-import { Badge } from "@repo/design-system/components/minime/badge";
+import { getSubscribersByUserId } from '@/actions/subscribers';
+import ExportButton from '@/components/forms/export-button';
+// import { getUserSubscription } from "@/lib/subscription";
+import { type Subscriber, formatDate } from '@/helper/utils';
+import { currentUser } from '@repo/backend/auth/utils';
+import { Badge } from '@repo/design-system/components/minime/badge';
+import { Icons } from '@repo/design-system/components/ui/icons';
 import {
   Table,
   TableBody,
@@ -9,18 +13,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/design-system/components/ui/table";
-import { getSubscribersByUserId } from "@/actions/subscribers";
-import { currentUser } from "@repo/backend/auth/utils";
-// import { getUserSubscription } from "@/lib/subscription";
-import { formatDate, Subscriber } from "@/helper/utils";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import DeleteSubscriber from "./delete-subscriber";
-import Newsletter from "./newsletter";
+} from '@repo/design-system/components/ui/table';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import DeleteSubscriber from './delete-subscriber';
+import Newsletter from './newsletter';
 
 export const metadata: Metadata = {
-  title: "Subscribers",
+  title: 'Subscribers',
 };
 
 export default async function Subscribers() {
@@ -28,18 +28,16 @@ export default async function Subscribers() {
   if (!user) {
     return notFound();
   }
-  const [subscribers] = await Promise.all([
-    getSubscribersByUserId(user.id),
-  ]);
+  const [subscribers] = await Promise.all([getSubscribersByUserId(user.id)]);
 
-//   if (!plan.isPro) {
-//     return <Upgrade className="relative py-10" />;
-//   }
+  //   if (!plan.isPro) {
+  //     return <Upgrade className="relative py-10" />;
+  //   }
   return (
     <div className="flex flex-col gap-2 ">
       {user.user_metadata?.newsletter ? (
         <>
-          <div className="w-full flex justify-between items-center mb-3">
+          <div className="mb-3 flex w-full items-center justify-between">
             <div className="flex gap-2">
               <Badge>{subscribers.length} Subscribers</Badge>
               <ExportButton
@@ -53,7 +51,7 @@ export default async function Subscribers() {
           <SubscribersTable subscribers={subscribers} />
         </>
       ) : (
-        <div className=" flex flex-col gap-2 items-center justify-center border p-3 border-gray-2 text-center text-gray-1 rounded-md text-sm">
+        <div className=" flex flex-col items-center justify-center gap-2 rounded-md border border-gray-2 p-3 text-center text-gray-1 text-sm">
           Your newsletter function is not active, you can activate it whenever
           you want.
           <Newsletter checked={user.user_metadata?.newsletter} />
@@ -72,8 +70,8 @@ function SubscribersTable({ subscribers }: { subscribers?: Subscriber[] }) {
           <TableHead>Name</TableHead>
           <TableHead>Email</TableHead>
           <TableHead>Subscribed</TableHead>
-          <TableHead className="flex justify-end items-center">
-            <div className="size-4.5 flex justify-center items-center">
+          <TableHead className="flex items-center justify-end">
+            <div className="flex size-4.5 items-center justify-center">
               <Icons.trash size={15} className="text-danger" />
             </div>
           </TableHead>

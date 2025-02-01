@@ -1,11 +1,11 @@
-import NavButton from "@/app/(organization)/minime/components/layout/nav-button";
-import { database } from "@repo/backend/database";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { unsubscribe } from "./action";
-import { eq } from "drizzle-orm";
-import { subscribers } from "@repo/backend/schema";
-import { getUserById } from "@repo/backend/auth/utils";
+import NavButton from '@/app/(organization)/minime/components/layout/nav-button';
+import { getUserById } from '@repo/backend/auth/utils';
+import { database } from '@repo/backend/database';
+import { subscribers } from '@repo/backend/schema';
+import { eq } from 'drizzle-orm';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { unsubscribe } from './action';
 
 interface Props {
   searchParams: {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: "Unsubscribe",
+  title: 'Unsubscribe',
 };
 
 export default async function Unsubscribe({ searchParams }: Props) {
@@ -23,15 +23,14 @@ export default async function Unsubscribe({ searchParams }: Props) {
     return notFound();
   }
 
- const subscriber = await database
-  .select()
-  .from(subscribers)
-  .where(eq(subscribers.id, searchParams.subId))
-  .limit(1)
-  .then(rows => rows[0]);
+  const subscriber = await database
+    .select()
+    .from(subscribers)
+    .where(eq(subscribers.id, searchParams.subId))
+    .limit(1)
+    .then((rows) => rows[0]);
 
   const user = await getUserById(subscriber.userId);
-
 
   if (!subscriber) {
     return notFound();
@@ -39,15 +38,15 @@ export default async function Unsubscribe({ searchParams }: Props) {
 
   const data: { error?: string; success?: string } = await unsubscribe(
     searchParams.subId,
-    subscriber.userId,
+    subscriber.userId
   );
 
   return (
-    <div className="mx-auto px-2 w-[450px] max-[450px]:w-full min-h-screen flex items-center justify-center">
-      <div className="w-full bg-gray-3 border border-gray-2 rounded-md p-5 flex flex-col items-center gap-3 justify-center">
+    <div className="mx-auto flex min-h-screen w-[450px] items-center justify-center px-2 max-[450px]:w-full">
+      <div className="flex w-full flex-col items-center justify-center gap-3 rounded-md border border-gray-2 bg-gray-3 p-5">
         {data.success ? (
-          <p className="text-gray-4 text-center">
-            You&apos;ve successfully been unsubscribed from{" "}
+          <p className="text-center text-gray-4">
+            You&apos;ve successfully been unsubscribed from{' '}
             <b>
               {user?.user_metadata?.username}
               &apos;s newsletter.

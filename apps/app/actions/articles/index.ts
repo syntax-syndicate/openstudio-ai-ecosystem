@@ -1,25 +1,31 @@
 'use server';
 
-import { formatDate, formatVerboseDate, jsonToFrontmatter } from '@/helper/utils';
+import {
+  formatDate,
+  formatVerboseDate,
+  jsonToFrontmatter,
+} from '@/helper/utils';
+import type { Article } from '@/helper/utils';
 import type {
   articleCreateSchema,
   articlePatchSchema,
 } from '@/lib/validations/article';
 import type { ExportResponse } from '@/types/minime';
 import type { User } from '@repo/backend/auth';
+import { getUserName } from '@repo/backend/auth/format';
 import { currentUser } from '@repo/backend/auth/utils';
 import { database } from '@repo/backend/database';
 import { articles } from '@repo/backend/schema';
-import { slugifyv2 } from '@repo/lib/src/slugify';
-import { and, desc, eq } from 'drizzle-orm';
-import type { z } from 'zod';
 import { resend } from '@repo/email';
-import Newsletter, { NewsletterProps } from '@repo/email/templates/newsletter';
-import {Article} from "@/helper/utils";
-import { getSubscribersByUserId } from '../subscribers';
+import Newsletter, {
+  type NewsletterProps,
+} from '@repo/email/templates/newsletter';
+import { slugifyv2 } from '@repo/lib/src/slugify';
 import { rateLimit } from '@repo/rate-limit';
-import { getUserName } from '@repo/backend/auth/format';
+import { and, desc, eq } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
+import type { z } from 'zod';
+import { getSubscribersByUserId } from '../subscribers';
 
 type ArticleCreateSchema = z.infer<typeof articleCreateSchema>;
 type ArticlePatchSchema = z.infer<typeof articlePatchSchema>;
@@ -199,7 +205,7 @@ export async function getArticlesExport(authorId: string) {
   return data;
 }
 
-// get 
+// get
 export async function getArticleByAuthor(articleId: string, authorId: string) {
   return await database
     .select()
@@ -207,18 +213,15 @@ export async function getArticleByAuthor(articleId: string, authorId: string) {
     .where(and(eq(articles.id, articleId), eq(articles.authorId, authorId)));
 }
 
-export async function sendNewsletter(
-  article: Article,
-  user: User,
-) {
+export async function sendNewsletter(article: Article, user: User) {
   const { success } = await rateLimit.newsletter.limit(
-    `newsletter:${user.id}:${article.id}`,
+    `newsletter:${user.id}:${article.id}`
   );
 
   if (!success) {
     return new Response(
-      "You can send newsletters a maximum of 2 times a day.",
-      { status: 429 },
+      'You can send newsletters a maximum of 2 times a day.',
+      { status: 429 }
     );
   }
 
@@ -230,7 +233,7 @@ export async function sendNewsletter(
         sendNewsletterEmail({
           from: `${user?.user_metadata.username} from OpenStudio Minime <notify@openstudio.tech>`,
           to: e.email,
-          subject: "I shared a new article.",
+          subject: 'I shared a new article.',
           newsletter: {
             title: article.title,
             author: user.user_metadata.username || getUserName(user),
@@ -242,16 +245,18 @@ export async function sendNewsletter(
           },
         });
       }),
-      database.update(articles).set({
-        lastNewsletterSentAt: new Date(),
-      }).where(eq(articles.id, article.id))
+      database
+        .update(articles)
+        .set({
+          lastNewsletterSentAt: new Date(),
+        })
+        .where(eq(articles.id, article.id)),
     ]);
 
     return new Response(null, { status: 200 });
   }
   return new Response("You don't have any subscribers", { status: 400 });
 }
-
 
 export async function sendNewsletterEmail({
   from,
@@ -270,7 +275,7 @@ export async function sendNewsletterEmail({
     subject,
     react: Newsletter(newsletter),
     headers: {
-      "X-Entity-Ref-ID": nanoid(),
+      'X-Entity-Ref-ID': nanoid(),
     },
   });
 }

@@ -18,6 +18,7 @@ import {
 import { createUpdateSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 import {
+  type TAIResponse,
   type TCustomAssistant,
   type TLLMRunConfig,
   type ToolExecutionState,
@@ -141,6 +142,7 @@ export const chatMessages = pgTable('chat_messages', {
   runConfig: json('run_config').$type<TLLMRunConfig>().notNull(),
   tools: json('tools').$type<ToolExecutionState[]>(),
   relatedQuestions: json('related_questions').$type<string[]>(),
+  aiResponses: json('ai_responses').$type<TAIResponse[]>(),
 });
 
 export const assistants = pgTable('assistants', {
@@ -173,6 +175,7 @@ export const preferences = pgTable('preferences', {
     .unique()
     .references(() => organization.id),
   defaultAssistant: text('default_assistant').notNull(),
+  defaultAssistants: json('default_assistants').$type<string[]>(),
   systemPrompt: text('system_prompt').notNull(),
   messageLimit: integer('message_limit').notNull(),
   temperature: decimal('temperature').notNull(),

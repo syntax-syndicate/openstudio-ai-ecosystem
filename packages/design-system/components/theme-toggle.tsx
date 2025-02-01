@@ -36,7 +36,7 @@ export default function ThemeToggle({
     <Button
       onClick={toggle}
       className={cn(
-        'justify-start gap-2 dark:[&_.moon-icon]:hidden [&_.sun-icon]:hidden dark:[&_.sun-icon]:inline w-full',
+        'w-full justify-start gap-2 dark:[&_.moon-icon]:hidden [&_.sun-icon]:hidden dark:[&_.sun-icon]:inline',
         compact ? 'justify-center text-gray-4' : '',
         className
       )}

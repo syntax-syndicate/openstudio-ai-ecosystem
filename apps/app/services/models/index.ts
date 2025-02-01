@@ -85,8 +85,12 @@ export class ModelService {
           model: model.key,
           streaming: true,
           apiKey,
-          temperature: Number(temperature),
-          maxTokens,
+          ...(!model.key.startsWith('o3-') && !model.key.startsWith('o1-') && {
+            temperature: Number(temperature),
+          }),
+          ...(model.key.startsWith('o3-mini-') || model.key.startsWith('o1-')
+            ? { maxCompletionTokens: maxTokens }
+            : { maxTokens }),
           topP: Number(topP),
           maxRetries: 2,
           ...props,

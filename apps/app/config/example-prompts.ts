@@ -6,12 +6,12 @@ export const examplePrompts = [
   },
   {
     name: 'Till now what great tech companies are built in India?',
-    content:
-      'Till now what great tech companies are built in ::India::?',
+    content: 'Till now what great tech companies are built in ::India::?',
   },
   {
     name: 'Where is India vs US/China/Russia/Europe?',
-    content: 'Where is ::India:: vs US/China/Russia/Europe? in detailed tabular format',
+    content:
+      'Where is ::India:: vs US/China/Russia/Europe? in detailed tabular format',
   },
   {
     name: 'Recent news in city',

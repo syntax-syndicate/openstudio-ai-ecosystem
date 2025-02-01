@@ -1,8 +1,8 @@
-import { createSubscriber, isSubscriberExist } from "@/actions/subscribers";
-import { getUserByUsername } from "@repo/backend/auth/utils";
-import { rateLimit } from "@repo/rate-limit";
-import type { NextRequest } from "next/server";
-import * as z from "zod";
+import { createSubscriber, isSubscriberExist } from '@/actions/subscribers';
+import { getUserByUsername } from '@repo/backend/auth/utils';
+import { rateLimit } from '@repo/rate-limit';
+import type { NextRequest } from 'next/server';
+import * as z from 'zod';
 
 const subscribeNewsletterPatchSchema = z.object({
   name: z.string().min(1),
@@ -23,22 +23,22 @@ export async function POST(req: NextRequest) {
 
     const { username, email } = body.data;
 
-    const ip = req.headers.get("x-forwarded-for") || "0.0.0.0";
+    const ip = req.headers.get('x-forwarded-for') || '0.0.0.0';
 
-    if (process.env.VERCEL === "1") {
+    if (process.env.VERCEL === '1') {
       const { success } = await rateLimit.subscribe.limit(
-        `subscribe:${username}:${ip}`,
+        `subscribe:${username}:${ip}`
       );
 
       if (!success) {
-        return new Response("Try again after 5 hours.", { status: 429 });
+        return new Response('Try again after 5 hours.', { status: 429 });
       }
     }
 
     const user = await getUserByUsername(username);
 
     if (!user) {
-      return new Response("User not found", { status: 404 });
+      return new Response('User not found', { status: 404 });
     }
     // const { isPro } = await getUserSubscription(user.id);
 
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     const isExist = await isSubscriberExist(email, user.id);
 
     if (isExist) {
-      return new Response("This email already subscribed", {
+      return new Response('This email already subscribed', {
         status: 401,
       });
     }

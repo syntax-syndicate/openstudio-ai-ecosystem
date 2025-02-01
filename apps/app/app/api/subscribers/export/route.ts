@@ -1,5 +1,5 @@
-import { guard } from "@/lib/auth";
-import { getSubscibersExport } from "@/actions/subscribers";
+import { getSubscibersExport } from '@/actions/subscribers';
+import { guard } from '@/lib/auth';
 
 export const GET = guard(
   async ({ user }) => {
@@ -8,8 +8,8 @@ export const GET = guard(
 
       return new Response(content, {
         headers: {
-          "Content-Type": "application/csv",
-          "Content-Disposition": `attachment; filename=${filename}`,
+          'Content-Type': 'application/csv',
+          'Content-Disposition': `attachment; filename=${filename}`,
         },
       });
     } catch (err) {
@@ -21,6 +21,6 @@ export const GET = guard(
     }
   },
   {
-    requiredPlan: "Pro",
-  },
+    requiredPlan: 'Pro',
+  }
 );

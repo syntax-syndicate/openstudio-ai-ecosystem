@@ -5,6 +5,8 @@ import type { ComponentProps } from 'react';
 
 export type TProvider = (typeof providers)[number];
 export const models = [
+  'o3-mini-2025-01-31',
+  // 'o1-mini-2024-09-12',
   'gpt-4o-mini',
   'gpt-4o',
   'gpt-4',
@@ -18,6 +20,8 @@ export const models = [
   'gemini-pro',
   'gemini-1.5-flash-latest',
   'gemini-1.5-pro-latest',
+  'gemini-2.0-flash-exp',
+  'gemini-2.0-flash-thinking-exp',
   'phi3:latest',
   'llama3-groq-70b-8192-tool-use-preview',
 ] as const;

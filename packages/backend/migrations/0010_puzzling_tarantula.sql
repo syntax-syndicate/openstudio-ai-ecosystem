@@ -1,0 +1,1 @@
+ALTER TABLE "preferences" ALTER COLUMN "default_assistants" DROP NOT NULL;

@@ -21,10 +21,24 @@ export type TLLMRunConfig = {
   assistant: TAssistant;
 };
 
+export type TAIResponse = {
+  assistant: TAssistant;
+  rawAI: string | null;
+  tools: ToolExecutionState[];
+  relatedQuestions: string[];
+  stopReason: TStopReason | null;
+  errorMessage: string | null;
+  isLoading: boolean;
+  createdAt: Date;
+  isComplete: boolean;
+};
+
 export type TChatMessage =
   | (typeof schema.chatMessages.$inferSelect & {
       runConfig: TLLMRunConfig;
+      runConfigs: TLLMRunConfig[];
       tools?: ToolExecutionState[];
+      aiResponses?: TAIResponse[];
     })
   | typeof schema.chatMessages.$inferSelect;
 
@@ -36,6 +50,7 @@ export type TLegacyChatMessage = {
   sessionId: string;
   parentId: string | null;
   runConfig: TLLMRunConfig | any;
+  aiResponses: TAIResponse[];
   tools: ToolExecutionState[] | any;
   isLoading: boolean;
   stop: boolean;

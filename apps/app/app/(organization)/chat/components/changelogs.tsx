@@ -1,17 +1,8 @@
-import { Mdx } from '@/app/(organization)/chat/components/mdx';
-import { getRelativeDate } from '@/helper/utils';
 import { Dialog, DialogContent } from '@repo/design-system/components/ui';
-import {
-  Autoplay,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from '@repo/design-system/components/ui/carousel';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import { useQuery } from '@tanstack/react-query';
 import { Flame } from 'lucide-react';
-import Image from 'next/image';
 
 export type Changelog = {
   id: string;
@@ -45,9 +36,7 @@ export const ChangeLogs = ({ open, setOpen }: ChangelogsProps) => {
           </Type>
         </Flex>
         <Flex>
-          <Type>
-            Work In Progress 🚧
-          </Type>
+          <Type>Work In Progress 🚧</Type>
         </Flex>
         {/* {changelogs?.map((changelog) => (
           <Flex

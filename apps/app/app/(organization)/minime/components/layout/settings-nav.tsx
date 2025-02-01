@@ -19,9 +19,7 @@ export default function SettingsNav() {
             href={link.href}
             key={link.title}
             size="sm"
-            buttonClassname={
-              link.href === path ? '!bg-gray-2' : ''
-            }
+            buttonClassname={link.href === path ? '!bg-gray-2' : ''}
             buttonVariant="ghost"
           >
             {link.title}

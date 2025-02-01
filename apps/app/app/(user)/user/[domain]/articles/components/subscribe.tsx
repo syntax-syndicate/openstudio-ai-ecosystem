@@ -1,6 +1,4 @@
 'use client';
-
-import NavButton from '@/app/(organization)/minime/components/layout/nav-button';
 import { subscribeSchema } from '@/helper/validator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@repo/design-system/components/minime/button';

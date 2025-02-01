@@ -6,7 +6,11 @@ import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom';
 import { useTitleGenerator } from '@/hooks/use-title-generator';
 import { useEffect } from 'react';
 
-export const RecentMessage = () => {
+interface RecentMessageProps {
+  assistantKey?: string; // Optional for backward compatibility
+}
+
+export const RecentMessage = ({ assistantKey }: RecentMessageProps) => {
   const { store } = useChatContext();
   const currentMessage = store((state) => state.currentMessage);
   const isGenerating = store((state) => state.isGenerating);
@@ -20,11 +24,32 @@ export const RecentMessage = () => {
   const { addMessageMutation } = useSessions();
   const { isAtBottom, scrollToBottom } = useScrollToBottom();
 
+  const targetResponse = assistantKey
+    ? currentMessage?.aiResponses?.find((r) => r.assistant.key === assistantKey)
+    : currentMessage;
+
   //   useEffect(() => {
   //     if (currentMessage?.id && prevMessagesIds?.includes(currentMessage?.id)) {
   //       setCurrentMessage(undefined);
   //     }
   //   }, [currentMessage?.id, prevMessagesIds?.length]);
+
+  useEffect(() => {
+    if (!assistantKey || !targetResponse?.rawAI) return;
+
+    // Get the specific column's scroll container
+    const container = document.querySelector(
+      `[data-model-id="${assistantKey}"] .column-scroll-container`
+    );
+
+    // Smooth scroll to bottom when response updates
+    if (container) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [targetResponse?.rawAI, assistantKey]);
 
   useEffect(() => {
     if (
@@ -88,7 +113,11 @@ export const RecentMessage = () => {
   return (
     <>
       {currentMessage ? (
-        <Message message={currentMessage} isLast={true} />
+        <Message
+          message={currentMessage}
+          isLast={true}
+          modelId={assistantKey}
+        />
       ) : null}
       <ChatScrollAnchor
         isAtBottom={isAtBottom}

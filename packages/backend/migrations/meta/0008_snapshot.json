@@ -1,6 +1,6 @@
 {
-  "id": "c5627097-476a-402d-8378-f75c17002e5a",
-  "prevId": "1fce3572-eed6-4da4-b373-424c443c99fa",
+  "id": "a199b361-41bb-4a84-920f-657c00b1f079",
+  "prevId": "c5627097-476a-402d-8378-f75c17002e5a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -582,6 +582,12 @@
         },
         "related_questions": {
           "name": "related_questions",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ai_responses": {
+          "name": "ai_responses",
           "type": "json",
           "primaryKey": false,
           "notNull": false

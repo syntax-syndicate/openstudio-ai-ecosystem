@@ -15,6 +15,7 @@ export type TPreferences = typeof schema.preferences.$inferSelect;
 
 export type TLegacyPreferences = {
   defaultAssistant: TAssistant['key'];
+  defaultAssistants: TAssistant['key'][];
   systemPrompt: string;
   messageLimit: number;
   temperature: number;

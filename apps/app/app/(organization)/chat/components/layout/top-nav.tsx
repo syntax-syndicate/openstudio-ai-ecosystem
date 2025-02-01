@@ -4,7 +4,7 @@ import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import { cn } from '@repo/design-system/lib/utils';
-import { ChevronLeft, FlagIcon, Github, PanelLeft } from 'lucide-react';
+import { ChevronLeft, Github, PanelLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
 

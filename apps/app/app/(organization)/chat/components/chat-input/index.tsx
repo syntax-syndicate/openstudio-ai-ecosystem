@@ -33,6 +33,8 @@ export const ChatInput = () => {
   const { getAssistantByKey, getAssistantIcon } = useAssistantUtils();
   const { invokeModel } = useLLMRunner();
   const { editor } = useChatEditor();
+  const currentMessage = store((state) => state.currentMessage);
+  const setCurrentMessage = store((state) => state.setCurrentMessage);
   const session = store((state) => state.session);
   const isInitialized = store((state) => state.isInitialized);
   const setIsInitialized = store((state) => state.setIsInitialized);
@@ -50,19 +52,49 @@ export const ChatInput = () => {
     }
   }, [session?.id]);
 
+  // const sendMessage = (input: string) => {
+  //   if (!isReady) return;
+  //   const props = getAssistantByKey(preferences.defaultAssistant);
+  //   if (!props || !session) return;
+  //   setIsInitialized(true);
+  //   editor?.commands.clearContent();
+  //   invokeModel({
+  //     input,
+  //     context,
+  //     image: attachment?.base64,
+  //     sessionId: session.id,
+  //     assistant: props.assistant,
+  //   });
+  //   clearAttachment();
+  // };
+
   const sendMessage = (input: string) => {
     if (!isReady) return;
-    const props = getAssistantByKey(preferences.defaultAssistant);
-    if (!props || !session) return;
+
+    // Get all default assistants from preferences
+    const assistants = preferences.defaultAssistants
+      ? preferences.defaultAssistants
+          .map((key) => getAssistantByKey(key))
+          .filter(Boolean)
+      : [preferences.defaultAssistant];
+
+    if (!assistants.length || !session) return;
+
     setIsInitialized(true);
     editor?.commands.clearContent();
-    invokeModel({
-      input,
-      context,
-      image: attachment?.base64,
-      sessionId: session.id,
-      assistant: props.assistant,
+
+    // Invoke model for each assistant in parallel
+    assistants.forEach((assistantProps) => {
+      invokeModel({
+        input,
+        context,
+        image: attachment?.base64,
+        sessionId: session.id,
+        // @ts-ignore
+        assistant: assistantProps!.assistant!,
+      });
     });
+
     clearAttachment();
   };
 
@@ -168,7 +200,7 @@ export const ChatInput = () => {
                 size="lg"
               />
             ) : (
-              getAssistantIcon(preferences.defaultAssistant, 'lg', true)
+              getAssistantIcon(preferences.defaultAssistants?.[0] ?? preferences.defaultAssistant, 'lg', true)
             )}
             <Flex direction="col" gap="xs" justify="center" items="center">
               <Type

@@ -1,16 +1,16 @@
-"use server";
+'use server';
 
-import { deleteSubscriber } from "@/actions/subscribers";
+import { deleteSubscriber } from '@/actions/subscribers';
 
 export async function unsubscribe(subId: string, userId: string) {
   try {
     await deleteSubscriber(subId, userId);
     return {
-      success: "Unsubscribed",
+      success: 'Unsubscribed',
     };
   } catch (err) {
     return {
-      error: "Something went wrong",
+      error: 'Something went wrong',
     };
   }
 }

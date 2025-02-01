@@ -5,10 +5,10 @@ import Timeseries from '@/app/(organization)/minime/components/analytics/timeser
 import type { IntervalProps, intervalData } from '@repo/tinybird/src/utils';
 import { useSearchParams } from 'next/navigation';
 import { createContext } from 'react';
+import Devices from './devices';
+import Locations from './locations';
 import Referrers from './referer';
 import Pages from './top-pages';
-import Locations from './locations';
-import Devices from './devices';
 
 export type IndexProps = 'visitors' | 'views' | 'clicks';
 export type Interval = keyof typeof intervalData;
@@ -50,10 +50,10 @@ export default function Analytics({
         <StatsHeader title={title} className={headerClassname} />
         <Timeseries />
         <div className="relative mt-2 grid grid-cols-2 gap-2 max-md:grid-cols-1">
-            <Pages />
-            <Locations />
-            <Devices />
-          <Referrers className={!pages ? "col-span-2 max-md:col-span-1" : ""} />
+          <Pages />
+          <Locations />
+          <Devices />
+          <Referrers className={pages ? '' : 'col-span-2 max-md:col-span-1'} />
         </div>
       </div>
     </AnalyticsContext.Provider>
