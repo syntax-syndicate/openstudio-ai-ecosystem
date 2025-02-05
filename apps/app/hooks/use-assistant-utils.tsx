@@ -28,6 +28,8 @@ export const useAssistantUtils = () => {
           icon: 'ollama',
           provider: 'ollama',
           maxOutputTokens: 2048,
+          inputTokenPrice: 0.0,
+          outputTokenPrice: 0.0,
         })
       ) || []),
     ],

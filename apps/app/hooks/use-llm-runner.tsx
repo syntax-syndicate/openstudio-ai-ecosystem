@@ -4,14 +4,17 @@ import { useRootContext } from '@/context/root';
 import { injectPresetValues } from '@/helper/preset-prompt-values';
 import { constructMessagePrompt, constructPrompt } from '@/helper/promptUtil';
 import { generateShortUUID } from '@/helper/utils';
-import { modelService } from '@/services/models';
+import {modelService } from '@/services/models';
 import { getApiKey } from '@/services/preferences/client';
 import { getMessages, getSessionById } from '@/services/sessions/client';
 import type { TLLMRunConfig, TProvider, TStopReason } from '@/types';
-import { useToast } from '@repo/design-system/hooks/use-toast';
+import { toast } from '@repo/design-system/hooks/use-toast';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import moment from 'moment';
 import { useAssistantUtils, useTools } from '.';
+import { saveAiUsage } from '@/lib/utils/ai-usage';
+import { usePremium } from './use-premium';
+import { env } from '@/env';
 
 const getErrorMessage = (error: string) => {
   if (error.includes('image_url') && error.includes('400')) {
@@ -36,8 +39,8 @@ export const useLLMRunner = () => {
   const { getModelByKey } = useAssistantUtils();
   const { preferences } = usePreferenceContext();
   const { getAvailableTools } = useTools();
-  const { toast } = useToast();
-  const { setApiKeyModalProvider, setOpenApiKeyModal } = useRootContext();
+  const { setApiKeyModalProvider, setOpenApiKeyModal, setOpenMessageLimitModal } = useRootContext();
+  const {isPremium, premium, user, messagesCountPerMonth} = usePremium()
 
   const invokeModel = async (config: TLLMRunConfig) => {
     //to avoid duplication not refetch when regenerating
@@ -50,6 +53,20 @@ export const useLLMRunner = () => {
     setAbortController(currentAbortController);
     const { sessionId, messageId, input, context, image, assistant } = config;
     const newMessageId = messageId || generateShortUUID();
+
+    const messageLimitPerMonth = 
+      premium!.tier === "LIFETIME" 
+        ? env.NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT
+        : premium!.tier === "PRO_MONTHLY" || premium!.tier === "PRO_ANNUALLY"
+          ? env.NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT
+          : env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT;
+
+    if (messagesCountPerMonth! >= messageLimitPerMonth) {
+      setIsGenerating(false);
+      console.log('You have exceeded the message limit for this month')
+      setOpenMessageLimitModal(true)
+      return;
+    }
 
     store.getState().updateAssistantResponse(config.assistant, '', false, true);
 
@@ -85,7 +102,8 @@ export const useLLMRunner = () => {
 
     if (
       !apiKey?.key &&
-      !['ollama', 'chathub'].includes(selectedModelKey?.provider)
+      !['ollama', 'chathub'].includes(selectedModelKey?.provider) &&
+      !isPremium
     ) {
       setIsGenerating(false);
       setApiKeyModalProvider(selectedModelKey?.provider);
@@ -96,6 +114,7 @@ export const useLLMRunner = () => {
     editor?.commands.clearContent();
     setIsGenerating(true);
     setCurrentMessage({
+      //@ts-ignore
       runConfig: config,
       id: newMessageId,
       parentId: sessionId,
@@ -130,6 +149,7 @@ export const useLLMRunner = () => {
       preferences,
       provider: selectedModelKey.provider,
       apiKey: apiKey?.key,
+      isPremium: isPremium,
     });
 
     let agentExecutor: AgentExecutor | undefined;
@@ -281,6 +301,18 @@ export const useLLMRunner = () => {
         stop: true,
         stopReason: 'finish',
       });
+
+      await saveAiUsage({
+        email: user!.email!,
+        userId: user!.id,
+        organizationId: user!.user_metadata.organization_id,
+        model: selectedModelKey,
+        usage: {
+          input_tokens: stream?.usage_metadata?.input_tokens || 0,
+          output_tokens: stream?.usage_metadata?.output_tokens || 0,
+          total_tokens: stream?.usage_metadata?.total_tokens || 0,
+        }
+      })
     } catch (err) {
       updateCurrentMessage({
         isLoading: false,
