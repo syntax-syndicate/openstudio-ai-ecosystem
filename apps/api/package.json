@@ -2,12 +2,11 @@
   "name": "api",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"pnpm:next\" \"pnpm:stripe\"",
+    "dev": "concurrently \"pnpm:next\"",
     "next": "next dev -p 3002 --turbopack",
     "build": "next build",
     "start": "next start",
     "analyze": "ANALYZE=true pnpm build",
-    "stripe": "stripe listen --forward-to localhost:3002/webhooks/stripe",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
@@ -20,6 +19,7 @@
     "@repo/payments": "workspace:*",
     "@sentry/nextjs": "^8.47.0",
     "@t3-oss/env-nextjs": "^0.11.1",
+    "drizzle-orm": "^0.38.4",
     "next": "15.1.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",

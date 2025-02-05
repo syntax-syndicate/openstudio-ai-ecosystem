@@ -20,7 +20,7 @@ export type EventName =
 export interface Meta {
   test_mode: boolean;
   event_name: EventName;
-  custom_data?: { user_id: string };
+  custom_data?: { user_id: string, organization_id: string };
 }
 
 export interface Data {
