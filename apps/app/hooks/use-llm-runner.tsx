@@ -54,12 +54,17 @@ export const useLLMRunner = () => {
     const { sessionId, messageId, input, context, image, assistant } = config;
     const newMessageId = messageId || generateShortUUID();
 
-    const messageLimitPerMonth = 
-      premium!.tier === "LIFETIME" 
+    let messageLimitPerMonth = 0;
+    if(!premium || !premium.tier){
+      messageLimitPerMonth = env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT;
+    }else{
+      messageLimitPerMonth = 
+        premium!.tier === "LIFETIME" 
         ? env.NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT
         : premium!.tier === "PRO_MONTHLY" || premium!.tier === "PRO_ANNUALLY"
           ? env.NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT
           : env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT;
+    }
 
     if (messagesCountPerMonth! >= messageLimitPerMonth) {
       setIsGenerating(false);
