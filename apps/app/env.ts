@@ -33,10 +33,53 @@ export const env = createEnv({
       .startsWith('tvly-')
       .optional(),
     NEXT_PUBLIC_HUGEICONS_API_KEY: z.string().min(1),
+
+    //lemon squeezy
+    NEXT_PUBLIC_LEMON_STORE_ID: z.string().nullish().default('openstudio'),
+
+    //pro
+    NEXT_PUBLIC_PRO_PAYMENT_LINK: z.string().default(''),
+    NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID: z.coerce.number().default(0),
+    NEXT_PUBLIC_PRO_ANNUALLY_VARIANT_ID: z.coerce.number().default(0),
+
+    //lifetime
+    NEXT_PUBLIC_LIFETIME_PAYMENT_LINK: z.string().default(''),
+    NEXT_PUBLIC_LIFETIME_VARIANT_ID: z.coerce.number().default(0),
+
+    NEXT_PUBLIC_XAI_API_KEY: z.string().default(''),
+    NEXT_PUBLIC_GROQ_API_KEY: z.string().default(''),
+    NEXT_PUBLIC_ANTHROPIC_API_KEY: z.string().default(''),
+    NEXT_PUBLIC_GEMINI_API_KEY: z.string().default(''),
+    NEXT_PUBLIC_PERPLEXITY_API_KEY: z.string().default(''),
+    NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT: z.coerce.number().default(500),
+    NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT: z.coerce.number().default(1000),
+    NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT: z.coerce.number().default(100),
+
   },
   runtimeEnv: {
     NEXT_PUBLIC_OPENAI_API_KEY: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     NEXT_PUBLIC_TAVILY_API_KEY: process.env.NEXT_PUBLIC_TAVILY_API_KEY,
     NEXT_PUBLIC_HUGEICONS_API_KEY: process.env.NEXT_PUBLIC_HUGEICONS_API_KEY,
+    NEXT_PUBLIC_LEMON_STORE_ID: process.env.NEXT_PUBLIC_LEMON_STORE_ID,
+    NEXT_PUBLIC_PRO_PAYMENT_LINK: process.env.NEXT_PUBLIC_PRO_PAYMENT_LINK,
+    NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID:
+      process.env.NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID,
+    NEXT_PUBLIC_PRO_ANNUALLY_VARIANT_ID:
+      process.env.NEXT_PUBLIC_PRO_ANNUALLY_VARIANT_ID,
+    NEXT_PUBLIC_LIFETIME_PAYMENT_LINK:
+      process.env.NEXT_PUBLIC_LIFETIME_PAYMENT_LINK,
+    NEXT_PUBLIC_LIFETIME_VARIANT_ID:
+      process.env.NEXT_PUBLIC_LIFETIME_VARIANT_ID,
+    NEXT_PUBLIC_XAI_API_KEY: process.env.NEXT_PUBLIC_XAI_API_KEY,
+    NEXT_PUBLIC_GROQ_API_KEY: process.env.NEXT_PUBLIC_GROQ_API_KEY,
+    NEXT_PUBLIC_ANTHROPIC_API_KEY: process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY,
+    NEXT_PUBLIC_GEMINI_API_KEY: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
+    NEXT_PUBLIC_PERPLEXITY_API_KEY: process.env.NEXT_PUBLIC_PERPLEXITY_API_KEY,
+    NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT:
+      process.env.NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT,
+    NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT:
+      process.env.NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT,
+    NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT:
+      process.env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT,
   },
 });
