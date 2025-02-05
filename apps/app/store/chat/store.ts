@@ -70,19 +70,22 @@ export const createChatStore = () =>
         isComplete,
       };
 
-      const updatedAiResponses =
-        existingResponseIndex !== undefined && existingResponseIndex !== -1
-          ? currentMessage.aiResponses?.map((response, index) =>
-              index === existingResponseIndex
-                ? { ...response, rawAI: content }
-                : response
-            )
-          : [...(currentMessage.aiResponses || []), baseResponse];
+      let updatedAiResponses = currentMessage.aiResponses || [];
+      if (existingResponseIndex !== -1) {
+        updatedAiResponses = updatedAiResponses.map((response, index) =>
+          index === existingResponseIndex
+            ? { ...response, rawAI: content, isLoading, isComplete }
+            : response
+        );
+      } else {
+        //@ts-ignore
+        updatedAiResponses = [...updatedAiResponses, baseResponse];
+      }
 
       set({
         currentMessage: {
           ...currentMessage,
-          aiResponses: updatedAiResponses || [],
+          aiResponses: updatedAiResponses,
         },
       });
     },
