@@ -27,6 +27,7 @@ import { Flame } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from '@repo/design-system/hooks/use-toast';
 import { useRootContext } from '@/context/root';
+import { env } from '@/env';
 
 export const ChatInput = () => {
   const { store, isReady, refetch } = useChatContext();
@@ -34,8 +35,8 @@ export const ChatInput = () => {
   const [openChangelog, setOpenChangelog] = useState(false);
   const { preferences, isPreferencesReady } = usePreferenceContext();
   const { getAssistantByKey, getAssistantIcon } = useAssistantUtils();
-  const { isPremium } = usePremium();
-  const { setOpenPricingModal } = useRootContext();
+  const { isPremium, messagesCountPerMonth, premium } = usePremium();
+  const { setOpenPricingModal, setOpenMessageLimitModal } = useRootContext();
   const { invokeModel } = useLLMRunner();
   const { editor } = useChatEditor();
   const currentMessage = store((state) => state.currentMessage);
@@ -82,16 +83,23 @@ export const ChatInput = () => {
           .filter(Boolean)
       : [preferences.defaultAssistant];
 
-    // if (!isPremium && assistants.length >= 2) {
-    //   setOpenPricingModal(true);
-    //   toast({
-    //     title: 'Error',
-    //     description:
-    //       'Upgrade to activate more than 2 parallel side by side assistants',
-    //     variant: 'destructive',
-    //   });
-    //   return;
-    // }
+    const messageLimitPerMonth = 
+      premium!.tier === "LIFETIME" 
+        ? env.NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT
+        : premium!.tier === "PRO_MONTHLY" || premium!.tier === "PRO_ANNUALLY"
+          ? env.NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT
+          : env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT;
+
+    if (!isPremium && messagesCountPerMonth! >= messageLimitPerMonth) {
+      setOpenMessageLimitModal(true);
+      toast({
+        title: 'Error',
+        description:
+          'You have reached the message limit for this month. Upgrade to continue.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     if (!assistants.length || !session) return;
 

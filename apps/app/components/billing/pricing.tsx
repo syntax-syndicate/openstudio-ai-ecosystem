@@ -236,7 +236,7 @@ function LifetimePricing(props: {
           <p className="mt-6 text-base text-gray-600 leading-7 dark:text-white">
             Get lifetime access to OpenStudio ChatHub for a one-time payment.
             <br />
-            This includes 4 side by side assistants, unlimited messages, and priority
+            This includes 2 (more sooner when stable) side by side assistants, unlimited messages, and priority
             support.
           </p>
           <div className="mt-10 flex items-center gap-x-4">

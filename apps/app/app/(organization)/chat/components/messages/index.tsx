@@ -196,7 +196,7 @@ export const ChatMessages = () => {
                 }}
               >
                 <div className="no-scrollbar column-scroll-container h-full overflow-y-auto">
-                  <div className="sticky top-0 z-[99] mb-4 rounded bg-white/80 p-2 shadow-sm backdrop-blur-sm dark:bg-zinc-800">
+                  <div className="sticky top-0 z-50 mb-4 rounded bg-white/80 p-2 shadow-sm backdrop-blur-sm dark:bg-zinc-800">
                     <div className="flex items-center justify-center gap-2">
                       {getAssistantIcon(modelId, 'sm', true)}
                       <h3 className="text-center font-medium">{modelId}</h3>
