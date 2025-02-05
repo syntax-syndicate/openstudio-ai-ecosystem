@@ -1,0 +1,8 @@
+NODE cost_per_model_node
+SQL > 
+    SELECT model, sum(cost) AS cost FROM aiCall
+    GROUP BY model
+    ORDER BY cost DESC
+
+/*
+i want to get the cost per model 

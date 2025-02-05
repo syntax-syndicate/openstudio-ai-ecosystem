@@ -1,0 +1,8 @@
+NODE count_per_model_node
+SQL > 
+    %
+    SELECT model, count(*) AS count FROM aiCall
+    WHERE "userEmail" = {{String(userEmail)}} AND "model" = {{String(model)}}
+    AND toStartOfMonth(fromUnixTimestamp64Milli(timestamp)) = toStartOfMonth(now())
+    GROUP BY model
+    ORDER BY count DESC

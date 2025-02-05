@@ -1,0 +1,3 @@
+NODE total_cost
+SQL > 
+    SELECT sum(cost) AS total_cost FROM aiCall

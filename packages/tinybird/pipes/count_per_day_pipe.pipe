@@ -1,0 +1,5 @@
+NODE count_per_day_node
+SQL > 
+    SELECT toStartOfDay(fromUnixTimestamp64Milli(timestamp)) AS "day", count(*) AS count FROM aiCall
+    GROUP BY day
+    ORDER BY day

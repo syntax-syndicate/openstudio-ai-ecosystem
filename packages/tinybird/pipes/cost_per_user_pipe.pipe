@@ -1,0 +1,5 @@
+NODE cost_per_user_node
+SQL > 
+    SELECT userId, sum(cost) AS cost FROM aiCall
+    GROUP BY userId
+    ORDER BY cost DESC

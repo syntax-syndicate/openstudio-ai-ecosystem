@@ -70,3 +70,26 @@ export const publishBookmarkAnalytics = tb.buildIngestEndpoint({
   datasource: 'osb',
   event: tinybirdBookmarkAnalytics,
 });
+
+
+const tinybirdAICall = z.object({
+  userId: z.string(),
+  organizationId: z.string(),
+  userEmail: z.string(),
+  timestamp: z.number(), //date
+  totalTokens: z.number().int(),
+  completionTokens: z.number().int(),
+  promptTokens: z.number().int(),
+  cost: z.number(),
+  model: z.string(),
+  provider: z.string(),
+  label: z.string().optional(),
+  data: z.string().optional(),
+});
+
+export type TinybirdAICall = z.infer<typeof tinybirdAICall>;
+
+export const publishAICall = tb.buildIngestEndpoint({
+  datasource: 'aiCall',
+  event: tinybirdAICall,
+});

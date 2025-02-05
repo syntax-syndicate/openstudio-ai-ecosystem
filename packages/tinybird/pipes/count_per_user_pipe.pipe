@@ -1,0 +1,6 @@
+NODE count_per_user_node
+SQL > 
+    %
+    SELECT count(*) AS count FROM aiCall
+    WHERE "userEmail" = {{String(userEmail)}}
+    AND toStartOfMonth(fromUnixTimestamp64Milli(timestamp)) = toStartOfMonth(now())
