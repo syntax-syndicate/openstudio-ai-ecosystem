@@ -15,6 +15,10 @@ export type RootContextType = {
   setApiKeyModalProvider: (apiKeyModalProvider: TProvider | null) => void;
   isMobileSidebarOpen: boolean;
   setIsMobileSidebarOpen: (isMobileSidebarOpen: boolean) => void;
+  openPricingModal: boolean;
+  setOpenPricingModal: (openPricingModal: boolean) => void;
+  openMessageLimitModal: boolean;
+  setOpenMessageLimitModal: (openMessageLimitModal: boolean) => void;
 };
 export const RootContext = createContext<RootContextType | null>(null);
 
@@ -28,7 +32,8 @@ export const RootProvider = ({ children }: { children: React.ReactNode }) => {
   const [openApiKeyModal, setOpenApiKeyModal] = useState(false);
   const [apiKeyModalProvider, setApiKeyModalProvider] =
     useState<TProvider | null>(null);
-
+  const [openPricingModal, setOpenPricingModal] = useState(false);
+  const [openMessageLimitModal, setOpenMessageLimitModal] = useState(false);
   return (
     <RootContext.Provider
       value={{
@@ -42,6 +47,10 @@ export const RootProvider = ({ children }: { children: React.ReactNode }) => {
         setApiKeyModalProvider,
         isMobileSidebarOpen,
         setIsMobileSidebarOpen,
+        openPricingModal,
+        setOpenPricingModal,
+        openMessageLimitModal,
+        setOpenMessageLimitModal,
       }}
     >
       {children}
