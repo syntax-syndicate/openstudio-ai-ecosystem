@@ -11,6 +11,9 @@ import type { TAssistant } from '@/types/assistants';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { MoneyBag02Icon } from '@hugeicons/react';
+import { usePremium } from '@/hooks/use-premium';
+
 
 export const ChatTopNav = () => {
   const { setOpen, renderModal } = useFeedback();
@@ -24,8 +27,10 @@ export const ChatTopNav = () => {
     setIsSidebarOpen,
     isMobileSidebarOpen,
     setIsMobileSidebarOpen,
+    setOpenPricingModal
   } = useRootContext();
   const { createSession } = useSessions();
+  const { isPremium } = usePremium();
   useEffect(() => {
     const assistantProps = getAssistantByKey(preferences.defaultAssistant);
     if (assistantProps?.model) {
@@ -56,6 +61,14 @@ export const ChatTopNav = () => {
       />
 
       <PluginSelect selectedAssistantKey={selectedAssistantKey} />
+
+      <Button
+        variant="premium"
+        className={`${isPremium ? '!text-green-500 bg-green-500/10 hover:bg-green-500/20' : ''}`}
+        onClick={() => setOpenPricingModal(true)}
+      >
+        <MoneyBag02Icon size={16} strokeWidth={2} /> {isPremium ? 'Pro' : 'Upgrade to Pro'}
+      </Button>
     </TopNav>
   );
 };

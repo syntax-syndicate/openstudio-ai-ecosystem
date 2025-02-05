@@ -10,21 +10,85 @@ import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import { useEffect, useState } from 'react';
+import { usePremium } from '@/hooks/use-premium';
 
 export const ChatMessages = () => {
-  const { preferences } = usePreferenceContext();
+  const { preferences, updatePreferences } = usePreferenceContext();
   const { getAssistantIcon } = useAssistantUtils();
   const [showScrollButtons, setShowScrollButtons] = useState<{
     [key: string]: boolean;
   }>({});
   const { store } = useChatContext();
+  const messages = store((state) => state.messages);
   const currentMessage = store((state) => state.currentMessage);
+
+  const isInitialized = store((state) => state.isInitialized);
+  const session = store((state) => state.session);
+  const { isPremium } = usePremium();
+
+  // useEffect(() => {
+  //   // Only update preferences for existing sessions (not fresh ones)
+  //   if (isInitialized && session && messages.length > 0) {
+  //     // Get all unique assistant keys from the conversation history
+  //     const historicalAssistants = Array.from(new Set(
+  //       messages.flatMap(msg => 
+  //         (msg.aiResponses || []).map(response => response.assistant.key)
+  //       )
+  //     ));
+
+  //     // Update preferences to match historical assistants
+  //     if (historicalAssistants.length > 0) {
+  //       updatePreferences({
+  //         ...preferences,
+  //         defaultAssistants: historicalAssistants,
+  //         defaultAssistant: historicalAssistants[0],
+  //       });
+  //     }
+  //   }
+  // }, [isInitialized, session?.id, messages]);
+
+    useEffect(() => {
+    // Only update preferences for existing sessions (not fresh ones)
+    if (isInitialized && session && messages.length > 0) {
+      // Get all unique assistant keys from the conversation history
+      const historicalAssistants = Array.from(new Set(
+        messages.flatMap(msg => 
+          (msg.aiResponses || []).map(response => response.assistant.key)
+        )
+      ));
+
+      // Get current preferences
+      const currentPreferences = preferences.defaultAssistants || [];
+      
+      // Determine max allowed models based on user's plan
+      const MAX_MODELS = isPremium ? 2 : 2;
+
+      // Combine and limit the assistants, prioritizing current preferences
+      const combinedAssistants = Array.from(new Set([
+        ...currentPreferences,
+        ...historicalAssistants
+      ])).slice(0, MAX_MODELS);
+
+      // Update preferences only if the combined list is different
+      if (combinedAssistants.length > 0 && 
+          JSON.stringify(combinedAssistants) !== JSON.stringify(preferences.defaultAssistants)) {
+        updatePreferences({
+          ...preferences,
+          defaultAssistants: combinedAssistants,
+          defaultAssistant: combinedAssistants[0],
+        });
+      }
+    }
+  }, [isInitialized, session?.id, messages, preferences.defaultAssistants]);
 
   const MIN_COLUMN_WIDTH = Math.max(
     300,
     Math.min(400, window.innerWidth * 0.8)
   );
 
+  // const models =  preferences.defaultAssistants!;
+
+  // Combine historical assistants with current preferences
   const models = preferences.defaultAssistants!;
 
   const gridCols = models.length;
@@ -132,7 +196,7 @@ export const ChatMessages = () => {
                 }}
               >
                 <div className="no-scrollbar column-scroll-container h-full overflow-y-auto">
-                  <div className="sticky top-0 z-[999] mb-4 rounded bg-white/80 p-2 shadow-sm backdrop-blur-sm dark:bg-zinc-800">
+                  <div className="sticky top-0 z-[99] mb-4 rounded bg-white/80 p-2 shadow-sm backdrop-blur-sm dark:bg-zinc-800">
                     <div className="flex items-center justify-center gap-2">
                       {getAssistantIcon(modelId, 'sm', true)}
                       <h3 className="text-center font-medium">{modelId}</h3>

@@ -15,6 +15,7 @@ import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils, useImageAttachment } from '@/hooks';
 import { useChatEditor } from '@/hooks/use-editor';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
+import { usePremium } from '@/hooks/use-premium';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -24,6 +25,8 @@ import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { toast } from '@repo/design-system/hooks/use-toast';
+import { useRootContext } from '@/context/root';
 
 export const ChatInput = () => {
   const { store, isReady, refetch } = useChatContext();
@@ -31,6 +34,8 @@ export const ChatInput = () => {
   const [openChangelog, setOpenChangelog] = useState(false);
   const { preferences, isPreferencesReady } = usePreferenceContext();
   const { getAssistantByKey, getAssistantIcon } = useAssistantUtils();
+  const { isPremium } = usePremium();
+  const { setOpenPricingModal } = useRootContext();
   const { invokeModel } = useLLMRunner();
   const { editor } = useChatEditor();
   const currentMessage = store((state) => state.currentMessage);
@@ -41,7 +46,6 @@ export const ChatInput = () => {
   const context = store((state) => state.context);
   const { attachment, clearAttachment, handleImageUpload, dropzonProps } =
     useImageAttachment();
-
   const isFreshSession = !isInitialized;
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -77,6 +81,17 @@ export const ChatInput = () => {
           .map((key) => getAssistantByKey(key))
           .filter(Boolean)
       : [preferences.defaultAssistant];
+
+    // if (!isPremium && assistants.length >= 2) {
+    //   setOpenPricingModal(true);
+    //   toast({
+    //     title: 'Error',
+    //     description:
+    //       'Upgrade to activate more than 2 parallel side by side assistants',
+    //     variant: 'destructive',
+    //   });
+    //   return;
+    // }
 
     if (!assistants.length || !session) return;
 
@@ -200,7 +215,12 @@ export const ChatInput = () => {
                 size="lg"
               />
             ) : (
-              getAssistantIcon(preferences.defaultAssistants?.[0] ?? preferences.defaultAssistant, 'lg', true)
+              getAssistantIcon(
+                preferences.defaultAssistants?.[0] ??
+                  preferences.defaultAssistant,
+                'lg',
+                true
+              )
             )}
             <Flex direction="col" gap="xs" justify="center" items="center">
               <Type
@@ -242,7 +262,7 @@ export const ChatInput = () => {
                 </Button>
               )}
             </Flex>
-            <ApiKeyStatus />
+            {!isPremium && <ApiKeyStatus />}
           </Flex>
         )}
         {renderChatBottom()}
