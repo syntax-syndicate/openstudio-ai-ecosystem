@@ -1,7 +1,9 @@
 import { defaultPreferences } from '@/config';
 import { usePreferenceContext } from '@/context';
+import { useRootContext } from '@/context/root';
 import { formatNumber } from '@/helper/utils';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
+import { usePremium } from '@/hooks/use-premium';
 import type { TAssistant } from '@/types';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { CommandItem } from '@repo/design-system/components/ui/command';
@@ -18,14 +20,15 @@ export type TAssistantItem = {
 export const AssistantItem = ({ assistant, onSelect }: TAssistantItem) => {
   const { updatePreferences, preferences } = usePreferenceContext();
   const { getAssistantByKey, getAssistantIcon } = useAssistantUtils();
+  const { isPremium } = usePremium();
   const assistantProps = getAssistantByKey(assistant.key);
+  const { setOpenPricingModal } = useRootContext();
   const model = assistantProps?.model;
   const isSelected = preferences.defaultAssistants
     ? preferences.defaultAssistants.includes(assistant.key)
     : preferences.defaultAssistant === assistant.key;
 
-  // max we can have is 2 assistants
-  const maxAssistants = 2;
+  const maxAssistants = isPremium ? 2 : 2;
   const handleSelect = () => {
     if (isSelected) {
       // Remove from defaultAssistants if already selected
@@ -48,7 +51,38 @@ export const AssistantItem = ({ assistant, onSelect }: TAssistantItem) => {
         () => onSelect(assistant)
       );
     } else {
-      // Check if we've already reached the maximum number of assistants
+      // For non-premium users, ensure they can only have one assistant
+      if (!isPremium) {
+        // If they already have an assistant and trying to select another
+        if (
+          preferences.defaultAssistants &&
+          preferences.defaultAssistants.length >= maxAssistants
+        ) {
+          setOpenPricingModal(true);
+          toast({
+            title: 'Error',
+            description: 'Beta feature: You can only select 2 assistants',
+            variant: 'destructive',
+          });
+          return;
+        }
+        const updatedAssistants = [
+        ...(preferences.defaultAssistants?.filter(
+          (key) => key !== assistant.key
+        ) || []),
+        assistant.key,
+      ];
+        updatePreferences(
+          {
+            defaultAssistant: assistant.key,
+            defaultAssistants: updatedAssistants,
+            maxTokens: defaultPreferences.maxTokens,
+          },
+          () => onSelect(assistant)
+        );
+        return;
+      }
+      // For premium users
       if (
         !preferences.defaultAssistants ||
         preferences.defaultAssistants?.length >= maxAssistants
@@ -58,7 +92,7 @@ export const AssistantItem = ({ assistant, onSelect }: TAssistantItem) => {
           description: 'Beta feature: You can only select 2 assistants',
           variant: 'destructive',
         });
-        return; // Don't add if we've reached the limit
+        return;
       }
       // Add new selection, ensuring defaultAssistant is first in the array
       const updatedAssistants = [

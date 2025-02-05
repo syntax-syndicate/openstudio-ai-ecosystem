@@ -6,6 +6,8 @@ import { Flex } from '@repo/design-system/components/ui/flex';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { ArrowUp, Book } from 'lucide-react';
 import { CircleStop } from 'lucide-react';
+import { FolderSearchIcon } from '@hugeicons/react';
+
 
 export type TChatActions = {
   sendMessage: (message: string) => void;
@@ -46,6 +48,11 @@ export const ChatActions = ({
             }}
           >
             <Book size={16} strokeWidth="2" />
+          </Button>
+        </Tooltip>
+        <Tooltip content="WIP - Deep Research">
+          <Button disabled className="disabled:opacity-50 disabled:cursor-not-allowed" size="icon-sm" variant="ghost">
+            <FolderSearchIcon size={16} strokeWidth="2" />
           </Button>
         </Tooltip>
       </Flex>
