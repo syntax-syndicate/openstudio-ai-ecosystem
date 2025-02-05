@@ -6,24 +6,31 @@ import type { ComponentProps } from 'react';
 export type TProvider = (typeof providers)[number];
 export const models = [
   'o3-mini-2025-01-31',
-  // 'o1-mini-2024-09-12',
   'gpt-4o-mini',
-  'gpt-4o',
   'gpt-4',
   'gpt-4-turbo',
-  'gpt-3.5-turbo',
+  'grok-2-latest',
+  'grok-2-vision-latest',
   'gpt-3.5-turbo-0125',
   'claude-3-opus-20240229',
   'claude-3-sonnet-20240229',
   'claude-3-5-sonnet-20240620',
+  'claude-3-5-sonnet-20241022',
   'claude-3-haiku-20240307',
-  'gemini-pro',
-  'gemini-1.5-flash-latest',
-  'gemini-1.5-pro-latest',
-  'gemini-2.0-flash-exp',
-  'gemini-2.0-flash-thinking-exp',
+  'claude-3-5-haiku-20241022',
+  'gemini-2.0-flash-thinking-exp-01-21',
+  'gemini-exp-1206',
+  'learnlm-1.5-pro-experimental',
+  'gemini-1.5-pro',
+  'gemini-1.5-flash',
+  'gemini-1.5-flash-8b',
+  'llama-3.2-90b-vision-preview',
+  'llama-3.3-70b-versatile',
+  'deepseek-r1-distill-llama-70b',
   'phi3:latest',
-  'llama3-groq-70b-8192-tool-use-preview',
+  'sonar-reasoning-pro',
+  'sonar-pro'
+
 ] as const;
 export type TModelKey = (typeof models)[number] | string;
 export type TModelItem = {
@@ -38,4 +45,6 @@ export type TModelItem = {
   plugins: ToolKey[];
   provider: TProvider;
   maxOutputTokens: number;
+  inputTokenPrice: number;
+  outputTokenPrice: number;
 };
