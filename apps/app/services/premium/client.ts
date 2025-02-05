@@ -129,7 +129,6 @@ export async function getPremium() {
     );
 
   const messagesCountPerMonth = await getCountPerUser({userEmail: user!.email!})
-  console.log('messagesCountPerMonth', messagesCountPerMonth)
 
   return {
     premium: premiumData[0],

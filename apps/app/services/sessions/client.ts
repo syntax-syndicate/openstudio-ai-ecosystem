@@ -216,7 +216,6 @@ export async function createNewSession(): Promise<TChatSession | null> {
     const user = await currentUser();
 
     if (!organizationId || !user) {
-      console.log('Missing organizationId or user');
       return null;
     }
 

@@ -32,7 +32,6 @@ export async function saveUsage(options: {email: string; usage: {
     const {email, usage, cost} = options;
     const key = getUsageKey(email);
     
-    console.log('saving usage', key, usage, cost)
     Promise.all([
         redis.hincrby(key, 'aiCalls', 1),
         redis.hincrby(key, 'totalTokensUsed', usage.total_tokens),
