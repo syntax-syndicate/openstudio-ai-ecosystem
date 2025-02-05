@@ -4,6 +4,8 @@ import { GeminiSettings } from '@/app/(organization)/chat/components/settings/mo
 import { GroqSettings } from '@/app/(organization)/chat/components/settings/models/groq';
 import { OllamaSettings } from '@/app/(organization)/chat/components/settings/models/ollama';
 import { OpenAISettings } from '@/app/(organization)/chat/components/settings/models/openai';
+import { PerplexitySettings } from '@/app/(organization)/chat/components/settings/models/perplexity';
+import { XAISettings } from '@/app/(organization)/chat/components/settings/models/xai';
 import { useRootContext } from '@/context/root';
 import {
   Dialog,
@@ -45,6 +47,8 @@ export const ApiKeyModal = () => {
         {apiKeyModalProvider === 'anthropic' && <AnthropicSettings />}
         {apiKeyModalProvider === 'gemini' && <GeminiSettings />}
         {apiKeyModalProvider === 'groq' && <GroqSettings />}
+        {apiKeyModalProvider === 'xai' && <XAISettings />}
+        {apiKeyModalProvider === 'perplexity' && <PerplexitySettings />}
         {apiKeyModalProvider === 'ollama' && (
           <OllamaSettings onRefresh={() => {}} />
         )}
