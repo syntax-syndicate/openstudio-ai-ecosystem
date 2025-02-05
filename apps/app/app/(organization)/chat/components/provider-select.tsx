@@ -50,7 +50,7 @@ export const ProviderSelect: FC<TProviderSelect> = ({
           align="end"
           sideOffset={4}
           className={cn(
-            'no-scrollbar z-[610] max-h-[260px] overflow-y-auto text-xs md:text-sm',
+            'no-scrollbar z-[999] max-h-[260px] overflow-y-auto text-xs md:text-sm',
             fullWidth ? 'w-full' : 'min-w-[250px]'
           )}
         >

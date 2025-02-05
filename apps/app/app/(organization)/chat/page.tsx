@@ -16,7 +16,8 @@ const ChatSessionPage = () => {
           <ChatMessages />
           <ChatInput />
         </Flex>
-      </PromptsProvider>
+        </PromptsProvider>
+    
     </ChatProvider>
   );
 };

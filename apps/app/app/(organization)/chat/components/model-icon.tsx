@@ -16,6 +16,10 @@ export type ModelIconType =
   | 'website_reader'
   | 'ollama'
   | 'groq'
+  | 'meta'
+  | 'deepseek'
+  | 'xai'
+  | 'perplexity'
   | 'assistants';
 
 export type TModelIcon = {
@@ -48,6 +52,10 @@ export const ModelIcon = ({
     ollama: '/icons/ollama.svg',
     assistants: '/icons/assistants.svg',
     groq: '/icons/groq.svg',
+    meta: '/icons/meta.svg',
+    deepseek: '/icons/deepseek-color.png',
+    xai: '/icons/xai.svg',
+    perplexity: '/icons/perplexity.svg',
   };
 
   if (type === 'assistant') {
