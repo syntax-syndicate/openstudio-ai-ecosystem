@@ -31,6 +31,9 @@ export const providers = [
   'gemini',
   'ollama',
   'groq',
+  'meta',
+  'xai',
+  'perplexity',
 ] as const;
 
 export type ToolExecutionState = {

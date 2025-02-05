@@ -1,6 +1,6 @@
 {
-  "id": "14d60785-c6ee-46db-b309-3aa66f7193e0",
-  "prevId": "7fb78f73-75d0-4c89-a096-43897cdd1e81",
+  "id": "6ec7f3e9-5699-4227-9ce8-d367cdac0030",
+  "prevId": "b2cfe010-155b-445e-a618-9de523e52946",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1174,6 +1174,137 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.premium": {
+      "name": "premium",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "organizationId": {
+          "name": "organizationId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tier": {
+          "name": "tier",
+          "type": "premium_tier",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp (6)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp (6)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "lemon_squeezy_renews_at": {
+          "name": "lemon_squeezy_renews_at",
+          "type": "timestamp (6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lemon_squeezy_customer_id": {
+          "name": "lemon_squeezy_customer_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lemon_squeezy_subscription_id": {
+          "name": "lemon_squeezy_subscription_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lemon_squeezy_subscription_item_id": {
+          "name": "lemon_squeezy_subscription_item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lemon_squeezy_order_id": {
+          "name": "lemon_squeezy_order_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lemon_squeezy_product_id": {
+          "name": "lemon_squeezy_product_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lemon_squeezy_variant_id": {
+          "name": "lemon_squeezy_variant_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "premium_organization_id_idx": {
+          "name": "premium_organization_id_idx",
+          "columns": [
+            {
+              "expression": "organizationId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "premium_userId_users_id_fk": {
+          "name": "premium_userId_users_id_fk",
+          "tableFrom": "premium",
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "premium_organizationId_organization_id_fk": {
+          "name": "premium_organizationId_organization_id_fk",
+          "tableFrom": "premium",
+          "tableTo": "organization",
+          "columnsFrom": ["organizationId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.projects": {
       "name": "projects",
       "schema": "",
@@ -1553,6 +1684,11 @@
       "name": "feedback_type",
       "schema": "public",
       "values": ["positive", "neutral", "negative"]
+    },
+    "public.premium_tier": {
+      "name": "premium_tier",
+      "schema": "public",
+      "values": ["PRO_MONTHLY", "PRO_ANNUALLY", "LIFETIME"]
     },
     "public.provider": {
       "name": "provider",

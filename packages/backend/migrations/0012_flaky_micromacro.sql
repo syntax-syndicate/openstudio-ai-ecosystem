@@ -1,0 +1,1 @@
+CREATE TYPE "public"."premium_tier" AS ENUM('PRO_MONTHLY', 'PRO_ANNUALLY', 'LIFETIME');

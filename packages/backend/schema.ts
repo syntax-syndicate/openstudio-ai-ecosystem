@@ -46,6 +46,45 @@ export const organization = pgTable('organization', {
   slug: varchar('slug', { length: 191 }).notNull(),
 });
 
+export const premiumTierEnum = pgEnum('premium_tier', [
+  'PRO_MONTHLY',
+  'PRO_ANNUALLY',
+  'LIFETIME',
+]);
+
+export const premium = pgTable(
+  'premium',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: varchar('userId').references(() => Users.id),
+    organizationId: varchar('organizationId').references(() => organization.id),
+    tier: premiumTierEnum('tier').notNull(),
+    createdAt: timestamp('createdAt', { mode: 'date', precision: 6 })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updatedAt', { mode: 'date', precision: 6 })
+      .defaultNow()
+      .notNull(),
+    lemon_squeezy_renews_at: timestamp('lemon_squeezy_renews_at', {
+      mode: 'date',
+      precision: 6,
+    }),
+    lemon_squeezy_customer_id: integer('lemon_squeezy_customer_id'),
+    lemon_squeezy_subscription_id: integer('lemon_squeezy_subscription_id'),
+    lemon_squeezy_subscription_item_id: integer(
+      'lemon_squeezy_subscription_item_id'
+    ),
+    lemon_squeezy_order_id: integer('lemon_squeezy_order_id'),
+    lemon_squeezy_product_id: integer('lemon_squeezy_product_id'),
+    lemon_squeezy_variant_id: integer('lemon_squeezy_variant_id'),
+  },
+  (table) => ({
+    organizationIdIdx: index('premium_organization_id_idx').on(
+      table.organizationId
+    ),
+  })
+);
+
 export const assistantTypeEnum = pgEnum('assistant_type', [
   'base',
   'custom',
@@ -397,4 +436,5 @@ export const schema = {
   projects,
   articles,
   subscribers,
+  premium,
 };

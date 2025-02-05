@@ -1,6 +1,6 @@
 {
-  "id": "14d60785-c6ee-46db-b309-3aa66f7193e0",
-  "prevId": "7fb78f73-75d0-4c89-a096-43897cdd1e81",
+  "id": "b2cfe010-155b-445e-a618-9de523e52946",
+  "prevId": "14d60785-c6ee-46db-b309-3aa66f7193e0",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1553,6 +1553,11 @@
       "name": "feedback_type",
       "schema": "public",
       "values": ["positive", "neutral", "negative"]
+    },
+    "public.premium_tier": {
+      "name": "premium_tier",
+      "schema": "public",
+      "values": ["PRO_MONTHLY", "PRO_ANNUALLY", "LIFETIME"]
     },
     "public.provider": {
       "name": "provider",
