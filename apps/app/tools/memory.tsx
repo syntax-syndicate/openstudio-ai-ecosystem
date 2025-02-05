@@ -6,6 +6,7 @@ import { RunnableSequence } from '@langchain/core/runnables';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { z } from 'zod';
+import { usePremium } from '@/hooks/use-premium';
 
 const memoryParser = StructuredOutputParser.fromZodSchema(
   z.object({
@@ -36,6 +37,7 @@ const memoryFunction = (context: ToolExecutionContext) => {
     model,
     updateToolExecutionState,
   } = context;
+  const { isPremium } = usePremium();
 
   return new DynamicStructuredTool({
     name: 'memory',
@@ -51,6 +53,7 @@ const memoryFunction = (context: ToolExecutionContext) => {
           provider: model.provider,
           apiKey: apiKeys.find((apiKey) => apiKey.provider === model.provider)
             ?.key,
+          isPremium: isPremium,
         });
 
         const chain = RunnableSequence.from([
