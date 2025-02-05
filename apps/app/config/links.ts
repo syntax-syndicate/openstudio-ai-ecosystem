@@ -8,6 +8,8 @@ export const links = {
   googleSearchApiUrl:
     'https://programmablesearchengine.google.com/controlpanel/create',
   groqApiKeyUrl: 'https://console.groq.com/keys',
+  xaiApiKeyUrl: 'https://console.x.ai',
+  perplexityApiKeyUrl: 'https://www.perplexity.ai/pplx-api',
   googleSearchEngineApiKeyUrl:
     'https://developers.google.com/custom-search/v1/introduction',
 };
