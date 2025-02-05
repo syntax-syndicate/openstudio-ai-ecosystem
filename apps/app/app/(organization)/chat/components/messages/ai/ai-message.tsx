@@ -36,6 +36,8 @@ export const AIMessage = ({
     return message.aiResponses?.find((r) => r.assistant.key === modelId);
   }, [message, modelId]);
 
+  
+
   // const {
   //   rawAI = '',
   //   tools = [],
@@ -101,7 +103,7 @@ export const AIMessage = ({
           message={message}
           canRegenerate={multipleAssistants === 1 ? message && isLast : false}
         />
-        <AIRelatedQuestions message={message} show={message && isLast} />
+        <AIRelatedQuestions message={message} show={message && isLast} modelId={modelId} />
       </Flex>
     </div>
   );

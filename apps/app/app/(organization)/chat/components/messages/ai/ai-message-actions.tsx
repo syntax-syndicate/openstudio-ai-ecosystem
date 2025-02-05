@@ -135,10 +135,11 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
             </PopOverConfirmProvider>
           </Tooltip>
           {canRegenerate ? (
-            <RegenerateWithModelSelect
-              assistant={runConfig?.assistant}
-              onRegenerate={handleRegenerate}
-            />
+            // <RegenerateWithModelSelect
+            //   assistant={runConfig?.assistant}
+            //   onRegenerate={handleRegenerate}
+            // />
+            <></>
           ) : (
             // <Type size="sm" textColor="tertiary" className="px-2">
             //   {message.runConfig?.assistant?.name}

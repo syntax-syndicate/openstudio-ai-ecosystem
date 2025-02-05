@@ -11,6 +11,9 @@ import { Type } from '@repo/design-system/components/ui/text';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
 import type { FC } from 'react';
+import { toast } from '@repo/design-system/hooks/use-toast';
+import { useRootContext } from '@/context/root';
+import { usePremium } from '@/hooks/use-premium';
 
 export type TAIRelatedQuestions = {
   message: TChatMessage;
@@ -24,6 +27,8 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
   modelId,
 }) => {
   const { refetch, store } = useChatContext();
+  const { setOpenPricingModal } = useRootContext();
+  const { isPremium } = usePremium();
   const isGenerating = store((state) => state.isGenerating);
   const { preferences } = usePreferenceContext();
   const { getAssistantByKey } = useAssistantUtils();
@@ -60,6 +65,18 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
           .map((key) => getAssistantByKey(key))
           .filter(Boolean)
       : [getAssistantByKey(preferences.defaultAssistant)].filter(Boolean);
+
+
+    // if (!isPremium && assistants.length > 1) {
+    //   toast({
+    //     title: 'Error',
+    //     description:
+    //       'Upgrade to activate multi assistant mode or to continue select just one assistant',
+    //     variant: 'destructive',
+    //   });
+    //   setOpenPricingModal(true);
+    //   return;
+    // }
 
     if (!assistants.length || !message.sessionId) return;
 
