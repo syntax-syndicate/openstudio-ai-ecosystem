@@ -9,6 +9,7 @@ import { StructuredOutputParser } from 'langchain/output_parsers';
 import moment from 'moment';
 import { z } from 'zod';
 import { useAssistantUtils } from '.';
+import { usePremium } from './use-premium';
 
 const parser = StructuredOutputParser.fromZodSchema(
   z.object({
@@ -20,6 +21,7 @@ export const useTitleGenerator = () => {
   const { getAssistantByKey } = useAssistantUtils();
   const { preferences, getApiKey } = usePreferenceContext();
   const { updateSessionMutation } = useSessions();
+  const { isPremium } = usePremium();
 
   const generateTitleForSession = async (sessionId: string) => {
     const messages = await getMessages(sessionId);
@@ -58,6 +60,7 @@ export const useTitleGenerator = () => {
       preferences,
       provider: assistant.model.provider,
       apiKey: apiKey,
+      isPremium: isPremium,
     });
 
     const prompt = await constructPrompt({
