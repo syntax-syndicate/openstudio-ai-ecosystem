@@ -24,6 +24,7 @@ import { cn } from '@repo/design-system/lib/utils';
 import { ArrowRight, Github } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { usePremium } from '@/hooks/use-premium';
 
 export type TWelcomeMessageProps = {
   show: boolean;
@@ -58,6 +59,7 @@ const welcomePoints: WelcomePoint[] = [
 ];
 export const WelcomeMessage = () => {
   const { store } = useChatContext();
+  const { isPremium } = usePremium();
 
   const [open, setOpen] = useState(false);
   useEffect(() => {
