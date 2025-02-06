@@ -206,8 +206,50 @@ export const models: TModelItem[] = [
     inputTokenPrice: 0.000025, // $0.25 per 1M tokens
     outputTokenPrice: 0.0001, // $1 per 1M tokens
   },
-  {
+   {
     name: 'Gemini Flash 2.0',
+    key: 'gemini-2.0-flash',
+    isNew: true,
+    tokens: 1048576,
+    description: 'Best for complex tasks',
+    vision: true,
+    maxOutputTokens: 8192,
+    plugins: [],
+    icon: 'gemini',
+    provider: 'gemini',
+    inputTokenPrice: 0.0, // $0.0 per 1M tokens
+    outputTokenPrice: 0.0, // $0.0 per 1M tokens
+  },
+  {
+    name: 'Gemini Flash 2.0 Lite Preview',
+    key: 'gemini-2.0-flash-lite-preview-02-05',
+    isNew: true,
+    tokens: 1048576,
+    description: 'Best for complex tasks',
+    vision: true,
+    maxOutputTokens: 8192,
+    plugins: [],
+    icon: 'gemini',
+    provider: 'gemini',
+    inputTokenPrice: 0.0, // $0.0 per 1M tokens
+    outputTokenPrice: 0.0, // $0.0 per 1M tokens
+  },
+  {
+    name: 'Gemini Pro 2.0',
+    key: 'gemini-2.0-pro-exp-02-05',
+    isNew: true,
+    tokens: 2097152,
+    description: 'Best for complex tasks',
+    vision: true,
+    maxOutputTokens: 8192,
+    plugins: [],
+    icon: 'gemini',
+    provider: 'gemini',
+    inputTokenPrice: 0.0, // $0.0 per 1M tokens
+    outputTokenPrice: 0.0, // $0.0 per 1M tokens
+  },
+  {
+    name: 'Gemini Flash 2.0 Exp',
     key: 'gemini-2.0-flash-exp',
     isNew: true,
     tokens: 1048576,
