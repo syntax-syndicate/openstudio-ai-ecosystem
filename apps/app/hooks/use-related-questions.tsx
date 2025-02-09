@@ -1,11 +1,4 @@
-import { configs } from '@/config';
-import { ollamaModelsSupportsTools } from '@/config/models';
 import { usePreferenceContext } from '@/context';
-import { constructPrompt } from '@/helper/promptUtil';
-import { modelService } from '@/services/models';
-import { getMessages } from '@/services/sessions/client';
-import { RunnableSequence } from '@langchain/core/runnables';
-import type { ChatOllama } from '@langchain/ollama';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { z } from 'zod';
 import { useAssistantUtils } from '.';
@@ -39,7 +32,7 @@ export const useRelatedQuestions = () => {
     // const assistant = getAssistantByKey(message.runConfig.assistant.key);
 
     // //check for apikey if not premium
-    
+
     // const conditionCheck = isPremium ? !assistant : !assistant || !getApiKey(assistant.model.provider)
 
     // if (conditionCheck) {

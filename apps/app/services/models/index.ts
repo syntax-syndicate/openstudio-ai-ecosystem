@@ -1,12 +1,13 @@
 import { defaultPreferences } from '@/config';
+import { env } from '@/env';
 import type { TModelItem, TModelKey, TPreferences, TProvider } from '@/types';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { ChatGroq } from '@langchain/groq';
+import type { ChatGroq } from '@langchain/groq';
 import { ChatOllama } from '@langchain/ollama';
 import { ChatOpenAI } from '@langchain/openai';
-import { ChatXAI } from '@langchain/xai';
-import { env } from '@/env';
+import { createOpenAI, createAnthropic, createGoogleGenerativeAI } from '@repo/ai';
+import type { ChatXAI } from '@langchain/xai';
 type ChatOpenAIConstructorParams = ConstructorParameters<typeof ChatOpenAI>[0];
 type ChatAnthropicConstructorParams = ConstructorParameters<
   typeof ChatAnthropic
@@ -210,7 +211,6 @@ type TCreateInstance = {
 //     }
 //   }
 
-
 // export async function getTestModelKey(key: TProvider): Promise<TModelKey> {
 //     switch (key) {
 //       case 'openai':
@@ -236,7 +236,6 @@ type TCreateInstance = {
 //     }
 //   }
 
-
 // export async function getModelAPIKeyForProUsers(key: TProvider): Promise<string> {
 //     switch (key) {
 //       case 'openai':
@@ -253,7 +252,6 @@ type TCreateInstance = {
 //         return '';
 //     }
 //   }
-
 
 export class ModelService {
   async createInstance({
@@ -276,139 +274,99 @@ export class ModelService {
 
     switch (provider) {
       case 'chathub':
-        return new ChatOpenAI({
-          model: model.key,
-          streaming: true,
-          apiKey: 'ssdlk',
-          configuration: {
-            baseURL: `${window.location.origin}/api/chathub/`,
-          },
-          temperature: Number(temperature),
-          maxTokens,
-          topP: Number(topP),
-          maxRetries: 2,
-          ...props,
-        });
+      //   return new ChatOpenAI({
+      //     model: model.key,
+      //     streaming: true,
+      //     apiKey: 'ssdlk',
+      //     configuration: {
+      //       baseURL: `${window.location.origin}/api/chathub/`,
+      //     },
+      //     temperature: Number(temperature),
+      //     maxTokens,
+      //     topP: Number(topP),
+      //     maxRetries: 2,
+      //     ...props,
+      //   });
+      return createOpenAI({
+        apiKey: 'ssdlk',
+        baseURL: `${window.location.origin}/api/chathub/`,
+      });
       case 'openai':
-        return new ChatOpenAI({
-          model: model.key,
-          streaming: true,
-          configuration: {
-            baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/openai`
-          },
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
-          ...(!model.key.startsWith('o3-') &&
-            !model.key.startsWith('o1-') && {
-              temperature: Number(temperature),
-            }),
-          ...(model.key.startsWith('o3-mini-') || model.key.startsWith('o1-')
-            ? { maxCompletionTokens: maxTokens }
-            : { maxTokens }),
-          topP: Number(topP),
-          maxRetries: 2,
-          ...props,
-        });
+        // return new ChatOpenAI({
+        //   model: model.key,
+        //   streaming: true,
+        //   configuration: {
+        //     baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/openai`,
+        //   },
+        //   apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
+        //   ...(!model.key.startsWith('o3-') &&
+        //     !model.key.startsWith('o1-') && {
+        //       temperature: Number(temperature),
+        //     }),
+        //   ...(model.key.startsWith('o3-mini-') || model.key.startsWith('o1-')
+        //     ? { maxCompletionTokens: maxTokens }
+        //     : { maxTokens }),
+        //   topP: Number(topP),
+        //   maxRetries: 2,
+        //   ...props,
+        // });
+
+        return createOpenAI({
+        apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
+        compatibility: 'strict',
+        baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/openai`
+      });
       case 'perplexity':
-        return new ChatOpenAI({
-          model: model.key,
-          streaming: true,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
-          configuration: {
-            baseURL: `${window.location.origin}/api/perplexity/`,
-          },
-          temperature: Number(temperature),
-          maxTokens,
-          topP: Number(topP),
-          maxRetries: 2,
-          ...props,
+        // return new ChatOpenAI({
+        //   model: model.key,
+        //   streaming: true,
+        //   apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
+        //   configuration: {
+        //     baseURL: `${window.location.origin}/api/perplexity/`,
+        //   },
+        //   temperature: Number(temperature),
+        //   maxTokens,
+        //   topP: Number(topP),
+        //   maxRetries: 2,
+        //   ...props,
+        // });
+        return createOpenAI({
+          apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
+          baseURL: `${window.location.origin}/api/perplexity/`,
         });
-      case 'xai':
-        return new ChatOpenAI({
-          model: model.key,
-          streaming: true,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
-          configuration: {
-            baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/grok`,
-          },
-          temperature: Number(temperature),
-          maxTokens,
-          topP: Number(topP),
-          maxRetries: 2,
-          ...props,
-        });
+
+      // case 'xai':
+      //   return new ChatOpenAI({
+      //     model: model.key,
+      //     streaming: true,
+      //     apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
+      //     configuration: {
+      //       baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/grok`,
+      //     },
+      //     temperature: Number(temperature),
+      //     maxTokens,
+      //     topP: Number(topP),
+      //     maxRetries: 2,
+      //     ...props,
+      //   });
       case 'anthropic':
-        return new ChatAnthropic({
-          model: model.key,
-          // anthropicApiUrl: `${window.location.origin}/api/anthropic/`,
-          anthropicApiUrl: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/anthropic`,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
-          maxTokens,
-          // clientOptions: {
-          //   defaultHeaders: {
-          //     'anthropic-dangerous-direct-browser-access': 'true',
-          //   },
-          // },
-          streaming: true,
-          temperature: Number(temperature),
-          topP: Number(topP),
-          topK: Number(topK),
-          maxRetries: 2,
-          ...props,
-        });
+        return createAnthropic({
+        apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
+        baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/anthropic`,
+        headers: {
+          'anthropic-dangerous-direct-browser-access': 'true',
+        }
+      });
       case 'gemini':
-        return new ChatGoogleGenerativeAI({
-          model: model.key,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
-          baseUrl: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/google-ai-studio`,
-          maxOutputTokens: maxTokens,
-          streaming: true,
-          temperature: Number(temperature),
-          maxRetries: 1,
-          onFailedAttempt: (error) => {
-            console.error('Failed attempt', error);
-          },
-          topP: Number(topP),
-          topK: Number(topK),
-          ...props,
-        });
-      case 'ollama':
-        return new ChatOllama({
-          model: model.key,
-          baseUrl: ollamaBaseUrl,
-          numPredict: maxTokens,
-          topK: Number(topK),
-          topP: Number(topP),
-          maxRetries: 2,
-          temperature: Number(temperature),
-          ...props,
+        return createGoogleGenerativeAI({
+          apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
+          // baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/google-ai-studio`,
         });
       case 'groq':
-        return new ChatOpenAI({
-          model: model.key,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
-          configuration: {
-            baseURL: `${window.location.origin}/api/groq/`,
-          },
-          //issue with cloudflare gateway for cors
-          //TODO: Check this later
-          // baseUrl: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/groq/chat/completions`,
-          streaming: true,
-          maxTokens: maxTokens,
-          maxRetries: 2,
-          temperature: Number(temperature),
-          ...props,
+        return createOpenAI({
+          apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
+          compatibility: 'strict',
+          baseURL: `${window.location.origin}/api/groq/`,
         });
       default:
         throw new Error('Invalid model');

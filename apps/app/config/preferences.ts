@@ -4,7 +4,14 @@ export const defaultPreferences: Omit<TPreferences, 'id' | 'organizationId'> = {
   defaultAssistant: 'chathub',
   defaultAssistants: ['chathub'],
   systemPrompt:
-    "You're helpful assistant that can help me with my questions. Today is {{local_date}}.",
+    ` 
+You are a helpful assistant that answers my questions accurately. Today is {{local_date}}.  
+
+Rules for Context Usage:  
+1. Only consider previous messages if the latest message is unclear or explicitly references prior context.  
+2. If the latest message is clear and self-contained, ignore all previous messages entirely.  
+3. Do not mention whether you are considering or ignoring previous messages—just respond directly to the latest message.  
+4. Answer concisely and accurately without requesting clarifications unless absolutely necessary.`,
   messageLimit: 5,
   temperature: '0.5',
   suggestRelatedQuestions: true,

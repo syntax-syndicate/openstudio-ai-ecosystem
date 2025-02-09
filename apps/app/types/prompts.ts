@@ -5,4 +5,5 @@ export type TConstructPrompt = {
   hasMessages: boolean;
   systemPrompt: string;
   formatInstructions?: boolean;
+  userPrompt?: string;
 };

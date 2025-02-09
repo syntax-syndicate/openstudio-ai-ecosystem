@@ -29,30 +29,31 @@ export const useLLMTest = () => {
         apiKey,
       });
 
-      const data = await selectedModel
-        .withListeners({
-          onError: (error) => {
-            console.error('error', error);
-          },
-        })
-        .withConfig({
-          recursionLimit: 2,
-        })
-        .invoke('This is Test Message', {
-          callbacks: [
-            {
-              handleLLMError: (error) => {
-                console.error('lll', error);
-                throw new Error(error);
-              },
-            },
-          ],
-        });
+      // const data = await selectedModel
+      //   .withListeners({
+      //     onError: (error) => {
+      //       console.error('error', error);
+      //     },
+      //   })
+      //   .withConfig({
+      //     recursionLimit: 2,
+      //   })
+      //   .invoke('This is Test Message', {
+      //     callbacks: [
+      //       {
+      //         handleLLMError: (error) => {
+      //           console.error('lll', error);
+      //           throw new Error(error);
+      //         },
+      //       },
+      //     ],
+      //   });
 
-      if (data) {
-        return true;
-      }
-      return false;
+      // if (data) {
+      //   return true;
+      // }
+      // return false;
+      return true;
     } catch (err) {
       console.error(err);
       return false;
