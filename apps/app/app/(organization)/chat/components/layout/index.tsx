@@ -4,8 +4,8 @@ import { ApiKeyModal } from '@/app/(organization)/chat/components/api-key-modal'
 import { CommandSearch } from '@/app/(organization)/chat/components/command-search';
 import { HistorySidebar } from '@/app/(organization)/chat/components/history/history-side-bar';
 import { Sidebar } from '@/app/(organization)/chat/components/layout/sidebar';
-import { PricingModal } from '@/app/(organization)/chat/components/pricing-modal';
 import { MessageLimitModal } from '@/app/(organization)/chat/components/message-limit-modal';
+import { PricingModal } from '@/app/(organization)/chat/components/pricing-modal';
 import { useRootContext } from '@/context/root';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Toaster } from '@repo/design-system/components/ui/toaster';

@@ -1,5 +1,5 @@
-import type { premiumTierEnum } from '@repo/backend/schema';
 import { env } from '@/env';
+import type { premiumTierEnum } from '@repo/backend/schema';
 
 export const frequencies = [
   {
@@ -35,8 +35,13 @@ export const tiers = [
       monthly: '/chat',
       annually: '/chat',
     },
-    description: 'Free tier with 2 side by side assistants and 100 messages per month',
-    features: ['Max 2 side by side assistants', '100 messages per month', 'Bring your own api keys'],
+    description:
+      'Free tier with 2 side by side assistants and 100 messages per month',
+    features: [
+      'Max 2 side by side assistants',
+      '100 messages per month',
+      'Bring your own api keys',
+    ],
     cta: 'Get Started',
     mostPopular: false,
     hideFrequency: false,
@@ -68,8 +73,15 @@ export const tiers = [
       monthly: 0,
       annually: discount(pricing.PRO_MONTHLY, pricing.PRO_ANNUALLY),
     },
-    description: 'Pro tier with 2 side by side assistants and 500 messages per month',
-    features: ['Max 2 side by side assistants', '500 messages per month', 'No API key needed', 'Access to new features well in advance', 'Priority support'],
+    description:
+      'Pro tier with 2 side by side assistants and 500 messages per month',
+    features: [
+      'Max 2 side by side assistants',
+      '500 messages per month',
+      'No API key needed',
+      'Access to new features well in advance',
+      'Priority support',
+    ],
     cta: 'Upgrade to Pro',
     mostPopular: false,
     hideFrequency: false,
@@ -83,4 +95,3 @@ export const lifetimeFeatures = [
   'Will Personally build features for you',
   'Priority support',
 ];
-

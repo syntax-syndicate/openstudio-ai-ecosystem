@@ -1,8 +1,5 @@
-import { env } from '@/env';
-import { createRateLimiter, slidingWindow } from '@repo/rate-limit';
 import axios from 'axios';
-import { headers } from 'next/headers';
-import { type NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
   // if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {

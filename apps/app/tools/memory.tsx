@@ -1,3 +1,4 @@
+import { usePremium } from '@/hooks/use-premium';
 import { modelService } from '@/services/models';
 import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
 import { BrainIcon } from '@hugeicons/react';
@@ -6,7 +7,6 @@ import { RunnableSequence } from '@langchain/core/runnables';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { z } from 'zod';
-import { usePremium } from '@/hooks/use-premium';
 
 const memoryParser = StructuredOutputParser.fromZodSchema(
   z.object({

@@ -1,8 +1,10 @@
 import { ToolBadge } from '@/app/(organization)/chat/components/tools/tool-badge';
 import { useChatContext, usePreferenceContext } from '@/context';
+import { useRootContext } from '@/context/root';
 import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
+import { usePremium } from '@/hooks/use-premium';
 import type { TChatMessage } from '@/types';
 import { ArrowRight02Icon, RepeatIcon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -11,9 +13,6 @@ import { Type } from '@repo/design-system/components/ui/text';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
 import type { FC } from 'react';
-import { toast } from '@repo/design-system/hooks/use-toast';
-import { useRootContext } from '@/context/root';
-import { usePremium } from '@/hooks/use-premium';
 
 export type TAIRelatedQuestions = {
   message: TChatMessage;
@@ -65,7 +64,6 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
           .map((key) => getAssistantByKey(key))
           .filter(Boolean)
       : [getAssistantByKey(preferences.defaultAssistant)].filter(Boolean);
-
 
     // if (!isPremium && assistants.length > 1) {
     //   toast({

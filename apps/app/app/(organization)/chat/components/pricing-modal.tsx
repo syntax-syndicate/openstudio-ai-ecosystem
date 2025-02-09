@@ -19,7 +19,7 @@ export const PricingModal = () => {
         <DialogHeader>
           <DialogTitle>Pricing</DialogTitle>
         </DialogHeader>
-        <Pricing/>
+        <Pricing />
       </DialogContent>
     </Dialog>
   );

@@ -7,13 +7,12 @@ import { usePreferenceContext } from '@/context/preferences';
 import { useRootContext } from '@/context/root';
 import { useSessions } from '@/context/sessions';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
+import { usePremium } from '@/hooks/use-premium';
 import type { TAssistant } from '@/types/assistants';
+import { MoneyBag02Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { MoneyBag02Icon } from '@hugeicons/react';
-import { usePremium } from '@/hooks/use-premium';
-
 
 export const ChatTopNav = () => {
   const { setOpen, renderModal } = useFeedback();
@@ -27,7 +26,7 @@ export const ChatTopNav = () => {
     setIsSidebarOpen,
     isMobileSidebarOpen,
     setIsMobileSidebarOpen,
-    setOpenPricingModal
+    setOpenPricingModal,
   } = useRootContext();
   const { createSession } = useSessions();
   const { isPremium } = usePremium();
@@ -67,7 +66,8 @@ export const ChatTopNav = () => {
         className={`${isPremium ? '!text-green-500 bg-green-500/10 hover:bg-green-500/20' : ''}`}
         onClick={() => setOpenPricingModal(true)}
       >
-        <MoneyBag02Icon size={16} strokeWidth={2} /> {isPremium ? 'Pro' : 'Upgrade to Pro'}
+        <MoneyBag02Icon size={16} strokeWidth={2} />{' '}
+        {isPremium ? 'Pro' : 'Upgrade to Pro'}
       </Button>
     </TopNav>
   );

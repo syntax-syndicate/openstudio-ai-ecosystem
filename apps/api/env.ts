@@ -16,9 +16,7 @@ export const env = createEnv({
     observability(),
     payments(),
   ],
-  server: {
-
-  },
+  server: {},
   client: {
     //lemon squeezy
     NEXT_PUBLIC_LEMON_STORE_ID: z.string().nullish().default('openstudio'),
@@ -33,11 +31,15 @@ export const env = createEnv({
     NEXT_PUBLIC_LIFETIME_VARIANT_ID: z.coerce.number().default(0),
   },
   runtimeEnv: {
-    NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID: process.env.NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID,
-    NEXT_PUBLIC_PRO_ANNUALLY_VARIANT_ID: process.env.NEXT_PUBLIC_PRO_ANNUALLY_VARIANT_ID,
-    NEXT_PUBLIC_LIFETIME_VARIANT_ID: process.env.NEXT_PUBLIC_LIFETIME_VARIANT_ID,
+    NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID:
+      process.env.NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID,
+    NEXT_PUBLIC_PRO_ANNUALLY_VARIANT_ID:
+      process.env.NEXT_PUBLIC_PRO_ANNUALLY_VARIANT_ID,
+    NEXT_PUBLIC_LIFETIME_VARIANT_ID:
+      process.env.NEXT_PUBLIC_LIFETIME_VARIANT_ID,
     NEXT_PUBLIC_LEMON_STORE_ID: process.env.NEXT_PUBLIC_LEMON_STORE_ID,
     NEXT_PUBLIC_PRO_PAYMENT_LINK: process.env.NEXT_PUBLIC_PRO_PAYMENT_LINK,
-    NEXT_PUBLIC_LIFETIME_PAYMENT_LINK: process.env.NEXT_PUBLIC_LIFETIME_PAYMENT_LINK,
+    NEXT_PUBLIC_LIFETIME_PAYMENT_LINK:
+      process.env.NEXT_PUBLIC_LIFETIME_PAYMENT_LINK,
   },
 });

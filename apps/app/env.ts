@@ -54,7 +54,6 @@ export const env = createEnv({
     NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT: z.coerce.number().default(500),
     NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT: z.coerce.number().default(1000),
     NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT: z.coerce.number().default(100),
-
   },
   runtimeEnv: {
     NEXT_PUBLIC_OPENAI_API_KEY: process.env.NEXT_PUBLIC_OPENAI_API_KEY,

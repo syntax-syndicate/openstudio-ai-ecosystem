@@ -33,8 +33,7 @@ export const models = [
   'deepseek-r1-distill-llama-70b',
   'phi3:latest',
   'sonar-reasoning-pro',
-  'sonar-pro'
-
+  'sonar-pro',
 ] as const;
 export type TModelKey = (typeof models)[number] | string;
 export type TModelItem = {

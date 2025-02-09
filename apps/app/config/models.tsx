@@ -206,7 +206,7 @@ export const models: TModelItem[] = [
     inputTokenPrice: 0.000025, // $0.25 per 1M tokens
     outputTokenPrice: 0.0001, // $1 per 1M tokens
   },
-   {
+  {
     name: 'Gemini Flash 2.0',
     key: 'gemini-2.0-flash',
     isNew: true,
@@ -436,7 +436,7 @@ export const models: TModelItem[] = [
     provider: 'perplexity',
     inputTokenPrice: 0.003,
     outputTokenPrice: 0.0015,
-  }
+  },
 ];
 
 // return cost in cents
@@ -448,7 +448,9 @@ export function calculateCost(
     total_tokens: number;
   }
 ) {
-  const {input_tokens, output_tokens, total_tokens} = usage;
-  const cost = input_tokens * model.inputTokenPrice + output_tokens * model.outputTokenPrice; //store in cents
+  const { input_tokens, output_tokens, total_tokens } = usage;
+  const cost =
+    input_tokens * model.inputTokenPrice +
+    output_tokens * model.outputTokenPrice; //store in cents
   return cost;
 }

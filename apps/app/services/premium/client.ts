@@ -1,10 +1,10 @@
-"use server";
+'use server';
 
 import { currentOrganizationId, currentUser } from '@repo/backend/auth/utils';
 import { database } from '@repo/backend/database';
 import { premium } from '@repo/backend/schema';
-import { and, eq } from 'drizzle-orm';
 import { getCountPerUser } from '@repo/tinybird/src/query';
+import { and, eq } from 'drizzle-orm';
 
 const TEN_YEARS = 10 * 365 * 24 * 60 * 60 * 1000;
 const FIVE_YEARS = 5 * 365 * 24 * 60 * 60 * 1000;
@@ -128,11 +128,13 @@ export async function getPremium() {
       )
     );
 
-  const messagesCountPerMonth = await getCountPerUser({userEmail: user!.email!})
+  const messagesCountPerMonth = await getCountPerUser({
+    userEmail: user!.email!,
+  });
 
   return {
     premium: premiumData[0],
     user,
-    messagesCountPerMonth : messagesCountPerMonth.data[0].count ?? 0,
+    messagesCountPerMonth: messagesCountPerMonth.data[0].count ?? 0,
   };
 }

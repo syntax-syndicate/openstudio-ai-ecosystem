@@ -67,11 +67,11 @@ export const AssistantItem = ({ assistant, onSelect }: TAssistantItem) => {
           return;
         }
         const updatedAssistants = [
-        ...(preferences.defaultAssistants?.filter(
-          (key) => key !== assistant.key
-        ) || []),
-        assistant.key,
-      ];
+          ...(preferences.defaultAssistants?.filter(
+            (key) => key !== assistant.key
+          ) || []),
+          assistant.key,
+        ];
         updatePreferences(
           {
             defaultAssistant: assistant.key,

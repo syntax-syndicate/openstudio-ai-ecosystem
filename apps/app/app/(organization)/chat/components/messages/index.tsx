@@ -4,13 +4,13 @@ import { WelcomeMessage } from '@/app/(organization)/chat/components/welcome-mes
 import { useChatContext } from '@/context';
 import { usePreferenceContext } from '@/context/preferences';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
+import { usePremium } from '@/hooks/use-premium';
 import { ArrowDown02Icon } from '@hugeicons/react';
 import { LabsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import { useEffect, useState } from 'react';
-import { usePremium } from '@/hooks/use-premium';
 
 export const ChatMessages = () => {
   const { preferences, updatePreferences } = usePreferenceContext();
@@ -31,7 +31,7 @@ export const ChatMessages = () => {
   //   if (isInitialized && session && messages.length > 0) {
   //     // Get all unique assistant keys from the conversation history
   //     const historicalAssistants = Array.from(new Set(
-  //       messages.flatMap(msg => 
+  //       messages.flatMap(msg =>
   //         (msg.aiResponses || []).map(response => response.assistant.key)
   //       )
   //     ));
@@ -47,31 +47,35 @@ export const ChatMessages = () => {
   //   }
   // }, [isInitialized, session?.id, messages]);
 
-    useEffect(() => {
+  useEffect(() => {
     // Only update preferences for existing sessions (not fresh ones)
     if (isInitialized && session && messages.length > 0) {
       // Get all unique assistant keys from the conversation history
-      const historicalAssistants = Array.from(new Set(
-        messages.flatMap(msg => 
-          (msg.aiResponses || []).map(response => response.assistant.key)
+      const historicalAssistants = Array.from(
+        new Set(
+          messages.flatMap((msg) =>
+            (msg.aiResponses || []).map((response) => response.assistant.key)
+          )
         )
-      ));
+      );
 
       // Get current preferences
       const currentPreferences = preferences.defaultAssistants || [];
-      
+
       // Determine max allowed models based on user's plan
       const MAX_MODELS = isPremium ? 2 : 2;
 
       // Combine and limit the assistants, prioritizing current preferences
-      const combinedAssistants = Array.from(new Set([
-        ...currentPreferences,
-        ...historicalAssistants
-      ])).slice(0, MAX_MODELS);
+      const combinedAssistants = Array.from(
+        new Set([...currentPreferences, ...historicalAssistants])
+      ).slice(0, MAX_MODELS);
 
       // Update preferences only if the combined list is different
-      if (combinedAssistants.length > 0 && 
-          JSON.stringify(combinedAssistants) !== JSON.stringify(preferences.defaultAssistants)) {
+      if (
+        combinedAssistants.length > 0 &&
+        JSON.stringify(combinedAssistants) !==
+          JSON.stringify(preferences.defaultAssistants)
+      ) {
         updatePreferences({
           ...preferences,
           defaultAssistants: combinedAssistants,

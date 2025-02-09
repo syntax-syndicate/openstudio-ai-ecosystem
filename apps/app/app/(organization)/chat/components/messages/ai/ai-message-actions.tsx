@@ -1,4 +1,3 @@
-import { RegenerateWithModelSelect } from '@/app/(organization)/chat/components/regenerate-model-select';
 import { useChatContext, usePreferenceContext, useSessions } from '@/context';
 import { useAssistantUtils, useClipboard } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';

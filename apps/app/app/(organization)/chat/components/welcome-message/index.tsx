@@ -6,6 +6,7 @@ import { OpenSourceCopy } from '@/app/(organization)/chat/components/welcome-mes
 import { PluginCopy } from '@/app/(organization)/chat/components/welcome-message/plugin-copy';
 import { PrivacyCopy } from '@/app/(organization)/chat/components/welcome-message/privacy-copy';
 import { useChatContext } from '@/context';
+import { usePremium } from '@/hooks/use-premium';
 import {
   AiChat02Icon,
   AiLockIcon,
@@ -24,7 +25,6 @@ import { cn } from '@repo/design-system/lib/utils';
 import { ArrowRight, Github } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { usePremium } from '@/hooks/use-premium';
 
 export type TWelcomeMessageProps = {
   show: boolean;

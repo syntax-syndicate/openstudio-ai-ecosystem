@@ -71,7 +71,6 @@ export const publishBookmarkAnalytics = tb.buildIngestEndpoint({
   event: tinybirdBookmarkAnalytics,
 });
 
-
 const tinybirdAICall = z.object({
   userId: z.string(),
   organizationId: z.string(),

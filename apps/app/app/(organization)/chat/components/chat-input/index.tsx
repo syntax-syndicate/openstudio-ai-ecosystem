@@ -11,6 +11,8 @@ import { StarterMessages } from '@/app/(organization)/chat/components/chat-input
 import { CustomAssistantAvatar } from '@/app/(organization)/chat/components/custom-assistant-avatar';
 import { examplePrompts } from '@/config';
 import { useChatContext, usePreferenceContext, useSessions } from '@/context';
+import { useRootContext } from '@/context/root';
+import { env } from '@/env';
 import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils, useImageAttachment } from '@/hooks';
 import { useChatEditor } from '@/hooks/use-editor';
@@ -21,13 +23,11 @@ import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { FullPageLoader } from '@repo/design-system/components/ui/full-page-loader';
 import { Type } from '@repo/design-system/components/ui/text';
+import { toast } from '@repo/design-system/hooks/use-toast';
 import { cn } from '@repo/design-system/lib/utils';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { toast } from '@repo/design-system/hooks/use-toast';
-import { useRootContext } from '@/context/root';
-import { env } from '@/env';
 
 export const ChatInput = () => {
   const { store, isReady, refetch } = useChatContext();
@@ -84,13 +84,13 @@ export const ChatInput = () => {
       : [preferences.defaultAssistant];
 
     let messageLimitPerMonth = 0;
-    if(!premium || !premium.tier){
+    if (!premium || !premium.tier) {
       messageLimitPerMonth = env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT;
-    }else{
-      messageLimitPerMonth = 
-        premium!.tier === "LIFETIME" 
+    } else {
+      messageLimitPerMonth =
+        premium!.tier === 'LIFETIME'
           ? env.NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT
-          : premium!.tier === "PRO_MONTHLY" || premium!.tier === "PRO_ANNUALLY"
+          : premium!.tier === 'PRO_MONTHLY' || premium!.tier === 'PRO_ANNUALLY'
             ? env.NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT
             : env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT;
     }

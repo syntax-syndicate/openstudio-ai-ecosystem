@@ -8,8 +8,7 @@ export * from '@/types/documents';
 export * from '@/types/export';
 export * from '@/types/prompt';
 export * from '@/types/attachment';
-import { premium } from '@repo/backend/schema';
-
+import type { premium } from '@repo/backend/schema';
 
 export type TPremium = typeof premium.$inferSelect;
 

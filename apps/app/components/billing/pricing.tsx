@@ -6,26 +6,22 @@ import {
   pricing,
   tiers,
 } from '@/config/pricing';
+import { env } from '@/env';
+import { usePremium } from '@/hooks/use-premium';
+import { getUserTier } from '@/lib/utils/premium';
 import { RadioGroup } from '@headlessui/react';
+import { getUserName } from '@repo/backend/auth/format';
 import type { premiumTierEnum } from '@repo/backend/schema';
+import { Button } from '@repo/design-system/components/ui/button-subscription';
 import { Tag } from '@repo/design-system/components/ui/tag';
 import { cn } from '@repo/design-system/lib/utils';
 import { CheckIcon } from 'lucide-react';
-import { useState } from 'react';
-import { usePremium } from '@/hooks/use-premium';
-import { getUserTier } from '@/lib/utils/premium';
-import Link from 'next/link';
-import { env } from '@/env';
 import { CreditCardIcon } from 'lucide-react';
-import { TPremium } from '@/types';
-import { User } from '@repo/backend/auth';
-import { getUserName } from '@repo/backend/auth/format';
-import { Button } from '@repo/design-system/components/ui/button-subscription';
-
+import { useState } from 'react';
 
 function Badge({ children }: { children: React.ReactNode }) {
   return (
-    <p className="rounded-full bg-red-600/10 px-2.5 py-1 text-xs font-semibold leading-5 text-red-600">
+    <p className="rounded-full bg-red-600/10 px-2.5 py-1 font-semibold text-red-600 text-xs leading-5">
       {children}
     </p>
   );
@@ -33,7 +29,12 @@ function Badge({ children }: { children: React.ReactNode }) {
 
 function attachUserInfo(
   url: string,
-  user: { id: string; email: string; name?: string | null, organizationId: string }
+  user: {
+    id: string;
+    email: string;
+    name?: string | null;
+    organizationId: string;
+  }
 ) {
   if (!user) return url;
 
@@ -51,7 +52,6 @@ export function Pricing() {
   const [frequency, setFrequency] = useState(frequencies[0]);
   const premiumTier = getUserTier(premium);
 
-  
   return (
     <div
       id="pricing"
@@ -69,16 +69,15 @@ export function Pricing() {
       </p>
       {isPremium && (
         <div className="mt-8 text-center">
-            <Button
-              link={{
-                href: `https://${env.NEXT_PUBLIC_LEMON_STORE_ID}.lemonsqueezy.com/billing`,
-                target: "_blank",
-              }}
-            >
-              <CreditCardIcon className="mr-2 h-4 w-4" />
-              Manage subscription
-            </Button>
-
+          <Button
+            link={{
+              href: `https://${env.NEXT_PUBLIC_LEMON_STORE_ID}.lemonsqueezy.com/billing`,
+              target: '_blank',
+            }}
+          >
+            <CreditCardIcon className="mr-2 h-4 w-4" />
+            Manage subscription
+          </Button>
         </div>
       )}
       <div className="mt-16 flex justify-center">
@@ -114,19 +113,23 @@ export function Pricing() {
       </div>
       <div className="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-2">
         {tiers.map((tier, tierIdx) => {
-            const isCurrentPlan = tier.tiers?.[frequency.value] === premiumTier;
+          const isCurrentPlan = tier.tiers?.[frequency.value] === premiumTier;
 
-            const href = user ? isCurrentPlan ? "#" : buildLemonUrl(
-                tier.checkout ? attachUserInfo(
-                    tier.href[frequency.value]!, {
+          const href = user
+            ? isCurrentPlan
+              ? '#'
+              : buildLemonUrl(
+                  tier.checkout
+                    ? attachUserInfo(tier.href[frequency.value]!, {
                         id: user.id,
                         email: user.email!,
                         name: null,
-                        organizationId: user.user_metadata.organization_id
-                    }
-                ) : tier.href[frequency.value]!,
-                null
-            ) : "/chat";
+                        organizationId: user.user_metadata.organization_id,
+                      })
+                    : tier.href[frequency.value]!,
+                  null
+                )
+            : '/chat';
           return (
             <div
               key={tier.name}
@@ -150,9 +153,7 @@ export function Pricing() {
                   >
                     {tier.name}
                   </h3>
-                  {tier.mostPopular ? (
-                    <Badge>Most Popular</Badge>
-                  ) : null}
+                  {tier.mostPopular ? <Badge>Most Popular</Badge> : null}
                 </div>
                 <p className="mt-4 text-gray-600 text-sm leading-6 dark:text-white">
                   {tier.description}
@@ -162,11 +163,11 @@ export function Pricing() {
                     ${tier.price[frequency.value]}
                   </span>
                   <span className="font-semibold text-gray-600 text-sm leading-6 dark:text-white">
-                      {frequency.priceSuffix}
+                    {frequency.priceSuffix}
                   </span>
                   {!!tier.discount?.[frequency.value] && (
                     <Badge>
-                      <span className='tracking-wide'>
+                      <span className="tracking-wide">
                         SAVE {tier.discount[frequency!.value].toFixed(0)}%
                       </span>
                     </Badge>
@@ -210,13 +211,30 @@ export function Pricing() {
           );
         })}
       </div>
-      <LifetimePricing user={user ? {id: user.id, email: user.email! , name: getUserName(user), organizationId: user.user_metadata.organization_id}: undefined} premiumTier={premiumTier} />
+      <LifetimePricing
+        user={
+          user
+            ? {
+                id: user.id,
+                email: user.email!,
+                name: getUserName(user),
+                organizationId: user.user_metadata.organization_id,
+              }
+            : undefined
+        }
+        premiumTier={premiumTier}
+      />
     </div>
   );
 }
 
 function LifetimePricing(props: {
-  user?: { id: string; organizationId: string; email: string; name?: string | null };
+  user?: {
+    id: string;
+    organizationId: string;
+    email: string;
+    name?: string | null;
+  };
   premiumTier?: (typeof premiumTierEnum.enumValues)[number] | null;
 }) {
   const { user, premiumTier } = props;
@@ -236,8 +254,8 @@ function LifetimePricing(props: {
           <p className="mt-6 text-base text-gray-600 leading-7 dark:text-white">
             Get lifetime access to OpenStudio ChatHub for a one-time payment.
             <br />
-            This includes 2 (more sooner when stable) side by side assistants, unlimited messages, and priority
-            support.
+            This includes 2 (more sooner when stable) side by side assistants,
+            unlimited messages, and priority support.
           </p>
           <div className="mt-10 flex items-center gap-x-4">
             <h4 className="flex-none font-cal text-red-600 text-sm leading-6">
@@ -276,19 +294,22 @@ function LifetimePricing(props: {
               </p>
               <a
                 href={
-                    user?.email ? hasLifetime ? '#' : buildLemonUrl(
-                        attachUserInfo(
+                  user?.email
+                    ? hasLifetime
+                      ? '#'
+                      : buildLemonUrl(
+                          attachUserInfo(
                             env.NEXT_PUBLIC_LIFETIME_PAYMENT_LINK,
                             {
-                                id: user.id,
-                                email: user.email,
-                                name: user.name,
-                                organizationId: user.organizationId
+                              id: user.id,
+                              email: user.email,
+                              name: user.name,
+                              organizationId: user.organizationId,
                             }
-                        ),
-                        null
-                    ) : '/chat'
-
+                          ),
+                          null
+                        )
+                    : '/chat'
                 }
                 onClick={() => {
                   //TODO: add posthog checkout event

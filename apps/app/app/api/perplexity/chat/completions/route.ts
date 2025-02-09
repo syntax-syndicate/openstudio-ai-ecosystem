@@ -1,7 +1,4 @@
-import { env } from '@/env';
-import { createRateLimiter, slidingWindow } from '@repo/rate-limit';
 import axios from 'axios';
-import { headers } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -24,7 +21,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const messages = [
     body.messages[0], // system message
-    body.messages[body.messages.length - 1] // last user message
+    body.messages[body.messages.length - 1], // last user message
   ];
 
   // Transform OpenAI format to Perplexity format
@@ -34,7 +31,7 @@ export async function POST(req: NextRequest) {
     temperature: body.temperature || 0.7,
     max_tokens: body.max_tokens || 2000,
     top_p: body.top_p || 1,
-    stream: body.stream || false
+    stream: body.stream || false,
   };
 
   const response = await axios({
@@ -43,10 +40,10 @@ export async function POST(req: NextRequest) {
     headers: {
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_PERPLEXITY_API_KEY}`,
       'Content-Type': 'application/json',
-      'Accept': body.stream ? 'text/event-stream' : 'application/json',
+      Accept: body.stream ? 'text/event-stream' : 'application/json',
     },
     data: perplexityBody,
-    ...(body.stream ? { responseType: 'stream' } : {})
+    ...(body.stream ? { responseType: 'stream' } : {}),
   });
 
   if (body.stream) {
