@@ -15,7 +15,12 @@ import {
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
-import { createUpdateSchema } from 'drizzle-zod';
+import { relations } from "drizzle-orm";
+import {
+  createInsertSchema,
+  createSelectSchema,
+  createUpdateSchema,
+} from "drizzle-zod";
 import type { z } from 'zod';
 import {
   type TAIResponse,
@@ -416,6 +421,61 @@ export const bookmarks = pgTable(
   })
 );
 
+export const integrationStatePlatform = pgEnum('integration_state_platform', [
+  'YOUTUBE',
+  'LINKEDIN',
+  'TWITTER'
+]);
+
+export const integrationStates = pgTable('integration_state', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+  organizationId: varchar('organization_id')
+    .notNull()
+    .references(() => organization.id, { onDelete: 'cascade' }),
+  creatorId: varchar('creator_id')
+    .notNull()
+    .references(() => Users.id, { onDelete: 'cascade' }),
+  platform: integrationStatePlatform('platform').notNull(),
+});
+
+// YouTube installation table
+export const youtubeIntegration = pgTable('youtube_integration', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+  organizationId: varchar('organization_id')
+    .notNull()
+    .references(() => organization.id, { onDelete: 'cascade' }),
+  creatorId: varchar('creator_id')
+    .notNull()
+    .references(() => Users.id, { onDelete: 'cascade' }),
+
+  // OAuth related fields
+  accessToken: varchar('access_token').notNull(),
+  refreshToken: varchar('refresh_token').notNull(),
+  tokenType: varchar('token_type').notNull(),
+  scope: varchar('scope').notNull(),
+  expiryDate: timestamp('expiry_date', { withTimezone: true }).notNull(),
+});
+
+export const integrationStateRelations = relations(integrationStates, ({ one }) => ({
+  organization: one(organization, {
+    fields: [integrationStates.organizationId],
+    references: [organization.id],
+  }),
+}));
+
+export const youtubeInstallationRelations = relations(youtubeIntegration, ({ one }) => ({
+  organization: one(organization, {
+    fields: [youtubeIntegration.organizationId],
+    references: [organization.id],
+  }),
+}));
+
+export const youtubeIntegrationInsertSchema: z.ZodTypeAny = createInsertSchema(youtubeIntegration);
+
 export const organizationUpdateSchema: z.ZodTypeAny =
   createUpdateSchema(organization);
 
@@ -437,4 +497,6 @@ export const schema = {
   articles,
   subscribers,
   premium,
+  integrationStates,
+  youtubeIntegration,
 };
