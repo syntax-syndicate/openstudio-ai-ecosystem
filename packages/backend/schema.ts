@@ -1,5 +1,6 @@
 import { init } from '@paralleldrive/cuid2';
 import { sql } from 'drizzle-orm';
+import { relations } from 'drizzle-orm';
 import {
   boolean,
   decimal,
@@ -15,12 +16,7 @@ import {
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
-import { relations } from "drizzle-orm";
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from "drizzle-zod";
+import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 import {
   type TAIResponse,
@@ -424,7 +420,7 @@ export const bookmarks = pgTable(
 export const integrationStatePlatform = pgEnum('integration_state_platform', [
   'YOUTUBE',
   'LINKEDIN',
-  'TWITTER'
+  'TWITTER',
 ]);
 
 export const integrationStates = pgTable('integration_state', {
@@ -460,21 +456,28 @@ export const youtubeIntegration = pgTable('youtube_integration', {
   expiryDate: timestamp('expiry_date', { withTimezone: true }).notNull(),
 });
 
-export const integrationStateRelations = relations(integrationStates, ({ one }) => ({
-  organization: one(organization, {
-    fields: [integrationStates.organizationId],
-    references: [organization.id],
-  }),
-}));
+export const integrationStateRelations = relations(
+  integrationStates,
+  ({ one }) => ({
+    organization: one(organization, {
+      fields: [integrationStates.organizationId],
+      references: [organization.id],
+    }),
+  })
+);
 
-export const youtubeInstallationRelations = relations(youtubeIntegration, ({ one }) => ({
-  organization: one(organization, {
-    fields: [youtubeIntegration.organizationId],
-    references: [organization.id],
-  }),
-}));
+export const youtubeInstallationRelations = relations(
+  youtubeIntegration,
+  ({ one }) => ({
+    organization: one(organization, {
+      fields: [youtubeIntegration.organizationId],
+      references: [organization.id],
+    }),
+  })
+);
 
-export const youtubeIntegrationInsertSchema: z.ZodTypeAny = createInsertSchema(youtubeIntegration);
+export const youtubeIntegrationInsertSchema: z.ZodTypeAny =
+  createInsertSchema(youtubeIntegration);
 
 export const organizationUpdateSchema: z.ZodTypeAny =
   createUpdateSchema(organization);

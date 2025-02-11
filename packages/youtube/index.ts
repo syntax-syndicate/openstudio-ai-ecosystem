@@ -1,261 +1,97 @@
-{
-  "name": "app",
-  "private": true,
-  "scripts": {
-    "dev": "next dev -p 3000 --turbopack",
-    "build": "NODE_OPTIONS=--max-old-space-size=6144 next build",
-    "start": "next start",
-    "analyze": "ANALYZE=true pnpm build",
-    "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "prepare": "husky"
-  },
-  "dependencies": {
-    "@headlessui/react": "^2.2.0",
-    "@hookform/resolvers": "^3.9.1",
-    "@hotjar/browser": "^1.0.9",
-    "@hugeicons/react": "0.8.0-beta.1",
-    "@langchain/anthropic": "^0.3.11",
-    "@langchain/community": "^0.3.21",
-    "@langchain/core": "^0.3.27",
-    "@langchain/google-genai": "^0.1.6",
-    "@langchain/groq": "^0.1.3",
-    "@langchain/ollama": "^0.1.4",
-    "@langchain/openai": "^0.3.16",
-    "@langchain/xai": "^0.0.1",
-    "@mendable/firecrawl-js": "^1.16.0",
-    "@mozilla/readability": "^0.5.0",
-    "@phosphor-icons/react": "^2.1.7",
-    "@radix-ui/react-dropdown-menu": "^2.1.4",
-    "@radix-ui/react-icons": "^1.3.2",
-    "@repo/analytics": "workspace:*",
-    "@repo/backend": "workspace:*",
-    "@repo/collaboration": "workspace:*",
-    "@repo/design-system": "workspace:*",
-    "@repo/email": "workspace:^",
-    "@repo/feature-flags": "workspace:*",
-    "@repo/lib": "workspace:*",
-    "@repo/next-config": "workspace:*",
-    "@repo/observability": "workspace:*",
-    "@repo/security": "workspace:*",
-    "@repo/seo": "workspace:*",
-    "@repo/tailwind-config": "workspace:*",
-    "@repo/tinybird": "workspace:^",
-    "@repo/webhooks": "workspace:*",
-    "@repo/youtube": "workspace:^",
-    "@sentry/nextjs": "^8.47.0",
-    "@t3-oss/env-nextjs": "^0.11.1",
-    "@tanstack/react-query": "^5.62.14",
-    "@tanstack/react-table": "^8.20.6",
-    "@tiptap-pro/extension-file-handler": "^2.17.2",
-    "@tiptap/core": "^2.11.0",
-    "@tiptap/extension-color": "^2.11.2",
-    "@tiptap/extension-document": "^2.11.0",
-    "@tiptap/extension-hard-break": "^2.11.0",
-    "@tiptap/extension-highlight": "^2.11.0",
-    "@tiptap/extension-image": "^2.11.2",
-    "@tiptap/extension-link": "^2.11.2",
-    "@tiptap/extension-paragraph": "^2.11.0",
-    "@tiptap/extension-placeholder": "^2.11.0",
-    "@tiptap/extension-task-item": "^2.11.2",
-    "@tiptap/extension-task-list": "^2.11.2",
-    "@tiptap/extension-text": "^2.11.0",
-    "@tiptap/extension-text-style": "^2.11.2",
-    "@tiptap/extension-typography": "^2.11.2",
-    "@tiptap/extension-underline": "^2.11.2",
-    "@tiptap/pm": "^2.11.0",
-    "@tiptap/react": "^2.11.0",
-    "@tiptap/starter-kit": "^2.11.0",
-    "@tiptap/suggestion": "^2.11.2",
-    "@vercel/edge": "^1.2.1",
-    "avvvatars-react": "^0.4.2",
-    "axios": "^1.7.9",
-    "boring-avatars": "^1.11.2",
-    "canvas": "^3.0.1",
-    "date-fns": "^4.1.0",
-    "drizzle-orm": "^0.38.4",
-    "drizzle-zod": "^0.6.1",
-    "duck-duck-scrape": "^2.2.6",
-    "feed": "^4.2.2",
-    "formik": "^2.4.6",
-    "framer-motion": "^11.15.0",
-    "fuse.js": "^7.0.0",
-    "highlight.js": "^11.11.1",
-    "husky": "^9.1.7",
-    "idb": "^7.1.1",
-    "idb-keyval": "^6.2.1",
-    "import-in-the-middle": "^1.12.0",
-    "js-tiktoken": "^1.0.16",
-    "json-2-csv": "^5.5.8",
-    "ky": "^1.7.4",
-    "langchain": "^0.3.9",
-    "lodash": "^4.17.21",
-    "lucide-react": "^0.469.0",
-    "marked-react": "^3.0.0",
-    "moment": "^2.30.1",
-    "nanoid": "^5.0.9",
-    "next": "15.1.3",
-    "next-mdx-remote-client": "^2.0.0",
-    "next-themes": "^0.4.4",
-    "open-graph-scraper": "^6.8.3",
-    "openai": "^4.77.0",
-    "pdf-parse": "^1.1.1",
-    "pdfjs-dist": "^3.11.174",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-dropzone": "^14.3.5",
-    "react-github-btn": "^1.4.0",
-    "react-hook-form": "^7.54.2",
-    "react-intersection-observer": "^9.14.1",
-    "react-textarea-autosize": "^8.5.7",
-    "react-wrap-balancer": "^1.1.1",
-    "reading-time": "^1.5.0",
-    "recharts": "^2.15.0",
-{
-  "name": "app",
-  "private": true,
-  "scripts": {
-    "dev": "next dev -p 3000 --turbopack",
-    "build": "NODE_OPTIONS=--max-old-space-size=6144 next build",
-    "start": "next start",
-    "analyze": "ANALYZE=true pnpm build",
-    "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "prepare": "husky"
-  },
-  "dependencies": {
-    "@headlessui/react": "^2.2.0",
-    "@hookform/resolvers": "^3.9.1",
-    "@hotjar/browser": "^1.0.9",
-    "@hugeicons/react": "0.8.0-beta.1",
-    "@langchain/anthropic": "^0.3.11",
-    "@langchain/community": "^0.3.21",
-    "@langchain/core": "^0.3.27",
-    "@langchain/google-genai": "^0.1.6",
-    "@langchain/groq": "^0.1.3",
-    "@langchain/ollama": "^0.1.4",
-    "@langchain/openai": "^0.3.16",
-    "@langchain/xai": "^0.0.1",
-    "@mozilla/readability": "^0.5.0",
-    "@phosphor-icons/react": "^2.1.7",
-    "@radix-ui/react-dropdown-menu": "^2.1.4",
-    "@radix-ui/react-icons": "^1.3.2",
-    "@repo/analytics": "workspace:*",
-    "@repo/backend": "workspace:*",
-    "@repo/collaboration": "workspace:*",
-    "@repo/design-system": "workspace:*",
-    "@repo/email": "workspace:^",
-    "@repo/feature-flags": "workspace:*",
-    "@repo/lib": "workspace:*",
-    "@repo/next-config": "workspace:*",
-    "@repo/observability": "workspace:*",
-    "@repo/security": "workspace:*",
-    "@repo/seo": "workspace:*",
-    "@repo/tailwind-config": "workspace:*",
-    "@repo/tinybird": "workspace:^",
-    "@repo/webhooks": "workspace:*",
-    "@sentry/nextjs": "^8.47.0",
-    "@t3-oss/env-nextjs": "^0.11.1",
-    "@tanstack/react-query": "^5.62.14",
-    "@tanstack/react-table": "^8.20.6",
-    "@tiptap-pro/extension-file-handler": "^2.17.2",
-    "@tiptap/core": "^2.11.0",
-    "@tiptap/extension-color": "^2.11.2",
-    "@tiptap/extension-document": "^2.11.0",
-    "@tiptap/extension-hard-break": "^2.11.0",
-    "@tiptap/extension-highlight": "^2.11.0",
-    "@tiptap/extension-image": "^2.11.2",
-    "@tiptap/extension-link": "^2.11.2",
-    "@tiptap/extension-paragraph": "^2.11.0",
-    "@tiptap/extension-placeholder": "^2.11.0",
-    "@tiptap/extension-task-item": "^2.11.2",
-    "@tiptap/extension-task-list": "^2.11.2",
-    "@tiptap/extension-text": "^2.11.0",
-    "@tiptap/extension-text-style": "^2.11.2",
-    "@tiptap/extension-typography": "^2.11.2",
-    "@tiptap/extension-underline": "^2.11.2",
-    "@tiptap/pm": "^2.11.0",
-    "@tiptap/react": "^2.11.0",
-    "@tiptap/starter-kit": "^2.11.0",
-    "@tiptap/suggestion": "^2.11.2",
-    "@vercel/edge": "^1.2.1",
-    "avvvatars-react": "^0.4.2",
-    "axios": "^1.7.9",
-    "boring-avatars": "^1.11.2",
-    "canvas": "^3.0.1",
-    "date-fns": "^4.1.0",
-    "drizzle-orm": "^0.38.4",
-    "drizzle-zod": "^0.6.1",
-    "duck-duck-scrape": "^2.2.6",
-    "feed": "^4.2.2",
-    "formik": "^2.4.6",
-    "framer-motion": "^11.15.0",
-    "fuse.js": "^7.0.0",
-    "highlight.js": "^11.11.1",
-    "husky": "^9.1.7",
-    "idb": "^7.1.1",
-    "idb-keyval": "^6.2.1",
-    "import-in-the-middle": "^1.12.0",
-    "js-tiktoken": "^1.0.16",
-    "json-2-csv": "^5.5.8",
-    "ky": "^1.7.4",
-    "langchain": "^0.3.9",
-    "lodash": "^4.17.21",
-    "lucide-react": "^0.469.0",
-    "marked-react": "^3.0.0",
-    "moment": "^2.30.1",
-    "nanoid": "^5.0.9",
-    "next": "15.1.3",
-    "next-mdx-remote-client": "^2.0.0",
-    "next-themes": "^0.4.4",
-    "open-graph-scraper": "^6.8.3",
-    "openai": "^4.77.0",
-    "pdf-parse": "^1.1.1",
-    "pdfjs-dist": "^3.11.174",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-dropzone": "^14.3.5",
-    "react-github-btn": "^1.4.0",
-    "react-hook-form": "^7.54.2",
-    "react-intersection-observer": "^9.14.1",
-    "react-textarea-autosize": "^8.5.7",
-    "react-wrap-balancer": "^1.1.1",
-    "reading-time": "^1.5.0",
-    "recharts": "^2.15.0",
-    "remark-gfm": "^4.0.0",
-    "require-in-the-middle": "^7.4.0",
-    "selection-popover": "^0.3.0",
-    "sharp": "^0.33.5",
-    "sonner": "^1.7.1",
-    "tailwind-scrollbar-hide": "^2.0.0",
-    "tippy.js": "^6.3.7",
-    "tiptap": "^1.32.2",
-    "tiptap-markdown": "^0.8.10",
-    "turndown": "^7.2.0",
-    "use-debounce": "^10.0.4",
-    "vaul": "^1.1.2",
-    "zod": "^3.24.1",
-    "zod-formik-adapter": "^1.3.0",
-    "zustand": "^5.0.2"
-  },
-  "devDependencies": {
-    "@repo/testing": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.1.0",
-    "@types/jsdom": "^21.1.7",
-    "@types/lodash": "^4.17.14",
-    "@types/node": "22.10.2",
-    "@types/react": "19.0.2",
-    "@types/react-dom": "19.0.2",
-    "@types/turndown": "^5.0.5",
-    "jsdom": "^25.0.1",
-    "tailwindcss": "^3.4.17",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
-  },
-  "puppeteer": {
-    "skip_download": true
+import { database } from '@repo/backend/database';
+import { youtubeIntegration } from '@repo/backend/schema';
+import { eq } from 'drizzle-orm';
+import type { OAuth2Client } from 'google-auth-library';
+import { google } from 'googleapis';
+
+export async function getValidAccessToken(organizationId: string) {
+  // Get current integration data
+  const [integration] = await database
+    .select()
+    .from(youtubeIntegration)
+    .where(eq(youtubeIntegration.organizationId, organizationId));
+
+  if (!integration) {
+    throw new Error('YouTube integration not found');
+  }
+
+  // Check if current token is still valid (with 5 min buffer)
+  const isExpired =
+    new Date(integration.expiryDate).getTime() - 5 * 60 * 1000 < Date.now();
+
+  if (!isExpired) {
+    return integration.accessToken;
+  }
+
+  // Token is expired, refresh it
+  const auth = getOAuth2Client();
+  auth.setCredentials({
+    refresh_token: integration.refreshToken,
+    access_token: integration.accessToken,
+    expiry_date: integration.expiryDate.getTime(),
+  });
+
+  try {
+    const { credentials } = await auth.refreshAccessToken();
+
+    if (!credentials.access_token) {
+      throw new Error('Failed to refresh YouTube access token');
+    }
+
+    // Update database with new tokens
+    await database
+      .update(youtubeIntegration)
+      .set({
+        accessToken: credentials.access_token,
+        expiryDate: new Date(credentials.expiry_date!),
+        ...(credentials.refresh_token && {
+          refreshToken: credentials.refresh_token,
+        }),
+      })
+      .where(eq(youtubeIntegration.organizationId, organizationId));
+
+    return credentials.access_token;
+  } catch (error) {
+    console.error('Error refreshing token:', error);
+    throw new Error('Failed to refresh YouTube access token');
   }
 }
+
+export async function getYouTubeClient(organizationId: string) {
+  const accessToken = await getValidAccessToken(organizationId);
+  const auth = getOAuth2Client();
+  auth.setCredentials({ access_token: accessToken });
+
+  return google.youtube({ version: 'v3', auth });
+}
+
+export async function listYouTubeVideos(organizationId: string) {
+  const youtube = await getYouTubeClient(organizationId);
+
+  try {
+    // const response = await youtube.videos.list({
+    //   part: ['snippet,contentDetails'],
+    //   myRating: 'like',
+    // });
+    const res = await youtube.channels.list({
+      part: ['contentDetails'],
+      //   managedByMe: true,
+      //   mySubscribers: true,
+      forHandle: '@kuluruvineeth',
+    });
+    return res.data;
+  } catch (error) {
+    console.error('YouTube API error:', error);
+    throw error;
+  }
+}
+
+export const getOAuth2Client = (): OAuth2Client => {
+  const auth = new google.auth.OAuth2(
+    process.env.YOUTUBE_CLIENT_ID,
+    process.env.YOUTUBE_CLIENT_SECRET,
+    `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/callbacks/youtube`
+  );
+
+  return auth;
+};
