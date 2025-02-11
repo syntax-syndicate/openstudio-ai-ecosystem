@@ -1,12 +1,12 @@
+import containerQueries from '@tailwindcss/container-queries';
+import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
-import defaultTheme from 'tailwindcss/defaultTheme';
-import typographyConfig from './typography.config';
 import safeArea from 'tailwindcss-safe-area';
-import forms from '@tailwindcss/forms';
-import containerQueries from '@tailwindcss/container-queries';
+import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
+import typographyConfig from './typography.config';
 
 export const config: Config = {
   darkMode: ['class'],
@@ -73,7 +73,7 @@ export const config: Config = {
           800: '#262626',
           850: '#1E1E1E',
           900: '#171717',
-          950: '#0D0D0D'
+          950: '#0D0D0D',
         },
         border: 'hsl(var(--border) / <alpha-value>)',
         input: 'hsl(var(--input) / <alpha-value>)',
@@ -178,15 +178,24 @@ export const config: Config = {
       typography: typographyConfig,
     },
   },
-  plugins: [animate, typography, safeArea, forms, containerQueries, plugin(function ({ addVariant, addBase }) {
-      addVariant('initial', 'html :where(&)')
+  plugins: [
+    animate,
+    typography,
+    safeArea,
+    forms,
+    containerQueries,
+    plugin(({ addVariant, addBase }) => {
+      addVariant('initial', 'html :where(&)');
       addBase({
-        '.border, .border-x, .border-y, .border-t, .border-r, .border-b, .border-l': {
-          backgroundClip: 'padding-box'
-        },
-        "[class^='divide-'] > :not([hidden]) ~ :not([hidden]), [class*=' divide-'] > :not([hidden]) ~ :not([hidden])": {
-          borderColor: 'var(--border-primary)'
-        }
-      })
-    })],
+        '.border, .border-x, .border-y, .border-t, .border-r, .border-b, .border-l':
+          {
+            backgroundClip: 'padding-box',
+          },
+        "[class^='divide-'] > :not([hidden]) ~ :not([hidden]), [class*=' divide-'] > :not([hidden]) ~ :not([hidden])":
+          {
+            borderColor: 'var(--border-primary)',
+          },
+      });
+    }),
+  ],
 };
