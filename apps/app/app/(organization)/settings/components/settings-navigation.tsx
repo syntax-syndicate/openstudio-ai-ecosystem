@@ -3,7 +3,12 @@
 import { Link } from '@repo/design-system/components/link';
 import { Button } from '@repo/design-system/components/ui/button';
 import { cn } from '@repo/design-system/lib/utils';
-import { CogIcon, ExternalLinkIcon, UsersIcon } from 'lucide-react';
+import {
+  CogIcon,
+  ExternalLinkIcon,
+  ToyBrickIcon,
+  UsersIcon,
+} from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 const pages = [
@@ -16,6 +21,11 @@ const pages = [
     icon: UsersIcon,
     label: 'Members',
     href: '/settings/members',
+  },
+  {
+    icon: ToyBrickIcon,
+    label: 'Integrations',
+    href: '/settings/integrations',
   },
 ];
 
