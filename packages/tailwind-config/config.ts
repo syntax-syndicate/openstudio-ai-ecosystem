@@ -3,6 +3,10 @@ import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
 import defaultTheme from 'tailwindcss/defaultTheme';
 import typographyConfig from './typography.config';
+import safeArea from 'tailwindcss-safe-area';
+import forms from '@tailwindcss/forms';
+import containerQueries from '@tailwindcss/container-queries';
+import plugin from 'tailwindcss/plugin';
 
 export const config: Config = {
   darkMode: ['class'],
@@ -56,6 +60,20 @@ export const config: Config = {
             DEFAULT: '#646464',
             dark: '#8e8e8e',
           },
+          50: '#FCFCFC',
+          100: '#F5F5F5',
+          150: '#F0F0F0',
+          200: '#E5E5E5',
+          300: '#D4D4D4',
+          400: '#A3A3A3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          750: '#313131',
+          800: '#262626',
+          850: '#1E1E1E',
+          900: '#171717',
+          950: '#0D0D0D'
         },
         border: 'hsl(var(--border) / <alpha-value>)',
         input: 'hsl(var(--input) / <alpha-value>)',
@@ -160,5 +178,15 @@ export const config: Config = {
       typography: typographyConfig,
     },
   },
-  plugins: [animate, typography],
+  plugins: [animate, typography, safeArea, forms, containerQueries, plugin(function ({ addVariant, addBase }) {
+      addVariant('initial', 'html :where(&)')
+      addBase({
+        '.border, .border-x, .border-y, .border-t, .border-r, .border-b, .border-l': {
+          backgroundClip: 'padding-box'
+        },
+        "[class^='divide-'] > :not([hidden]) ~ :not([hidden]), [class*=' divide-'] > :not([hidden]) ~ :not([hidden])": {
+          borderColor: 'var(--border-primary)'
+        }
+      })
+    })],
 };

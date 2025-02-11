@@ -292,6 +292,47 @@
   }
 }
 
+.animated-border:hover {
+  --border-size: 13px;
+  --border-angle: 0turn;
+
+  animation: bg-animated-border 10s linear infinite;
+  background-image: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 50%,
+      #213
+    ),
+    conic-gradient(
+      from var(--border-angle),
+      transparent 20%,
+      rgb(255 255 255 / 10%),
+      rgb(255 255 255 / 20%)
+    );
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: calc(100% - (var(--border-size) * 2))
+    calc(100% - (var(--border-size) * 2)), cover;
+}
+
+.dark .shiki {
+  background-color: var(--shiki-dark-bg);
+  color: var(--shiki-dark);
+  @apply border-neutral-700;
+}
+
+@keyframes bg-animated-border {
+  to {
+    --border-angle: 1turn;
+  }
+}
+
+@property --border-angle {
+  inherits: true;
+  initial-value: 0turn;
+  syntax: "<angle>";
+}
+
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
