@@ -15,7 +15,7 @@ export const Logo = ({ showName, className }: LogoProperties) => (
     <Logomark />
     <p
       className={cn(
-        'font-semibold text-foreground text-lg tracking-tight',
+        'whitespace-nowrap font-semibold text-foreground text-lg tracking-tight',
         !showName && 'sr-only'
       )}
     >
