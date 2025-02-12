@@ -1,10 +1,11 @@
 import { env } from '@/env';
+import { updateSession } from '@repo/backend/auth/middleware';
 import {
   noseconeMiddleware,
   noseconeOptions,
   noseconeOptionsWithToolbar,
 } from '@repo/security/middleware';
-
+import type { NextRequest, NextResponse } from 'next/server';
 export const config = {
   // matcher tells Next.js which routes to run the middleware on. This runs the
   // middleware on all routes except for static assets and Posthog ingest
@@ -38,3 +39,6 @@ const securityHeaders = env.FLAGS_SECRET
 //     return NextResponse.json({ error: message }, { status: 403 });
 //   }
 // });
+
+export const middleware = async (request: NextRequest): Promise<NextResponse> =>
+  updateSession(request);
