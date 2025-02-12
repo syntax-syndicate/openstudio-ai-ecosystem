@@ -64,6 +64,16 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const publicDomains = [
+    'localhost:3001',
+    'openstudio.tech',
+    'www.openstudio.tech'
+  ];
+  
+  if (publicDomains.includes(hostname)) {
+    return supabaseResponse;
+  }
+
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/sign-in') &&
