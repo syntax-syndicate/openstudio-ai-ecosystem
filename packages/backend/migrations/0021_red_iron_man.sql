@@ -1,0 +1,1 @@
+ALTER TYPE "public"."integration_state_platform" ADD VALUE 'TWITTER';
