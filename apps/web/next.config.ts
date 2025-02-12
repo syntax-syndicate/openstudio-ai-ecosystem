@@ -1,6 +1,5 @@
 import { env } from '@/env';
 import nextMdx from '@next/mdx';
-import { withCMS } from '@repo/cms/next-config';
 import { withToolbar } from '@repo/feature-flags/lib/toolbar';
 import { config, withAnalyzer } from '@repo/next-config';
 import { withLogtail, withSentry } from '@repo/observability/next-config';
@@ -38,4 +37,5 @@ nextConfig.images?.remotePatterns?.push({
 nextConfig.pageExtensions = ['js', 'jsx', 'mdx', 'ts', 'tsx'];
 nextConfig = withMDX(nextConfig);
 
-export default withCMS(nextConfig);
+// export default withCMS(nextConfig);
+export default nextConfig;
