@@ -11,7 +11,7 @@ export const ApiKeyStatus = () => {
   const { apiKeys, preferences } = usePreferenceContext();
   const { getAssistantByKey } = useAssistantUtils();
   const assistant = getAssistantByKey(
-    preferences.defaultAssistants?.[0] ?? preferences.defaultAssistant
+    preferences.defaultAssistant
   );
   const hasApiKeys =
     apiKeys.filter(

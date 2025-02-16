@@ -1,13 +1,12 @@
 import { AudioRecorder } from '@/app/(organization)/chat/components/chat-input/audio-recorder';
 import { ImageUpload } from '@/app/(organization)/chat/components/chat-input/image-upload';
 import { useChatContext, usePromptsContext } from '@/context';
+import { Telescope01Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { ArrowUp, Book } from 'lucide-react';
 import { CircleStop } from 'lucide-react';
-import { FolderSearchIcon } from '@hugeicons/react';
-
 
 export type TChatActions = {
   sendMessage: (message: string) => void;
@@ -22,7 +21,12 @@ export const ChatActions = ({
   const editor = store((state) => state.editor);
   const { open: openPrompts } = usePromptsContext();
   const stopGeneration = store((state) => state.stopGeneration);
+  const abortController = store((state) => state.abortController);
   const hasTextInput = !!editor?.getText();
+
+  const handleStopGeneration = () => {
+    stopGeneration();
+  };
   return (
     <Flex
       className="w-full px-1 pt-1 pb-1 md:px-2 md:pb-2"
@@ -51,14 +55,19 @@ export const ChatActions = ({
           </Button>
         </Tooltip>
         <Tooltip content="WIP - Deep Research">
-          <Button disabled className="disabled:opacity-50 disabled:cursor-not-allowed" size="icon-sm" variant="ghost">
-            <FolderSearchIcon size={16} strokeWidth="2" />
+          <Button
+            disabled
+            className="rounded-full px-2 py-1.5 text-green-600 hover:bg-green-100 disabled:cursor-not-allowed disabled:opacity-50"
+            size="icon-sm"
+            variant="ghost"
+          >
+            <Telescope01Icon size={16} strokeWidth="2" /> Deep Research
           </Button>
         </Tooltip>
       </Flex>
       <Flex gap="xs" items="center">
         {isGenerating ? (
-          <Button size="sm" variant="secondary" onClick={stopGeneration}>
+          <Button size="sm" variant="secondary" onClick={handleStopGeneration}>
             <CircleStop size={16} strokeWidth={2} /> Stop
           </Button>
         ) : (

@@ -12,18 +12,17 @@ import {
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { PopOverConfirmProvider } from '@repo/design-system/components/ui/use-confirmation-popover';
+import { RegenerateWithModelSelect } from '@/app/(organization)/chat/components/regenerate-model-select';
 import type { FC } from 'react';
 
 export type TAIMessageActions = {
   message: TChatMessage;
   canRegenerate: boolean;
-  isLoading?: boolean;
 };
 
 export const AIMessageActions: FC<TAIMessageActions> = ({
   message,
   canRegenerate,
-  isLoading: propIsLoading,
 }) => {
   const { updatePreferences } = usePreferenceContext();
   const { refetch, store } = useChatContext();
@@ -33,9 +32,9 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
   const { invokeModel } = useLLMRunner();
   const { removeMessageByIdMutation } = useSessions();
 
-  const { tools, runConfig, isLoading: messageIsLoading, rawAI } = message;
+  const { tools, runConfig, isLoading, rawAI } = message;
   const isToolRunning = !!tools?.filter((t) => !!t?.isLoading)?.length;
-  const isGenerating = propIsLoading ?? (messageIsLoading && !isToolRunning);
+  const isGenerating = isLoading && !isToolRunning;
   const removeLastMessage = store((state) => state.removeLastMessage);
 
   const { showCopied, copy } = useClipboard();
@@ -103,7 +102,7 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
           </Type>
         </Flex>
       )}
-      {!isGenerating && (
+      {!isLoading && (
         <Flex gap="xs" items="center" className="w-full">
           <Tooltip content="Copy">
             <Button
@@ -134,16 +133,14 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
             </PopOverConfirmProvider>
           </Tooltip>
           {canRegenerate ? (
-            // <RegenerateWithModelSelect
-            //   assistant={runConfig?.assistant}
-            //   onRegenerate={handleRegenerate}
-            // />
-            <></>
+            <RegenerateWithModelSelect
+              assistant={runConfig?.assistant}
+              onRegenerate={handleRegenerate}
+            />
           ) : (
-            // <Type size="sm" textColor="tertiary" className="px-2">
-            //   {message.runConfig?.assistant?.name}
-            // </Type>
-            <></>
+            <Type size="sm" textColor="tertiary" className="px-2">
+              {message.runConfig?.assistant?.name}
+            </Type>
           )}
         </Flex>
       )}

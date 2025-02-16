@@ -1,10 +1,12 @@
 import { defaultPreferences } from '@/config';
 import { useChatContext, usePreferenceContext } from '@/context';
 import { useRootContext } from '@/context/root';
+import { env } from '@/env';
 import { injectPresetValues } from '@/helper/preset-prompt-values';
 import { constructMessagePrompt, constructPrompt } from '@/helper/promptUtil';
 import { generateShortUUID } from '@/helper/utils';
-import {modelService } from '@/services/models';
+import { saveAiUsage } from '@/lib/utils/ai-usage';
+import { modelService } from '@/services/models';
 import { getApiKey } from '@/services/preferences/client';
 import { getMessages, getSessionById } from '@/services/sessions/client';
 import type { TLLMRunConfig, TProvider, TStopReason } from '@/types';
@@ -12,9 +14,7 @@ import { toast } from '@repo/design-system/hooks/use-toast';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import moment from 'moment';
 import { useAssistantUtils, useTools } from '.';
-import { saveAiUsage } from '@/lib/utils/ai-usage';
 import { usePremium } from './use-premium';
-import { env } from '@/env';
 
 const getErrorMessage = (error: string) => {
   if (error.includes('image_url') && error.includes('400')) {
@@ -30,7 +30,6 @@ export const useLLMRunner = () => {
   const { store, refetch } = useChatContext();
   const editor = store((state) => state.editor);
   const setIsGenerating = store((state) => state.setIsGenerating);
-  const currentMessage = store((state) => state.currentMessage);
   const setCurrentMessage = store((state) => state.setCurrentMessage);
   const updateCurrentMessage = store((state) => state.updateCurrentMessage);
   const addTool = store((state) => state.addTool);
@@ -39,8 +38,12 @@ export const useLLMRunner = () => {
   const { getModelByKey } = useAssistantUtils();
   const { preferences } = usePreferenceContext();
   const { getAvailableTools } = useTools();
-  const { setApiKeyModalProvider, setOpenApiKeyModal, setOpenMessageLimitModal } = useRootContext();
-  const {isPremium, premium, user, messagesCountPerMonth} = usePremium()
+  const {
+    setApiKeyModalProvider,
+    setOpenApiKeyModal,
+    setOpenMessageLimitModal,
+  } = useRootContext();
+  const { isPremium, premium, user, messagesCountPerMonth } = usePremium();
 
   const invokeModel = async (config: TLLMRunConfig) => {
     //to avoid duplication not refetch when regenerating
@@ -55,25 +58,23 @@ export const useLLMRunner = () => {
     const newMessageId = messageId || generateShortUUID();
 
     let messageLimitPerMonth = 0;
-    if(!premium || !premium.tier){
+    if (!premium || !premium.tier) {
       messageLimitPerMonth = env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT;
-    }else{
-      messageLimitPerMonth = 
-        premium!.tier === "LIFETIME" 
-        ? env.NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT
-        : premium!.tier === "PRO_MONTHLY" || premium!.tier === "PRO_ANNUALLY"
-          ? env.NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT
-          : env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT;
+    } else {
+      messageLimitPerMonth =
+        premium!.tier === 'LIFETIME'
+          ? env.NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT
+          : premium!.tier === 'PRO_MONTHLY' || premium!.tier === 'PRO_ANNUALLY'
+            ? env.NEXT_PUBLIC_PRO_USERS_MESSAGE_LIMIT
+            : env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT;
     }
 
     if (messagesCountPerMonth! >= messageLimitPerMonth) {
       setIsGenerating(false);
-      console.log('You have exceeded the message limit for this month')
-      setOpenMessageLimitModal(true)
+      console.log('You have exceeded the message limit for this month');
+      setOpenMessageLimitModal(true);
       return;
     }
-
-    store.getState().updateAssistantResponse(config.assistant, '', false, true);
 
     const modelKey = assistant.baseModel;
     const session = await getSessionById(sessionId);
@@ -128,7 +129,6 @@ export const useLLMRunner = () => {
       stop: false,
       stopReason: null,
       rawAI: null,
-      aiResponses: [],
       image: image || null,
       tools: [],
       relatedQuestions: [],
@@ -212,6 +212,7 @@ export const useLLMRunner = () => {
         {
           maxConcurrency: 1,
           recursionLimit: 3,
+          signal: currentAbortController?.signal,
           callbacks: [
             {
               handleLLMStart: async () => {},
@@ -227,15 +228,14 @@ export const useLLMRunner = () => {
                 name && addTool({ toolName: name, isLoading: true });
               },
               handleLLMNewToken: async (token: string) => {
+                if (currentAbortController?.signal.aborted) {
+                  updateCurrentMessage({
+        isLoading: false,
+        stop: true,
+                  });
+                  return;
+                }
                 streamedMessage += token;
-                store
-                  .getState()
-                  .updateAssistantResponse(
-                    config.assistant,
-                    streamedMessage,
-                    false,
-                    true
-                  );
                 updateCurrentMessage({
                   isLoading: true,
                   rawAI: streamedMessage,
@@ -266,15 +266,6 @@ export const useLLMRunner = () => {
                   (value) => hasError[value]
                 ) as TStopReason;
 
-                store
-                  .getState()
-                  .updateAssistantResponse(
-                    config.assistant,
-                    streamedMessage,
-                    false,
-                    false
-                  );
-
                 updateCurrentMessage({
                   isLoading: false,
                   rawHuman: input,
@@ -288,15 +279,6 @@ export const useLLMRunner = () => {
           ],
         }
       );
-
-      store
-        .getState()
-        .updateAssistantResponse(
-          config.assistant,
-          stream?.content || stream?.output?.[0]?.text || stream?.output,
-          true,
-          false
-        );
 
       updateCurrentMessage({
         rawHuman: input,
@@ -316,8 +298,8 @@ export const useLLMRunner = () => {
           input_tokens: stream?.usage_metadata?.input_tokens || 0,
           output_tokens: stream?.usage_metadata?.output_tokens || 0,
           total_tokens: stream?.usage_metadata?.total_tokens || 0,
-        }
-      })
+        },
+      });
     } catch (err) {
       updateCurrentMessage({
         isLoading: false,

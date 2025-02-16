@@ -1,12 +1,12 @@
 import { defaultPreferences } from '@/config';
+import { env } from '@/env';
 import type { TModelItem, TModelKey, TPreferences, TProvider } from '@/types';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { ChatGroq } from '@langchain/groq';
+import type { ChatGroq } from '@langchain/groq';
 import { ChatOllama } from '@langchain/ollama';
 import { ChatOpenAI } from '@langchain/openai';
-import { ChatXAI } from '@langchain/xai';
-import { env } from '@/env';
+import type { ChatXAI } from '@langchain/xai';
 type ChatOpenAIConstructorParams = ConstructorParameters<typeof ChatOpenAI>[0];
 type ChatAnthropicConstructorParams = ConstructorParameters<
   typeof ChatAnthropic
@@ -210,7 +210,6 @@ type TCreateInstance = {
 //     }
 //   }
 
-
 // export async function getTestModelKey(key: TProvider): Promise<TModelKey> {
 //     switch (key) {
 //       case 'openai':
@@ -236,7 +235,6 @@ type TCreateInstance = {
 //     }
 //   }
 
-
 // export async function getModelAPIKeyForProUsers(key: TProvider): Promise<string> {
 //     switch (key) {
 //       case 'openai':
@@ -253,7 +251,6 @@ type TCreateInstance = {
 //         return '';
 //     }
 //   }
-
 
 export class ModelService {
   async createInstance({
@@ -294,11 +291,9 @@ export class ModelService {
           model: model.key,
           streaming: true,
           configuration: {
-            baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/openai`
+            baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/openai`,
           },
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
+          apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
           ...(!model.key.startsWith('o3-') &&
             !model.key.startsWith('o1-') && {
               temperature: Number(temperature),
@@ -314,9 +309,7 @@ export class ModelService {
         return new ChatOpenAI({
           model: model.key,
           streaming: true,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
+          apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
           configuration: {
             baseURL: `${window.location.origin}/api/perplexity/`,
           },
@@ -330,9 +323,7 @@ export class ModelService {
         return new ChatOpenAI({
           model: model.key,
           streaming: true,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
+          apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
           configuration: {
             baseURL: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/grok`,
           },
@@ -347,9 +338,7 @@ export class ModelService {
           model: model.key,
           // anthropicApiUrl: `${window.location.origin}/api/anthropic/`,
           anthropicApiUrl: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/anthropic`,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
+          apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
           maxTokens,
           // clientOptions: {
           //   defaultHeaders: {
@@ -366,17 +355,12 @@ export class ModelService {
       case 'gemini':
         return new ChatGoogleGenerativeAI({
           model: model.key,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
+          apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
           baseUrl: `https://gateway.ai.cloudflare.com/v1/b8a66f8a4ddbd419ef8e4bdfeea7aa60/chathub/google-ai-studio`,
           maxOutputTokens: maxTokens,
           streaming: true,
           temperature: Number(temperature),
           maxRetries: 1,
-          onFailedAttempt: (error) => {
-            console.error('Failed attempt', error);
-          },
           topP: Number(topP),
           topK: Number(topK),
           ...props,
@@ -395,9 +379,7 @@ export class ModelService {
       case 'groq':
         return new ChatOpenAI({
           model: model.key,
-          apiKey: isPremium
-            ? this.getModelAPIKeyForProUsers(provider)
-            : apiKey,
+          apiKey: isPremium ? this.getModelAPIKeyForProUsers(provider) : apiKey,
           configuration: {
             baseURL: `${window.location.origin}/api/groq/`,
           },

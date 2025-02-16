@@ -1,16 +1,13 @@
-import { configs } from '@/config';
-import { ollamaModelsSupportsTools } from '@/config/models';
 import { usePreferenceContext } from '@/context';
-import { constructPrompt } from '@/helper/promptUtil';
-import { modelService } from '@/services/models';
-import { getMessages } from '@/services/sessions/client';
-import { RunnableSequence } from '@langchain/core/runnables';
-import type { ChatOllama } from '@langchain/ollama';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { z } from 'zod';
 import { useAssistantUtils } from '.';
 import { usePremium } from './use-premium';
-
+import { getMessages } from '@/services/sessions/client';
+import { modelService } from '@/services/models';
+import { constructPrompt } from '@/helper/promptUtil';
+import { RunnableSequence } from '@langchain/core/runnables';
+import { configs } from '@/config';
 const parsingSchema = z.object({
   questions: z.array(z.string()).describe('list of questions'),
 });
@@ -26,65 +23,65 @@ export const useRelatedQuestions = () => {
     sessionId: string,
     messageId: string
   ) => {
-    if (!preferences?.suggestRelatedQuestions || true) {
+    if (!preferences?.suggestRelatedQuestions) {
       return [];
     }
-    // const messages = await getMessages(sessionId);
-    // const message = messages.find((m) => m.id === messageId);
+    const messages = await getMessages(sessionId);
+    const message = messages.find((m) => m.id === messageId);
 
-    // if (!message?.rawHuman || !message?.rawAI) {
-    //   return [];
-    // }
+    if (!message?.rawHuman || !message?.rawAI) {
+      return [];
+    }
 
-    // const assistant = getAssistantByKey(message.runConfig.assistant.key);
+    const assistant = getAssistantByKey(message.runConfig.assistant.key);
 
-    // //check for apikey if not premium
-    
-    // const conditionCheck = isPremium ? !assistant : !assistant || !getApiKey(assistant.model.provider)
+    //check for apikey if not premium
 
-    // if (conditionCheck) {
-    //   return [];
-    // }
+    const conditionCheck = isPremium ? !assistant : !assistant || !getApiKey(assistant.model.provider)
 
-    // if (assistant!.model.provider === 'ollama') {
-    //   return generateRelatedQuestionForOllama(sessionId, messageId);
-    // }
-    // const apiKey = getApiKey(assistant!.model.provider);
-    // const selectedModel = await modelService.createInstance({
-    //   model: assistant!.model,
-    //   preferences,
-    //   apiKey: apiKey,
-    //   provider: assistant!.model.provider,
-    //   isPremium: isPremium,
-    // });
+    if (conditionCheck) {
+      return [];
+    }
 
-    // const prompt = await constructPrompt({
-    //   hasMessages: false,
-    //   formatInstructions: true,
-    //   systemPrompt: configs.relatedQuestionsSystemPrompt,
-    //   memories: [],
-    // });
+    if (assistant!.model.provider === 'ollama') {
+      return generateRelatedQuestionForOllama(sessionId, messageId);
+    }
+    const apiKey = getApiKey(assistant!.model.provider);
+    const selectedModel = await modelService.createInstance({
+      model: assistant!.model,
+      preferences,
+      apiKey: apiKey,
+      provider: assistant!.model.provider,
+      isPremium: isPremium,
+    });
 
-    // try {
-    //   const chain = RunnableSequence.from([
-    //     prompt,
-    //     selectedModel as any,
-    //     parser as any,
-    //   ]);
-    //   const generation = await chain.invoke({
-    //     chat_history: [],
-    //     input: configs.relatedQuestionsUserPrompt(
-    //       message.rawHuman,
-    //       message.rawAI
-    //     ),
-    //     format_instructions: parser.getFormatInstructions(),
-    //   });
+    const prompt = await constructPrompt({
+      hasMessages: false,
+      formatInstructions: true,
+      systemPrompt: configs.relatedQuestionsSystemPrompt,
+      memories: [],
+    });
 
-    //   return generation?.questions || [];
-    // } catch (error) {
-    //   console.error(error);
-    //   return [];
-    // }
+    try {
+      const chain = RunnableSequence.from([
+        prompt,
+        selectedModel as any,
+        parser as any,
+      ]);
+      const generation = await chain.invoke({
+        chat_history: [],
+        input: configs.relatedQuestionsUserPrompt(
+          message.rawHuman,
+          message.rawAI
+        ),
+        format_instructions: parser.getFormatInstructions(),
+      });
+
+      return generation?.questions || [];
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   };
 
   const generateRelatedQuestionForOllama = async (

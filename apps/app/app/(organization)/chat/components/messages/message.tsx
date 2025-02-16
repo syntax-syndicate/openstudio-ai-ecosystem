@@ -4,16 +4,20 @@ import { HumanMessage } from '@/app/(organization)/chat/components/messages/huma
 import { ImageMessage } from '@/app/(organization)/chat/components/messages/image-message';
 import type { TChatMessage } from '@/types';
 import {
+  Accordion,
+  AccordionContent,
   AccordionHeader,
+  AccordionItem,
   AccordionTrigger,
 } from '@repo/design-system/components/ui/accordion';
 import { Flex } from '@repo/design-system/components/ui/flex';
+import { cn } from '@repo/design-system/lib/utils';
 import { type FC, forwardRef } from 'react';
+
 
 export type TMessage = {
   message: TChatMessage;
   isLast: boolean;
-  modelId?: string;
 };
 
 const CustomTrigger = forwardRef<
@@ -33,51 +37,33 @@ const CustomTrigger = forwardRef<
 
 CustomTrigger.displayName = 'CustomTrigger';
 
-export const Message: FC<TMessage> = ({ message, isLast, modelId }) => {
-  const hasMultipleResponses = (message.aiResponses?.length || 0) > 1;
+export const Message: FC<TMessage> = ({ message, isLast}) => {
   return (
-    // <Accordion
-    //   type="single"
-    //   className="w-full"
-    //   collapsible
-    //   defaultValue={message.id}
-    // >
-    //   <AccordionItem
-    //     value={message.id}
-    //     key={message.id}
-    //     className={cn(
-    //       'flex w-full flex-col items-start gap-1 py-2',
-    //       isLast && 'border-b-0'
-    //     )}
-    //   >
-    //     <CustomTrigger>
-    //       <Flex direction="col" gap="md" items="start">
-    //         <ImageMessage image={message.runConfig?.image} />
-    //         <ContextMessage context={message.runConfig?.context} />
-    //         <HumanMessage chatMessage={message} />
-    //       </Flex>
-    //     </CustomTrigger>
-    //     <AccordionContent className="w-full items-start p-2">
-    //       {/* Existing single-response fallback */}
-    //       {!hasMultipleResponses && <AIMessage message={message} isLast={isLast} modelId={modelId}/>}
-    //       {hasMultipleResponses && <AIMessage message={message} isLast={isLast} modelId={modelId} />}
-    //       {/* <AIMessage message={message} isLast={isLast} modelId={modelId}/> */}
-    //       {/* <AIMessage message={message} isLast={isLast} /> */}
-    //     </AccordionContent>
-    //   </AccordionItem>
-    // </Accordion>
-    <>
-      <Flex direction="col" gap="md" items="start">
-        <ImageMessage image={message.runConfig?.image} />
-        <ContextMessage context={message.runConfig?.context} />
-        <HumanMessage chatMessage={message} />
-        {!hasMultipleResponses && (
-          <AIMessage message={message} isLast={isLast} modelId={modelId} />
+    <Accordion
+      type="single"
+      className="w-full"
+      collapsible
+      defaultValue={message.id}
+    >
+      <AccordionItem
+        value={message.id}
+        key={message.id}
+        className={cn(
+          'flex w-full flex-col items-start gap-1 py-2',
+          isLast && 'border-b-0'
         )}
-        {hasMultipleResponses && (
-          <AIMessage message={message} isLast={isLast} modelId={modelId} />
-        )}
-      </Flex>
-    </>
+      >
+        <CustomTrigger>
+          <Flex direction="col" gap="md" items="start">
+            <ImageMessage image={message.runConfig?.image} />
+            <ContextMessage context={message.runConfig?.context} />
+            <HumanMessage chatMessage={message} />
+          </Flex>
+        </CustomTrigger>
+        <AccordionContent className="w-full items-start p-2">
+          <AIMessage message={message} isLast={isLast} />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };

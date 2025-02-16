@@ -1,6 +1,4 @@
-import type { TAssistant } from '@/types/assistants';
 import type { TChatState } from '@/types/chat';
-import type { TAIResponse } from '@/types/messages';
 import { create } from 'zustand';
 
 const initialState = {
@@ -30,64 +28,9 @@ export const createChatStore = () =>
     updateCurrentMessage: (message) => {
       const { currentMessage } = get();
       if (currentMessage) {
-        // Handle multiple AI responses
-        const newAiResponses = message.aiResponses
-          ? [...(currentMessage.aiResponses || []), ...message.aiResponses]
-          : currentMessage.aiResponses;
-
-        set({
-          currentMessage: {
-            ...currentMessage,
-            ...message,
-            aiResponses: newAiResponses,
-          },
-        });
+        const newMessage = { ...currentMessage, ...message };
+        set({ currentMessage: { ...currentMessage, ...newMessage } });
       }
-    },
-    // Add new action for parallel updates
-    updateAssistantResponse: (
-      assistant: TAssistant,
-      content: string,
-      isComplete: boolean,
-      isLoading: boolean
-    ) => {
-      const { currentMessage } = get();
-      if (!currentMessage) return;
-
-      const existingResponseIndex = currentMessage.aiResponses?.findIndex(
-        (response) => response.assistant.key === assistant.key
-      );
-
-      const baseResponse: TAIResponse = {
-        assistant,
-        rawAI: content,
-        tools: [],
-        relatedQuestions: [],
-        stopReason: null,
-        errorMessage: null,
-        isLoading: isLoading,
-        createdAt: new Date(),
-        isComplete,
-      };
-
-      let updatedAiResponses = currentMessage.aiResponses || [];
-      if (existingResponseIndex !== -1) {
-        updatedAiResponses = updatedAiResponses.map((response, index) =>
-          index === existingResponseIndex
-            ? { ...response, rawAI: content, isLoading, isComplete }
-            : response
-        );
-      } else {
-        //@ts-ignore
-        updatedAiResponses = [...updatedAiResponses, baseResponse];
-      }
-
-      set({
-        currentMessage: {
-          ...currentMessage,
-          aiResponses: updatedAiResponses,
-        },
-      });
     },
     setIsInitialized: (isInitialized) => set({ isInitialized }),
     removeLastMessage: () => {
@@ -131,6 +74,7 @@ export const createChatStore = () =>
     setAbortController: (abortController) => set({ abortController }),
     stopGeneration: () => {
       const { abortController } = get();
+      console.log('abortController', abortController);
       abortController?.abort('cancel');
     },
     addMessage: (message) => {

@@ -53,13 +53,13 @@ export const OrganizationDetailsForm = ({
         value={name}
         onChangeText={setName}
         className="bg-background"
-        placeholder="Eververse"
+        placeholder="OpenStudio"
       />
       <Input
         label="Slug"
         value={slug}
         onChangeText={setSlug}
-        placeholder="eververse"
+        placeholder="openstudio"
         className="bg-background"
         disabled
       />
