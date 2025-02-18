@@ -1,4 +1,3 @@
-import { useChatContext } from '@/context';
 import {
   DisableEnter,
   ShiftEnterToLineBreak,
@@ -13,8 +12,8 @@ import { useEditor } from '@tiptap/react';
 import { useEffect } from 'react';
 
 export const useChatEditor = () => {
-  const { store } = useChatContext();
-  const setEditor = store((state) => state.setEditor);
+  // const { store } = useChatContext();
+  // const setEditor = store((state) => state.setEditor);
   const editor = useEditor({
     extensions: [
       Document,
@@ -58,9 +57,9 @@ export const useChatEditor = () => {
       preserveWhitespace: 'full',
     },
   });
-  useEffect(() => {
-    setEditor(editor);
-  }, [editor]);
+  // useEffect(() => {
+  //   setEditor(editor);
+  // }, [editor]);
   useEffect(() => {
     if (editor) {
       editor.commands.focus('end');

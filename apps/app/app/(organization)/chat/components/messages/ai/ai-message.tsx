@@ -17,10 +17,7 @@ export type TAIMessage = {
   isLast: boolean;
 };
 
-export const AIMessage = ({
-  message,
-  isLast,
-}: TAIMessage) => {
+export const AIMessage = ({ message, isLast }: TAIMessage) => {
   const { id, rawAI, isLoading, stopReason, tools, runConfig, stop } = message;
   const { store } = useChatContext();
   const session = store((state) => state.session);
@@ -76,14 +73,8 @@ export const AIMessage = ({
             message={message}
           />
         )}
-        <AIMessageActions
-          message={message}
-          canRegenerate={message && isLast}
-        />
-        <AIRelatedQuestions
-          message={message}
-          show={message && isLast}
-        />
+        <AIMessageActions message={message} canRegenerate={message && isLast} />
+        <AIRelatedQuestions message={message} show={message && isLast} />
       </Flex>
     </div>
   );

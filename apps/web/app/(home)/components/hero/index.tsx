@@ -82,7 +82,9 @@ export const Hero = ({
                 transition={{ duration: 1, ease: 'easeInOut', delay: 1 }}
               >
                 <Balancer>
-                  Open Studio is an open-source AI ecosystem. ChatHub drives research and leverage verticalized agents like OpenStudio Tube to get the work done for YouTube. More niche AI inbound!
+                  Open Studio is an open-source AI ecosystem. ChatHub drives
+                  research and leverage verticalized agents like OpenStudio Tube
+                  to get the work done for YouTube. More niche AI inbound!
                 </Balancer>
               </m.p>
             </Prose>

@@ -1,3 +1,4 @@
+import { RegenerateWithModelSelect } from '@/app/(organization)/chat/components/regenerate-model-select';
 import { useChatContext, usePreferenceContext, useSessions } from '@/context';
 import { useAssistantUtils, useClipboard } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
@@ -12,7 +13,6 @@ import {
 import { Type } from '@repo/design-system/components/ui/text';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { PopOverConfirmProvider } from '@repo/design-system/components/ui/use-confirmation-popover';
-import { RegenerateWithModelSelect } from '@/app/(organization)/chat/components/regenerate-model-select';
 import type { FC } from 'react';
 
 export type TAIMessageActions = {

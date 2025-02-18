@@ -10,9 +10,7 @@ export const ApiKeyStatus = () => {
   const { setOpenApiKeyModal, setApiKeyModalProvider } = useRootContext();
   const { apiKeys, preferences } = usePreferenceContext();
   const { getAssistantByKey } = useAssistantUtils();
-  const assistant = getAssistantByKey(
-    preferences.defaultAssistant
-  );
+  const assistant = getAssistantByKey(preferences.defaultAssistant);
   const hasApiKeys =
     apiKeys.filter(
       (key) => assistant?.model.provider === key.provider && key.key

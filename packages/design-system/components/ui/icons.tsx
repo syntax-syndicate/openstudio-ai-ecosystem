@@ -111,6 +111,10 @@ import {
   User2,
   X as XIcon,
   PersonStanding,
+  LanguagesIcon,
+  SmilePlus,
+  BookOpen,
+  SlidersVertical
 } from "lucide-react";
 
 export type IconProps = {
@@ -191,6 +195,7 @@ export const Icons = {
   github: Github,
   globe: Globe,
   logo: PersonStanding,
+  LanguagesIcon: LanguagesIcon,
   google: ({ size = 24 }: IconProps) => {
     return (
       <svg
@@ -1624,4 +1629,8 @@ export {
   Warning,
   WavingHand02Icon,
   X,
+  LanguagesIcon,
+  SmilePlus,
+  BookOpen,
+  SlidersVertical,
 };

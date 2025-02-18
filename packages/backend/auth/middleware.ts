@@ -67,9 +67,9 @@ export async function updateSession(request: NextRequest) {
   const publicDomains = [
     'localhost:3001',
     'openstudio.tech',
-    'www.openstudio.tech'
+    'www.openstudio.tech',
   ];
-  
+
   if (publicDomains.includes(hostname)) {
     return supabaseResponse;
   }

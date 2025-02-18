@@ -1,6 +1,4 @@
-import {
-  ClockIcon,
-} from 'lucide-react';
+import type { ClockIcon } from 'lucide-react';
 
 export type Feature = {
   icon: typeof ClockIcon;
@@ -11,10 +9,8 @@ export type Feature = {
   short: string;
 };
 
-export const features: Record<string, Feature> = {
-  
-};
+export const features: Record<string, Feature> = {};
 
 // export const integrations: Feature = {
-  
+
 // };
