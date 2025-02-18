@@ -1,6 +1,5 @@
 import type { useEditor } from '@tiptap/react';
 import type { StoreApi, UseBoundStore } from 'zustand';
-import type { TAssistant } from './assistants';
 import type { TChatMessage } from './messages';
 import type { TChatSession } from './sessions';
 import type { ToolExecutionState } from './tools';
@@ -19,12 +18,6 @@ export type TChatState = {
   addMessage: (message: TChatMessage) => void;
   setCurrentMessage: (message?: TChatMessage) => void;
   updateCurrentMessage: (message: Partial<TChatMessage>) => void;
-  updateAssistantResponse: (
-    assistant: TAssistant,
-    content: string,
-    isComplete: boolean,
-    isLoading: boolean
-  ) => void;
   addTool: (tool: ToolExecutionState) => void;
   setTools: (tools: ToolExecutionState[]) => void;
   setIsGenerating: (isGenerating: boolean) => void;

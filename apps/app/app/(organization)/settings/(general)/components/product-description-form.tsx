@@ -48,7 +48,7 @@ export const ProductDescriptionForm = ({
         value={description}
         onChangeText={setDescription}
         className="max-h-[20rem] min-h-[10rem] resize-y bg-background"
-        placeholder="Eververse is a new standard for modern product management. It's a web application designed to help Product teams at SaaS companies explore problems, ideate solutions, prioritize features and plan your roadmap all in one place."
+        placeholder="OpenStudio is an open-source AI ecosystem for building multi-assistant AI applications."
       />
       <Button type="submit" disabled={disabled}>
         Save

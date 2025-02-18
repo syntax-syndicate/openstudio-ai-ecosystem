@@ -1,15 +1,17 @@
 import { init } from '@paralleldrive/cuid2';
-import { sql } from 'drizzle-orm';
+import { type InferSelectModel, sql } from 'drizzle-orm';
 import { relations } from 'drizzle-orm';
 import {
   boolean,
   decimal,
+  foreignKey,
   index,
   integer,
   json,
   pgEnum,
   pgSchema,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -19,7 +21,6 @@ import {
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 import {
-  type TAIResponse,
   type TCustomAssistant,
   type TLLMRunConfig,
   type ToolExecutionState,
@@ -139,6 +140,7 @@ export const prompts = pgTable(
   }
 );
 
+// TODO: later deprecate this table
 export const chatSessions = pgTable(
   'chat_sessions',
   {
@@ -165,6 +167,7 @@ export const chatSessions = pgTable(
   }
 );
 
+// TODO: later deprecate this table
 export const chatMessages = pgTable('chat_messages', {
   id: text('id').primaryKey(),
   sessionId: varchar('session_id')
@@ -182,8 +185,54 @@ export const chatMessages = pgTable('chat_messages', {
   runConfig: json('run_config').$type<TLLMRunConfig>().notNull(),
   tools: json('tools').$type<ToolExecutionState[]>(),
   relatedQuestions: json('related_questions').$type<string[]>(),
-  aiResponses: json('ai_responses').$type<TAIResponse[]>(),
 });
+
+export const chat = pgTable('chat', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  createdAt: timestamp('createdAt').notNull(),
+  title: text('title').notNull(),
+  userId: uuid('userId')
+    .notNull()
+    .references(() => Users.id),
+  organizationId: varchar('organizationId')
+    .notNull()
+    .references(() => organization.id),
+});
+
+export type Chat = InferSelectModel<typeof chat>;
+
+export const message = pgTable('message', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  chatId: uuid('chatId')
+    .notNull()
+    .references(() => chat.id),
+  createdAt: timestamp('createdAt').notNull(),
+  content: json('content').notNull(),
+  role: varchar('role').notNull(),
+  runConfig: json('runConfig').notNull(),
+});
+
+export type Message = InferSelectModel<typeof message>;
+
+export const vote = pgTable(
+  'vote',
+  {
+    chatId: uuid('chatId')
+      .notNull()
+      .references(() => chat.id),
+    messageId: uuid('messageId')
+      .notNull()
+      .references(() => message.id),
+    isUpvoted: boolean('isUpvoted').notNull(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.chatId, table.messageId] }),
+    };
+  }
+);
+
+export type Vote = InferSelectModel<typeof vote>;
 
 export const assistants = pgTable('assistants', {
   name: text('name').notNull(),
@@ -215,10 +264,6 @@ export const preferences = pgTable('preferences', {
     .unique()
     .references(() => organization.id),
   defaultAssistant: text('default_assistant').notNull(),
-  // add default chathub
-  defaultAssistants: json('default_assistants')
-    .$type<string[]>()
-    .default(['chathub']),
   systemPrompt: text('system_prompt').notNull(),
   messageLimit: integer('message_limit').notNull(),
   temperature: decimal('temperature').notNull(),
@@ -476,6 +521,60 @@ export const youtubeInstallationRelations = relations(
   })
 );
 
+export const document = pgTable(
+  'document',
+  {
+    id: uuid('id').notNull().defaultRandom(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    title: text('title').notNull(),
+    content: text('content'),
+    kind: varchar('text', { enum: ['text', 'code', 'image', 'sheet'] })
+      .notNull()
+      .default('text'),
+    organizationId: varchar('organization_id')
+      .notNull()
+      .references(() => organization.id),
+    userId: varchar('user_id')
+      .notNull()
+      .references(() => Users.id),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.id, table.createdAt] }),
+    };
+  }
+);
+
+export type Document = InferSelectModel<typeof document>;
+
+export const suggestion = pgTable(
+  'suggestion',
+  {
+    id: uuid('id').notNull().defaultRandom(),
+    documentId: uuid('document_id').notNull(),
+    documentCreatedAt: timestamp('document_created_at').notNull(),
+    originalText: text('original_text').notNull(),
+    suggestedText: text('suggested_text').notNull(),
+    description: text('description'),
+    isResolved: boolean('is_resolved').notNull().default(false),
+    organizationId: varchar('organization_id')
+      .notNull()
+      .references(() => organization.id),
+    userId: varchar('user_id')
+      .notNull()
+      .references(() => Users.id),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.id] }),
+    documentRef: foreignKey({
+      columns: [table.documentId, table.documentCreatedAt],
+      foreignColumns: [document.id, document.createdAt],
+    }),
+  })
+);
+
+export type Suggestion = InferSelectModel<typeof suggestion>;
+
 export const youtubeIntegrationInsertSchema: z.ZodTypeAny =
   createInsertSchema(youtubeIntegration);
 
@@ -502,4 +601,6 @@ export const schema = {
   premium,
   integrationStates,
   youtubeIntegration,
+  document,
+  suggestion,
 };

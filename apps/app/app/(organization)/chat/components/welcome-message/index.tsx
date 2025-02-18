@@ -5,7 +5,6 @@ import { CustomAssistantCopy } from '@/app/(organization)/chat/components/welcom
 import { OpenSourceCopy } from '@/app/(organization)/chat/components/welcome-message/opensource-copy';
 import { PluginCopy } from '@/app/(organization)/chat/components/welcome-message/plugin-copy';
 import { PrivacyCopy } from '@/app/(organization)/chat/components/welcome-message/privacy-copy';
-import { useChatContext } from '@/context';
 import { usePremium } from '@/hooks/use-premium';
 import {
   AiChat02Icon,
@@ -58,7 +57,6 @@ const welcomePoints: WelcomePoint[] = [
   },
 ];
 export const WelcomeMessage = () => {
-  const { store } = useChatContext();
   const { isPremium } = usePremium();
 
   const [open, setOpen] = useState(false);

@@ -63,15 +63,3 @@ export const stopReasons = [
 ] as const;
 
 export type TStopReason = (typeof stopReasons)[number];
-
-export type TAIResponse = {
-  assistant: TAssistant;
-  rawAI: string | null;
-  tools: ToolExecutionState[];
-  relatedQuestions: string[];
-  stopReason: TStopReason | null;
-  errorMessage: string | null;
-  isLoading: boolean;
-  createdAt: Date;
-  isComplete: boolean;
-};

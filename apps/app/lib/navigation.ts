@@ -4,6 +4,7 @@ import {
   HomeIcon,
   MessageCircleIcon,
   UserIcon,
+  MessageCircleCodeIcon
 } from 'lucide-react';
 
 export type SidebarPage = {
@@ -30,9 +31,17 @@ export const minime: SidebarPage = {
 
 export const chat: SidebarPage = {
   icon: MessageCircleIcon,
-  label: 'ChatHub',
+  label: 'ChatHub Deprecated',
   href: '/chat',
   active: (pathname) => pathname === '/chat',
+};
+
+
+export const chatv2: SidebarPage = {
+  icon: MessageCircleCodeIcon,
+  label: 'ChatHub v2',
+  href: '/chatv2',
+  active: (pathname) => pathname === '/chatv2',
 };
 
 export const settings: SidebarPage = {

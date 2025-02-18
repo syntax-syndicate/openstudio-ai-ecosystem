@@ -1,17 +1,14 @@
 import { ToolBadge } from '@/app/(organization)/chat/components/tools/tool-badge';
 import { useChatContext, usePreferenceContext } from '@/context';
-import { useRootContext } from '@/context/root';
 import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
-import { usePremium } from '@/hooks/use-premium';
 import type { TChatMessage } from '@/types';
 import { ArrowRight02Icon, RepeatIcon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { StaggerContainer } from '@repo/design-system/components/ui/stagger-container';
 import { Type } from '@repo/design-system/components/ui/text';
 import { motion } from 'framer-motion';
-import { useMemo } from 'react';
 import type { FC } from 'react';
 
 export type TAIRelatedQuestions = {
@@ -25,67 +22,25 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
   show,
   modelId,
 }) => {
-  const { refetch, store } = useChatContext();
-  const { setOpenPricingModal } = useRootContext();
-  const { isPremium } = usePremium();
+  const { store } = useChatContext();
   const isGenerating = store((state) => state.isGenerating);
   const { preferences } = usePreferenceContext();
   const { getAssistantByKey } = useAssistantUtils();
   const { invokeModel } = useLLMRunner();
 
-  // Filter to get specific AI response
-  const targetResponse = useMemo(() => {
-    if (!modelId) return message; // Fallback for single-assistant
-    return message.aiResponses?.find((r) => r.assistant.key === modelId);
-  }, [message, modelId]);
-
-  // const handleOnClick = (question: string) => {
-  //   const assistant = preferences.defaultAssistant;
-
-  //   const props = getAssistantByKey(assistant);
-  //   if (!props?.assistant) {
-  //     return;
-  //   }
-  //   message.sessionId &&
-  //     invokeModel({
-  //       input: question,
-  //       sessionId: message.sessionId,
-  //       assistant: props.assistant,
-  //     });
-  // };
-
-  // Get questions from filtered response
-  // const hasQuestions = targetResponse?.relatedQuestions?.length > 0;
-
   const handleOnClick = (question: string) => {
-    // Get all configured assistants
-    const assistants = preferences.defaultAssistants
-      ? preferences.defaultAssistants
-          .map((key) => getAssistantByKey(key))
-          .filter(Boolean)
-      : [getAssistantByKey(preferences.defaultAssistant)].filter(Boolean);
+    const assistant = preferences.defaultAssistant;
 
-    // if (!isPremium && assistants.length > 1) {
-    //   toast({
-    //     title: 'Error',
-    //     description:
-    //       'Upgrade to activate multi assistant mode or to continue select just one assistant',
-    //     variant: 'destructive',
-    //   });
-    //   setOpenPricingModal(true);
-    //   return;
-    // }
-
-    if (!assistants.length || !message.sessionId) return;
-
-    // Invoke model for each assistant
-    assistants.forEach((assistantProps) => {
+    const props = getAssistantByKey(assistant);
+    if (!props?.assistant) {
+      return;
+    }
+    message.sessionId &&
       invokeModel({
         input: question,
-        sessionId: message.sessionId!,
-        assistant: assistantProps!.assistant,
+        sessionId: message.sessionId,
+        assistant: props.assistant,
       });
-    });
   };
 
   if (

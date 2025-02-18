@@ -7,6 +7,7 @@ import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { Navbar } from './components/navbar';
+import Script from 'next/script';
 
 type OrganizationLayoutProperties = {
   readonly children: ReactNode;
@@ -38,6 +39,11 @@ const OrganizationLayout = async ({
   }
 
   return (
+    <>
+    <Script
+        src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"
+        strategy="beforeInteractive"
+      />
     <SidebarProvider
       style={{
         // @ts-expect-error --sidebar-width is a custom property
@@ -50,6 +56,7 @@ const OrganizationLayout = async ({
         {children}
       </main>
     </SidebarProvider>
+    </>
   );
 };
 
