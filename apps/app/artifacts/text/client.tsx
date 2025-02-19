@@ -2,21 +2,19 @@ import { Artifact } from '@/app/(organization)/chatv2/components/v2/create-artif
 import { DiffView } from '@/app/(organization)/chatv2/components/v2/diffview';
 import { DocumentSkeleton } from '@/app/(organization)/chatv2/components/v2/document-skeleton';
 import { Editor } from '@/app/(organization)/chatv2/components/v2/text-editor';
+import { getSuggestions } from '@/artifacts/actions';
+import type { Suggestion } from '@repo/backend/schema';
 import {
   ClockRewind,
   CopyIcon,
+  LanguagesIcon,
   MessageIcon,
   PenIcon,
   RedoIcon,
-  UndoIcon,
-  LanguagesIcon,
   SmilePlus,
-  BookOpen,
-  SlidersVertical,
+  UndoIcon,
 } from '@repo/design-system/components/ui/icons';
-import { Suggestion } from '@repo/backend/schema';
 import { toast } from 'sonner';
-import { getSuggestions } from '@/artifacts/actions';
 
 interface TextArtifactMetadata {
   suggestions: Array<Suggestion>;
@@ -84,7 +82,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
 
     return (
       <>
-        <div className="flex flex-row py-8 md:p-20 px-4">
+        <div className="flex flex-row px-4 py-8 md:p-20">
           <Editor
             content={content}
             suggestions={metadata ? metadata.suggestions : []}
@@ -97,7 +95,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
           {metadata &&
           metadata.suggestions &&
           metadata.suggestions.length > 0 ? (
-            <div className="md:hidden h-dvh w-12 shrink-0" />
+            <div className="h-dvh w-12 shrink-0 md:hidden" />
           ) : null}
         </div>
       </>
@@ -180,23 +178,23 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     },
     {
       icon: <LanguagesIcon />,
-      description: "Translate to Telugu",
+      description: 'Translate to Telugu',
       onClick: ({ appendMessage }) => {
         appendMessage({
-          role: "user",
-          content: "Translate the text to Telugu",
+          role: 'user',
+          content: 'Translate the text to Telugu',
         });
       },
     },
     {
       icon: <SmilePlus />,
-      description: "Add emojis",
+      description: 'Add emojis',
       onClick: ({ appendMessage }) => {
         appendMessage({
-          role: "user",
-          content: "Please add emojis where appropriate",
+          role: 'user',
+          content: 'Please add emojis where appropriate',
         });
       },
-    }
+    },
   ],
 });

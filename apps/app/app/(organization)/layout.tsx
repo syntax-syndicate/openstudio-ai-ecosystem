@@ -5,9 +5,9 @@ import { schema } from '@repo/backend/schema';
 import { SidebarProvider } from '@repo/design-system/components/ui/sidebar';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
+import Script from 'next/script';
 import type { ReactNode } from 'react';
 import { Navbar } from './components/navbar';
-import Script from 'next/script';
 
 type OrganizationLayoutProperties = {
   readonly children: ReactNode;
@@ -40,22 +40,22 @@ const OrganizationLayout = async ({
 
   return (
     <>
-    <Script
+      <Script
         src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"
         strategy="beforeInteractive"
       />
-    <SidebarProvider
-      style={{
-        // @ts-expect-error --sidebar-width is a custom property
-        '--sidebar-width': '220px',
-      }}
-    >
-      <Sidebar user={user} organization={organization[0]} />
-      <main className="flex min-h-screen flex-1 flex-col">
-        <Navbar />
-        {children}
-      </main>
-    </SidebarProvider>
+      <SidebarProvider
+        style={{
+          // @ts-expect-error --sidebar-width is a custom property
+          '--sidebar-width': '220px',
+        }}
+      >
+        <Sidebar user={user} organization={organization[0]} />
+        <main className="flex min-h-screen flex-1 flex-col">
+          <Navbar />
+          {children}
+        </main>
+      </SidebarProvider>
     </>
   );
 };

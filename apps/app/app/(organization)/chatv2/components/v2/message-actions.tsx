@@ -5,16 +5,20 @@ import { useCopyToClipboard } from 'usehooks-ts';
 
 import type { Vote } from '@repo/backend/schema';
 
-import { CopyIcon, ThumbDownIcon, ThumbUpIcon } from '@repo/design-system/components/ui/icons';
 import { Button } from '@repo/design-system/components/ui/button';
+import {
+  CopyIcon,
+  ThumbDownIcon,
+  ThumbUpIcon,
+} from '@repo/design-system/components/ui/icons';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@repo/design-system/components/ui/tooltip';
-import { memo } from 'react';
 import equal from 'fast-deep-equal';
+import { memo } from 'react';
 
 export function PureMessageActions({
   chatId,
@@ -41,7 +45,7 @@ export function PureMessageActions({
         <Tooltip>
           <TooltipTrigger>
             <Button
-              className="py-1 px-2 h-fit text-muted-foreground"
+              className="h-fit px-2 py-1 text-muted-foreground"
               variant="outline"
               onClick={async () => {
                 await copyToClipboard(message.content as string);
@@ -57,7 +61,7 @@ export function PureMessageActions({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+              className="!pointer-events-auto h-fit px-2 py-1 text-muted-foreground"
               disabled={vote?.isUpvoted}
               variant="outline"
               onClick={async () => {
@@ -79,7 +83,7 @@ export function PureMessageActions({
                         if (!currentVotes) return [];
 
                         const votesWithoutCurrent = currentVotes.filter(
-                          (vote) => vote.messageId !== message.id,
+                          (vote) => vote.messageId !== message.id
                         );
 
                         return [
@@ -91,7 +95,7 @@ export function PureMessageActions({
                           },
                         ];
                       },
-                      { revalidate: false },
+                      { revalidate: false }
                     );
 
                     return 'Upvoted Response!';
@@ -109,7 +113,7 @@ export function PureMessageActions({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+              className="!pointer-events-auto h-fit px-2 py-1 text-muted-foreground"
               variant="outline"
               disabled={vote && !vote.isUpvoted}
               onClick={async () => {
@@ -131,7 +135,7 @@ export function PureMessageActions({
                         if (!currentVotes) return [];
 
                         const votesWithoutCurrent = currentVotes.filter(
-                          (vote) => vote.messageId !== message.id,
+                          (vote) => vote.messageId !== message.id
                         );
 
                         return [
@@ -143,7 +147,7 @@ export function PureMessageActions({
                           },
                         ];
                       },
-                      { revalidate: false },
+                      { revalidate: false }
                     );
 
                     return 'Downvoted Response!';
@@ -169,5 +173,5 @@ export const MessageActions = memo(
     if (prevProps.isLoading !== nextProps.isLoading) return false;
 
     return true;
-  },
+  }
 );

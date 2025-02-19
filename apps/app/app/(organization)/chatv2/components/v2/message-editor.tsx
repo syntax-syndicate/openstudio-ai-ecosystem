@@ -1,20 +1,25 @@
 'use client';
 
-import { ChatRequestOptions, Message } from '@repo/ai';
-import { Button } from '@repo/design-system/components/ui/button';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Textarea } from '@repo/design-system/components/ui/textarea';
 import { deleteTrailingMessages } from '@/lib/actions';
-import { toast } from 'sonner';
+import type { ChatRequestOptions, Message } from '@repo/ai';
+import { Button } from '@repo/design-system/components/ui/button';
+import { Textarea } from '@repo/design-system/components/ui/textarea';
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 export type MessageEditorProps = {
   message: Message;
   setMode: Dispatch<SetStateAction<'view' | 'edit'>>;
   setMessages: (
-    messages: Message[] | ((messages: Message[]) => Message[]),
+    messages: Message[] | ((messages: Message[]) => Message[])
   ) => void;
   reload: (
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
 };
 
@@ -48,18 +53,18 @@ export function MessageEditor({
   };
 
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex w-full flex-col gap-2">
       <Textarea
         ref={textareaRef}
-        className="bg-transparent outline-none overflow-hidden resize-none !text-base rounded-xl w-full"
+        className="!text-base w-full resize-none overflow-hidden rounded-xl bg-transparent outline-none"
         value={draftContent}
         onChange={handleInput}
       />
 
-      <div className="flex flex-row gap-2 justify-end">
+      <div className="flex flex-row justify-end gap-2">
         <Button
           variant="outlined"
-          className="h-fit py-2 px-3"
+          className="h-fit px-3 py-2"
           onClick={() => {
             setMode('view');
           }}
@@ -68,7 +73,7 @@ export function MessageEditor({
         </Button>
         <Button
           variant="default"
-          className="h-fit py-2 px-3"
+          className="h-fit px-3 py-2"
           disabled={isSubmitting}
           onClick={async () => {
             setIsSubmitting(true);

@@ -1,5 +1,5 @@
-import { currentUser } from '@repo/backend/auth/utils';
 import { getSuggestionsByDocumentId } from '@/lib/queries';
+import { currentUser } from '@repo/backend/auth/utils';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

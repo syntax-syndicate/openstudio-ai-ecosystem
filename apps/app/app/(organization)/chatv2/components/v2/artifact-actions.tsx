@@ -1,10 +1,14 @@
 import { Button } from '@repo/design-system/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/design-system/components/ui/tooltip';
-import { artifactDefinitions, UIArtifact } from './artifact';
-import { Dispatch, memo, SetStateAction, useState } from 'react';
-import { ArtifactActionContext } from './create-artifact';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@repo/design-system/components/ui/tooltip';
 import { cn } from '@repo/design-system/lib/utils';
+import { type Dispatch, type SetStateAction, memo, useState } from 'react';
 import { toast } from 'sonner';
+import { type UIArtifact, artifactDefinitions } from './artifact';
+import type { ArtifactActionContext } from './create-artifact';
 
 interface ArtifactActionsProps {
   artifact: UIArtifact;
@@ -28,7 +32,7 @@ function PureArtifactActions({
   const [isLoading, setIsLoading] = useState(false);
 
   const artifactDefinition = artifactDefinitions.find(
-    (definition) => definition.kind === artifact.kind,
+    (definition) => definition.kind === artifact.kind
   );
 
   if (!artifactDefinition) {
@@ -54,7 +58,7 @@ function PureArtifactActions({
               variant="outline"
               className={cn('h-fit dark:hover:bg-zinc-700', {
                 'p-2': !action.label,
-                'py-1.5 px-2': action.label,
+                'px-2 py-1.5': action.label,
               })}
               onClick={async () => {
                 setIsLoading(true);
@@ -96,5 +100,5 @@ export const ArtifactActions = memo(
     if (prevProps.artifact.content !== nextProps.artifact.content) return false;
 
     return true;
-  },
+  }
 );

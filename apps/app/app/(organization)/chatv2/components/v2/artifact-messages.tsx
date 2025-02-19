@@ -1,10 +1,10 @@
+import type { ChatRequestOptions, Message } from '@repo/ai';
+import type { Vote } from '@repo/backend/schema';
+import equal from 'fast-deep-equal';
+import { memo } from 'react';
+import type { UIArtifact } from './artifact';
 import { PreviewMessage } from './message';
 import { useScrollToBottom } from './use-scroll-to-bottom';
-import { Vote } from '@repo/backend/schema';
-import { ChatRequestOptions, Message } from '@repo/ai';
-import { memo } from 'react';
-import equal from 'fast-deep-equal';
-import { UIArtifact } from './artifact';
 
 interface ArtifactMessagesProps {
   chatId: string;
@@ -12,10 +12,10 @@ interface ArtifactMessagesProps {
   votes: Array<Vote> | undefined;
   messages: Array<Message>;
   setMessages: (
-    messages: Message[] | ((messages: Message[]) => Message[]),
+    messages: Message[] | ((messages: Message[]) => Message[])
   ) => void;
   reload: (
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
   isReadonly: boolean;
   artifactStatus: UIArtifact['status'];
@@ -36,7 +36,7 @@ function PureArtifactMessages({
   return (
     <div
       ref={messagesContainerRef}
-      className="flex flex-col gap-4 h-full items-center overflow-y-scroll px-4 pt-20"
+      className="flex h-full flex-col items-center gap-4 overflow-y-scroll px-4 pt-20"
     >
       {messages.map((message, index) => (
         <PreviewMessage
@@ -57,7 +57,7 @@ function PureArtifactMessages({
 
       <div
         ref={messagesEndRef}
-        className="shrink-0 min-w-[24px] min-h-[24px]"
+        className="min-h-[24px] min-w-[24px] shrink-0"
       />
     </div>
   );
@@ -65,7 +65,7 @@ function PureArtifactMessages({
 
 function areEqual(
   prevProps: ArtifactMessagesProps,
-  nextProps: ArtifactMessagesProps,
+  nextProps: ArtifactMessagesProps
 ) {
   if (
     prevProps.artifactStatus === 'streaming' &&

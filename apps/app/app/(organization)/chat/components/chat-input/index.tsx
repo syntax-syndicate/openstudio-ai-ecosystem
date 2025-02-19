@@ -76,7 +76,8 @@ export const ChatInput = () => {
       setOpenMessageLimitModal(true);
       toast({
         title: 'Error',
-        description: 'You have reached the message limit for this month. Upgrade to continue.',
+        description:
+          'You have reached the message limit for this month. Upgrade to continue.',
         variant: 'destructive',
       });
       return;
@@ -196,11 +197,7 @@ export const ChatInput = () => {
                 size="lg"
               />
             ) : (
-              getAssistantIcon(
-                  preferences.defaultAssistant,
-                'lg',
-                true
-              )
+              getAssistantIcon(preferences.defaultAssistant, 'lg', true)
             )}
             <Flex direction="col" gap="xs" justify="center" items="center">
               <Type

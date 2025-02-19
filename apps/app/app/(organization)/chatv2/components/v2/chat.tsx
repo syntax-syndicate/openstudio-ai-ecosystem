@@ -10,11 +10,10 @@ import type { Vote } from '@repo/backend/schema';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import useSWR, { useSWRConfig } from 'swr';
-import { MultimodalInput } from './multimodal-input';
-import { ChatTopNav } from '../../../chat/components/chat-input/chat-top-nav';
-import { Messages } from './messages';
-import { ChatHeader } from './chat-header';
 import { Artifact } from './artifact';
+import { ChatHeader } from './chat-header';
+import { Messages } from './messages';
+import { MultimodalInput } from './multimodal-input';
 export function Chat({
   id,
   initialMessages,
@@ -89,9 +88,24 @@ export function Chat({
           isReadonly={false}
           isArtifactVisible={isArtifactVisible}
         />
-        <form className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
+        <form className="mx-auto flex w-full gap-2 px-4 pb-4 md:max-w-3xl md:pb-6">
           <MultimodalInput
             chatId={id}
+            input={input}
+            setInput={setInput}
+            handleSubmit={handleSubmit}
+            isLoading={isLoading}
+            stop={stop}
+            attachments={attachments}
+            setAttachments={setAttachments}
+            messages={messages}
+            setMessages={setMessages}
+            append={append}
+          />
+        </form>
+
+        <Artifact
+          chatId={id}
           input={input}
           setInput={setInput}
           handleSubmit={handleSubmit}
@@ -99,25 +113,10 @@ export function Chat({
           stop={stop}
           attachments={attachments}
           setAttachments={setAttachments}
+          append={append}
           messages={messages}
           setMessages={setMessages}
-          append={append}
-        />
-        </form>
-
-        <Artifact
-        chatId={id}
-        input={input}
-        setInput={setInput}
-        handleSubmit={handleSubmit}
-        isLoading={isLoading}
-        stop={stop}
-        attachments={attachments}
-        setAttachments={setAttachments}
-        append={append}
-        messages={messages}
-        setMessages={setMessages}
-        reload={reload}
+          reload={reload}
           votes={votes}
           isReadonly={false}
         />

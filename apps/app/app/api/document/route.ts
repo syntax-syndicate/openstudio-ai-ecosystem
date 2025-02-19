@@ -1,10 +1,10 @@
-import { currentUser } from '@repo/backend/auth/utils';
-import { ArtifactKind } from '@/app/(organization)/chatv2/components/v2/artifact';
+import type { ArtifactKind } from '@/app/(organization)/chatv2/components/v2/artifact';
 import {
   deleteDocumentsByIdAfterTimestamp,
   getDocumentsById,
   saveDocument,
 } from '@/lib/queries';
+import { currentUser } from '@repo/backend/auth/utils';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
