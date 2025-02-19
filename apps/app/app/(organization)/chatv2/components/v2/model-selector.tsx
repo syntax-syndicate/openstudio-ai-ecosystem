@@ -3,6 +3,7 @@
 import { startTransition, useMemo, useOptimistic, useState } from 'react';
 
 import { saveChatModelAsCookie } from '@/lib/actions';
+import { chatModels } from '@/lib/ai/model';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   DropdownMenu,
@@ -10,10 +11,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
-import { chatModels } from '@/lib/ai/model';
 import { cn } from '@repo/design-system/lib/utils';
 
-import { CheckCircleFillIcon, ChevronDownIcon } from '@repo/design-system/components/ui/icons';
+import {
+  CheckCircleFillIcon,
+  ChevronDownIcon,
+} from '@repo/design-system/components/ui/icons';
 
 export function ModelSelector({
   selectedModelId,
@@ -27,7 +30,7 @@ export function ModelSelector({
 
   const selectedChatModel = useMemo(
     () => chatModels.find((chatModel) => chatModel.id === optimisticModelId),
-    [optimisticModelId],
+    [optimisticModelId]
   );
 
   return (
@@ -35,10 +38,10 @@ export function ModelSelector({
       <DropdownMenuTrigger
         className={cn(
           'w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
-          className,
+          className
         )}
       >
-        <Button variant="outline" className="md:px-2 md:h-[34px]">
+        <Button variant="outline" className="md:h-[34px] md:px-2">
           {selectedChatModel?.name}
           <ChevronDownIcon />
         </Button>
@@ -58,17 +61,17 @@ export function ModelSelector({
                   saveChatModelAsCookie(id);
                 });
               }}
-              className="gap-4 group/item flex flex-row justify-between items-center"
+              className="group/item flex flex-row items-center justify-between gap-4"
               data-active={id === optimisticModelId}
             >
-              <div className="flex flex-col gap-1 items-start">
+              <div className="flex flex-col items-start gap-1">
                 <div>{chatModel.name}</div>
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   {chatModel.description}
                 </div>
               </div>
 
-              <div className="text-foreground dark:text-foreground opacity-0 group-data-[active=true]/item:opacity-100">
+              <div className="text-foreground opacity-0 group-data-[active=true]/item:opacity-100 dark:text-foreground">
                 <CheckCircleFillIcon />
               </div>
             </DropdownMenuItem>

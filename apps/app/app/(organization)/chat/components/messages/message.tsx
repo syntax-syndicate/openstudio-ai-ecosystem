@@ -14,7 +14,6 @@ import { Flex } from '@repo/design-system/components/ui/flex';
 import { cn } from '@repo/design-system/lib/utils';
 import { type FC, forwardRef } from 'react';
 
-
 export type TMessage = {
   message: TChatMessage;
   isLast: boolean;
@@ -37,7 +36,7 @@ const CustomTrigger = forwardRef<
 
 CustomTrigger.displayName = 'CustomTrigger';
 
-export const Message: FC<TMessage> = ({ message, isLast}) => {
+export const Message: FC<TMessage> = ({ message, isLast }) => {
   return (
     <Accordion
       type="single"

@@ -1,10 +1,9 @@
-import { z } from 'zod';
-import { DataStreamWriter, streamObject, tool, openai } from '@repo/ai';
 import { getDocumentById, saveSuggestions } from '@/lib/queries';
-import { Suggestion } from '@repo/backend/schema';
 import { generateUUID } from '@/lib/utils';
-import { myProvider } from '@/lib/ai/model';
-import { User } from '@repo/backend/auth';
+import { type DataStreamWriter, openai, streamObject, tool } from '@repo/ai';
+import type { User } from '@repo/backend/auth';
+import type { Suggestion } from '@repo/backend/schema';
+import { z } from 'zod';
 
 interface RequestSuggestionsProps {
   user: User;

@@ -1,8 +1,15 @@
 import { generateTitleFromUserMessage } from '@/lib/actions';
 import { systemPrompt } from '@/lib/ai/prompts';
 import { createDocument } from '@/lib/ai/tools/create-document';
+import { getWeather } from '@/lib/ai/tools/get-weather';
+import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
 import { updateDocument } from '@/lib/ai/tools/update-document';
-import { deleteChatById, getChatById, saveChat, saveMessages } from '@/lib/queries';
+import {
+  deleteChatById,
+  getChatById,
+  saveChat,
+  saveMessages,
+} from '@/lib/queries';
 import { generateUUID, getMostRecentUserMessage } from '@/lib/utils';
 import { sanitizeResponseMessages } from '@/lib/utils';
 import {
@@ -14,8 +21,8 @@ import {
 } from '@repo/ai';
 import { currentUser } from '@repo/backend/auth/utils';
 import type { TLLMRunConfig } from '@repo/backend/types';
-import { getWeather } from '@/lib/ai/tools/get-weather';
-import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
+
+export const maxDuration = 90;
 
 export async function POST(request: Request) {
   const {
@@ -58,13 +65,22 @@ export async function POST(request: Request) {
   });
 
   return createDataStreamResponse({
+    headers: {
+      'Transfer-Encoding': 'chunked',
+      Connection: 'keep-alive',
+    },
     execute: (dataStream) => {
       const result = streamText({
         //TODO: remove hardcoded model later
         model: openai('gpt-4o-mini'),
         system: systemPrompt({ selectedChatModel }),
         messages,
-        experimental_activeTools: ['getWeather', 'createDocument', 'updateDocument', 'requestSuggestions'],
+        experimental_activeTools: [
+          'getWeather',
+          'createDocument',
+          'updateDocument',
+          'requestSuggestions',
+        ],
         experimental_transform: smoothStream({ chunking: 'word' }),
         experimental_generateMessageId: generateUUID,
         tools: {
@@ -82,7 +98,10 @@ export async function POST(request: Request) {
                 reasoning,
               });
 
-              console.log('sanitizedResponseMessages', sanitizedResponseMessages);
+              console.log(
+                'sanitizedResponseMessages',
+                sanitizedResponseMessages
+              );
               await saveMessages({
                 messages: sanitizedResponseMessages.map((message) => {
                   return {

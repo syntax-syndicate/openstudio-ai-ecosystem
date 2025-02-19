@@ -8,7 +8,7 @@ import { renderToString } from 'react-dom/server';
 import { Markdown } from '@/app/(organization)/chatv2/components/v2/markdown';
 
 import { documentSchema } from './config';
-import { createSuggestionWidget, type UISuggestion } from './suggestions';
+import { type UISuggestion, createSuggestionWidget } from './suggestions';
 
 export const buildDocumentFromContent = (content: string) => {
   const parser = DOMParser.fromSchema(documentSchema);
@@ -24,7 +24,7 @@ export const buildContentFromDocument = (document: Node) => {
 
 export const createDecorations = (
   suggestions: Array<UISuggestion>,
-  view: EditorView,
+  view: EditorView
 ) => {
   const decorations: Array<Decoration> = [];
 
@@ -39,8 +39,8 @@ export const createDecorations = (
         {
           suggestionId: suggestion.id,
           type: 'highlight',
-        },
-      ),
+        }
+      )
     );
 
     decorations.push(
@@ -53,8 +53,8 @@ export const createDecorations = (
         {
           suggestionId: suggestion.id,
           type: 'widget',
-        },
-      ),
+        }
+      )
     );
   }
 

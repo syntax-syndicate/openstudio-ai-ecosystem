@@ -2,31 +2,32 @@
 
 import type { ChatRequestOptions, Message } from '@repo/ai';
 import { AnimatePresence, motion } from 'framer-motion';
-import { memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 
 import type { Vote } from '@repo/backend/schema';
-import { Mdx } from '@/app/(organization)/chat/components/mdx';
 
-import { DocumentToolCall, DocumentToolResult } from './document';
+import { Markdown } from '@/app/(organization)/chatv2/components/v2/markdown';
+import { useAssistantUtils } from '@/hooks/use-assistant-utils';
+import { Button } from '@repo/design-system/components/ui/button';
 import {
-  ChevronDownIcon,
-  LoaderIcon,
   PencilEditIcon,
   SparklesIcon,
 } from '@repo/design-system/components/ui/icons';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@repo/design-system/components/ui/tooltip';
+import { cn } from '@repo/design-system/lib/utils';
+import equal from 'fast-deep-equal';
+import { DocumentToolCall, DocumentToolResult } from './document';
+import { DocumentPreview } from './document-preview';
 // import { Markdown } from './markdown';
 import { MessageActions } from './message-actions';
+import { MessageEditor } from './message-editor';
+import { MessageReasoning } from './message-reasoning';
 import { PreviewAttachment } from './preview-attachment';
 import { Weather } from './weather';
-import equal from 'fast-deep-equal';
-import { cn } from '@repo/design-system/lib/utils';
-import { Button } from '@repo/design-system/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/design-system/components/ui/tooltip';
-import { MessageEditor } from './message-editor';
-import { DocumentPreview } from './document-preview';
-import { MessageReasoning } from './message-reasoning';
-import { useAssistantUtils } from '@/hooks/use-assistant-utils';
-import { Markdown } from '@/app/(organization)/chatv2/components/v2/markdown';
 
 const PurePreviewMessage = ({
   chatId,
@@ -42,47 +43,45 @@ const PurePreviewMessage = ({
   vote: Vote | undefined;
   isLoading: boolean;
   setMessages: (
-    messages: Message[] | ((messages: Message[]) => Message[]),
+    messages: Message[] | ((messages: Message[]) => Message[])
   ) => void;
   reload: (
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
   isReadonly: boolean;
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   console.log(message);
-  const {
-    getAssistantIcon,
-  } = useAssistantUtils();
+  const { getAssistantIcon } = useAssistantUtils();
 
   return (
     <AnimatePresence>
       <motion.div
-        className="w-full mx-auto max-w-3xl px-4 group/message"
+        className="group/message mx-auto w-full max-w-3xl px-4"
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         data-role={message.role}
       >
         <div
           className={cn(
-            'flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl',
+            'flex w-full gap-4 group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl',
             {
               'w-full': mode === 'edit',
               'group-data-[role=user]/message:w-fit': mode !== 'edit',
-            },
+            }
           )}
         >
           {message.role === 'assistant' && (
-            <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border bg-background">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-border">
               <div className="translate-y-px">
                 {/* <SparklesIcon size={14} /> */}
                 {/* {getAssistantIcon(message.runConfig.assistant.key, 'sm')} */}
-                {getAssistantIcon("gpt-4o-mini", 'sm')}
+                {getAssistantIcon('gpt-4o-mini', 'sm')}
               </div>
             </div>
           )}
 
-          <div className="flex flex-col gap-4 w-full">
+          <div className="flex w-full flex-col gap-4">
             {message.experimental_attachments && (
               <div className="flex flex-row justify-end gap-2">
                 {message.experimental_attachments.map((attachment) => (
@@ -102,13 +101,13 @@ const PurePreviewMessage = ({
             )}
 
             {(message.content || message.reasoning) && mode === 'view' && (
-              <div className="flex flex-row gap-2 items-start">
+              <div className="flex flex-row items-start gap-2">
                 {message.role === 'user' && !isReadonly && (
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
                         variant="ghost"
-                        className="px-2 h-fit rounded-full text-muted-foreground opacity-0 group-hover/message:opacity-100"
+                        className="h-fit rounded-full px-2 text-muted-foreground opacity-0 group-hover/message:opacity-100"
                         onClick={() => {
                           setMode('edit');
                         }}
@@ -122,22 +121,22 @@ const PurePreviewMessage = ({
 
                 <div
                   className={cn('flex flex-col gap-4', {
-                    'bg-background px-3 py-2 rounded-xl':
+                    'rounded-xl bg-background px-3 py-2':
                       message.role === 'user',
                   })}
                 >
-                    {/* <Mdx
+                  {/* <Mdx
             message={message.content as string}
             animate={!!isLoading}
             messageId={message.id}
           /> */}
-          <Markdown>{message.content as string}</Markdown>
+                  <Markdown>{message.content as string}</Markdown>
                 </div>
               </div>
             )}
 
             {message.content && mode === 'edit' && (
-              <div className="flex flex-row gap-2 items-start">
+              <div className="flex flex-row items-start gap-2">
                 <div className="size-8" />
 
                 <MessageEditor
@@ -167,7 +166,6 @@ const PurePreviewMessage = ({
                             isReadonly={isReadonly}
                             result={result}
                           />
-                          
                         ) : toolName === 'updateDocument' ? (
                           <DocumentToolResult
                             type="update"
@@ -196,8 +194,7 @@ const PurePreviewMessage = ({
                       {toolName === 'getWeather' ? (
                         <Weather />
                       ) : toolName === 'createDocument' ? (
-                            <DocumentPreview isReadonly={isReadonly} args={args} />
-                            
+                        <DocumentPreview isReadonly={isReadonly} args={args} />
                       ) : toolName === 'updateDocument' ? (
                         <DocumentToolCall
                           type="update"
@@ -243,14 +240,14 @@ export const PreviewMessage = memo(
     if (
       !equal(
         prevProps.message.toolInvocations,
-        nextProps.message.toolInvocations,
+        nextProps.message.toolInvocations
       )
     )
       return false;
     if (!equal(prevProps.vote, nextProps.vote)) return false;
 
     return true;
-  },
+  }
 );
 
 export const ThinkingMessage = () => {
@@ -258,24 +255,24 @@ export const ThinkingMessage = () => {
 
   return (
     <motion.div
-      className="w-full mx-auto max-w-3xl px-4 group/message "
+      className="group/message mx-auto w-full max-w-3xl px-4 "
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1, transition: { delay: 1 } }}
       data-role={role}
     >
       <div
         className={cn(
-          'flex gap-4 group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl',
+          'flex w-full gap-4 rounded-xl group-data-[role=user]/message:ml-auto group-data-[role=user]/message:w-fit group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:px-3 group-data-[role=user]/message:py-2',
           {
             'group-data-[role=user]/message:bg-muted': true,
-          },
+          }
         )}
       >
-        <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-full ring-1 ring-border">
           <SparklesIcon size={14} />
         </div>
 
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex w-full flex-col gap-2">
           <div className="flex flex-col gap-4 text-muted-foreground">
             Thinking...
           </div>

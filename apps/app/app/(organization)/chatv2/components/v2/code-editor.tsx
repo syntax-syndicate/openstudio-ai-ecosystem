@@ -1,12 +1,12 @@
 'use client';
 
-import { EditorView } from '@codemirror/view';
-import { EditorState, Transaction } from '@codemirror/state';
 import { python } from '@codemirror/lang-python';
+import { EditorState, Transaction } from '@codemirror/state';
 import { oneDark } from '@codemirror/theme-one-dark';
+import { EditorView } from '@codemirror/view';
+import type { Suggestion } from '@repo/backend/schema';
 import { basicSetup } from 'codemirror';
-import React, { memo, useEffect, useRef } from 'react';
-import { Suggestion } from '@repo/backend/schema';
+import { memo, useEffect, useRef } from 'react';
 
 type EditorProps = {
   content: string;
@@ -49,7 +49,7 @@ function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
       const updateListener = EditorView.updateListener.of((update) => {
         if (update.docChanged) {
           const transaction = update.transactions.find(
-            (tr) => !tr.annotation(Transaction.remote),
+            (tr) => !tr.annotation(Transaction.remote)
           );
 
           if (transaction) {
@@ -92,7 +92,7 @@ function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
 
   return (
     <div
-      className="relative not-prose w-full pb-[calc(80dvh)] text-sm"
+      className="not-prose relative w-full pb-[calc(80dvh)] text-sm"
       ref={containerRef}
     />
   );

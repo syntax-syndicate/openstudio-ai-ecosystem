@@ -4,7 +4,6 @@ import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom';
 import type { TChatMessage } from '@/types';
 import { useEffect, useMemo } from 'react';
 
-
 export const PreviousMessages = () => {
   const { store } = useChatContext();
   const messages = store((state) => state.messages) || [];
@@ -14,20 +13,14 @@ export const PreviousMessages = () => {
 
   const renderMessage = (message: TChatMessage, index: number) => {
     const isLast = !hasCurrentMessage && messages.length - 1 === index;
-    return (
-      <Message
-        message={message}
-        isLast={isLast}
-        key={message.id}
-      />
-    );
+    return <Message message={message} isLast={isLast} key={message.id} />;
   };
 
-    useEffect(() => {
-      if (messages?.length) {
-        scrollToBottom();
-      }
-    }, [messages.length]);
+  useEffect(() => {
+    if (messages?.length) {
+      scrollToBottom();
+    }
+  }, [messages.length]);
 
   const previousMessages = useMemo(() => {
     return messages.map(renderMessage);

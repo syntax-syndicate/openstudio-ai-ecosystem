@@ -1,12 +1,11 @@
-
-import type { Viewport } from 'next';
+import { AppSidebar } from '@/app/(organization)/chatv2/components/v2/app-sidebar';
+import { PreferenceProvider } from '@/context';
+import { currentUser } from '@repo/backend/auth/utils';
 import { SidebarProvider } from '@repo/design-system/components/ui/sidebar';
 import { SidebarInset } from '@repo/design-system/components/ui/sidebar';
-import { AppSidebar } from '@/app/(organization)/chatv2/components/v2/app-sidebar';
-import Script from 'next/script';
-import { currentUser } from '@repo/backend/auth/utils';
+import type { Viewport } from 'next';
 import { cookies } from 'next/headers';
-import { PreferenceProvider } from '@/context';
+import Script from 'next/script';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -30,10 +29,10 @@ export default async function ChatLayout({
         strategy="beforeInteractive"
       />
       <PreferenceProvider>
-      <SidebarProvider defaultOpen={!isCollapsed}>
-        <AppSidebar user={user!} />
-        <SidebarInset>{children}</SidebarInset>
-      </SidebarProvider>
+        <SidebarProvider defaultOpen={!isCollapsed}>
+          <AppSidebar user={user!} />
+          <SidebarInset>{children}</SidebarInset>
+        </SidebarProvider>
       </PreferenceProvider>
     </>
   );

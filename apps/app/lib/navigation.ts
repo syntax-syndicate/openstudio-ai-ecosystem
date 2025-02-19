@@ -2,9 +2,9 @@ import {
   type ActivityIcon,
   CogIcon,
   HomeIcon,
+  MessageCircleCodeIcon,
   MessageCircleIcon,
   UserIcon,
-  MessageCircleCodeIcon
 } from 'lucide-react';
 
 export type SidebarPage = {
@@ -35,7 +35,6 @@ export const chat: SidebarPage = {
   href: '/chat',
   active: (pathname) => pathname === '/chat',
 };
-
 
 export const chatv2: SidebarPage = {
   icon: MessageCircleCodeIcon,

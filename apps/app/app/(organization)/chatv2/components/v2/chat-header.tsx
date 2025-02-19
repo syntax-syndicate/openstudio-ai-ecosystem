@@ -1,27 +1,29 @@
 'use client';
-
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useWindowSize } from 'usehooks-ts';
 
-import { ModelSelector } from './model-selector';
-import { SidebarToggle } from '@repo/design-system/components/ui/sidebar-toggle';
 import { Button } from '@repo/design-system/components/ui/button';
-import { PlusIcon, VercelIcon } from '@repo/design-system/components/ui/icons';
+import { PlusIcon } from '@repo/design-system/components/ui/icons';
 import { useSidebar } from '@repo/design-system/components/ui/sidebar';
+import { SidebarToggle } from '@repo/design-system/components/ui/sidebar-toggle';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@repo/design-system/components/ui/tooltip';
 import { memo } from 'react';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/design-system/components/ui/tooltip';
+import { ModelSelector } from './model-selector';
 // import { VisibilityType, VisibilitySelector } from './visibility-selector';
 
 function PureChatHeader({
   chatId,
   selectedModelId,
-//   selectedVisibilityType,
+  //   selectedVisibilityType,
   isReadonly,
 }: {
   chatId: string;
   selectedModelId: string;
-//   selectedVisibilityType: VisibilityType;
+  //   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
 }) {
   const router = useRouter();
@@ -30,15 +32,15 @@ function PureChatHeader({
   const { width: windowWidth } = useWindowSize();
 
   return (
-    <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
+    <header className="sticky top-0 flex items-center gap-2 bg-background px-2 py-1.5 md:px-2">
       <SidebarToggle />
 
       {(!open || windowWidth < 768) && (
         <Tooltip>
-          <TooltipTrigger >
+          <TooltipTrigger>
             <Button
               variant="outline"
-              className="order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
+              className="order-2 ml-auto px-2 md:order-1 md:ml-0 md:h-fit md:px-2"
               onClick={() => {
                 router.push('/chatv2');
                 router.refresh();

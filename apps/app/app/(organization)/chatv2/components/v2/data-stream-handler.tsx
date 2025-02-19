@@ -4,7 +4,7 @@ import { initialArtifactData, useArtifact } from '@/hooks/use-artifact';
 import { useChat } from '@repo/ai/lib/react';
 import type { Suggestion } from '@repo/backend/schema';
 import { useEffect, useRef } from 'react';
-import { type ArtifactKind, artifactDefinitions, type UIArtifact } from './artifact';
+import { type ArtifactKind, artifactDefinitions } from './artifact';
 
 export type DataStreamDelta = {
   type:

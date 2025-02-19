@@ -1,10 +1,10 @@
 import { Chat } from '@/app/(organization)/chatv2/components/v2/chat';
+import { DEFAULT_CHAT_MODEL } from '@/lib/ai/model';
 import { getChatById, getMessagesByChatId } from '@/lib/queries';
 import { convertToUIMessages } from '@/lib/utils';
 import { currentUser } from '@repo/backend/auth/utils';
-import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
-import { DEFAULT_CHAT_MODEL } from '@/lib/ai/model';
+import { notFound } from 'next/navigation';
 
 export default async function ChatSessionPage(props: {
   params: Promise<{ id: string }>;

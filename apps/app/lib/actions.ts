@@ -2,9 +2,9 @@
 
 import { generateText, openai } from '@repo/ai';
 import type { Message } from '@repo/ai';
+import { cookies } from 'next/headers';
 import { getMessageById } from './queries';
 import { deleteMessagesByChatIdAfterTimestamp } from './queries';
-import { cookies } from 'next/headers';
 
 export async function generateTitleFromUserMessage({
   message,
@@ -23,7 +23,6 @@ export async function generateTitleFromUserMessage({
 
   return title;
 }
-
 
 export async function deleteTrailingMessages({ id }: { id: string }) {
   const [message] = await getMessageById({ id });

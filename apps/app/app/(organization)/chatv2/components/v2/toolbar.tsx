@@ -1,6 +1,13 @@
 'use client';
 
+import { sanitizeUIMessages } from '@/lib/utils';
 import type { ChatRequestOptions, CreateMessage, Message } from '@repo/ai';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@repo/design-system/components/ui/tooltip';
 import { cn } from '@repo/design-system/lib/utils';
 import {
   AnimatePresence,
@@ -8,38 +15,26 @@ import {
   useMotionValue,
   useTransform,
 } from 'framer-motion';
+import { nanoid } from 'nanoid';
 import {
   type Dispatch,
-  memo,
-  ReactNode,
+  type ReactNode,
   type SetStateAction,
+  memo,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
-import { nanoid } from 'nanoid';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@repo/design-system/components/ui/tooltip';
-import { sanitizeUIMessages } from '@/lib/utils';
 
+import type { UseChatHelpers } from '@repo/ai/lib/react';
 import {
   ArrowUpIcon,
-  CodeIcon,
-  LogsIcon,
-  MessageIcon,
-  PenIcon,
-  SparklesIcon,
   StopIcon,
   SummarizeIcon,
 } from '@repo/design-system/components/ui/icons';
-import { artifactDefinitions, ArtifactKind } from './artifact';
-import { ArtifactToolbarItem } from './create-artifact';
-import { UseChatHelpers } from '@repo/ai/lib/react';
+import { type ArtifactKind, artifactDefinitions } from './artifact';
+import type { ArtifactToolbarItem } from './create-artifact';
 
 type ToolProps = {
   description: string;
@@ -51,7 +46,7 @@ type ToolProps = {
   isAnimating: boolean;
   append: (
     message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
   onClick: ({
     appendMessage,
@@ -103,8 +98,8 @@ const Tool = ({
     <Tooltip open={isHovered && !isAnimating}>
       <TooltipTrigger asChild>
         <motion.div
-          className={cn('p-3 rounded-full', {
-            'bg-primary !text-primary-foreground': selectedTool === description,
+          className={cn('rounded-full p-3', {
+            '!text-primary-foreground bg-primary': selectedTool === description,
           })}
           onHoverStart={() => {
             setIsHovered(true);
@@ -136,7 +131,7 @@ const Tool = ({
       <TooltipContent
         side="left"
         sideOffset={16}
-        className="bg-foreground text-background rounded-2xl p-3 px-4"
+        className="rounded-2xl bg-foreground p-3 px-4 text-background"
       >
         {description}
       </TooltipContent>
@@ -155,7 +150,7 @@ const ReadingLevelSelector = ({
   isAnimating: boolean;
   append: (
     message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
 }) => {
   const LEVELS = [
@@ -185,11 +180,11 @@ const ReadingLevelSelector = ({
   }, [yToLevel]);
 
   return (
-    <div className="relative flex flex-col justify-end items-center">
+    <div className="relative flex flex-col items-center justify-end">
       {randomArr.map((id) => (
         <motion.div
           key={id}
-          className="size-[40px] flex flex-row items-center justify-center"
+          className="flex size-[40px] flex-row items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -204,11 +199,11 @@ const ReadingLevelSelector = ({
           <TooltipTrigger asChild>
             <motion.div
               className={cn(
-                'absolute bg-background p-3 border rounded-full flex flex-row items-center',
+                'absolute flex flex-row items-center rounded-full border bg-background p-3',
                 {
                   'bg-primary text-primary-foreground': currentLevel !== 2,
                   'bg-background text-foreground': currentLevel === 2,
-                },
+                }
               )}
               style={{ y }}
               drag="y"
@@ -245,7 +240,7 @@ const ReadingLevelSelector = ({
           <TooltipContent
             side="left"
             sideOffset={16}
-            className="bg-foreground text-background text-sm rounded-2xl p-3 px-4"
+            className="rounded-2xl bg-foreground p-3 px-4 text-background text-sm"
           >
             {LEVELS[currentLevel]}
           </TooltipContent>
@@ -269,7 +264,7 @@ export const Tools = ({
   setSelectedTool: Dispatch<SetStateAction<string | null>>;
   append: (
     message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
   isAnimating: boolean;
   setIsToolbarVisible: Dispatch<SetStateAction<boolean>>;
@@ -329,7 +324,7 @@ const PureToolbar = ({
   isLoading: boolean;
   append: (
     message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
   stop: () => void;
   setMessages: Dispatch<SetStateAction<Message[]>>;
@@ -380,7 +375,7 @@ const PureToolbar = ({
   }, [isLoading, setIsToolbarVisible]);
 
   const artifactDefinition = artifactDefinitions.find(
-    (definition) => definition.kind === artifactKind,
+    (definition) => definition.kind === artifactKind
   );
 
   if (!artifactDefinition) {
@@ -396,7 +391,7 @@ const PureToolbar = ({
   return (
     <TooltipProvider delayDuration={0}>
       <motion.div
-        className="cursor-pointer absolute right-6 bottom-6 p-1.5 border rounded-full shadow-lg bg-background flex flex-col justify-end"
+        className="absolute right-6 bottom-6 flex cursor-pointer flex-col justify-end rounded-full border bg-background p-1.5 shadow-lg"
         initial={{ opacity: 0, y: -20, scale: 1 }}
         animate={
           isToolbarVisible

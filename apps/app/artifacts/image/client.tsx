@@ -1,6 +1,10 @@
 import { Artifact } from '@/app/(organization)/chatv2/components/v2/create-artifact';
-import { CopyIcon, RedoIcon, UndoIcon } from '@repo/design-system/components/ui/icons';
 import { ImageEditor } from '@/app/(organization)/chatv2/components/v2/image-editor';
+import {
+  CopyIcon,
+  RedoIcon,
+  UndoIcon,
+} from '@repo/design-system/components/ui/icons';
 import { toast } from 'sonner';
 
 export const imageArtifact = new Artifact({

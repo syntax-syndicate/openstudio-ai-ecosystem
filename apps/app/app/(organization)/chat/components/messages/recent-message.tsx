@@ -6,15 +6,14 @@ import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom';
 import { useTitleGenerator } from '@/hooks/use-title-generator';
 import { useEffect, useMemo } from 'react';
 
-
 export const RecentMessage = () => {
   const { store } = useChatContext();
   const currentMessage = store((state) => state.currentMessage);
   const isGenerating = store((state) => state.isGenerating);
   const prevMessagesIds = useMemo(
-  () => store.getState().messages.map((message) => message.id),
-  [store((state) => state.messages)]
-);
+    () => store.getState().messages.map((message) => message.id),
+    [store((state) => state.messages)]
+  );
   const setIsGenerating = store((state) => state.setIsGenerating);
   const setCurrentMessage = store((state) => state.setCurrentMessage);
   const { generateTitleForSession } = useTitleGenerator();
@@ -22,11 +21,11 @@ export const RecentMessage = () => {
   const { addMessageMutation } = useSessions();
   const { isAtBottom, scrollToBottom } = useScrollToBottom();
 
-    useEffect(() => {
-      if (currentMessage?.id && prevMessagesIds?.includes(currentMessage?.id)) {
-        setCurrentMessage(undefined);
-      }
-    }, [currentMessage?.id, prevMessagesIds?.length]);
+  useEffect(() => {
+    if (currentMessage?.id && prevMessagesIds?.includes(currentMessage?.id)) {
+      setCurrentMessage(undefined);
+    }
+  }, [currentMessage?.id, prevMessagesIds?.length]);
 
   useEffect(() => {
     if (
@@ -90,10 +89,7 @@ export const RecentMessage = () => {
   return (
     <>
       {currentMessage ? (
-        <Message
-          message={currentMessage}
-          isLast={true}
-        />
+        <Message message={currentMessage} isLast={true} />
       ) : null}
       <ChatScrollAnchor
         isAtBottom={isAtBottom}

@@ -1,5 +1,11 @@
-import { Artifact } from '@/app/(organization)/chatv2/components/v2/create-artifact';
 import { CodeEditor } from '@/app/(organization)/chatv2/components/v2/code-editor';
+import {
+  Console,
+  type ConsoleOutput,
+  type ConsoleOutputContent,
+} from '@/app/(organization)/chatv2/components/v2/console';
+import { Artifact } from '@/app/(organization)/chatv2/components/v2/create-artifact';
+import { generateUUID } from '@/lib/utils';
 import {
   CopyIcon,
   LogsIcon,
@@ -9,12 +15,6 @@ import {
   UndoIcon,
 } from '@repo/design-system/components/ui/icons';
 import { toast } from 'sonner';
-import { generateUUID } from '@/lib/utils';
-import {
-  Console,
-  ConsoleOutput,
-  ConsoleOutputContent,
-} from '@/app/(organization)/chatv2/components/v2/console';
 
 const OUTPUT_HANDLERS = {
   matplotlib: `
@@ -133,12 +133,12 @@ export const codeArtifact = new Artifact<'code', Metadata>({
         }));
 
         try {
-
-         // @ts-expect-error - loadPyodide is not defined
-         if (typeof globalThis.loadPyodide !== 'function') {
+          // @ts-expect-error - loadPyodide is not defined
+          if (typeof globalThis.loadPyodide !== 'function') {
             await new Promise((resolve, reject) => {
               const script = document.createElement('script');
-              script.src = 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js';
+              script.src =
+                'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js';
               script.onload = resolve;
               script.onerror = reject;
               document.head.appendChild(script);
@@ -180,12 +180,12 @@ export const codeArtifact = new Artifact<'code', Metadata>({
           for (const handler of requiredHandlers) {
             if (OUTPUT_HANDLERS[handler as keyof typeof OUTPUT_HANDLERS]) {
               await currentPyodideInstance.runPythonAsync(
-                OUTPUT_HANDLERS[handler as keyof typeof OUTPUT_HANDLERS],
+                OUTPUT_HANDLERS[handler as keyof typeof OUTPUT_HANDLERS]
               );
 
               if (handler === 'matplotlib') {
                 await currentPyodideInstance.runPythonAsync(
-                  'setup_matplotlib_output()',
+                  'setup_matplotlib_output()'
                 );
               }
             }
