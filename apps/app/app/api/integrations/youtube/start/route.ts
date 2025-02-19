@@ -40,7 +40,7 @@ export const GET = async (): Promise<Response> => {
     ],
     response_type: 'code',
     prompt: 'consent',
-    redirect_uri: `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/callbacks/youtube`,
+    redirect_uri: `https://app.openstudio.tech/callbacks/youtube`,
     state: state[0].id,
   });
 
