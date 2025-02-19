@@ -23,7 +23,6 @@ type YoutubeCallbackPageProperties = {
 const YoutubeCallbackPage = async (props: YoutubeCallbackPageProperties) => {
   const searchParams = await props.searchParams;
   const { code, state, error, error_description } = searchParams;
-  console.log('searchParams', searchParams);
   const [user, organizationId] = await Promise.all([
     currentUser(),
     currentOrganizationId(),
@@ -34,7 +33,6 @@ const YoutubeCallbackPage = async (props: YoutubeCallbackPageProperties) => {
   }
 
   const youtubeAuthData = await getOAuth2Client().getToken(code);
-  console.log(youtubeAuthData);
 
   if (!user || !organizationId || !code || !state) {
     notFound();
