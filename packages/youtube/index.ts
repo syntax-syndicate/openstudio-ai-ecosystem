@@ -90,7 +90,7 @@ export const getOAuth2Client = (): OAuth2Client => {
   const auth = new google.auth.OAuth2(
     process.env.YOUTUBE_CLIENT_ID,
     process.env.YOUTUBE_CLIENT_SECRET,
-    `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/callbacks/youtube`
+    `https://app.openstudio.tech/callbacks/youtube`
   );
 
   return auth;
