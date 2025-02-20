@@ -74,7 +74,6 @@ export const createChatStore = () =>
     setAbortController: (abortController) => set({ abortController }),
     stopGeneration: () => {
       const { abortController } = get();
-      console.log('abortController', abortController);
       abortController?.abort('cancel');
     },
     addMessage: (message) => {

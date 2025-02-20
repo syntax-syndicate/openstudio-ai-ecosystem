@@ -55,7 +55,6 @@ export const AdvancedEditor = () => {
   const debouncedUpdates = useDebouncedCallback(
     async (editor: EditorInstance) => {
       const json = editor.getJSON();
-      console.log('json', json);
       setCharsCount(editor.storage.characterCount.words());
       window.localStorage.setItem(
         'html-content',

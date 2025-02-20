@@ -30,7 +30,6 @@ const IntegrationsSettings = async () => {
       .where(eq(youtubeIntegration.organizationId, currentOrganization))
       .limit(1),
   ]);
-  console.log('youtubeIntegrationData', youtubeIntegrationData);
 
   const integrations = [
     {

@@ -79,7 +79,6 @@ export async function getChatById({ id }: { id: string }) {
 
 export async function saveMessages({ messages }: { messages: Array<Message> }) {
   try {
-    console.log('messages', messages);
     return await database.insert(message).values(messages);
   } catch (error) {
     console.error('Failed to save messages in database', error);
@@ -156,7 +155,6 @@ export async function saveDocument({
   userId: string;
   organizationId: string;
 }) {
-  console.log('saveDocument', id, title, kind, content, userId, organizationId);
   try {
     return await database.insert(document).values({
       id,

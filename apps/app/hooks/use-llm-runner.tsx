@@ -3,18 +3,15 @@ import { useChatContext, usePreferenceContext } from '@/context';
 import { useRootContext } from '@/context/root';
 import { env } from '@/env';
 import { injectPresetValues } from '@/helper/preset-prompt-values';
-import {
-  constructMessagePromptNew,
-  constructPrompt,
-} from '@/helper/promptUtil';
+import { constructMessagePrompt, constructPrompt } from '@/helper/promptUtil';
 import { generateShortUUID } from '@/helper/utils';
 import { saveAiUsage } from '@/lib/utils/ai-usage';
 import { modelService } from '@/services/models';
 import { getApiKey } from '@/services/preferences/client';
 import { getMessages, getSessionById } from '@/services/sessions/client';
-import type { TLLMRunConfig, TProvider } from '@/types';
-import { smoothStream, streamText } from '@repo/ai';
+import type { TLLMRunConfig, TProvider, TStopReason } from '@/types';
 import { toast } from '@repo/design-system/hooks/use-toast';
+import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import moment from 'moment';
 import { useAssistantUtils, useTools } from '.';
 import { usePremium } from './use-premium';
@@ -160,103 +157,149 @@ export const useLLMRunner = () => {
       isPremium: isPremium,
     });
 
+    let agentExecutor: AgentExecutor | undefined;
+
+    const modifiedModel = Object.create(Object.getPrototypeOf(selectedModel));
+    Object.assign(modifiedModel, selectedModel);
+
+    modifiedModel.bindTools = (tools: any[], options: any) => {
+      return selectedModel?.bindTools?.(tools, {
+        ...options,
+        recursionLimit: 5,
+        signal: currentAbortController?.signal,
+      });
+    };
+
+    if (availableTools?.length) {
+      const agentWithTool = await createToolCallingAgent({
+        llm: modifiedModel as any,
+        tools: availableTools,
+        prompt: prompt as any,
+        streamRunnable: true,
+      });
+
+      agentExecutor = new AgentExecutor({
+        agent: agentWithTool as any,
+        tools: availableTools,
+        maxIterations: 5,
+      });
+    }
+    const chainWithoutTools = prompt.pipe(
+      selectedModel.bind({
+        signal: currentAbortController?.signal,
+      }) as any
+    );
+
     let streamedMessage = '';
 
-    const chatHistory = await constructMessagePromptNew({
-      messages: allPreviousMessages,
-      limit: messageLimit,
-      systemPrompt:
-        session.customAssistant?.systemPrompt ||
-        injectPresetValues(assistant.systemPrompt),
-      input: input || '',
-      context: context || '',
-    });
+    const executor =
+      availableTools?.length && agentExecutor
+        ? agentExecutor
+        : chainWithoutTools;
 
-    console.log('messageLimit', messageLimit);
-    const coreMessages = await constructMessagePromptNew({
-      systemPrompt:
-        session.customAssistant?.systemPrompt ||
-        injectPresetValues(assistant.systemPrompt),
-      input: input || '',
+    const chatHistory = await constructMessagePrompt({
       messages: allPreviousMessages,
       limit: messageLimit,
-      context: context || '',
     });
 
     try {
-      console.log(coreMessages);
-      const result = streamText({
-        model: selectedModel(selectedModelKey.key),
-        abortSignal: currentAbortController?.signal,
-        messages: coreMessages,
-        experimental_transform: smoothStream({
-          chunking: 'word',
-          delayInMs: 5,
-        }),
-        // experimental_activeTools: ['getWeather'],
-        // tools: {getWeather},
-        maxTokens:
-          { ...defaultPreferences, ...preferences }.maxTokens <=
-          selectedModelKey.maxOutputTokens
-            ? { ...defaultPreferences, ...preferences }.maxTokens
-            : selectedModelKey.maxOutputTokens,
-        // topP: Number(topP),
-        // maxRetries: 2,
-        // ...props,
-        onChunk({ chunk }) {
-          if (chunk.type === 'text-delta') {
-            // streamedMessage += chunk.textDelta;
-            // updateCurrentMessage({
-            //   isLoading: true,
-            //   rawAI: streamedMessage,
-            //   stop: false,
-            //   stopReason: undefined,
-            // });
-          }
+      const stream: any = await executor.invoke(
+        {
+          chat_history: chatHistory || [],
+          context,
+          input,
         },
-        async onFinish({ text, finishReason, usage, response }) {
-          console.log(text, finishReason, usage, response);
-          console.log('I am in onFinish');
+        {
+          maxConcurrency: 1,
+          recursionLimit: 3,
+          signal: currentAbortController?.signal,
+          callbacks: [
+            {
+              handleLLMStart: async () => {},
+              handleToolStart(
+                tool,
+                input,
+                runId,
+                parentRunId,
+                tags,
+                metadata,
+                name
+              ) {
+                name && addTool({ toolName: name, isLoading: true });
+              },
+              handleLLMNewToken: async (token: string) => {
+                if (currentAbortController?.signal.aborted) {
+                  updateCurrentMessage({
+        isLoading: false,
+        stop: true,
+                  });
+                  return;
+                }
+                streamedMessage += token;
+                updateCurrentMessage({
+                  isLoading: true,
+                  rawAI: streamedMessage,
+                  stop: false,
+                  stopReason: undefined,
+                });
+              },
+              handleChainEnd: async () => {},
+              handleLLMError: async (err: Error) => {
+                // Log this error
+                if (!currentAbortController?.signal.aborted) {
+                  toast({
+                    title: 'Error',
+                    description: 'Something went wrong',
+                    variant: 'destructive',
+                  });
+                }
 
-          updateCurrentMessage({
-            rawHuman: input,
-            rawAI: text,
-            isLoading: false,
-            image,
-            stop: true,
-            stopReason: 'finish',
-          });
+                const hasError: Record<string, boolean> = {
+                  cancel: currentAbortController?.signal.aborted,
+                  rateLimit:
+                    err.message.includes('429') &&
+                    !err.message.includes('chathub'),
+                  unauthorized: err.message.includes('401'),
+                };
 
-          await saveAiUsage({
-            email: user!.email!,
-            userId: user!.id,
-            organizationId: user!.user_metadata.organization_id,
-            model: selectedModelKey,
-            usage: {
-              input_tokens: usage.promptTokens || 0,
-              output_tokens: usage.completionTokens || 0,
-              total_tokens: usage.totalTokens || 0,
+                const stopReason = Object.keys(hasError).find(
+                  (value) => hasError[value]
+                ) as TStopReason;
+
+                updateCurrentMessage({
+                  isLoading: false,
+                  rawHuman: input,
+                  rawAI: streamedMessage,
+                  stop: true,
+                  errorMessage: getErrorMessage(err.message),
+                  stopReason: stopReason as any,
+                });
+              },
             },
-          });
-        },
+          ],
+        }
+      );
+
+      updateCurrentMessage({
+        rawHuman: input,
+        rawAI: stream?.content || stream?.output?.[0]?.text || stream?.output,
+        isLoading: false,
+        image,
+        stop: true,
+        stopReason: 'finish',
       });
 
-      console.log('result', result);
-
-      for await (const part of result.fullStream) {
-        switch (part.type) {
-          case 'text-delta': {
-            streamedMessage += part.textDelta;
-            updateCurrentMessage({
-              isLoading: true,
-              rawAI: streamedMessage,
-              stop: false,
-              stopReason: undefined,
-            });
-            break;
-          }
-        }
-      }
+      await saveAiUsage({
+        email: user!.email!,
+        userId: user!.id,
+        organizationId: user!.user_metadata.organization_id,
+        model: selectedModelKey,
+        usage: {
+          input_tokens: stream?.usage_metadata?.input_tokens || 0,
+          output_tokens: stream?.usage_metadata?.output_tokens || 0,
+          total_tokens: stream?.usage_metadata?.total_tokens || 0,
+        },
+      });
     } catch (err) {
       updateCurrentMessage({
         isLoading: false,

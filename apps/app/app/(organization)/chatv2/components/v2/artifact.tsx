@@ -111,9 +111,6 @@ function PureArtifact({
     fetcher
   );
 
-  console.log('documents', documents);
-  console.log('artifact', artifact);
-
   const [mode, setMode] = useState<'edit' | 'diff'>('edit');
   const [document, setDocument] = useState<Document | null>(null);
   const [currentVersionIndex, setCurrentVersionIndex] = useState(-1);
@@ -253,8 +250,6 @@ function PureArtifact({
     //@ts-ignore
     (definition) => definition.kind === artifact.kind
   );
-
-  console.log('artifactDefinition', artifactDefinition);
 
   if (!artifactDefinition) {
     throw new Error('Artifact definition not found!');

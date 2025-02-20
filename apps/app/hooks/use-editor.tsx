@@ -10,10 +10,12 @@ import { Placeholder } from '@tiptap/extension-placeholder';
 import { Text } from '@tiptap/extension-text';
 import { useEditor } from '@tiptap/react';
 import { useEffect } from 'react';
+import { useChatContext } from '@/context/chat';
+
 
 export const useChatEditor = () => {
-  // const { store } = useChatContext();
-  // const setEditor = store((state) => state.setEditor);
+  const { store } = useChatContext();
+  const setEditor = store((state) => state.setEditor);
   const editor = useEditor({
     extensions: [
       Document,
@@ -57,9 +59,9 @@ export const useChatEditor = () => {
       preserveWhitespace: 'full',
     },
   });
-  // useEffect(() => {
-  //   setEditor(editor);
-  // }, [editor]);
+  useEffect(() => {
+    setEditor(editor);
+  }, [editor]);
   useEffect(() => {
     if (editor) {
       editor.commands.focus('end');

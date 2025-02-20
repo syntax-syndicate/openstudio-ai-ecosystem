@@ -51,7 +51,6 @@ const PurePreviewMessage = ({
   isReadonly: boolean;
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
-  console.log(message);
   const { getAssistantIcon } = useAssistantUtils();
 
   return (

@@ -36,7 +36,6 @@ export function DataStreamHandler({ id }: { id: string }) {
       const artifactDefinition = artifactDefinitions.find(
         (artifactDefinition) => artifactDefinition.kind === artifact.kind
       );
-      console.log(artifactDefinition);
       if (artifactDefinition?.onStreamPart) {
         artifactDefinition.onStreamPart({
           streamPart: delta,
@@ -49,8 +48,6 @@ export function DataStreamHandler({ id }: { id: string }) {
         if (!draftArtifact) {
           return { ...initialArtifactData, status: 'streaming' };
         }
-
-        console.log(delta);
 
         switch (delta.type) {
           case 'id':

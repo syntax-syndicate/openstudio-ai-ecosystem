@@ -38,7 +38,6 @@ export async function POST(request: Request) {
   } = await request.json();
 
   const user = await currentUser();
-  console.log('user', user);
   if (!user) return new Response('Unauthorized', { status: 401 });
 
   const userMessage = getMostRecentUserMessage(messages);
@@ -92,16 +91,11 @@ export async function POST(request: Request) {
         onFinish: async ({ response, reasoning }) => {
           if (user.id) {
             try {
-              console.log('response', response);
               const sanitizedResponseMessages = sanitizeResponseMessages({
                 messages: response.messages,
                 reasoning,
               });
 
-              console.log(
-                'sanitizedResponseMessages',
-                sanitizedResponseMessages
-              );
               await saveMessages({
                 messages: sanitizedResponseMessages.map((message) => {
                   return {

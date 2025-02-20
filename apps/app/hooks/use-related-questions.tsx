@@ -1,11 +1,13 @@
 import { usePreferenceContext } from '@/context';
-import { modelService } from '@/services/models';
-import { getMessages } from '@/services/sessions/client';
-import { generateObject } from '@repo/ai';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { z } from 'zod';
 import { useAssistantUtils } from '.';
 import { usePremium } from './use-premium';
+import { getMessages } from '@/services/sessions/client';
+import { modelService } from '@/services/models';
+import { constructPrompt } from '@/helper/promptUtil';
+import { RunnableSequence } from '@langchain/core/runnables';
+import { configs } from '@/config';
 const parsingSchema = z.object({
   questions: z.array(z.string()).describe('list of questions'),
 });
@@ -35,9 +37,7 @@ export const useRelatedQuestions = () => {
 
     //check for apikey if not premium
 
-    const conditionCheck = isPremium
-      ? !assistant
-      : !assistant || !getApiKey(assistant.model.provider);
+    const conditionCheck = isPremium ? !assistant : !assistant || !getApiKey(assistant.model.provider)
 
     if (conditionCheck) {
       return [];
@@ -55,21 +55,29 @@ export const useRelatedQuestions = () => {
       isPremium: isPremium,
     });
 
+    const prompt = await constructPrompt({
+      hasMessages: false,
+      formatInstructions: true,
+      systemPrompt: configs.relatedQuestionsSystemPrompt,
+      memories: [],
+    });
+
     try {
-      const generation = await generateObject({
-        model: selectedModel(assistant!.model.key),
-        prompt: `
-        Given the initial message and the AI's response, act as a user and determine what you would ask or answer next based on the AI's response.
-        Initial Message: """ ${message.rawHuman} """
-        AI Response: """ ${message.rawAI} """
-        What would your next 2-3 short questions or response be as a user?
-        `,
-        schema: z.object({
-          questions: z.array(z.string()).describe('list of questions'),
-        }),
+      const chain = RunnableSequence.from([
+        prompt,
+        selectedModel as any,
+        parser as any,
+      ]);
+      const generation = await chain.invoke({
+        chat_history: [],
+        input: configs.relatedQuestionsUserPrompt(
+          message.rawHuman,
+          message.rawAI
+        ),
+        format_instructions: parser.getFormatInstructions(),
       });
 
-      return generation?.object?.questions || [];
+      return generation?.questions || [];
     } catch (error) {
       console.error(error);
       return [];
