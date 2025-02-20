@@ -37,6 +37,8 @@ export const GET = async (): Promise<Response> => {
       'https://www.googleapis.com/auth/youtube.upload',
       'https://www.googleapis.com/auth/youtube',
       'https://www.googleapis.com/auth/youtube.readonly',
+      'https://www.googleapis.com/auth/youtube.download',
+      'https://www.googleapis.com/auth/youtube.third-party-link.creator',
     ],
     response_type: 'code',
     prompt: 'consent',
