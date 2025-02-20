@@ -4,5 +4,10 @@
       "path": "/cron/keep-alive",
       "schedule": "0 1 * * *"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  }
 }
