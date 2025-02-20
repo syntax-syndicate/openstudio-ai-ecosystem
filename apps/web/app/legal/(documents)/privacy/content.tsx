@@ -5,6 +5,6 @@ import Content from './content.mdx';
 
 export default function PrivacyContent() {
   return (
-    <LegalPage date="2025-02-11" title="Privacy Policy" content={<Content />} />
+    <LegalPage date="2025-02-20" title="Privacy Policy" content={<Content />} />
   );
 }
