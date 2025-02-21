@@ -132,7 +132,7 @@ export const LoginForm = () => {
       </div>
       <Prose className="prose-sm text-center">
         <p className="text-muted-foreground">
-          Don't have an account? <Link href="/sign-up">Sign up</Link>
+          Don't have an account? <Link href="/sign-up" className='text-white'>Sign up</Link>
         </p>
       </Prose>
     </div>
