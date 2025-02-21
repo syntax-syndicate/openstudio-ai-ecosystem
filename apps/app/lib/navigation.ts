@@ -1,10 +1,13 @@
 import {
   type ActivityIcon,
   CogIcon,
+  FlameIcon,
   HomeIcon,
   MessageCircleCodeIcon,
   MessageCircleIcon,
+  PlaySquareIcon,
   UserIcon,
+  VideoIcon,
 } from 'lucide-react';
 
 export type SidebarPage = {
@@ -31,14 +34,14 @@ export const minime: SidebarPage = {
 
 export const chat: SidebarPage = {
   icon: MessageCircleIcon,
-  label: 'ChatHub Deprecated',
+  label: 'ChatHub',
   href: '/chat',
   active: (pathname) => pathname === '/chat',
 };
 
 export const chatv2: SidebarPage = {
   icon: MessageCircleCodeIcon,
-  label: 'ChatHub v2',
+  label: 'Artifacts',
   href: '/chatv2',
   active: (pathname) => pathname === '/chatv2',
 };
@@ -49,3 +52,31 @@ export const settings: SidebarPage = {
   href: '/settings',
   active: (pathname) => pathname.startsWith('/settings'),
 };
+
+export const tube: SidebarPage = {
+  icon: VideoIcon,
+  label: 'Tube',
+  href: '/tube',
+  active: (pathname) => pathname === '/tube',
+};
+
+export const tubeHome: SidebarPage = {
+  icon: HomeIcon,
+  label: 'Tube Home',
+  href: '/tube',
+  active: (pathname) => pathname === '/tube',
+};
+
+// export const tubeSubscribed: SidebarPage = {
+//   icon: PlaySquareIcon,
+//   label: 'Subscribed',
+//   href: '/tube/feed/subscribed',
+//   active: (pathname) => pathname === '/tube/feed/subscribed',
+// };
+
+// export const tubeTrending: SidebarPage = {
+//   icon: FlameIcon,
+//   label: 'Trending',
+//   href: '/tube/feed/trending',
+//   active: (pathname) => pathname === '/tube/feed/trending',
+// };
