@@ -1,5 +1,6 @@
 import '@repo/design-system/styles/globals.css';
 import { QueryProvider } from '@/providers/query-provider';
+import { TRPCProvider } from '@/trpc/client';
 import { AnalyticsProvider } from '@repo/analytics';
 import { DesignSystemProvider } from '@repo/design-system';
 import { fonts } from '@repo/design-system/lib/fonts';
@@ -49,12 +50,14 @@ type RootLayoutProperties = {
 const RootLayout = ({ children }: RootLayoutProperties) => (
   <html lang="en" className={fonts} suppressHydrationWarning>
     <body className="min-h-screen bg-backdrop">
-      <AnalyticsProvider>
-        <DesignSystemProvider>
-          <QueryProvider>{children}</QueryProvider>
-        </DesignSystemProvider>
-        <Toolbar />
-      </AnalyticsProvider>
+      <TRPCProvider>
+        <AnalyticsProvider>
+          <DesignSystemProvider>
+            <QueryProvider>{children}</QueryProvider>
+          </DesignSystemProvider>
+          <Toolbar />
+        </AnalyticsProvider>
+      </TRPCProvider>
     </body>
   </html>
 );
