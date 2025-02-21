@@ -17,6 +17,7 @@ import {
   TooltipTrigger,
 } from "@repo/design-system/components/ui/tooltip"
 import { ViewVerticalIcon } from "@radix-ui/react-icons"
+import {ArrowLeftDoubleIcon, ArrowRightDoubleIcon} from "@hugeicons/react"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -263,7 +264,7 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, open } = useSidebar()
 
   return (
     <Button
@@ -278,7 +279,7 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-      <ViewVerticalIcon />
+      {open ? <ArrowLeftDoubleIcon size={16} strokeWidth={2} /> : <ArrowRightDoubleIcon size={16} strokeWidth={2} />}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

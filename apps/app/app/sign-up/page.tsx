@@ -3,7 +3,7 @@ import { Logo } from '@repo/design-system/components/logo';
 import { createMetadata } from '@repo/seo/metadata';
 import type { Metadata } from 'next';
 import { SignupForm } from './components/form';
-import { BuilderVision } from '@/components/builder-vision';
+import { BuilderNote } from '@/components/builder-note';
 import { Prose } from '@repo/design-system/components/prose';
 import { Balancer } from 'react-wrap-balancer';
 import Link from 'next/link';
@@ -44,7 +44,7 @@ const SignUpPage = async () => {
       </div>
       <div className="hidden h-full w-full items-start justify-center overflow-y-auto bg-background px-24 py-24 lg:flex">
         <div className="flex w-full flex-col gap-8">
-          <BuilderVision />
+          <BuilderNote />
         </div>
       </div>
     </div>

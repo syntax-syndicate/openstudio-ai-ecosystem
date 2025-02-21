@@ -1,7 +1,7 @@
 import { handleAuthedState } from '@/lib/auth';
 import { Logo } from '@repo/design-system/components/logo';
 
-import { BuilderVision } from '@/components/builder-vision';
+import { BuilderNote } from '@/components/builder-note';
 import { createMetadata } from '@repo/seo/metadata';
 import type { Metadata } from 'next';
 import { LoginForm } from './components/form';
@@ -42,7 +42,7 @@ const SignInPage = async () => {
       </div>
       <div className="hidden h-full w-full items-start justify-center overflow-y-auto bg-background px-24 py-24 lg:flex">
         <div className="flex w-full flex-col gap-8">
-          <BuilderVision />
+          <BuilderNote />
         </div>
       </div>
     </div>

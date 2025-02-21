@@ -1,13 +1,13 @@
+import { configs } from '@/config';
 import { usePreferenceContext } from '@/context';
+import { constructPrompt } from '@/helper/promptUtil';
+import { modelService } from '@/services/models';
+import { getMessages } from '@/services/sessions/client';
+import { RunnableSequence } from '@langchain/core/runnables';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { z } from 'zod';
 import { useAssistantUtils } from '.';
 import { usePremium } from './use-premium';
-import { getMessages } from '@/services/sessions/client';
-import { modelService } from '@/services/models';
-import { constructPrompt } from '@/helper/promptUtil';
-import { RunnableSequence } from '@langchain/core/runnables';
-import { configs } from '@/config';
 const parsingSchema = z.object({
   questions: z.array(z.string()).describe('list of questions'),
 });
@@ -37,7 +37,9 @@ export const useRelatedQuestions = () => {
 
     //check for apikey if not premium
 
-    const conditionCheck = isPremium ? !assistant : !assistant || !getApiKey(assistant.model.provider)
+    const conditionCheck = isPremium
+      ? !assistant
+      : !assistant || !getApiKey(assistant.model.provider);
 
     if (conditionCheck) {
       return [];

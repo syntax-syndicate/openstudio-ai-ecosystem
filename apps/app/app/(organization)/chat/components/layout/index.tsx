@@ -11,7 +11,6 @@ import { Flex } from '@repo/design-system/components/ui/flex';
 import { Toaster } from '@repo/design-system/components/ui/toaster';
 import { cn } from '@repo/design-system/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
-import { usePathname } from 'next/navigation';
 import { Drawer } from 'vaul';
 
 export type RootLayoutProps = {
@@ -19,7 +18,6 @@ export type RootLayoutProps = {
 };
 
 export const RootLayout = ({ children }: RootLayoutProps) => {
-  const pathname = usePathname();
   const { isSidebarOpen, isMobileSidebarOpen, setIsMobileSidebarOpen } =
     useRootContext();
 

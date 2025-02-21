@@ -1,10 +1,11 @@
 import { useFeedback } from '@/app/(organization)/chat/components/feedback/use-feedback';
 import { useRootContext } from '@/context/root';
+import { ArrowLeftDoubleIcon, ArrowRightDoubleIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import { cn } from '@repo/design-system/lib/utils';
-import { ChevronLeft, Github, PanelLeft } from 'lucide-react';
+import { ChevronLeft, Github } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
 
@@ -51,7 +52,11 @@ export const TopNav = ({
             className="flex lg:hidden"
             onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
           >
-            <PanelLeft size={16} strokeWidth={2} />
+            {isSidebarOpen ? (
+              <ArrowLeftDoubleIcon size={16} strokeWidth={2} />
+            ) : (
+              <ArrowRightDoubleIcon size={16} strokeWidth={2} />
+            )}
           </Button>
           <Button
             variant="ghost"
@@ -59,7 +64,11 @@ export const TopNav = ({
             className="hidden lg:flex"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
-            <PanelLeft size={16} strokeWidth={2} />
+            {isSidebarOpen ? (
+              <ArrowLeftDoubleIcon size={16} strokeWidth={2} />
+            ) : (
+              <ArrowRightDoubleIcon size={16} strokeWidth={2} />
+            )}
           </Button>
           {showBackButton && (
             <Button

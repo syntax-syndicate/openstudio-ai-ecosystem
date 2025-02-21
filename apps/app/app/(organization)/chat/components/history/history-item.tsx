@@ -76,7 +76,7 @@ export const HistoryItem = ({
   };
 
   const containerClasses = cn(
-    'group flex h-9 w-full w-full cursor-pointer flex-row items-center gap-2 rounded-md py-0.5 pr-1 pl-2 hover:bg-zinc-500/10',
+    'group flex h-9 w-full cursor-pointer flex-row items-center gap-2 rounded-md py-0.5 pr-1 pl-2 hover:bg-zinc-500/10',
     (activeSessionId === session.id && isChatPage) || isEditing
       ? 'bg-zinc-500/10'
       : ''
@@ -123,9 +123,6 @@ export const HistoryItem = ({
             <Type className="line-clamp-1 w-full" size="sm" textColor="primary">
               {session.title}
             </Type>
-            {/* <Type className="line-clamp-1" size="xs" textColor="tertiary">
-              {moment(session.updatedAt).fromNow()}
-            </Type> */}
           </Flex>
         </>
       )}

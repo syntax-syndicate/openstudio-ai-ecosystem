@@ -1,3 +1,4 @@
+import { useChatContext } from '@/context/chat';
 import {
   DisableEnter,
   ShiftEnterToLineBreak,
@@ -10,8 +11,6 @@ import { Placeholder } from '@tiptap/extension-placeholder';
 import { Text } from '@tiptap/extension-text';
 import { useEditor } from '@tiptap/react';
 import { useEffect } from 'react';
-import { useChatContext } from '@/context/chat';
-
 
 export const useChatEditor = () => {
   const { store } = useChatContext();

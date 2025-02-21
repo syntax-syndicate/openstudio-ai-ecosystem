@@ -230,8 +230,8 @@ export const useLLMRunner = () => {
               handleLLMNewToken: async (token: string) => {
                 if (currentAbortController?.signal.aborted) {
                   updateCurrentMessage({
-        isLoading: false,
-        stop: true,
+                    isLoading: false,
+                    stop: true,
                   });
                   return;
                 }
