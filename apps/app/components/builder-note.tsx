@@ -57,7 +57,7 @@ export function BuilderNote() {
         {/* <Signature /> */}
 
         <Link
-          href="https://x.com/brian_lovin"
+          href="https://x.com/kuluruvineeth"
           target="_blank"
           className="mt-4 flex items-center gap-4 md:mt-6 lg:mt-8"
         >
