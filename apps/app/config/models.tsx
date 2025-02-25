@@ -137,6 +137,20 @@ export const models: TModelItem[] = [
     outputTokenPrice: 0.00015, // $1.5 per 1M tokens
   },
   {
+    name: 'Claude 3.7 Sonnet Latest',
+    key: 'claude-3-7-sonnet-20250219',
+    isNew: true,
+    tokens: 200000,
+    description: 'Best for complex tasks',
+    vision: true,
+    maxOutputTokens: 8192,
+    plugins: allPlugins,
+    icon: 'anthropic',
+    provider: 'anthropic',
+    inputTokenPrice: 0.0003, // $3 per 1M tokens
+    outputTokenPrice: 0.0015, // $15 per 1M tokens
+  },
+  {
     name: 'Claude 3 Opus',
     key: 'claude-3-opus-20240229',
     isNew: false,
@@ -167,7 +181,7 @@ export const models: TModelItem[] = [
   {
     name: 'Claude 3.5 Sonnet',
     key: 'claude-3-5-sonnet-20241022',
-    isNew: true,
+    isNew: false,
     tokens: 200000,
     description: 'Best for complex tasks',
     vision: true,
@@ -181,7 +195,7 @@ export const models: TModelItem[] = [
   {
     name: 'Claude 3.5 Haiku',
     key: 'claude-3-5-haiku-20241022',
-    isNew: true,
+    isNew: false,
     tokens: 200000,
     description: 'Best for complex tasks',
     vision: false,
