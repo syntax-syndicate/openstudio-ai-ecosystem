@@ -6,9 +6,10 @@ import animate from 'tailwindcss-animate';
 import safeArea from 'tailwindcss-safe-area';
 import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
+import { withUt } from 'uploadthing/tw';
 import typographyConfig from './typography.config';
 
-export const config: Config = {
+export const config: Config = withUt({
   darkMode: ['class'],
   content: [
     './node_modules/@repo/design-system/components/**/*.{ts,tsx}',
@@ -198,4 +199,4 @@ export const config: Config = {
       });
     }),
   ],
-};
+});
