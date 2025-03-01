@@ -1,4 +1,5 @@
 import { generateTitleFromUserMessage } from '@/lib/actions';
+import { myProvider } from '@/lib/ai/model';
 import { systemPrompt } from '@/lib/ai/prompts';
 import { createDocument } from '@/lib/ai/tools/create-document';
 import { getWeather } from '@/lib/ai/tools/get-weather';
@@ -15,7 +16,6 @@ import { sanitizeResponseMessages } from '@/lib/utils';
 import {
   type Message,
   createDataStreamResponse,
-  openai,
   smoothStream,
   streamText,
 } from '@repo/ai';
@@ -71,15 +71,25 @@ export async function POST(request: Request) {
     execute: (dataStream) => {
       const result = streamText({
         //TODO: remove hardcoded model later
-        model: openai('gpt-4o-mini'),
+        model: myProvider.languageModel(selectedChatModel),
         system: systemPrompt({ selectedChatModel }),
         messages,
-        experimental_activeTools: [
-          'getWeather',
-          'createDocument',
-          'updateDocument',
-          'requestSuggestions',
-        ],
+        maxSteps: 5,
+        providerOptions:
+          selectedChatModel === 'chat-model-reasoning'
+            ? {
+                thinking: { type: 'enabled', budgetTokens: 12000 },
+              }
+            : {},
+        experimental_activeTools:
+          selectedChatModel === 'chat-model-reasoning'
+            ? []
+            : [
+                'getWeather',
+                'createDocument',
+                'updateDocument',
+                'requestSuggestions',
+              ],
         experimental_transform: smoothStream({ chunking: 'word' }),
         experimental_generateMessageId: generateUUID,
         tools: {
@@ -118,11 +128,13 @@ export async function POST(request: Request) {
           functionId: 'stream-text',
         },
       });
+      // result.consumeStream();
       result.mergeIntoDataStream(dataStream, {
         sendReasoning: true,
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Error in streamText', error);
       return 'Oops, an error occured!';
     },
   });
