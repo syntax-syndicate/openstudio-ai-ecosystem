@@ -1,14 +1,20 @@
+import { TubeLayout } from '@/modules/tube/home/ui/layouts/tube-layout';
 import { TubeProvider } from '@/modules/tube/providers/tube-provider';
-import { TubeLayout } from '@/modules/tube/ui/layouts/tube-layout';
-
+import { trpc } from '@/trpc/server';
+import { Flex } from '@repo/design-system/components/ui/flex';
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = async ({ children }: LayoutProps) => {
+  void trpc.user.getPremium.prefetch();
   return (
     <TubeProvider>
-      <TubeLayout>{children}</TubeLayout>
+      <TubeLayout>
+        <Flex className="w-full" direction="col">
+          {children}
+        </Flex>
+      </TubeLayout>
     </TubeProvider>
   );
 };
