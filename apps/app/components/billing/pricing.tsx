@@ -47,16 +47,16 @@ function buildLemonUrl(url: string, affiliateCode: string | null) {
   return newUrl;
 }
 
-export function Pricing() {
+export function Pricing(props: {
+  header?: React.ReactNode;
+  showSkipUpgrade?: boolean;
+}) {
   const { isPremium, user, premium } = usePremium();
   const [frequency, setFrequency] = useState(frequencies[0]);
   const premiumTier = getUserTier(premium);
 
-  return (
-    <div
-      id="pricing"
-      className="relative isolate mx-auto max-w-7xl bg-white px-6 pt-10 pb-32 lg:px-6 dark:bg-zinc-800"
-    >
+  const header = props.header || (
+    <div className="mb-12">
       <div className="mx-auto max-w-2xl text-center lg:max-w-4xl">
         <h2 className="font-cal text-base text-red-600 leading-7">Pricing</h2>
         <p className="mt-2 font-cal text-4xl text-gray-900 sm:text-5xl dark:text-white">
@@ -67,6 +67,15 @@ export function Pricing() {
         OpenStudio ChatHub is free to use. You can upgrade to a paid plan to get
         more features.
       </p>
+    </div>
+  );
+
+  return (
+    <div
+      id="pricing"
+      className="relative isolate mx-auto max-w-7xl bg-white px-6 pt-10 pb-32 lg:px-6 dark:bg-zinc-800"
+    >
+      {header}
       {isPremium && (
         <div className="mt-8 text-center">
           <Button
@@ -252,10 +261,10 @@ function LifetimePricing(props: {
             </div>
           </h3>
           <p className="mt-6 text-base text-gray-600 leading-7 dark:text-white">
-            Get lifetime access to OpenStudio ChatHub for a one-time payment.
+            Get lifetime access to OpenStudio for a one-time payment.
             <br />
-            This includes 2 (more sooner when stable) side by side assistants,
-            unlimited messages, and priority support.
+            This includes all models, unlimited messages, Open Studio Tube, Open
+            Studio Artifacts, and priority support.
           </p>
           <div className="mt-10 flex items-center gap-x-4">
             <h4 className="flex-none font-cal text-red-600 text-sm leading-6">

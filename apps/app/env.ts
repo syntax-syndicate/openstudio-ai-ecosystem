@@ -33,6 +33,7 @@ export const env = createEnv({
       .startsWith('tvly-')
       .optional(),
     NEXT_PUBLIC_HUGEICONS_API_KEY: z.string().min(1),
+    NEXT_PUBLIC_WELCOME_UPGRADE_ENABLED: z.coerce.boolean().default(false),
 
     //lemon squeezy
     NEXT_PUBLIC_LEMON_STORE_ID: z.string().nullish().default('openstudio'),
@@ -80,5 +81,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_LIFETIME_USERS_MESSAGE_LIMIT,
     NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT:
       process.env.NEXT_PUBLIC_FREE_USERS_MESSAGE_LIMIT,
+    NEXT_PUBLIC_WELCOME_UPGRADE_ENABLED:
+      process.env.NEXT_PUBLIC_WELCOME_UPGRADE_ENABLED,
   },
 });

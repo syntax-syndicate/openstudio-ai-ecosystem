@@ -35,10 +35,9 @@ export const tiers = [
       monthly: '/chat',
       annually: '/chat',
     },
-    description:
-      'Free tier with 2 side by side assistants and 100 messages per month',
+    description: 'Free tier with all models and 100 messages per month. ',
     features: [
-      'Max 2 side by side assistants',
+      'All models',
       '100 messages per month',
       'Bring your own api keys',
     ],
@@ -74,11 +73,13 @@ export const tiers = [
       annually: discount(pricing.PRO_MONTHLY, pricing.PRO_ANNUALLY),
     },
     description:
-      'Pro tier with 2 side by side assistants and 500 messages per month',
+      'Pro tier with all models, 500 messages per month, Open Studio Tube and Open Studio Artifacts.',
     features: [
-      'Max 2 side by side assistants',
+      'All models',
       '500 messages per month',
       'No API key needed',
+      'Open Studio Tube',
+      'Open Studio Artifacts',
       'Access to new features well in advance',
       'Priority support',
     ],
@@ -91,6 +92,8 @@ export const tiers = [
 export const lifetimeFeatures = [
   'All in free and pro tier',
   'Unlimited messages',
+  'Open Studio Tube',
+  'Open Studio Artifacts',
   'Access to new features well in advance',
   'Will Personally build features for you',
   'Priority support',
