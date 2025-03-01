@@ -3,6 +3,6 @@
 import { trpc } from '@/trpc/client';
 
 export default function Test() {
-  const [data] = trpc.hello.useSuspenseQuery({ name: 'Vineeth' });
-  return <div>{data}</div>;
+  const [data] = trpc.categories.getMany.useSuspenseQuery();
+  return <div>{JSON.stringify(data)}</div>;
 }

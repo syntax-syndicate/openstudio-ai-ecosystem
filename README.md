@@ -121,6 +121,12 @@ External services required:
 
 We use Postgres for the database.
 
+### Seeding Categories
+
+```bash
+bun scripts/seed-categories.ts
+```
+
 
 ```bash
 Instructions will be added soon to get the project running.

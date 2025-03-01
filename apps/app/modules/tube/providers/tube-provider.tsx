@@ -1,6 +1,9 @@
 'use client';
+import { env } from '@/env';
 import initHotjar from '@/lib/utils/hotjar';
-
+import { isPremium } from '@/lib/utils/premium';
+import { trpc } from '@/trpc/client';
+import { redirect } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 export type TubeContextType = {
@@ -17,6 +20,16 @@ export const TubeProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const [data] = trpc.user.getPremium.useSuspenseQuery();
+  const premium = !!(
+    data?.premium && isPremium(data.premium.lemon_squeezy_renews_at)
+  );
+
+  if (env.NEXT_PUBLIC_WELCOME_UPGRADE_ENABLED && !premium) {
+    redirect('/welcome-upgrade');
+  }
+
   return (
     <TubeContext.Provider
       value={{
