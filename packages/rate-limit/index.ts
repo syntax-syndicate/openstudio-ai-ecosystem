@@ -45,6 +45,12 @@ export const rateLimit = {
     prefix: 'unlock',
     analytics: true,
   }),
+  trpc: new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(10, '10 s'),
+    prefix: 'trpc',
+    analytics: true,
+  }),
 };
 
 export const { slidingWindow } = Ratelimit;

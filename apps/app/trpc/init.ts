@@ -1,5 +1,6 @@
 import { getSession } from '@repo/backend/auth/session';
 import { currentUser } from '@repo/backend/auth/utils';
+import { rateLimit } from '@repo/rate-limit';
 import { TRPCError, initTRPC } from '@trpc/server';
 import { cache } from 'react';
 import superjson from 'superjson';
@@ -44,7 +45,10 @@ export const protectedProcedure = t.procedure.use(
       throw new TRPCError({ code: 'UNAUTHORIZED' });
     }
 
-    //TODO: Later add ratelimit check here
+    const { success } = await rateLimit.trpc.limit(user.id);
+    if (!success) {
+      throw new TRPCError({ code: 'TOO_MANY_REQUESTS' });
+    }
 
     return opts.next({
       ctx: {
