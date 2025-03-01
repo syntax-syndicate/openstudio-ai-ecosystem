@@ -6,7 +6,7 @@ import { memo, useState } from 'react';
 
 import type { Vote } from '@repo/backend/schema';
 
-import { Markdown } from '@/app/(organization)/chatv2/components/v2/markdown';
+import { Markdown } from '@/app/(organization)/artifacts/components/v2/markdown';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
@@ -52,7 +52,7 @@ const PurePreviewMessage = ({
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const { getAssistantIcon } = useAssistantUtils();
-
+  console.log('message', message);
   return (
     <AnimatePresence>
       <motion.div

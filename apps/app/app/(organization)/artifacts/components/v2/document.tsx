@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import type { ArtifactKind } from '@/app/(organization)/chatv2/components/v2/artifact';
+import type { ArtifactKind } from '@/app/(organization)/artifacts/components/v2/artifact';
 import { useArtifact } from '@/hooks/use-artifact';
 import {
   FileIcon,

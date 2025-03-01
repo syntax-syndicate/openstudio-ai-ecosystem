@@ -27,7 +27,7 @@ export function Chat({
   const { getAssistantByKey } = useAssistantUtils();
   const { mutate } = useSWRConfig();
   const props = getAssistantByKey(preferences.defaultAssistant);
-
+  console.log(selectedChatModel);
   const {
     messages,
     setMessages,

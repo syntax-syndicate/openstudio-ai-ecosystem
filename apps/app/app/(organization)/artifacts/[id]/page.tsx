@@ -1,4 +1,4 @@
-import { Chat } from '@/app/(organization)/chatv2/components/v2/chat';
+import { Chat } from '@/app/(organization)/artifacts/components/v2/chat';
 import { DEFAULT_CHAT_MODEL } from '@/lib/ai/model';
 import { getChatById, getMessagesByChatId } from '@/lib/queries';
 import { convertToUIMessages } from '@/lib/utils';

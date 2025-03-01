@@ -1,5 +1,6 @@
-import { AppSidebar } from '@/app/(organization)/chatv2/components/v2/app-sidebar';
+import { AppSidebar } from '@/app/(organization)/artifacts/components/v2/app-sidebar';
 import { PreferenceProvider } from '@/context';
+import { trpc } from '@/trpc/server';
 import { currentUser } from '@repo/backend/auth/utils';
 import { SidebarProvider } from '@repo/design-system/components/ui/sidebar';
 import { SidebarInset } from '@repo/design-system/components/ui/sidebar';
@@ -22,6 +23,7 @@ export default async function ChatLayout({
   const user = await currentUser();
   const cookieStore = await cookies();
   const isCollapsed = cookieStore.get('sidebar:state')?.value !== 'true';
+  void trpc.user.getPremium.prefetch();
   return (
     <>
       <Script

@@ -1,6 +1,6 @@
 'use client';
+import { AppSidebar } from '@/app/(organization)/artifacts/components/v2/app-sidebar';
 import { Sidebar } from '@/app/(organization)/chat/components/layout/sidebar';
-import { AppSidebar } from '@/app/(organization)/chatv2/components/v2/app-sidebar';
 import { useRootContext } from '@/context/root';
 import type { User } from '@repo/backend/auth';
 import { Flex } from '@repo/design-system/components/ui/flex';

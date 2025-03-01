@@ -1,5 +1,5 @@
-import { Chat } from '@/app/(organization)/chatv2/components/v2/chat';
-import { DataStreamHandler } from '@/app/(organization)/chatv2/components/v2/data-stream-handler';
+import { Chat } from '@/app/(organization)/artifacts/components/v2/chat';
+import { DataStreamHandler } from '@/app/(organization)/artifacts/components/v2/data-stream-handler';
 import { DEFAULT_CHAT_MODEL } from '@/lib/ai/model';
 import { generateUUID } from '@/lib/utils';
 

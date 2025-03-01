@@ -1,10 +1,12 @@
 'use client';
 
 import type { User } from '@repo/backend/auth';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
-import { SidebarHistory } from '@/app/(organization)/chatv2/components/v2/sidebar-history';
-// import { SidebarUserNav } from '@/app/(organization)/chatv2/components/v2/sidebar-user-nav';
+import { SidebarHistory } from '@/app/(organization)/artifacts/components/v2/sidebar-history';
+import { env } from '@/env';
+import { isPremium } from '@/lib/utils/premium';
+import { trpc } from '@/trpc/client';
 import { Button } from '@repo/design-system/components/ui/button';
 import { PlusIcon } from '@repo/design-system/components/ui/icons';
 import {
@@ -24,6 +26,15 @@ import Link from 'next/link';
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
+
+  const [data] = trpc.user.getPremium.useSuspenseQuery();
+  const premium = !!(
+    data?.premium && isPremium(data.premium.lemon_squeezy_renews_at)
+  );
+
+  if (env.NEXT_PUBLIC_WELCOME_UPGRADE_ENABLED && !premium) {
+    redirect('/welcome-upgrade');
+  }
 
   return (
     <Sidebar className="group-data-[side=left]:border-r-0">
