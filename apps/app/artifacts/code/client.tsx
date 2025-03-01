@@ -1,10 +1,10 @@
-import { CodeEditor } from '@/app/(organization)/chatv2/components/v2/code-editor';
+import { CodeEditor } from '@/app/(organization)/artifacts/components/v2/code-editor';
 import {
   Console,
   type ConsoleOutput,
   type ConsoleOutputContent,
-} from '@/app/(organization)/chatv2/components/v2/console';
-import { Artifact } from '@/app/(organization)/chatv2/components/v2/create-artifact';
+} from '@/app/(organization)/artifacts/components/v2/console';
+import { Artifact } from '@/app/(organization)/artifacts/components/v2/create-artifact';
 import { generateUUID } from '@/lib/utils';
 import {
   CopyIcon,

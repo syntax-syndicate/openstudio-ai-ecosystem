@@ -1,7 +1,7 @@
-import { Artifact } from '@/app/(organization)/chatv2/components/v2/create-artifact';
-import { DiffView } from '@/app/(organization)/chatv2/components/v2/diffview';
-import { DocumentSkeleton } from '@/app/(organization)/chatv2/components/v2/document-skeleton';
-import { Editor } from '@/app/(organization)/chatv2/components/v2/text-editor';
+import { Artifact } from '@/app/(organization)/artifacts/components/v2/create-artifact';
+import { DiffView } from '@/app/(organization)/artifacts/components/v2/diffview';
+import { DocumentSkeleton } from '@/app/(organization)/artifacts/components/v2/document-skeleton';
+import { Editor } from '@/app/(organization)/artifacts/components/v2/text-editor';
 import { getSuggestions } from '@/artifacts/actions';
 import type { Suggestion } from '@repo/backend/schema';
 import {

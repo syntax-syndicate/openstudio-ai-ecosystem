@@ -1,5 +1,5 @@
-import { Artifact } from '@/app/(organization)/chatv2/components/v2/create-artifact';
-import { SpreadsheetEditor } from '@/app/(organization)/chatv2/components/v2/sheet-editor';
+import { Artifact } from '@/app/(organization)/artifacts/components/v2/create-artifact';
+import { SpreadsheetEditor } from '@/app/(organization)/artifacts/components/v2/sheet-editor';
 import {
   CopyIcon,
   LineChartIcon,

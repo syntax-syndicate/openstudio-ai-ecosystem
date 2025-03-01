@@ -1,5 +1,5 @@
-import { Artifact } from '@/app/(organization)/chatv2/components/v2/create-artifact';
-import { ImageEditor } from '@/app/(organization)/chatv2/components/v2/image-editor';
+import { Artifact } from '@/app/(organization)/artifacts/components/v2/create-artifact';
+import { ImageEditor } from '@/app/(organization)/artifacts/components/v2/image-editor';
 import {
   CopyIcon,
   RedoIcon,
