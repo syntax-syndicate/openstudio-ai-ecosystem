@@ -161,7 +161,10 @@ export const SignupForm = () => {
       </div>
       <Prose className="prose-sm text-center">
         <p className="text-muted-foreground">
-          Already have an account? <Link href="/sign-in" className='text-white'>Sign in</Link>
+          Already have an account?{' '}
+          <Link href="/sign-in" className="text-white">
+            Sign in
+          </Link>
         </p>
       </Prose>
     </div>

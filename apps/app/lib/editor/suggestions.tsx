@@ -7,8 +7,8 @@ import {
 } from 'prosemirror-view';
 import { createRoot } from 'react-dom/client';
 
-import type { ArtifactKind } from '@/app/(organization)/chatv2/components/v2/artifact';
-import { Suggestion as PreviewSuggestion } from '@/app/(organization)/chatv2/components/v2/suggestion';
+import type { ArtifactKind } from '@/app/(organization)/artifacts/components/v2/artifact';
+import { Suggestion as PreviewSuggestion } from '@/app/(organization)/artifacts/components/v2/suggestion';
 import type { Suggestion } from '@repo/backend/schema';
 
 export interface UISuggestion extends Suggestion {

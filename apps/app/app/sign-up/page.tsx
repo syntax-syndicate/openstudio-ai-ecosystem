@@ -1,12 +1,12 @@
+import { BuilderNote } from '@/components/builder-note';
 import { handleAuthedState } from '@/lib/auth';
 import { Logo } from '@repo/design-system/components/logo';
+import { Prose } from '@repo/design-system/components/prose';
 import { createMetadata } from '@repo/seo/metadata';
 import type { Metadata } from 'next';
-import { SignupForm } from './components/form';
-import { BuilderNote } from '@/components/builder-note';
-import { Prose } from '@repo/design-system/components/prose';
-import { Balancer } from 'react-wrap-balancer';
 import Link from 'next/link';
+import { Balancer } from 'react-wrap-balancer';
+import { SignupForm } from './components/form';
 
 const title = 'Sign Up';
 const description = 'Sign up to your account';
@@ -29,11 +29,17 @@ const SignUpPage = async () => {
             <p className="text-center text-muted-foreground text-sm">
               <Balancer>
                 By signing in, you agree to our{' '}
-                <Link href="https://www.openstudio.tech/legal/terms" className='text-white'>
+                <Link
+                  href="https://www.openstudio.tech/legal/terms"
+                  className="text-white"
+                >
                   Terms of Service
                 </Link>{' '}
                 and{' '}
-                <Link href="https://www.openstudio.tech/legal/privacy" className='text-white'>
+                <Link
+                  href="https://www.openstudio.tech/legal/privacy"
+                  className="text-white"
+                >
                   Privacy Policy
                 </Link>
                 .
