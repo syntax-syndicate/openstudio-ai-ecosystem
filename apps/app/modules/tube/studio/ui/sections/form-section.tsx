@@ -200,7 +200,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     update.mutate(data);
   };
 
-  const fullUrl = `${'https://app.openstudio.tech' || 'http://localhost:3000'}/tube/studio/${videoId}/final_view`;
+  const fullUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/tube/studio/${videoId}/final_view`;
   const [isCopied, setIsCopied] = useState(false);
 
   const onCopy = async () => {
