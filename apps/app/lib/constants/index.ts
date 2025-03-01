@@ -3,3 +3,5 @@ export const StorageFolders = [
   'og-images',
   'editor-uploads',
 ] as const;
+
+export const THUMBNAIL_FALLBACK = '/icons/placeholder.svg';
