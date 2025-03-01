@@ -8,6 +8,7 @@ import {
   index,
   integer,
   json,
+  jsonb,
   pgEnum,
   pgSchema,
   pgTable,
@@ -18,8 +19,11 @@ import {
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
-import type { z } from 'zod';
+import {
+  createInsertSchema,
+  createSelectSchema,
+  createUpdateSchema,
+} from 'drizzle-zod';
 import {
   type TCustomAssistant,
   type TLLMRunConfig,
@@ -33,6 +37,23 @@ const authSchema = pgSchema('auth');
 export const Users = authSchema.table('users', {
   id: uuid('id').primaryKey(),
 });
+
+//TODO: Thinking to use this table to store user data than to rely on supabase auth.users table
+// export const users = pgTable('users', {
+//   id: uuid('id').primaryKey().defaultRandom(),
+//   supabaseAuthId: uuid('supabase_auth_id').notNull().references(() => Users.id, { onDelete: 'cascade' }),
+//   firstName: text('first_name'),
+//   lastName: text('last_name'),
+//   email: text('email').notNull(),
+//   avatarUrl: text('avatar_url'),
+//   organizationId: uuid('organization_id').references(() => organization.id, { onDelete: 'cascade' }),
+//   createdAt: timestamp('created_at').defaultNow().notNull(),
+//   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+// }, (t) => [
+//   uniqueIndex('users_email_idx').on(t.email),
+//   uniqueIndex('users_supabase_auth_id_idx').on(t.supabaseAuthId),
+//   index('users_organization_id_idx').on(t.organizationId),
+// ]);
 
 export const organization = pgTable('organization', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -58,8 +79,8 @@ export const premium = pgTable(
   'premium',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    userId: varchar('userId').references(() => Users.id),
-    organizationId: varchar('organizationId').references(() => organization.id),
+    userId: varchar('userId').references(() => Users.id, {onDelete: 'cascade'}),
+    organizationId: varchar('organizationId').references(() => organization.id, {onDelete: 'cascade'}),
     tier: premiumTierEnum('tier').notNull(),
     createdAt: timestamp('createdAt', { mode: 'date', precision: 6 })
       .defaultNow()
@@ -123,12 +144,12 @@ export const prompts = pgTable(
     content: text('content').notNull(),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id),
+      .references(() => organization.id, {onDelete: 'cascade'}),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
     userId: varchar('user_id')
       .notNull()
-      .references(() => Users.id),
+      .references(() => Users.id, {onDelete: 'cascade'}),
   },
   (table) => {
     return {
@@ -152,7 +173,7 @@ export const chatSessions = pgTable(
     updatedAt: timestamp('updated_at').defaultNow(),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id),
+      .references(() => organization.id, {onDelete: 'cascade'}),
     userId: uuid('user_id')
       .notNull()
       .references(() => Users.id, { onDelete: 'cascade' }), // References Supabase auth.users table
@@ -193,10 +214,10 @@ export const chat = pgTable('chat', {
   title: text('title').notNull(),
   userId: uuid('userId')
     .notNull()
-    .references(() => Users.id),
+    .references(() => Users.id, {onDelete: 'cascade'}),
   organizationId: varchar('organizationId')
     .notNull()
-    .references(() => organization.id),
+    .references(() => organization.id, {onDelete: 'cascade'}),
 });
 
 export type Chat = InferSelectModel<typeof chat>;
@@ -254,7 +275,7 @@ export const customAssistants = pgTable('custom_assistants', {
   startMessage: json('start_message').$type<string[]>(),
   organizationId: varchar('organization_id')
     .notNull()
-    .references(() => organization.id),
+    .references(() => organization.id, {onDelete: 'cascade'}),
 });
 
 export const preferences = pgTable('preferences', {
@@ -262,7 +283,7 @@ export const preferences = pgTable('preferences', {
   organizationId: varchar('organization_id')
     .notNull()
     .unique()
-    .references(() => organization.id),
+    .references(() => organization.id, {onDelete: 'cascade'}),
   defaultAssistant: text('default_assistant').notNull(),
   systemPrompt: text('system_prompt').notNull(),
   messageLimit: integer('message_limit').notNull(),
@@ -293,7 +314,7 @@ export const apiKeys = pgTable('api_keys', {
   key: text('key').notNull(),
   organizationId: varchar('organization_id')
     .notNull()
-    .references(() => organization.id),
+    .references(() => organization.id, {onDelete: 'cascade'}),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -322,7 +343,7 @@ export const feedbacks = pgTable('feedbacks', {
   email: varchar('email', { length: 320 }),
   organizationId: varchar('organization_id')
     .notNull()
-    .references(() => organization.id),
+    .references(() => organization.id, {onDelete: 'cascade'}),
   userId: varchar('user_id').references(() => Users.id),
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
@@ -337,7 +358,7 @@ export const subscribers = pgTable(
     createdAt: timestamp('created_at').defaultNow().notNull(),
     userId: varchar('user_id')
       .notNull()
-      .references(() => Users.id),
+      .references(() => Users.id, {onDelete: 'cascade'}),
   },
   (table) => ({
     userIdIdx: index('subscribers_user_id_idx').on(table.userId),
@@ -366,11 +387,11 @@ export const articles = pgTable(
     publishedAt: timestamp('published_at').defaultNow().notNull(),
     authorId: varchar('author_id')
       .notNull()
-      .references(() => Users.id),
+      .references(() => Users.id, {onDelete: 'cascade'}),
     canonicalURL: varchar('canonical_url'),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id),
+      .references(() => organization.id, {onDelete: 'cascade'}),
   },
   (table) => ({
     authorSlugUnique: uniqueIndex('articles_author_id_slug_unique').on(
@@ -403,10 +424,10 @@ export const projects = pgTable(
     password: varchar('password'),
     authorId: varchar('author_id')
       .notNull()
-      .references(() => Users.id),
+      .references(() => Users.id, {onDelete: 'cascade'}),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id),
+      .references(() => organization.id, {onDelete: 'cascade'}),
   },
   (table) => ({
     authorSlugUnique: uniqueIndex('projects_author_id_slug_unique').on(
@@ -426,10 +447,10 @@ export const collections = pgTable(
     name: varchar('name').notNull(),
     authorId: varchar('author_id')
       .notNull()
-      .references(() => Users.id),
+      .references(() => Users.id, {onDelete: 'cascade'}),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id),
+      .references(() => organization.id, {onDelete: 'cascade'}),
   },
   (table) => ({
     organizationIdIdx: index('collections_organization_id_idx').on(
@@ -448,7 +469,7 @@ export const bookmarks = pgTable(
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
     authorId: varchar('author_id')
       .notNull()
-      .references(() => Users.id),
+      .references(() => Users.id, {onDelete: 'cascade'}),
     clicks: integer('clicks').default(0),
     collectionId: uuid('collection_id').references(() => collections.id),
     organizationId: varchar('organization_id')
@@ -533,10 +554,10 @@ export const document = pgTable(
       .default('text'),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id),
+      .references(() => organization.id, {onDelete: 'cascade'}),
     userId: varchar('user_id')
       .notNull()
-      .references(() => Users.id),
+      .references(() => Users.id, {onDelete: 'cascade'}),
   },
   (table) => {
     return {
@@ -559,10 +580,10 @@ export const suggestion = pgTable(
     isResolved: boolean('is_resolved').notNull().default(false),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id),
+      .references(() => organization.id, {onDelete: 'cascade'}),
     userId: varchar('user_id')
       .notNull()
-      .references(() => Users.id),
+      .references(() => Users.id, {onDelete: 'cascade'}),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.id] }),
@@ -575,11 +596,327 @@ export const suggestion = pgTable(
 
 export type Suggestion = InferSelectModel<typeof suggestion>;
 
-export const youtubeIntegrationInsertSchema: z.ZodTypeAny =
+export const youtubeIntegrationInsertSchema =
   createInsertSchema(youtubeIntegration);
 
-export const organizationUpdateSchema: z.ZodTypeAny =
-  createUpdateSchema(organization);
+export const organizationUpdateSchema = createUpdateSchema(organization);
+
+export const categories = pgTable(
+  'categories',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    name: text('name').notNull().unique(),
+    description: text('description'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (t) => [uniqueIndex('name_idx').on(t.name)]
+);
+
+export const videoVisibility = pgEnum('video_visibility', [
+  'private',
+  'public',
+]);
+
+export const videos = pgTable('videos', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: text('title').notNull(),
+  description: text('description'),
+  muxStatus: text('mux_status'),
+  muxAssetId: text('mux_asset_id').unique(),
+  muxUploadId: text('mux_upload_id').unique(),
+  muxPlaybackId: text('mux_playback_id').unique(),
+  muxTrackId: text('mux_track_id').unique(),
+  muxTrackStatus: text('mux_track_status'),
+  chapters: jsonb('chapters'),
+  thumbnailUrl: text('thumbnail_url'),
+  thumbnailKey: text('thumbnail_key'),
+  previewUrl: text('preview_url'),
+  previewKey: text('preview_key'),
+  duration: integer('duration'),
+  visibility: videoVisibility('visibility').default('private').notNull(),
+  userId: uuid('user_id')
+    .references(() => Users.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  organizationId: uuid('organization_id')
+    .references(() => organization.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  categoryId: uuid('category_id').references(() => categories.id, {
+    onDelete: 'set null',
+  }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const videoViews = pgTable(
+  'video_views',
+  {
+    userId: uuid('user_id')
+      .references(() => Users.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    videoId: uuid('video_id')
+      .references(() => videos.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (t) => [
+    primaryKey({
+      name: 'video_views_pk',
+      columns: [t.userId, t.videoId],
+    }),
+  ]
+);
+
+export const reactionType = pgEnum('reaction_type', ['like', 'dislike']);
+
+export const videoReactions = pgTable(
+  'video_reactions',
+  {
+    userId: uuid('user_id')
+      .references(() => Users.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    videoId: uuid('video_id')
+      .references(() => videos.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    type: reactionType('type').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (t) => [
+    primaryKey({
+      name: 'video_reactions_pk',
+      columns: [t.userId, t.videoId],
+    }),
+  ]
+);
+
+export const videoReactionRelations = relations(videoReactions, ({ one }) => ({
+  user: one(Users, {
+    fields: [videoReactions.userId],
+    references: [Users.id],
+  }),
+  video: one(videos, {
+    fields: [videoReactions.videoId],
+    references: [videos.id],
+  }),
+}));
+
+export const videoReactionSelectSchema = createSelectSchema(videoReactions);
+export const videoReactionInsertSchema = createInsertSchema(videoReactions);
+export const videoReactionUpdateSchema = createUpdateSchema(videoReactions);
+
+export const videoViewRelations = relations(videoViews, ({ one }) => ({
+  user: one(Users, {
+    fields: [videoViews.userId],
+    references: [Users.id],
+  }),
+  video: one(videos, {
+    fields: [videoViews.videoId],
+    references: [videos.id],
+  }),
+}));
+
+export const videoViewSelectSchema = createSelectSchema(videoViews);
+export const videoViewInsertSchema = createInsertSchema(videoViews);
+export const videoViewUpdateSchema = createUpdateSchema(videoViews);
+
+export const videoSelectSchema = createSelectSchema(videos);
+export const videoInsertSchema = createInsertSchema(videos);
+export const videoUpdateSchema = createUpdateSchema(videos);
+
+//NOTE (Optional): Relations work only on application level, does not affect database schema or relations
+export const videoRelations = relations(videos, ({ one, many }) => ({
+  user: one(Users, {
+    fields: [videos.userId],
+    references: [Users.id],
+  }),
+  organization: one(organization, {
+    fields: [videos.organizationId],
+    references: [organization.id],
+  }),
+  category: one(categories, {
+    fields: [videos.categoryId],
+    references: [categories.id],
+  }),
+  views: many(videoViews),
+  reactions: many(videoReactions),
+  comments: many(comments),
+}));
+
+//NOTE (Optional): Relations work only on application level, does not affect database schema or relations
+// user can have many videos
+// user can have many video views
+// user can have many video reactions
+// user can have many subscriptions
+// user can have many subscribers
+export const userRelations = relations(Users, ({ many }) => ({
+  videos: many(videos),
+  videoViews: many(videoViews),
+  videoReactions: many(videoReactions),
+  subscriptions: many(subscriptions, {
+    relationName: 'subscriptions_viewer_id_fkey',
+  }),
+  subscribers: many(subscriptions, {
+    relationName: 'subscriptions_creator_id_fkey',
+  }),
+  comments: many(comments),
+  commentReactions: many(commentReactions),
+}));
+
+//NOTE (Optional): Relations work only on application level, does not affect database schema or relations
+// organization can have many videos
+export const organizationRelations = relations(organization, ({ many }) => ({
+  videos: many(videos),
+}));
+
+//NOTE (Optional): Relations work only on application level, does not affect database schema or relations
+// category can have many videos
+export const categoryRelations = relations(categories, ({ many }) => ({
+  videos: many(videos),
+}));
+
+export const subscriptions = pgTable(
+  'subscriptions',
+  {
+    viewerId: uuid('viewer_id')
+      .references(() => Users.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    creatorId: uuid('creator_id')
+      .references(() => Users.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (t) => [
+    primaryKey({
+      name: 'subscriptions_pk',
+      columns: [t.viewerId, t.creatorId],
+    }),
+  ]
+);
+
+export const subscriptionRelations = relations(subscriptions, ({ one }) => ({
+  viewer: one(Users, {
+    fields: [subscriptions.viewerId],
+    references: [Users.id],
+    relationName: 'subscriptions_viewer_id_fkey',
+  }),
+  creator: one(Users, {
+    fields: [subscriptions.creatorId],
+    references: [Users.id],
+    relationName: 'subscriptions_creator_id_fkey',
+  }),
+}));
+
+export const comments = pgTable(
+  'comments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    parentId: uuid('parent_id'),
+    userId: uuid('user_id')
+      .references(() => Users.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    videoId: uuid('video_id')
+      .references(() => videos.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    value: text('value').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (t) => {
+    return [
+      foreignKey({
+        columns: [t.parentId],
+        foreignColumns: [t.id],
+        name: 'comments_parent_id_fkey',
+      }),
+    ];
+  }
+);
+
+export const commentRelations = relations(comments, ({ one, many }) => ({
+  user: one(Users, {
+    fields: [comments.userId],
+    references: [Users.id],
+  }),
+  video: one(videos, {
+    fields: [comments.videoId],
+    references: [videos.id],
+  }),
+  parent: one(comments, {
+    fields: [comments.parentId],
+    references: [comments.id],
+    relationName: 'comments_parent_id_fkey',
+  }),
+  replies: many(comments, {
+    relationName: 'comments_parent_id_fkey',
+  }),
+  reactions: many(commentReactions),
+}));
+
+export const commentSelectSchema = createSelectSchema(comments);
+export const commentInsertSchema = createInsertSchema(comments);
+export const commentUpdateSchema = createUpdateSchema(comments);
+
+export const commentReactions = pgTable(
+  'comment_reactions',
+  {
+    userId: uuid('user_id')
+      .references(() => Users.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    commentId: uuid('comment_id')
+      .references(() => comments.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    type: reactionType('type').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (t) => [
+    primaryKey({
+      name: 'comment_reactions_pk',
+      columns: [t.userId, t.commentId],
+    }),
+  ]
+);
+
+export const commentReactionRelations = relations(
+  commentReactions,
+  ({ one }) => ({
+    user: one(Users, {
+      fields: [commentReactions.userId],
+      references: [Users.id],
+    }),
+    comment: one(comments, {
+      fields: [commentReactions.commentId],
+      references: [comments.id],
+    }),
+  })
+);
 
 export const schema = {
   organization,
