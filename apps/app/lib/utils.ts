@@ -13,6 +13,16 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+export const snakeCaseToTitle = (str: string) => {
+  return str.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+export const formatDuration = (duration: number) => {
+  const seconds = Math.floor((duration % 60000) / 1000);
+  const minutes = Math.floor(duration / 60000);
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+};
+
 export function detectBot(req: NextRequest) {
   const url = req.nextUrl;
   if (url.searchParams.get('bot')) return true;

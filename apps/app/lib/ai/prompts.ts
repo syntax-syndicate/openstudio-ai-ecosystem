@@ -1,4 +1,4 @@
-import type { ArtifactKind } from '@/app/(organization)/chatv2/components/v2/artifact';
+import type { ArtifactKind } from '@/app/(organization)/artifacts/components/v2/artifact';
 
 export const artifactsPrompt = `
 Artifacts is a special user interface mode that helps users with writing, editing, and other content creation tasks. When artifact is open, it is on the right side of the screen, while the conversation is on the left side. When creating or updating documents, changes are reflected in real-time on the artifacts and visible to the user.
@@ -39,12 +39,11 @@ export const systemPrompt = ({
 }: {
   selectedChatModel: string;
 }) => {
-  // if (selectedChatModel === 'chat-model-reasoning') {
-  //   return regularPrompt;
-  // } else {
-  //   return `${regularPrompt}\n\n${artifactsPrompt}`;
-  // }
-  return `${regularPrompt}\n\n${artifactsPrompt}`;
+  if (selectedChatModel === 'chat-model-reasoning') {
+    return regularPrompt;
+  } else {
+    return `${regularPrompt}\n\n${artifactsPrompt}`;
+  }
 };
 
 export const codePrompt = `

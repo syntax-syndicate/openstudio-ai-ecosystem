@@ -1,5 +1,5 @@
 import { openai } from '@repo/ai';
-// import { fireworks } from '@ai-sdk/fireworks';
+import { anthropic } from '@repo/ai';
 import { type Provider, customProvider } from '@repo/ai';
 
 export const DEFAULT_CHAT_MODEL: string = 'chat-model-large';
@@ -8,10 +8,7 @@ export const myProvider: Provider = customProvider({
   languageModels: {
     'chat-model-small': openai('gpt-4o-mini'),
     'chat-model-large': openai('gpt-4o'),
-    // 'chat-model-reasoning': wrapLanguageModel({
-    //   model: fireworks('accounts/fireworks/models/deepseek-r1'),
-    //   middleware: extractReasoningMiddleware({ tagName: 'think' }),
-    // }),
+    'chat-model-reasoning': anthropic('claude-3-7-sonnet-20250219'),
     'title-model': openai('gpt-4-turbo'),
     'artifact-model': openai('gpt-4o-mini'),
   },

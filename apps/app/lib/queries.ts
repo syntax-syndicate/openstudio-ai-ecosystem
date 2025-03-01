@@ -1,6 +1,6 @@
 import 'server-only';
 
-import type { ArtifactKind } from '@/app/(organization)/chatv2/components/v2/artifact';
+import type { ArtifactKind } from '@/app/(organization)/artifacts/components/v2/artifact';
 import { database } from '@repo/backend/database';
 import {
   type Message,
