@@ -1,16 +1,14 @@
-import { z } from 'zod';
-import { baseProcedure, createTRPCRouter } from '../init';
+import { studioRouter } from '@/modules/tube/studio/server/procedures';
+import { videosRouter } from '@/modules/tube/videos/server/procedures';
+import { userRouter } from '@/modules/user/server/procedures';
+import { youtubeRouter } from '@/modules/youtube/server/procedures';
+import { createTRPCRouter } from '../init';
 
 export const appRouter = createTRPCRouter({
-  hello: baseProcedure
-    .input(
-      z.object({
-        name: z.string(),
-      })
-    )
-    .query((opts) => {
-      return `Hello ${opts.input.name}`;
-    }),
+  studio: studioRouter,
+  videos: videosRouter,
+  youtube: youtubeRouter,
+  user: userRouter,
 });
 
 export type AppRouter = typeof appRouter;
