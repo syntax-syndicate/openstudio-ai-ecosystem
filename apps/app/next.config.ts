@@ -38,6 +38,14 @@ const nextConfig: NextConfig = withLogtail({
         protocol: 'https',
         hostname: 'flagcdn.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'image.mux.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'utfs.io',
+      },
     ],
   },
 
@@ -53,6 +61,11 @@ const nextConfig: NextConfig = withLogtail({
         ],
         destination: `https://app.openstudio.tech/api/bookmarks/t/:id`,
         permanent: false,
+      },
+      {
+        source: '/tube',
+        destination: '/tube/studio',
+        permanent: true,
       },
       // {
       //   source: '/:id',
