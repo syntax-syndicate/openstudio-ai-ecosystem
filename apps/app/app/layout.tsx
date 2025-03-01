@@ -9,11 +9,11 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Open Studio - ChatHub',
+  title: 'Open Studio',
   description:
     'OpenStudio - App of Apps, Your gateway to AI Powered Applications',
   openGraph: {
-    title: 'Open Studio - ChatHub | AI-Powered Innovation Hub',
+    title: 'Open Studio',
     siteName: 'Open Studio',
     description:
       'Experience the future of AI applications in one unified platform. Open Studio brings you a seamless gateway to cutting-edge AI tools and services.',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Open Studio - ChatHub | AI Innovation Platform',
+    title: 'Open Studio',
     site: 'openstudio.tech',
     description:
       'Discover a world of AI possibilities with Open Studio. Your all-in-one platform for accessing and interacting with advanced AI applications.',
