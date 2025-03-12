@@ -46,6 +46,10 @@ const nextConfig: NextConfig = withLogtail({
         protocol: 'https',
         hostname: 'utfs.io',
       },
+      {
+        protocol: 'https',
+        hostname: 'yt3.ggpht.com',
+      },
     ],
   },
 
