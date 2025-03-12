@@ -1,0 +1,28 @@
+NODE get_youtube_comment_counts_node
+SQL >
+    %
+    WITH 
+    thread_counts AS (
+        SELECT
+            organization_id,
+            count() AS thread_count
+        FROM youtube_comment_threads
+        WHERE organization_id = {{String(organization_id, '')}}
+        GROUP BY organization_id
+    ),
+    reply_counts AS (
+        SELECT
+            organization_id,
+            count() AS reply_count
+        FROM youtube_comment_replies
+        WHERE organization_id = {{String(organization_id, '')}}
+        GROUP BY organization_id
+    )
+    
+    SELECT
+        COALESCE(t.organization_id, r.organization_id) AS organization_id,
+        COALESCE(t.thread_count, 0) AS thread_count,
+        COALESCE(r.reply_count, 0) AS reply_count,
+        COALESCE(t.thread_count, 0) + COALESCE(r.reply_count, 0) AS total_comments
+    FROM thread_counts t
+    FULL OUTER JOIN reply_counts r ON t.organization_id = r.organization_id

@@ -1,0 +1,17 @@
+SCHEMA >
+    `organization_id` String `json:$.organization_id`,
+    `channel_id` String `json:$.channel_id`,
+    `video_id` String `json:$.video_id`,
+    `last_sync_time` DateTime `json:$.last_sync_time`,
+    `oldest_comment_time` DateTime `json:$.oldest_comment_time`,
+    `newest_comment_time` DateTime `json:$.newest_comment_time`,
+    `next_page_token` String `json:$.next_page_token`,
+    `comments_synced` Int32 `json:$.comments_synced`,
+    `sync_status` String `json:$.sync_status`,
+    `error_message` String `json:$.error_message`,
+    `created_at` DateTime `json:$.created_at`,
+    `updated_at` DateTime `json:$.updated_at`
+
+ENGINE "MergeTree"
+ENGINE_SORTING_KEY "organization_id, channel_id, video_id, created_at"
+ENGINE_PARTITION_KEY "toYYYYMM(created_at)"

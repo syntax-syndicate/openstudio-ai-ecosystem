@@ -1,0 +1,85 @@
+NODE get_comments_with_replies_node
+SQL >
+    %
+    WITH comments_with_metadata AS (
+        SELECT
+            t.organization_id,
+            t.id as comment_id,
+            t.text_display as comment_text,
+            t.author_display_name,
+            t.author_profile_image_url,
+            t.author_channel_id,
+            t.like_count,
+            t.published_at,
+            t.updated_at,
+            t.video_id,
+            NULL as parent_id,
+            -- This is a top-level comment (thread)
+            NULL as reply_id,
+            -- Count replies for this thread
+            t.total_reply_count as reply_count,
+            -- For sorting
+            t.published_at as sort_date
+        FROM youtube_comment_threads t
+        WHERE t.organization_id = {{String(organization_id, '')}}
+        {% if defined(video_id) %}
+        AND t.video_id = {{String(video_id, '')}}
+        {% end %}
+        
+        UNION ALL
+        
+        SELECT
+            r.organization_id,
+            r.id as comment_id,
+            r.text_display as comment_text,
+            r.author_display_name,
+            r.author_profile_image_url,
+            r.author_channel_id,
+            r.like_count,
+            r.published_at,
+            r.updated_at,
+            r.video_id,
+            r.parent_id,
+            -- This is a reply
+            r.id as reply_id,
+            -- Replies don't have nested replies in YouTube
+            0 as reply_count,
+            -- For sorting within thread
+            r.published_at as sort_date
+        FROM youtube_comment_replies r
+        WHERE r.organization_id = {{String(organization_id, '')}}
+        {% if defined(video_id) %}
+        AND r.video_id = {{String(video_id, '')}}
+        {% end %}
+    )
+    
+    SELECT
+        organization_id,
+        comment_id,
+        comment_text,
+        author_display_name,
+        author_profile_image_url,
+        author_channel_id,
+        like_count,
+        published_at,
+        updated_at,
+        video_id,
+        parent_id,
+        reply_id,
+        reply_count,
+        -- Is this a top-level comment?
+        reply_id IS NULL as is_thread
+    FROM comments_with_metadata
+    ORDER BY
+        -- First group by parent_id (NULL for threads, will sort first)
+        parent_id NULLS FIRST,
+        -- Then sort threads by their date (newest first by default)
+        CASE WHEN reply_id IS NULL THEN sort_date END DESC,
+        -- Then for replies within a thread, sort by date (oldest first for replies)
+        CASE WHEN reply_id IS NOT NULL THEN sort_date END ASC
+    {% if defined(limit) %}
+    LIMIT {{Int32(limit, 100)}}
+    {% end %}
+    {% if defined(offset) %}
+    OFFSET {{Int32(offset, 0)}}
+    {% end %}

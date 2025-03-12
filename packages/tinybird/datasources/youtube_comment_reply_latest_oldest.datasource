@@ -1,0 +1,9 @@
+SCHEMA >
+    `organization_id` String,
+    `newest_comment_id` AggregateFunction(argMax, String, DateTime),
+    `newest_comment_time` AggregateFunction(max, DateTime),
+    `oldest_comment_id` AggregateFunction(argMin, String, DateTime),
+    `oldest_comment_time` AggregateFunction(min, DateTime)
+
+ENGINE "AggregatingMergeTree"
+ENGINE_SORTING_KEY "organization_id"

@@ -1,0 +1,46 @@
+NODE get_latest_and_oldest_comment_node
+SQL >
+    %
+    WITH 
+    thread_data AS (
+        SELECT
+            organization_id,
+            argMaxMerge(newest_comment_id) AS thread_newest_id,
+            maxMerge(newest_comment_time) AS thread_newest_time,
+            argMinMerge(oldest_comment_id) AS thread_oldest_id,
+            minMerge(oldest_comment_time) AS thread_oldest_time
+        FROM youtube_comment_thread_latest_oldest
+        WHERE organization_id = {{String(organization_id, '')}}
+        GROUP BY organization_id
+    ),
+    reply_data AS (
+        SELECT
+            organization_id,
+            argMaxMerge(newest_comment_id) AS reply_newest_id,
+            maxMerge(newest_comment_time) AS reply_newest_time,
+            argMinMerge(oldest_comment_id) AS reply_oldest_id,
+            minMerge(oldest_comment_time) AS reply_oldest_time
+        FROM youtube_comment_reply_latest_oldest
+        WHERE organization_id = {{String(organization_id, '')}}
+        GROUP BY organization_id
+    )
+    
+    SELECT
+        COALESCE(t.organization_id, r.organization_id) AS organization_id,
+        -- Get the newest comment across both sources
+        IF(
+            t.thread_newest_time >= r.reply_newest_time OR r.reply_newest_time IS NULL,
+            t.thread_newest_id,
+            r.reply_newest_id
+        ) AS newest_comment_id,
+        greatest(t.thread_newest_time, r.reply_newest_time) AS newest_comment_time,
+        
+        -- Get the oldest comment across both sources
+        IF(
+            t.thread_oldest_time <= r.reply_oldest_time OR r.reply_oldest_time IS NULL,
+            t.thread_oldest_id,
+            r.reply_oldest_id
+        ) AS oldest_comment_id,
+        least(t.thread_oldest_time, r.reply_oldest_time) AS oldest_comment_time
+    FROM thread_data t
+    FULL OUTER JOIN reply_data r ON t.organization_id = r.organization_id

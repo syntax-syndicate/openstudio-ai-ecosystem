@@ -1,0 +1,19 @@
+NODE get_last_sync_metadata_node
+SQL > 
+    %
+    SELECT 
+        organization_id,
+        channel_id,
+        video_id,
+        last_sync_time,
+        oldest_comment_time,
+        newest_comment_time,
+        next_page_token,
+        comments_synced,
+        sync_status,
+        error_message
+    FROM youtube_comment_sync_metadata
+    WHERE organization_id = {{String(organization_id)}}
+    AND channel_id = {{String(channel_id)}}
+    ORDER BY created_at DESC
+    LIMIT 1

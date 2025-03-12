@@ -1,0 +1,31 @@
+NODE get_youtube_comment_replies_node
+SQL >
+    %
+    SELECT
+        r.organization_id,
+        r.id as comment_id,
+        r.text_display as comment_text,
+        r.author_display_name,
+        r.author_profile_image_url,
+        r.author_channel_id,
+        r.like_count,
+        r.published_at,
+        r.updated_at,
+        r.video_id,
+        r.parent_id,
+        r.id as reply_id,
+        0 as reply_count,
+        0 as is_thread
+    FROM youtube_comment_replies r
+    WHERE r.organization_id = {{String(organization_id, '')}}
+    AND r.parent_id = {{String(parent_id, '')}}
+    {% if defined(video_id) %}
+    AND r.video_id = {{String(video_id, '')}}
+    {% end %}
+    ORDER BY r.published_at ASC
+    {% if defined(limit) %}
+    LIMIT {{Int32(limit, 100)}}
+    {% end %}
+    {% if defined(offset) %}
+    OFFSET {{Int32(offset, 0)}}
+    {% end %}

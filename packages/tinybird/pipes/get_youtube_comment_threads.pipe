@@ -1,0 +1,30 @@
+NODE get_youtube_comment_threads_node
+SQL >
+    %
+    SELECT
+        t.organization_id,
+        t.id as comment_id,
+        t.text_display as comment_text,
+        t.author_display_name,
+        t.author_profile_image_url,
+        t.author_channel_id,
+        t.like_count,
+        t.published_at,
+        t.updated_at,
+        t.video_id,
+        NULL as parent_id,
+        NULL as reply_id,
+        t.total_reply_count as reply_count,
+        1 as is_thread
+    FROM youtube_comment_threads t
+    WHERE t.organization_id = {{String(organization_id, '')}}
+    {% if defined(video_id) %}
+    AND t.video_id = {{String(video_id, '')}}
+    {% end %}
+    ORDER BY t.published_at DESC
+    {% if defined(limit) %}
+    LIMIT {{Int32(limit, 100)}}
+    {% end %}
+    {% if defined(offset) %}
+    OFFSET {{Int32(offset, 0)}}
+    {% end %}

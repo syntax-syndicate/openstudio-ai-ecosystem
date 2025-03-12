@@ -1,0 +1,13 @@
+NODE youtube_reply_latest_oldest_mv
+SQL >
+    SELECT
+        organization_id,
+        argMaxState(id, published_at) AS newest_comment_id,
+        maxState(published_at) AS newest_comment_time,
+        argMinState(id, published_at) AS oldest_comment_id,
+        minState(published_at) AS oldest_comment_time
+    FROM youtube_comment_replies
+    GROUP BY organization_id
+
+TYPE materialized
+DATASOURCE youtube_comment_reply_latest_oldest

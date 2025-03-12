@@ -1,0 +1,31 @@
+NODE youtube_comments_latest_oldest_mv_node
+SQL >
+    WITH all_comments AS (
+        -- Include top-level comments
+        SELECT
+            id AS comment_id,
+            organization_id,
+            published_at AS timestamp
+        FROM youtube_comment_threads
+        
+        UNION ALL
+        
+        -- Include reply comments
+        SELECT
+            id AS comment_id,
+            organization_id,
+            published_at AS timestamp
+        FROM youtube_comment_replies
+    )
+    
+    SELECT
+        organization_id,
+        argMaxState(comment_id, timestamp) AS newest_comment_id,
+        maxState(timestamp) AS newest_comment_time,
+        argMinState(comment_id, timestamp) AS oldest_comment_id,
+        minState(timestamp) AS oldest_comment_time
+    FROM all_comments
+    GROUP BY organization_id
+
+TYPE materialized
+DATASOURCE youtube_comment_latest_oldest
