@@ -1,7 +1,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-
+import { Loader2 } from "lucide-react";
 import { cn } from "@repo/design-system/lib/utils";
 
 const buttonVariants = cva(
@@ -46,11 +46,16 @@ const buttonVariants = cva(
         lg: "rounded-lg",
         full: "rounded-full",
       },
+      loading: {
+        true: "opacity-50 cursor-not-allowed",
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
       rounded: "lg",
+      loading: false,
     },
   }
 );
@@ -59,6 +64,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean;
   suffixIcon?: any;
   icon?: any;
   iconSize?: "xs" | "sm" | "md" | "lg";
@@ -74,6 +80,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       iconSize = "sm",
       rounded,
       asChild = false,
+      loading = false,
       prefixIcon,
       suffixIcon,
       icon,
@@ -95,8 +102,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, rounded, className }))}
+        className={cn(buttonVariants({ variant, size, rounded, className, loading }))}
         ref={ref}
+        disabled={loading || props.disabled}
         {...props}
       >
         {PrefixIcon && (
@@ -106,6 +114,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {SuffixIcon && (
           <SuffixIcon size={iconSizes[iconSize]} strokeWidth={2} />
         )}
+        {loading && <Loader2 className='mr-2 size-4 animate-spin'/>}
       </Comp>
     );
   }

@@ -5,6 +5,30 @@ import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "@repo/design-system/lib/utils"
 
+
+interface TabsToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+}
+
+export function TabsToolbar({
+  className,
+  children,
+  ...props
+}: TabsToolbarProps) {
+  return (
+    <div
+      className={cn(
+        "px-2 sm:px-6 flex shrink-0 flex-col justify-between gap-x-4 space-y-2 border-b border-border bg-zinc-100 dark:bg-zinc-800/50 py-2 shadow-sm md:flex-row md:gap-x-6 md:space-y-0",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+
 const Tabs = TabsPrimitive.Root;
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
