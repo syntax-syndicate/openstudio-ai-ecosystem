@@ -5,6 +5,7 @@ import {
   HomeIcon,
   MessageCircleCodeIcon,
   MessageCircleIcon,
+  SparklesIcon,
   UserIcon,
   VideoIcon,
 } from 'lucide-react';
@@ -64,4 +65,18 @@ export const tubeStudio: SidebarPage = {
   label: 'Tube Studio',
   href: '/tube/studio',
   active: (pathname) => pathname === '/tube/studio',
+};
+
+export const tubeAIAutomation: SidebarPage = {
+  icon: SparklesIcon,
+  label: 'AI Automation',
+  href: '/tube/automation',
+  active: (pathname) => pathname === '/tube/automation',
+};
+
+export const youtubeComments: SidebarPage = {
+  icon: MessageCircleIcon,
+  label: 'Youtube Comments',
+  href: '/tube/comments',
+  active: (pathname) => pathname === '/tube/comments',
 };
