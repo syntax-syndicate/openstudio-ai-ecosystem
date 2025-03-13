@@ -38,22 +38,132 @@ export const Users = authSchema.table('users', {
   id: uuid('id').primaryKey(),
 });
 
-//TODO: Thinking to use this table to store user data than to rely on supabase auth.users table
-// export const users = pgTable('users', {
-//   id: uuid('id').primaryKey().defaultRandom(),
-//   supabaseAuthId: uuid('supabase_auth_id').notNull().references(() => Users.id, { onDelete: 'cascade' }),
-//   firstName: text('first_name'),
-//   lastName: text('last_name'),
-//   email: text('email').notNull(),
-//   avatarUrl: text('avatar_url'),
-//   organizationId: uuid('organization_id').references(() => organization.id, { onDelete: 'cascade' }),
-//   createdAt: timestamp('created_at').defaultNow().notNull(),
-//   updatedAt: timestamp('updated_at').defaultNow().notNull(),
-// }, (t) => [
-//   uniqueIndex('users_email_idx').on(t.email),
-//   uniqueIndex('users_supabase_auth_id_idx').on(t.supabaseAuthId),
-//   index('users_organization_id_idx').on(t.organizationId),
-// ]);
+// Added Additional table to store user profile data than to extend raw user meta data in supabase auth.users table
+export const Profile = pgTable('profile', {
+  id: uuid('id')
+    .primaryKey()
+    .references(() => Users.id, { onDelete: 'cascade' }),
+  email: varchar('email', { length: 256 }),
+  rulesPrompt: text('rules_prompt'),
+  aiProvider: text('ai_provider'),
+  aiModel: text('ai_model'),
+  aiApiKey: text('ai_api_key'),
+});
+
+export const actionType = pgEnum('action_type', [
+  'REPLY',
+  'DELETE',
+  'PUBLISH',
+  'REJECT',
+  'REVIEW',
+  'MARK_AS_SPAM',
+  //below are not supported by youtube api
+  'NOTIFY',
+  'CALL_WEBHOOK',
+  'CATEGORIZE',
+  'TRANSLATE',
+]);
+
+export const logicalOperatorEnum = pgEnum('logical_operator', ['AND', 'OR']);
+
+export const executedRuleStatusEnum = pgEnum('executed_rule_status', [
+  'APPLIED',
+  'APPLYING',
+  'REJECTED',
+  'PENDING',
+  'SKIPPED',
+  'ERROR',
+]);
+
+export const rule = pgTable(
+  'rule',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    name: text('name').notNull(),
+    enabled: boolean('enabled').default(true).notNull(),
+    automate: boolean('automate').default(false).notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => Users.id, { onDelete: 'cascade' }),
+
+    conditionalOperator: logicalOperatorEnum('conditional_operator')
+      .default('AND')
+      .notNull(),
+
+    instructions: text('instructions'),
+  },
+  (t) => [uniqueIndex('rule_user_id_name_idx').on(t.userId, t.name)]
+);
+
+export const executedRule = pgTable(
+  'executed_rule',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    ruleId: uuid('rule_id')
+      .notNull()
+      .references(() => rule.id),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    commentId: text('comment_id').notNull(),
+    videoId: text('video_id').notNull(),
+    status: executedRuleStatusEnum('status').notNull(),
+    automated: boolean('automated').notNull(),
+    reason: text('reason'),
+
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => Users.id, { onDelete: 'cascade' }),
+  },
+  (t) => [
+    uniqueIndex('executed_rule_user_id_comment_id_video_id_idx').on(
+      t.userId,
+      t.commentId,
+      t.videoId
+    ),
+    index('executed_rule_user_id_status_created_at_idx').on(
+      t.userId,
+      t.status,
+      t.createdAt
+    ),
+  ]
+);
+
+export const action = pgTable('action', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  type: actionType('type').notNull(),
+  ruleId: uuid('rule_id')
+    .notNull()
+    .references(() => rule.id),
+});
+
+export const executedAction = pgTable('executed_action', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  executedRuleId: uuid('executed_rule_id')
+    .notNull()
+    .references(() => executedRule.id),
+});
+
+export const youtubeCommentDataSyncFrequencyEnum = pgEnum(
+  'youtube_comment_data_sync_frequency',
+  [
+    'manual',
+    'hourly',
+    '6hours',
+    '12hours',
+    'daily',
+    'weekly',
+    'monthly',
+    'quaterly',
+    'half_yearly',
+    'yearly',
+  ]
+);
 
 export const organization = pgTable('organization', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -67,6 +177,10 @@ export const organization = pgTable('organization', {
     .notNull(),
   productDescription: text('productDescription'),
   slug: varchar('slug', { length: 191 }).notNull(),
+  youtubeChannelId: text('youtube_channel_id'),
+  youtubeCommentDataSyncFrequency: youtubeCommentDataSyncFrequencyEnum(
+    'youtube_comment_data_sync_frequency'
+  ).default('manual'),
 });
 
 export const premiumTierEnum = pgEnum('premium_tier', [
@@ -79,8 +193,13 @@ export const premium = pgTable(
   'premium',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    userId: varchar('userId').references(() => Users.id, {onDelete: 'cascade'}),
-    organizationId: varchar('organizationId').references(() => organization.id, {onDelete: 'cascade'}),
+    userId: varchar('userId').references(() => Users.id, {
+      onDelete: 'cascade',
+    }),
+    organizationId: varchar('organizationId').references(
+      () => organization.id,
+      { onDelete: 'cascade' }
+    ),
     tier: premiumTierEnum('tier').notNull(),
     createdAt: timestamp('createdAt', { mode: 'date', precision: 6 })
       .defaultNow()
@@ -144,12 +263,12 @@ export const prompts = pgTable(
     content: text('content').notNull(),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id, {onDelete: 'cascade'}),
+      .references(() => organization.id, { onDelete: 'cascade' }),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
     userId: varchar('user_id')
       .notNull()
-      .references(() => Users.id, {onDelete: 'cascade'}),
+      .references(() => Users.id, { onDelete: 'cascade' }),
   },
   (table) => {
     return {
@@ -173,7 +292,7 @@ export const chatSessions = pgTable(
     updatedAt: timestamp('updated_at').defaultNow(),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id, {onDelete: 'cascade'}),
+      .references(() => organization.id, { onDelete: 'cascade' }),
     userId: uuid('user_id')
       .notNull()
       .references(() => Users.id, { onDelete: 'cascade' }), // References Supabase auth.users table
@@ -214,10 +333,10 @@ export const chat = pgTable('chat', {
   title: text('title').notNull(),
   userId: uuid('userId')
     .notNull()
-    .references(() => Users.id, {onDelete: 'cascade'}),
+    .references(() => Users.id, { onDelete: 'cascade' }),
   organizationId: varchar('organizationId')
     .notNull()
-    .references(() => organization.id, {onDelete: 'cascade'}),
+    .references(() => organization.id, { onDelete: 'cascade' }),
 });
 
 export type Chat = InferSelectModel<typeof chat>;
@@ -275,7 +394,7 @@ export const customAssistants = pgTable('custom_assistants', {
   startMessage: json('start_message').$type<string[]>(),
   organizationId: varchar('organization_id')
     .notNull()
-    .references(() => organization.id, {onDelete: 'cascade'}),
+    .references(() => organization.id, { onDelete: 'cascade' }),
 });
 
 export const preferences = pgTable('preferences', {
@@ -283,7 +402,7 @@ export const preferences = pgTable('preferences', {
   organizationId: varchar('organization_id')
     .notNull()
     .unique()
-    .references(() => organization.id, {onDelete: 'cascade'}),
+    .references(() => organization.id, { onDelete: 'cascade' }),
   defaultAssistant: text('default_assistant').notNull(),
   systemPrompt: text('system_prompt').notNull(),
   messageLimit: integer('message_limit').notNull(),
@@ -314,7 +433,7 @@ export const apiKeys = pgTable('api_keys', {
   key: text('key').notNull(),
   organizationId: varchar('organization_id')
     .notNull()
-    .references(() => organization.id, {onDelete: 'cascade'}),
+    .references(() => organization.id, { onDelete: 'cascade' }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -343,7 +462,7 @@ export const feedbacks = pgTable('feedbacks', {
   email: varchar('email', { length: 320 }),
   organizationId: varchar('organization_id')
     .notNull()
-    .references(() => organization.id, {onDelete: 'cascade'}),
+    .references(() => organization.id, { onDelete: 'cascade' }),
   userId: varchar('user_id').references(() => Users.id),
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
@@ -358,7 +477,7 @@ export const subscribers = pgTable(
     createdAt: timestamp('created_at').defaultNow().notNull(),
     userId: varchar('user_id')
       .notNull()
-      .references(() => Users.id, {onDelete: 'cascade'}),
+      .references(() => Users.id, { onDelete: 'cascade' }),
   },
   (table) => ({
     userIdIdx: index('subscribers_user_id_idx').on(table.userId),
@@ -387,11 +506,11 @@ export const articles = pgTable(
     publishedAt: timestamp('published_at').defaultNow().notNull(),
     authorId: varchar('author_id')
       .notNull()
-      .references(() => Users.id, {onDelete: 'cascade'}),
+      .references(() => Users.id, { onDelete: 'cascade' }),
     canonicalURL: varchar('canonical_url'),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id, {onDelete: 'cascade'}),
+      .references(() => organization.id, { onDelete: 'cascade' }),
   },
   (table) => ({
     authorSlugUnique: uniqueIndex('articles_author_id_slug_unique').on(
@@ -424,10 +543,10 @@ export const projects = pgTable(
     password: varchar('password'),
     authorId: varchar('author_id')
       .notNull()
-      .references(() => Users.id, {onDelete: 'cascade'}),
+      .references(() => Users.id, { onDelete: 'cascade' }),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id, {onDelete: 'cascade'}),
+      .references(() => organization.id, { onDelete: 'cascade' }),
   },
   (table) => ({
     authorSlugUnique: uniqueIndex('projects_author_id_slug_unique').on(
@@ -447,10 +566,10 @@ export const collections = pgTable(
     name: varchar('name').notNull(),
     authorId: varchar('author_id')
       .notNull()
-      .references(() => Users.id, {onDelete: 'cascade'}),
+      .references(() => Users.id, { onDelete: 'cascade' }),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id, {onDelete: 'cascade'}),
+      .references(() => organization.id, { onDelete: 'cascade' }),
   },
   (table) => ({
     organizationIdIdx: index('collections_organization_id_idx').on(
@@ -469,7 +588,7 @@ export const bookmarks = pgTable(
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
     authorId: varchar('author_id')
       .notNull()
-      .references(() => Users.id, {onDelete: 'cascade'}),
+      .references(() => Users.id, { onDelete: 'cascade' }),
     clicks: integer('clicks').default(0),
     collectionId: uuid('collection_id').references(() => collections.id),
     organizationId: varchar('organization_id')
@@ -554,10 +673,10 @@ export const document = pgTable(
       .default('text'),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id, {onDelete: 'cascade'}),
+      .references(() => organization.id, { onDelete: 'cascade' }),
     userId: varchar('user_id')
       .notNull()
-      .references(() => Users.id, {onDelete: 'cascade'}),
+      .references(() => Users.id, { onDelete: 'cascade' }),
   },
   (table) => {
     return {
@@ -580,10 +699,10 @@ export const suggestion = pgTable(
     isResolved: boolean('is_resolved').notNull().default(false),
     organizationId: varchar('organization_id')
       .notNull()
-      .references(() => organization.id, {onDelete: 'cascade'}),
+      .references(() => organization.id, { onDelete: 'cascade' }),
     userId: varchar('user_id')
       .notNull()
-      .references(() => Users.id, {onDelete: 'cascade'}),
+      .references(() => Users.id, { onDelete: 'cascade' }),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.id] }),
