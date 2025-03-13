@@ -101,7 +101,8 @@ export const CommentForm = ({
                 Cancel
               </Button>
             )}
-            <Button disabled={create.isPending} type="submit" size="sm">
+            {/* TODO: Later remove the hardcoded true */}
+            <Button disabled={create.isPending || true} type="submit" size="sm">
               {variant === 'reply' ? 'Reply' : 'Comment'}
             </Button>
           </div>
