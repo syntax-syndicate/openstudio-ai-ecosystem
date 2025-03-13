@@ -1,5 +1,4 @@
 import { trpc } from '@/trpc/client';
-import { WhatsappIcon } from '@hugeicons/react';
 import { Tick01Icon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { AnimatedSocialIcons } from '@repo/design-system/components/ui/floating-action-button';
@@ -8,14 +7,7 @@ import {
   FloatingButtonItem,
 } from '@repo/design-system/components/ui/floating-button';
 import { cn } from '@repo/design-system/lib/utils';
-import {
-  FacebookIcon,
-  InstagramIcon,
-  LinkedinIcon,
-  Loader2Icon,
-  TwitterIcon,
-  YoutubeIcon,
-} from 'lucide-react';
+import { Loader2Icon, YoutubeIcon } from 'lucide-react';
 import { Github, Instagram, Linkedin, Twitter } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -108,7 +100,11 @@ function PublishToSocialMediaPlatforms({ videoId }: { videoId: string }) {
           variant={'secondary'}
           className="z-10 flex h-12 w-12 items-center justify-center rounded-full"
         >
-          {uploadToYoutube.isPending ? <Loader2Icon className="animate-spin"/> : <Tick01Icon />}
+          {uploadToYoutube.isPending ? (
+            <Loader2Icon className="animate-spin" />
+          ) : (
+            <Tick01Icon />
+          )}
         </Button>
       }
     >

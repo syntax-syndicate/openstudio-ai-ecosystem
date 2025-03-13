@@ -24,7 +24,11 @@ export const TubeSidebar = () => {
         >
           <Flex gap="xs" direction="col" items="start" className="w-full">
             <Flex className="w-full" gap="xs" direction="col">
-              {[navigation.tubeStudio].map((item) => (
+              {[
+                navigation.tubeStudio,
+                // navigation.tubeAIAutomation,
+                navigation.youtubeComments,
+              ].map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}

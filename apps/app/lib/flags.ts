@@ -13,7 +13,7 @@ export const tubeFlag = flag({
     };
   },
   decide({ entities }) {
-    return false
+    return false;
   },
 });
 

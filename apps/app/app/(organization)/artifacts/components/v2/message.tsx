@@ -52,7 +52,7 @@ const PurePreviewMessage = ({
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const { getAssistantIcon } = useAssistantUtils();
-  console.log('message', message);
+ 
   return (
     <AnimatePresence>
       <motion.div
