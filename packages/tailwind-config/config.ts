@@ -4,6 +4,7 @@ import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
 import safeArea from 'tailwindcss-safe-area';
+import colors from 'tailwindcss/colors';
 import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
 import { withUt } from 'uploadthing/tw';
@@ -30,6 +31,7 @@ export const config: Config = withUt({
     },
     extend: {
       colors: {
+        ...colors,
         zinc: {
           '25': 'hsl(0, 0%, 99%, <alpha-value>)',
           '50': 'hsl(0, 0%, 93.7%, <alpha-value>)',
@@ -75,6 +77,9 @@ export const config: Config = withUt({
           850: '#1E1E1E',
           900: '#171717',
           950: '#0D0D0D',
+        },
+        yellow: {
+          500: '#FFD700',
         },
         border: 'hsl(var(--border) / <alpha-value>)',
         input: 'hsl(var(--input) / <alpha-value>)',
