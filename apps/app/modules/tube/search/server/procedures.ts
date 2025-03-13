@@ -28,11 +28,6 @@ export const searchRouter = createTRPCRouter({
     .query(async ({ input }) => {
       const { cursor, limit, query, categoryId } = input;
 
-      console.log('query', query);
-      console.log('categoryId', categoryId);
-      console.log('cursor', cursor);
-      console.log('limit', limit);
-
       const data = await db
         .select({
           ...getTableColumns(videos),
