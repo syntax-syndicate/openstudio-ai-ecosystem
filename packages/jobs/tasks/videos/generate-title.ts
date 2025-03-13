@@ -22,7 +22,7 @@ Your task is to generate an SEO-focused title for a YouTube video based on its t
 Return ONLY the title as plain text. No quotes, brackets, or extra formatting.
 `;
 
-export const generateYoutubeTitle: any = schemaTask({
+export const generateYoutubeTitle = schemaTask({
   id: 'generate-youtube-title',
   schema: z.object({
     videoId: z.string(),

@@ -10,7 +10,7 @@ import { z } from 'zod';
 import { YOUTUBE_CHAPTERS_PROMPT } from './generate-chapters';
 import { YOUTUBE_DESCRIPTION_PROMPT } from './generate-description';
 
-export const generateVideoMetadata: any = schemaTask({
+export const generateVideoMetadata = schemaTask({
   id: 'generate-video-metadata',
   schema: z.object({
     videoId: z.string(),

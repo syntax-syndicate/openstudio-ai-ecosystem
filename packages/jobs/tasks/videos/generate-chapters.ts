@@ -36,7 +36,7 @@ Your role is to segment the following transcript into meaningful chapters, summa
 - Do not include timestamps beyond the video's length
 `;
 
-export const generateYoutubeChapters: any = schemaTask({
+export const generateYoutubeChapters = schemaTask({
   id: 'generate-youtube-chapters',
   schema: z.object({
     videoId: z.string(),

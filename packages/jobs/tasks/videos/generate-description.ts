@@ -161,7 +161,7 @@ Join me on an adventure through *Bali’s most breathtaking spots* – from secr
 - Ensure content is *engaging, structured, and optimized for searchability*.  
 `;
 
-export const generateYoutubeDescription: any = schemaTask({
+export const generateYoutubeDescription = schemaTask({
   id: 'generate-youtube-description',
   schema: z.object({
     videoId: z.string(),
