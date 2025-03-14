@@ -86,7 +86,10 @@ const YoutubeCallbackPage = async (props: YoutubeCallbackPageProperties) => {
       }
 
       // Step 2: Fetch YouTube channel ID
-      const channelResponse = await getYouTubeChannelId(organizationId);
+      const channelResponse = await getYouTubeChannelId(
+        organizationId,
+        integrationResult
+      );
 
       if (!channelResponse?.items || channelResponse.items.length === 0) {
         throw new Error('YouTube channel ID not found');

@@ -4,31 +4,42 @@ import { eq } from 'drizzle-orm';
 import type { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
 
-export async function getValidAccessToken(organizationId: string) {
-  // Get current integration data
-  const [integration] = await database
-    .select()
-    .from(youtubeIntegration)
-    .where(eq(youtubeIntegration.organizationId, organizationId));
+//TODO: change any to the actual type
+export async function getValidAccessToken(
+  organizationId: string,
+  integrationData?: any
+) {
+  let integration;
+  if (integrationData) {
+    integration = integrationData;
+  } else {
+    // Get current integration data
+    integration = await database
+      .select()
+      .from(youtubeIntegration)
+      .where(eq(youtubeIntegration.organizationId, organizationId));
 
-  if (!integration) {
-    throw new Error('YouTube integration not found');
+    console.log('integration', integration[0]);
+
+    if (!integration[0]) {
+      throw new Error('YouTube integration not found');
+    }
   }
 
   // Check if current token is still valid (with 5 min buffer)
   const isExpired =
-    new Date(integration.expiryDate).getTime() - 5 * 60 * 1000 < Date.now();
+    new Date(integration[0].expiryDate).getTime() - 5 * 60 * 1000 < Date.now();
 
   if (!isExpired) {
-    return integration.accessToken;
+    return integration[0].accessToken;
   }
 
   // Token is expired, refresh it
   const auth = getOAuth2Client();
   auth.setCredentials({
-    refresh_token: integration.refreshToken,
-    access_token: integration.accessToken,
-    expiry_date: integration.expiryDate.getTime(),
+    refresh_token: integration[0].refreshToken,
+    access_token: integration[0].accessToken,
+    expiry_date: integration[0].expiryDate.getTime(),
   });
 
   try {
@@ -57,26 +68,28 @@ export async function getValidAccessToken(organizationId: string) {
   }
 }
 
-export async function getYouTubeClient(organizationId: string) {
-  const accessToken = await getValidAccessToken(organizationId);
+//TODO: change any to the actual type
+export async function getYouTubeClient(
+  organizationId: string,
+  integrationData?: any
+) {
+  const accessToken = await getValidAccessToken(
+    organizationId,
+    integrationData
+  );
   const auth = getOAuth2Client();
   auth.setCredentials({ access_token: accessToken });
 
   return google.youtube({ version: 'v3', auth });
 }
 
+//TODO: Remove after testing
 export async function listYouTubeVideos(organizationId: string) {
   const youtube = await getYouTubeClient(organizationId);
 
   try {
-    // const response = await youtube.videos.list({
-    //   part: ['snippet,contentDetails'],
-    //   myRating: 'like',
-    // });
     const res = await youtube.channels.list({
       part: ['contentDetails'],
-      //   managedByMe: true,
-      //   mySubscribers: true,
       forHandle: '@kuluruvineeth',
     });
     return res.data;
@@ -86,8 +99,12 @@ export async function listYouTubeVideos(organizationId: string) {
   }
 }
 
-export async function getYouTubeChannelId(organizationId: string) {
-  const youtube = await getYouTubeClient(organizationId);
+//TODO: change any to the actual type
+export async function getYouTubeChannelId(
+  organizationId: string,
+  integrationData?: any
+) {
+  const youtube = await getYouTubeClient(organizationId, integrationData);
 
   try {
     const res = await youtube.channels.list({

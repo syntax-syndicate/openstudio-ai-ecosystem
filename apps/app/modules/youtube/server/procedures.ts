@@ -244,7 +244,7 @@ export const youtubeRouter = createTRPCRouter({
     const youtubeClient = await getYouTubeClient(
       ctx.user.user_metadata.organization_id
     );
-  
+
     const organizationData = await database
       .select()
       .from(organization)
