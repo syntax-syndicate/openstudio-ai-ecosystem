@@ -4,6 +4,8 @@ import { ArrowRightIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 const title = 'Legal';
 const description = 'Legal information for OpenStudio.';
 

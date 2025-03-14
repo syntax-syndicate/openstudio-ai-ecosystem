@@ -4,6 +4,8 @@ import type { Metadata } from 'next';
 import { DemoVideo } from './components/demo-video';
 import { Hero } from './components/hero';
 
+export const dynamic = 'force-dynamic';
+
 const meta = {
   title: 'An Evolving Open-Source AI Ecosystem',
   description:

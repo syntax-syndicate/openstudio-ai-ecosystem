@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import TermsContent from './content';
 
+export const dynamic = 'force-dynamic';
+
 const title = 'Terms of Service - Open Studio';
 const description = 'Terms of Service - Open Studio';
 
