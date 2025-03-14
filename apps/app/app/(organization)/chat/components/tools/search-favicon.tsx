@@ -1,4 +1,5 @@
-import { Globe02Icon } from '@hugeicons/react';
+import { Globe02Icon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { cn } from '@repo/design-system/lib/utils';
 import Image from 'next/image';
 import { type FC, useState } from 'react';
@@ -17,7 +18,8 @@ export const SearchFavicon: FC<TSeachFavicon> = ({
   const [error, setError] = useState<boolean>(false);
   if (error) {
     return (
-      <Globe02Icon
+      <HugeiconsIcon
+        icon={Globe02Icon}
         size={size === 'sm' ? 16 : 18}
         strokeWidth={1.5}
         className={cn(className, 'text-gray-500')}

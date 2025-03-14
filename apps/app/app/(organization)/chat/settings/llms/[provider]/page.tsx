@@ -13,7 +13,11 @@ import { SettingsContainer } from '@/app/(organization)/chat/components/settings
 import { providers } from '@/config/models';
 import { usePreferenceContext } from '@/context/preferences';
 import type { TProvider } from '@/types';
-import { Alert01Icon, CheckmarkCircle01Icon } from '@hugeicons/react';
+import {
+  Alert01Icon,
+  CheckmarkCircle01Icon,
+} from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import {
   Accordion,
   AccordionContent,
@@ -128,9 +132,17 @@ export default function LLMsSettings() {
                 )}
               >
                 {model.connected ? (
-                  <CheckmarkCircle01Icon size={18} variant="solid" />
+                  <HugeiconsIcon
+                    icon={CheckmarkCircle01Icon}
+                    size={18}
+                    strokeWidth={1.5}
+                  />
                 ) : (
-                  <Alert01Icon size={18} strokeWidth={1.5} variant="solid" />
+                  <HugeiconsIcon
+                    icon={Alert01Icon}
+                    size={18}
+                    strokeWidth={1.5}
+                  />
                 )}
               </div>
             </AccordionTrigger>

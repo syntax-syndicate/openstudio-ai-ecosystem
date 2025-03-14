@@ -1,5 +1,6 @@
 import { useScrollToBottom } from '@/hooks';
-import { ArrowDown02Icon } from '@hugeicons/react';
+import { ArrowDown02Icon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { motion } from 'framer-motion';
 
@@ -18,7 +19,7 @@ export const ScrollToBottomButton = () => {
         size="icon-xs"
         rounded="full"
       >
-        <ArrowDown02Icon size={16} strokeWidth="2" />
+        <HugeiconsIcon icon={ArrowDown02Icon} size={16} strokeWidth={2} />
       </Button>
     </motion.span>
   );

@@ -11,6 +11,8 @@ import { and, eq, sql } from 'drizzle-orm';
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = createMetadata({
   title: 'Processing',
   description: 'Please wait while we process your request.',

@@ -1,7 +1,7 @@
 import { usePremium } from '@/hooks/use-premium';
 import { modelService } from '@/services/models';
 import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
-import { BrainIcon } from '@hugeicons/react';
+import { BrainIcon } from '@hugeicons-pro/core-stroke-rounded';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { RunnableSequence } from '@langchain/core/runnables';
 import { DynamicStructuredTool } from '@langchain/core/tools';

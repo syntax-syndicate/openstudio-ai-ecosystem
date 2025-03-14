@@ -60,6 +60,7 @@ export const ModelIcon = ({
 
   if (type === 'assistant') {
     return (
+      // @ts-ignore
       <Avvvatars
         value={name || 'assistant'}
         style={name ? 'character' : 'shape'}

@@ -3,6 +3,8 @@ import { Link } from '@repo/design-system/components/link';
 import { Button } from '@repo/design-system/components/ui/button';
 import { SearchIcon } from 'lucide-react';
 
+export const dynamic = "force-dynamic";
+
 const NotFound = () => (
   <main className="flex min-h-screen w-screen items-center justify-center bg-backdrop">
     <EmptyState

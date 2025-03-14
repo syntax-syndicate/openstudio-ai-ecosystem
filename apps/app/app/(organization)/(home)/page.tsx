@@ -4,6 +4,8 @@ import type { Metadata } from 'next';
 import MDX from '../minime/components/markdown/mdx';
 import { Greeting } from './components/greeting';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Home',
   description: 'The homepage for your organization.',

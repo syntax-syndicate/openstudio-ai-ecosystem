@@ -1,4 +1,5 @@
-import { FolderLibraryIcon } from '@hugeicons/react';
+import { FolderLibraryIcon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import {
   Popover,
   PopoverContent,
@@ -18,12 +19,13 @@ export const SpaceSelector: FC<SpaceSelector> = () => {
       <Popover>
         <PopoverTrigger>
           <Button size="icon-sm" variant="ghost">
-            <FolderLibraryIcon size={16} strokeWidth={2} />
+            <HugeiconsIcon icon={FolderLibraryIcon} size={16} strokeWidth={2} />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-64">
           <Flex className="p-4" direction="col" items="center" justify="center">
-            <FolderLibraryIcon
+            <HugeiconsIcon
+              icon={FolderLibraryIcon}
               size={16}
               strokeWidth={2}
               className="mb-2 text-zinc-500"

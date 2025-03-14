@@ -4,7 +4,11 @@ import { slideUpVariant } from '@/helper/animations';
 import { useAssistantUtils } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TChatMessage } from '@/types';
-import { ArrowRight02Icon, RepeatIcon } from '@hugeicons/react';
+import {
+  ArrowRight02Icon,
+  RepeatIcon,
+} from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { StaggerContainer } from '@repo/design-system/components/ui/stagger-container';
 import { Type } from '@repo/design-system/components/ui/text';
@@ -69,7 +73,8 @@ export const AIRelatedQuestions: FC<TAIRelatedQuestions> = ({
                 onClick={() => handleOnClick(question)}
                 weight="medium"
               >
-                <ArrowRight02Icon
+                <HugeiconsIcon
+                  icon={ArrowRight02Icon}
                   size={18}
                   strokeWidth={2}
                   className="flex-shrink-0"

@@ -10,6 +10,9 @@ import { createMetadata } from '@repo/seo/metadata';
 import { eq, sql } from 'drizzle-orm';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
+
 const title = 'Integrations';
 const description = 'Connect your favorite tools to OpenStudio.';
 

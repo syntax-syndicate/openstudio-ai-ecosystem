@@ -2,6 +2,8 @@ import Form from '@/components/forms/form';
 import { currentUser } from '@repo/backend/auth/utils';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Links',
 };

@@ -1,11 +1,11 @@
-import { constants } from '@/config';
 import {
   Github01Icon,
   HelpCircleIcon,
   Moon02Icon,
   Sun01Icon,
   TwitterIcon,
-} from '@hugeicons/react';
+} from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +17,6 @@ import { Flex } from '@repo/design-system/components/ui/flex';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { cn } from '@repo/design-system/lib/utils';
 import Avvvatars from 'avvvatars-react';
-import Avatar from 'boring-avatars';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import type { FC } from 'react';
@@ -34,7 +33,7 @@ export const MoreOptionsDropdownItem = ({
   const Icon = icon;
   return (
     <DropdownMenuItem onClick={onClick}>
-      <Icon size={16} variant="stroke" strokeWidth="2" />
+      <HugeiconsIcon icon={Icon} size={16} strokeWidth={2} />
       {label}
     </DropdownMenuItem>
   );
@@ -69,12 +68,8 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
                 className
               )}
             >
-              <Avatar
-                name={'ChatHub'}
-                variant="marble"
-                size={24}
-                colors={constants.avatarColors}
-              />
+              {/* @ts-ignore */}
+              <Avvvatars value={'ChatHub'} style={'shape'} size={24} />
             </div>
           </DropdownMenuTrigger>
         </Tooltip>
@@ -85,6 +80,7 @@ export const MoreOptionsDropdown: FC<MoreOptionsDropdownProps> = ({
           sideOffset={8}
         >
           <Flex className="items-center p-2" gap="md">
+            {/* @ts-ignore */}
             <Avvvatars value={'ChatHub'} style={'shape'} size={24} />
           </Flex>
           <DropdownMenuSeparator className="my-1.5" />

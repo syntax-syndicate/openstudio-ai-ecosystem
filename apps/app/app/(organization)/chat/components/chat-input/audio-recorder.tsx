@@ -1,7 +1,8 @@
 import { useChatContext } from '@/context';
 import { formatTickerTime } from '@/helper/utils';
 import { useRecordVoice } from '@/hooks';
-import { RecordIcon } from '@hugeicons/react';
+import { RecordIcon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { AudioVisualizer } from '@repo/design-system/components/ui/audio-visualizer';
 import {
@@ -62,7 +63,7 @@ export const AudioRecorder: FC<TAudioRecorder> = ({ sendMessage }) => {
             startVoiceRecording();
           }}
         >
-          <RecordIcon size={16} variant="stroke" strokeWidth="2" />
+          <HugeiconsIcon icon={RecordIcon} size={16} strokeWidth={2} />
         </Button>
       </Tooltip>
       {transcribing && (

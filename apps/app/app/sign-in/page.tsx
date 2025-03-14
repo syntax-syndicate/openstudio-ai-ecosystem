@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { Balancer } from 'react-wrap-balancer';
 import { LoginForm } from './components/form';
 
+export const dynamic = 'force-dynamic';
+
 const title = 'Sign in';
 const description = 'Sign in to your account.';
 

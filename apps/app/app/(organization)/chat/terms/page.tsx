@@ -1,7 +1,8 @@
-'use client';
 import { Mdx } from '@/app/(organization)/chat/components/mdx';
 import { termsMdx } from '@/config/terms';
 import { Flex } from '@repo/design-system/components/ui/flex';
+
+export const dynamic = 'force-dynamic';
 
 const TermsPage = () => {
   return (

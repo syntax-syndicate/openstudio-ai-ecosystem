@@ -1,3 +1,4 @@
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import {
@@ -47,9 +48,10 @@ const ApiKeyInput: FC<TApiKeyInput> = ({
       />
       <Flex items="center" gap="sm" className="absolute right-2">
         {isLocked && (
-          <SquareLock02Icon
+          <HugeiconsIcon
+            icon={SquareLock02Icon}
             size={16}
-            variant="solid"
+            strokeWidth={2}
             className="text-zinc-500"
           />
         )}
@@ -59,9 +61,9 @@ const ApiKeyInput: FC<TApiKeyInput> = ({
           onClick={() => setShowKey(!showKey)}
         >
           {showKey ? (
-            <ViewOffIcon size={16} variant="solid" />
+            <HugeiconsIcon icon={ViewOffIcon} size={16} strokeWidth={2} />
           ) : (
-            <ViewIcon size={16} variant="solid" />
+            <HugeiconsIcon icon={ViewIcon} size={16} strokeWidth={2} />
           )}
         </Button>
       </Flex>

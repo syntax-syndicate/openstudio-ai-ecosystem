@@ -1,3 +1,5 @@
+'use client';
+
 import { CodeBlock } from '@/app/(organization)/chat/components/codeblock';
 import { SearchFavicon } from '@/app/(organization)/chat/components/tools/search-favicon';
 import { REVEAL_ANIMATION_VARIANTS } from '@/helper/animations';

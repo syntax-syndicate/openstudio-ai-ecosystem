@@ -1,3 +1,4 @@
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Alert, AlertDescription } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Alert02Icon } from '@repo/design-system/components/ui/icons';
@@ -21,7 +22,7 @@ export const GeneratedImage = ({ image }: TGeneratedImage) => {
       )}
       <Alert variant="warning">
         <AlertDescription className="flex flex-row items-center gap-2">
-          <Alert02Icon size={20} />
+          <HugeiconsIcon icon={Alert02Icon} size={20} />
           {error
             ? 'The image has expired. Please generate a new one.'
             : 'This image will expire in 1 hour. Please copy it before it expires.'}

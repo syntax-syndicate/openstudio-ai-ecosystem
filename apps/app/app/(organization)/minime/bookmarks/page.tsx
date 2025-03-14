@@ -11,6 +11,8 @@ import { sortBookmarks } from '@/helper/utils';
 import type { Collection } from '@/helper/utils';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Bookmarks',
 };

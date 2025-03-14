@@ -168,7 +168,7 @@ export const CommentFilters = ({
         <Button
           variant="outline"
           size="sm"
-          className="relative flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="relative flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <FilterIcon className="h-4 w-4" />
           <span>Filter</span>

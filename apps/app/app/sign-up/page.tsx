@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { Balancer } from 'react-wrap-balancer';
 import { SignupForm } from './components/form';
 
+export const dynamic = 'force-dynamic';
+
 const title = 'Sign Up';
 const description = 'Sign up to your account';
 

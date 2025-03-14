@@ -27,6 +27,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
 
+  //TODO: For Testing, this is commented out, later we will uncomment this and redirect to the welcome-upgrade page if the user is not premium
   const [data] = trpc.user.getPremium.useSuspenseQuery();
   const premium = !!(
     data?.premium && isPremium(data.premium.lemon_squeezy_renews_at)

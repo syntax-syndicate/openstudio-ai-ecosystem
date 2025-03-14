@@ -37,7 +37,7 @@ import {
   ViewOffIcon,
   VoiceIcon,
   WavingHand02Icon,
-} from "@hugeicons/react";
+} from "@hugeicons-pro/core-stroke-rounded";
 import { cn } from "@repo/design-system/lib/utils";
 //@ts-ignore
 import { Check, ClockCounterClockwise, DotsThree, Pencil, TrashSimple, Warning, X, } from "@phosphor-icons/react";

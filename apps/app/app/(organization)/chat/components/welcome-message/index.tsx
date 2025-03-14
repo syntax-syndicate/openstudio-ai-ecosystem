@@ -12,7 +12,8 @@ import {
   AiMagicIcon,
   PuzzleIcon,
   Rocket01Icon,
-} from '@hugeicons/react';
+} from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Dialog,
@@ -125,7 +126,8 @@ export const WelcomeMessage = () => {
                       textColor="secondary"
                       className="flex gap-3"
                     >
-                      <Icon
+                      <HugeiconsIcon
+                        icon={Icon}
                         size={20}
                         strokeWidth={1.5}
                         className="mt-1 flex-shrink-0"

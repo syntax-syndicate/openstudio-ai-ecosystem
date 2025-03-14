@@ -2,6 +2,7 @@ import { useChatContext, usePreferenceContext } from '@/context';
 import { useAssistantUtils } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TChatMessage, TProvider } from '@/types';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Alert02Icon } from '@repo/design-system/components/ui/icons';
@@ -92,7 +93,12 @@ export const AIMessageError: FC<TAIMessageError> = ({
       justify="between"
     >
       <Flex items="start" gap="sm">
-        <Alert02Icon size={16} variant="solid" className="mt-0 md:mt-0.5" />
+        <HugeiconsIcon
+          icon={Alert02Icon}
+          size={16}
+          strokeWidth={2}
+          className="mt-0 md:mt-0.5"
+        />
         <Type textColor="secondary" size="sm">
           {errorMessage}
         </Type>

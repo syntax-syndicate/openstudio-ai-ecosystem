@@ -3,6 +3,7 @@ import { useChatContext, usePreferenceContext, useSessions } from '@/context';
 import { useAssistantUtils, useClipboard } from '@/hooks';
 import { useLLMRunner } from '@/hooks/use-llm-runner';
 import type { TChatMessage } from '@/types';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button, Spinner } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import {
@@ -112,9 +113,9 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
               onClick={handleCopyContent}
             >
               {showCopied ? (
-                <Tick01Icon size={14} variant="stroke" strokeWidth="2" />
+                <HugeiconsIcon icon={Tick01Icon} size={14} strokeWidth={2} />
               ) : (
-                <Copy01Icon size={14} variant="stroke" strokeWidth="2" />
+                <HugeiconsIcon icon={Copy01Icon} size={14} strokeWidth={2} />
               )}
               Copy
             </Button>
@@ -127,7 +128,7 @@ export const AIMessageActions: FC<TAIMessageActions> = ({
               onConfirm={handleDeleteMessage}
             >
               <Button variant="secondary" size="sm" rounded="lg">
-                <Delete01Icon size={14} variant="stroke" strokeWidth="2" />
+                <HugeiconsIcon icon={Delete01Icon} size={14} strokeWidth={2} />
                 Delete
               </Button>
             </PopOverConfirmProvider>

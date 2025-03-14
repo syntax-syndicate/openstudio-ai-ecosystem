@@ -1,6 +1,8 @@
 import { usePreferenceContext } from '@/context';
+import { StopIcon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
-import { RecordIcon, StopIcon } from '@repo/design-system/components/ui/icons';
+import { RecordIcon } from '@repo/design-system/components/ui/icons';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useToast } from '@repo/design-system/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
@@ -152,12 +154,7 @@ export const useWhisperRecorder = () => {
             }}
             className="group"
           >
-            <StopIcon
-              size={16}
-              variant="solid"
-              strokeWidth="2"
-              className="text-rose-400/80"
-            />
+            <HugeiconsIcon icon={StopIcon} size={16} strokeWidth={2} />
             <span className="hidden group-hover:flex">Stop</span>
           </Button>
         </>
@@ -166,7 +163,7 @@ export const useWhisperRecorder = () => {
     return (
       <Tooltip content="Record">
         <Button size="icon" variant="ghost" onClick={startVoiceRecording}>
-          <RecordIcon size={16} variant="stroke" strokeWidth="2" />
+          <HugeiconsIcon icon={RecordIcon} size={16} strokeWidth={2} />
         </Button>
       </Tooltip>
     );

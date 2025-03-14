@@ -1,6 +1,7 @@
 import { defaultPreferences } from '@/config';
 import { usePreferenceContext } from '@/context/preferences';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { ArrowClockwise, Info } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
@@ -42,7 +43,7 @@ export const QuickSettings = () => {
       <Tooltip content="Configure Model">
         <PopoverTrigger asChild>
           <Button variant="ghost" size="icon-sm">
-            <Settings03Icon size={16} variant="stroke" strokeWidth="2" />
+            <HugeiconsIcon icon={Settings03Icon} size={16} strokeWidth={2} />
           </Button>
         </PopoverTrigger>
       </Tooltip>

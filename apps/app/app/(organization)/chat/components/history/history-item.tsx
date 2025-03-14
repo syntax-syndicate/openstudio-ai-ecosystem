@@ -1,5 +1,6 @@
 import { useSessions } from '@/context';
 import type { TChatSession } from '@/types';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import {
@@ -131,7 +132,7 @@ export const HistoryItem = ({
           className={cn('hidden group-hover:flex', openDeleteConfirm && 'flex')}
         >
           <Button variant="ghost" size="icon-xs" onClick={handleEditClick}>
-            <Edit02Icon size={14} variant="stroke" strokeWidth="2" />
+            <HugeiconsIcon icon={Edit02Icon} size={14} strokeWidth={2} />
           </Button>
           <Tooltip content="Delete">
             <Popover
@@ -144,7 +145,11 @@ export const HistoryItem = ({
                   size="icon-xs"
                   onClick={(e) => handleDeleteClick(e)}
                 >
-                  <Delete01Icon size={14} variant="stroke" strokeWidth="2" />
+                  <HugeiconsIcon
+                    icon={Delete01Icon}
+                    size={14}
+                    strokeWidth={2}
+                  />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="z-[1000]" side="bottom">

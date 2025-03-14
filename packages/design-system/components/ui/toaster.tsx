@@ -9,7 +9,8 @@ import {
   ToastViewport,
 } from "@repo/design-system/components/ui/toast";
 import { useToast } from "@repo/design-system/components/ui/use-toast";
-import { AlertCircleIcon, CheckmarkCircle01Icon } from "@hugeicons/react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon, CheckmarkCircle01Icon } from "@hugeicons-pro/core-stroke-rounded";
 import { Button } from "@repo/design-system/components/ui/button";
 
 export function Toaster() {
@@ -21,17 +22,9 @@ export function Toaster() {
           <Toast key={id} {...props}>
             <div className="flex flex-row gap-3">
               {props.variant === "destructive" ? (
-                <AlertCircleIcon
-                  size={24}
-                  variant="solid"
-                  className="mt-1 flex-shrink-0 text-rose-400"
-                />
+                <HugeiconsIcon icon={AlertCircleIcon} size={24} className="mt-1 flex-shrink-0 text-rose-400" />
               ) : (
-                <CheckmarkCircle01Icon
-                  size={24}
-                  variant="solid"
-                  className="mt-1 flex-shrink-0 text-teal-400"
-                />
+                <HugeiconsIcon icon={CheckmarkCircle01Icon} size={24} className="mt-1 flex-shrink-0 text-teal-400" />
               )}
               <div className="grid gap-0 w-full">
                 {title && <ToastTitle>{title}</ToastTitle>}

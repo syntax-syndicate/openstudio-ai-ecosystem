@@ -1,5 +1,10 @@
 import { ExplainationCard } from '@/app/(organization)/chat/components/welcome-message/explaination-card';
-import { AiImageIcon, BrainIcon, Globe02Icon } from '@hugeicons/react';
+import {
+  AiImageIcon,
+  BrainIcon,
+  Globe02Icon,
+} from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { StaggerContainer } from '@repo/design-system/components/ui/stagger-container';
 import { cn } from '@repo/design-system/lib/utils';
 
@@ -45,7 +50,7 @@ const PluginItem = ({
           }
         )}
       >
-        <Icon size={14} strokeWidth={2} />
+        <HugeiconsIcon icon={Icon} size={14} strokeWidth={2} />
         {text}
       </div>
     </ExplainationCard>

@@ -1,5 +1,9 @@
 import type { TChatMessage } from '@/types';
-import { ArrowDown01Icon, ArrowUp01Icon } from '@hugeicons/react';
+import {
+  ArrowDown01Icon,
+  ArrowUp01Icon,
+} from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import { cn } from '@repo/design-system/lib/utils';
@@ -30,6 +34,7 @@ export const HumanMessage = ({ chatMessage }: THumanMessage) => {
     <div className="relative w-full">
       <Flex className="w-full items-start" gap="md">
         <Flex className="mt-0.5">
+          {/* @ts-ignore */}
           <Avvvatars
             displayValue={'A'}
             value={'ChatHub'}
@@ -58,12 +63,20 @@ export const HumanMessage = ({ chatMessage }: THumanMessage) => {
             >
               {isExpanded ? (
                 <>
-                  <ArrowUp01Icon size={14} strokeWidth={2} />
+                  <HugeiconsIcon
+                    icon={ArrowUp01Icon}
+                    size={14}
+                    strokeWidth={2}
+                  />
                   Read Less
                 </>
               ) : (
                 <>
-                  <ArrowDown01Icon size={14} strokeWidth={2} />
+                  <HugeiconsIcon
+                    icon={ArrowDown01Icon}
+                    size={14}
+                    strokeWidth={2}
+                  />
                   Read More
                 </>
               )}

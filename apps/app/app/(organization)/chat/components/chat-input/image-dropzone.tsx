@@ -1,4 +1,5 @@
-import { ImageAdd01Icon } from '@hugeicons/react';
+import { ImageAdd01Icon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 import type { FC } from 'react';
@@ -19,7 +20,12 @@ export const ImageDropzone: FC<TImageDropzone> = ({ dropzonProps }) => {
           justify="center"
           gap="sm"
         >
-          <ImageAdd01Icon size={16} strokeWidth={2} className="text-zinc-500" />
+          <HugeiconsIcon
+            icon={ImageAdd01Icon}
+            size={16}
+            strokeWidth={2}
+            className="text-zinc-500"
+          />
           <Type size="sm" textColor="secondary">
             Drag and drop an image here, or click to select an image
           </Type>

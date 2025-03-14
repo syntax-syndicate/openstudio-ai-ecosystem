@@ -4,7 +4,8 @@ import * as React from "react"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@repo/design-system/lib/utils"
-import { Cancel01Icon } from "@hugeicons/react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon } from "@hugeicons-pro/core-stroke-rounded";
 
 const ToastProvider = ToastPrimitives.Provider;
 
@@ -83,7 +84,7 @@ const ToastClose = React.forwardRef<
     toast-close=""
     {...props}
   >
-    <Cancel01Icon size={14} strokeWidth={2} />
+    <HugeiconsIcon icon={Cancel01Icon} size={14} strokeWidth={2} />
   </ToastPrimitives.Close>
 ));
 ToastClose.displayName = ToastPrimitives.Close.displayName;

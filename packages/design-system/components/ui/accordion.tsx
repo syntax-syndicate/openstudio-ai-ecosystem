@@ -3,7 +3,8 @@
 import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { cn } from "@repo/design-system/lib/utils"
-import { ArrowDown01Icon } from "@hugeicons/react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowDown01Icon } from "@hugeicons-pro/core-stroke-rounded";
 import { AccordionHeader } from "@radix-ui/react-accordion";
 
 const Accordion = AccordionPrimitive.Root;
@@ -35,11 +36,7 @@ const AccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <ArrowDown01Icon
-        size={16}
-        strokeWidth={2}
-        className="shrink-0 text-zinc-500 transition-transform duration-200 dark:text-zinc-400"
-      />
+      <HugeiconsIcon icon={ArrowDown01Icon} size={16} strokeWidth={2} className="shrink-0 text-zinc-500 transition-transform duration-200 dark:text-zinc-400" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));

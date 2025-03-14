@@ -3,9 +3,12 @@ import UploadImage from '@/components/forms/upload-image';
 import { currentUser } from '@repo/backend/auth/utils';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'SEO',
 };
+
 export default async function SEO() {
   const user = await currentUser();
   const endpoint = 'user';

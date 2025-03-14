@@ -1,7 +1,8 @@
 import { AudioRecorder } from '@/app/(organization)/chat/components/chat-input/audio-recorder';
 import { ImageUpload } from '@/app/(organization)/chat/components/chat-input/image-upload';
 import { useChatContext, usePromptsContext } from '@/context';
-import { Telescope01Icon } from '@hugeicons/react';
+import { Telescope01Icon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
@@ -61,7 +62,8 @@ export const ChatActions = ({
             size="icon-sm"
             variant="ghost"
           >
-            <Telescope01Icon size={16} strokeWidth="2" /> Deep Research
+            <HugeiconsIcon icon={Telescope01Icon} size={16} strokeWidth={2} />{' '}
+            Deep Research
           </Button>
         </Tooltip>
       </Flex>

@@ -200,7 +200,6 @@ export const CommentListItem = ({
             </div>
           ) : replies.length > 0 ? (
             <ul className="relative border-gray-300 border-l-2 dark:border-gray-700">
-
               <div className="-left-6 absolute top-0 h-8 w-6 overflow-visible">
                 <div
                   className="absolute top-0 left-0 h-8 w-6"

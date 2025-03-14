@@ -13,6 +13,8 @@ import { OrganizationDetailsForm } from './components/organization-details-form'
 import { OrganizationLogoForm } from './components/organization-logo-form';
 import { ProductDescriptionForm } from './components/product-description-form';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = createMetadata({
   title: 'General Settings',
   description: 'General settings for your organization.',

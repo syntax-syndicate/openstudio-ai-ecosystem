@@ -6,6 +6,8 @@ import type { Metadata } from 'next';
 import { InviteMemberButton } from './components/invite-member-button';
 import { MembersTable } from './components/members-table';
 
+export const dynamic = 'force-dynamic';
+
 const title = 'Members';
 const description = "Manage your organization's members.";
 

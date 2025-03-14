@@ -2,6 +2,7 @@ import { usePreferenceContext } from '@/context/preferences';
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import { useTools } from '@/hooks/use-tools';
 import type { ToolKey } from '@/types';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Badge } from '@repo/design-system/components/ui/badge';
 import { BetaTag } from '@repo/design-system/components/ui/beta-tag';
 import { Button } from '@repo/design-system/components/ui/button';
@@ -77,7 +78,7 @@ export const PluginSelect: FC<TPluginSelect> = ({ selectedAssistantKey }) => {
       <Tooltip content="Plugins">
         <PopoverTrigger asChild>
           <Button variant="bordered" size="sm">
-            <PuzzleIcon size={16} variant="stroke" strokeWidth="2" />
+            <HugeiconsIcon icon={PuzzleIcon} size={16} strokeWidth={2} />
             <Badge>{selectedPlugins.length}</Badge>
           </Button>
         </PopoverTrigger>
@@ -124,7 +125,12 @@ const ToolItem: FC<ToolItemProps> = ({ tool, isSelected, onToggle }) => {
         justify="center"
         className="h-8 w-8 rounded-lg border border-zinc-500/15 bg-white dark:bg-zinc-700"
       >
-        <Icon size={16} strokeWidth={2} className="flex-shrink-0" />
+        <HugeiconsIcon
+          icon={Icon}
+          size={16}
+          strokeWidth={2}
+          className="flex-shrink-0"
+        />
       </Flex>{' '}
       <Flex direction="col" gap="none" items="start">
         <Type size="sm" weight="medium">

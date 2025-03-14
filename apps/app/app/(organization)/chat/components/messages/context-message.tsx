@@ -1,5 +1,5 @@
 import { ToolBadge } from '@/app/(organization)/chat/components/tools/tool-badge';
-import { QuoteUpSquareIcon } from '@hugeicons/react';
+import { QuoteUpSquareIcon } from '@hugeicons-pro/core-stroke-rounded';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
 

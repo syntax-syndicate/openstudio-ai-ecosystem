@@ -1,7 +1,11 @@
 'use client';
 
 import { useTubeContext } from '@/modules/tube/providers/tube-provider';
-import { ArrowLeftDoubleIcon, ArrowRightDoubleIcon } from '@hugeicons/react';
+import {
+  ArrowLeftDoubleIcon,
+  ArrowRightDoubleIcon,
+} from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import { Type } from '@repo/design-system/components/ui/text';
@@ -47,9 +51,17 @@ export const StudioNavbar = ({
             }}
           >
             {isSidebarOpen ? (
-              <ArrowLeftDoubleIcon size={16} strokeWidth={2} />
+              <HugeiconsIcon
+                icon={ArrowLeftDoubleIcon}
+                size={16}
+                strokeWidth={2}
+              />
             ) : (
-              <ArrowRightDoubleIcon size={16} strokeWidth={2} />
+              <HugeiconsIcon
+                icon={ArrowRightDoubleIcon}
+                size={16}
+                strokeWidth={2}
+              />
             )}
           </Button>
           <Button
@@ -61,9 +73,17 @@ export const StudioNavbar = ({
             }}
           >
             {isSidebarOpen ? (
-              <ArrowLeftDoubleIcon size={16} strokeWidth={2} />
+              <HugeiconsIcon
+                icon={ArrowLeftDoubleIcon}
+                size={16}
+                strokeWidth={2}
+              />
             ) : (
-              <ArrowRightDoubleIcon size={16} strokeWidth={2} />
+              <HugeiconsIcon
+                icon={ArrowRightDoubleIcon}
+                size={16}
+                strokeWidth={2}
+              />
             )}
           </Button>
           {title && <Type weight="medium">{title}</Type>}

@@ -1,5 +1,10 @@
 'use client';
-import { NeutralIcon, Sad01Icon, SmileIcon } from '@hugeicons/react';
+import {
+  NeutralIcon,
+  Sad01Icon,
+  SmileIcon,
+} from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button, Input, Textarea } from '@repo/design-system/components/ui';
 import {
   Dialog,
@@ -125,7 +130,7 @@ export const FeedbackModal = ({ open, onOpenChange }: FeedbackModalProps) => {
                       formik.setFieldValue('feedbackType', type as FeedbackType)
                     }
                   >
-                    <Icon size={24} strokeWidth={2} />
+                    <HugeiconsIcon icon={Icon} size={24} strokeWidth={2} />
                   </Button>
                 ))}
               </Flex>

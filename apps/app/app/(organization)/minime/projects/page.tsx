@@ -8,6 +8,8 @@ import CreateProject from '@/app/(organization)/minime/components/projects/proje
 import { sortProjects } from '@/helper/utils';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 interface Props {
   searchParams: {
     published?: 'true' | 'false';

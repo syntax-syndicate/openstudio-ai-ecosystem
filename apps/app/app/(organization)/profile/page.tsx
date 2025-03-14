@@ -7,6 +7,8 @@ import { ModeToggle } from './components/mode-toggle';
 import { ProfileForm } from './components/profile-form';
 import { ProfilePhoto } from './components/profile-photo';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = createMetadata({
   title: 'Profile',
   description: 'Manage your account info.',

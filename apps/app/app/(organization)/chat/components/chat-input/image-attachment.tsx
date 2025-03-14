@@ -1,5 +1,6 @@
 import type { TAttachment } from '@/types';
-import { Cancel01Icon } from '@hugeicons/react';
+import { Cancel01Icon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Flex } from '@repo/design-system/components/ui/flex';
 import Image from 'next/image';
@@ -31,7 +32,7 @@ export const ImageAttachment: FC<TImageAttachment> = ({
           onClick={clearAttachment}
           className="absolute top-[-4px] right-[-4px] z-10 h-4 w-4 flex-shrink-0"
         >
-          <Cancel01Icon size={12} strokeWidth={2} />
+          <HugeiconsIcon icon={Cancel01Icon} size={12} strokeWidth={2} />
         </Button>
       </div>
     </Flex>

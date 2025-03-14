@@ -13,6 +13,8 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { YoutubeCommentSyncSettings } from './youtube-comment-sync';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = createMetadata({
   title: 'YouTube Integration',
   description: 'Configure your YouTube integration settings.',

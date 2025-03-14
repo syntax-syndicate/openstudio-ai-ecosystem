@@ -8,6 +8,8 @@ import PostsFilter from '@/app/(organization)/minime/components/layout/posts-fil
 import { sortArticles } from '@/helper/utils';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 interface Props {
   searchParams: {
     published?: 'true' | 'false';

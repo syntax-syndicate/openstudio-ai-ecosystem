@@ -1,5 +1,6 @@
 import type { TPrompt } from '@/types';
-import { GoogleGeminiIcon } from '@hugeicons/react';
+import { GoogleGeminiIcon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { DotsThree, Pencil, TrashSimple } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
@@ -55,7 +56,7 @@ export const PromptLibrary = ({
             className="w-full"
             onSelect={onCreate}
           >
-            <Edit02Icon size={16} variant="stroke" strokeWidth="2" />
+            <HugeiconsIcon icon={Edit02Icon} size={16} strokeWidth={2} />
             Create Prompt
           </CommandItem>
           {!!localPrompts?.length && (
@@ -67,10 +68,10 @@ export const PromptLibrary = ({
                   className="w-full"
                   onSelect={() => onPromptSelect(prompt)}
                 >
-                  <GoogleGeminiIcon
+                  <HugeiconsIcon
+                    icon={GoogleGeminiIcon}
                     size={20}
-                    variant="stroke"
-                    strokeWidth="2"
+                    strokeWidth={2}
                   />
                   {prompt.name}
                   <Flex className="flex-1" />
@@ -116,7 +117,11 @@ export const PromptLibrary = ({
                 className="w-full"
                 onSelect={() => onPromptSelect(prompt)}
               >
-                <GoogleGeminiIcon size={20} variant="stroke" strokeWidth="2" />
+                <HugeiconsIcon
+                  icon={GoogleGeminiIcon}
+                  size={20}
+                  strokeWidth={2}
+                />
                 {prompt.name}
               </CommandItem>
             ))}

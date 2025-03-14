@@ -7,6 +7,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unsubscribe } from './action';
 
+export const dynamic = 'force-dynamic';
+
 interface Props {
   searchParams: {
     subId: string;

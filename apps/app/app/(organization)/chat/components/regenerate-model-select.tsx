@@ -1,5 +1,7 @@
 import { useAssistantUtils } from '@/hooks/use-assistant-utils';
 import type { TAssistant, TModelKey } from '@/types';
+import { SparklesIcon as HugeiconsSparklesIcon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   DropdownMenu,
@@ -7,10 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
-import {
-  ArrowDown01Icon,
-  SparklesIcon,
-} from '@repo/design-system/components/ui/icons';
+import { ArrowDown01Icon } from '@repo/design-system/components/ui/icons';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import { useState } from 'react';
 
@@ -36,9 +35,17 @@ export const RegenerateWithModelSelect = ({
           <DropdownMenuTrigger asChild>
             {
               <Button variant="secondary" size="sm" rounded="lg">
-                <SparklesIcon size={16} variant="stroke" strokeWidth="2" />
+                <HugeiconsIcon
+                  icon={HugeiconsSparklesIcon}
+                  size={16}
+                  strokeWidth={2}
+                />
                 Regenerate
-                <ArrowDown01Icon size={16} variant="stroke" strokeWidth="2" />
+                <HugeiconsIcon
+                  icon={ArrowDown01Icon}
+                  size={16}
+                  strokeWidth={2}
+                />
               </Button>
             }
           </DropdownMenuTrigger>

@@ -1,5 +1,5 @@
 import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
-import { Book01Icon } from '@hugeicons/react';
+import { Book01Icon } from '@hugeicons-pro/core-stroke-rounded';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import axios from 'axios';
 

@@ -1,4 +1,5 @@
 import type { TAttachment } from '@/types';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { X } from '@phosphor-icons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { Pdf01Icon } from '@repo/design-system/components/ui/icons';
@@ -36,7 +37,7 @@ export const useAttachment = () => {
     if (attachment?.file) {
       return (
         <div className="relative flex h-[60px] min-w-[60px] items-center justify-center rounded-xl border border-white/5 shadow-md">
-          <Pdf01Icon size={24} />
+          <HugeiconsIcon icon={Pdf01Icon} size={24} />
           <Button
             size={'icon-xs'}
             variant="default"
@@ -59,7 +60,7 @@ export const useAttachment = () => {
           onChange={handlePdfUpload}
         />
         <Button onClick={handleFileSelect}>
-          <Pdf01Icon size={16} strokeWidth={1.5} />
+          <HugeiconsIcon icon={Pdf01Icon} size={16} strokeWidth={1.5} />
           Upload PDF
         </Button>
       </>

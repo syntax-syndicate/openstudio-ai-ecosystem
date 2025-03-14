@@ -8,6 +8,8 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { CreateOrganizationForm } from './components/form';
 
+export const dynamic = 'force-dynamic';
+
 const title = 'Create Organization';
 const description = 'Create an organization to get started.';
 

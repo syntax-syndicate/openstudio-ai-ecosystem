@@ -3,6 +3,8 @@ import { FullPageLoader } from '@repo/design-system/components/ui/full-page-load
 import { CheckCircleIcon } from 'lucide-react';
 import { Suspense } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 export default function WelcomeUpgradePage() {
   return (
     <>

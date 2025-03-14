@@ -1,4 +1,5 @@
-import { ImageAdd01Icon } from '@hugeicons/react';
+import { ImageAdd01Icon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui';
 import { Tooltip } from '@repo/design-system/components/ui/tooltip-with-content';
 import type { FC } from 'react';
@@ -31,7 +32,7 @@ export const ImageUpload: FC<TImageUpload> = ({
       <Tooltip content={tooltip}>
         {showIcon ? (
           <Button variant="ghost" size="icon-sm" onClick={handleFileSelect}>
-            <ImageAdd01Icon size={16} strokeWidth={2} />
+            <HugeiconsIcon icon={ImageAdd01Icon} size={16} strokeWidth={2} />
           </Button>
         ) : (
           <Button variant="bordered" onClick={handleFileSelect}>

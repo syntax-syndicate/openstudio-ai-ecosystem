@@ -1,4 +1,5 @@
 import { useClipboard } from '@/hooks/use-clipboard';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   Copy01Icon,
@@ -50,9 +51,9 @@ export const CodeBlock = ({
               }}
             >
               {showCopied ? (
-                <Tick01Icon size={14} strokeWidth="2" />
+                <HugeiconsIcon icon={Tick01Icon} size={14} strokeWidth={2} />
               ) : (
-                <Copy01Icon size={14} strokeWidth="2" />
+                <HugeiconsIcon icon={Copy01Icon} size={14} strokeWidth={2} />
               )}
               Copy
             </Button>

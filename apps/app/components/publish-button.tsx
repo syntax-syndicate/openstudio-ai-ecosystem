@@ -1,5 +1,6 @@
 import { trpc } from '@/trpc/client';
-import { Tick01Icon } from '@hugeicons/react';
+import { Tick01Icon } from '@hugeicons-pro/core-stroke-rounded';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@repo/design-system/components/ui/button';
 import { AnimatedSocialIcons } from '@repo/design-system/components/ui/floating-action-button';
 import {
@@ -103,7 +104,7 @@ function PublishToSocialMediaPlatforms({ videoId }: { videoId: string }) {
           {uploadToYoutube.isPending ? (
             <Loader2Icon className="animate-spin" />
           ) : (
-            <Tick01Icon />
+            <HugeiconsIcon icon={Tick01Icon} />
           )}
         </Button>
       }

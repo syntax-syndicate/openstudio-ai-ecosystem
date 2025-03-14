@@ -19,6 +19,8 @@ import { notFound } from 'next/navigation';
 import DeleteSubscriber from './delete-subscriber';
 import Newsletter from './newsletter';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Subscribers',
 };

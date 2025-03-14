@@ -1,6 +1,6 @@
 import { SearchResults } from '@/app/(organization)/chat/components/tools/search-results';
 import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
-import { Globe02Icon } from '@hugeicons/react';
+import { Globe02Icon } from '@hugeicons-pro/core-stroke-rounded';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import axios from 'axios';
 import { z } from 'zod';

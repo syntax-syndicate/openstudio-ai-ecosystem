@@ -1,6 +1,6 @@
 import { GeneratedImage } from '@/app/(organization)/chat/components/generated-image';
 import type { ToolDefinition, ToolExecutionContext } from '@/types/tools';
-import { AiImageIcon } from '@hugeicons/react';
+import { AiImageIcon } from '@hugeicons-pro/core-stroke-rounded';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { DallEAPIWrapper } from '@langchain/openai';
 import { z } from 'zod';

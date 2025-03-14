@@ -1,8 +1,8 @@
 {
-  "name": "next-forge",
+  "name": "openstudio",
   "version": "3.0.2",
   "bin": {
-    "next-forge": "scripts/init.mjs"
+    "openstudio": "scripts/init.mjs"
   },
   "files": ["scripts/init.mjs"],
   "scripts": {

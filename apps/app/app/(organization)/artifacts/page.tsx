@@ -3,6 +3,8 @@ import { DataStreamHandler } from '@/app/(organization)/artifacts/components/v2/
 import { DEFAULT_CHAT_MODEL } from '@/lib/ai/model';
 import { generateUUID } from '@/lib/utils';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ChatPage() {
   const id = generateUUID();
 
