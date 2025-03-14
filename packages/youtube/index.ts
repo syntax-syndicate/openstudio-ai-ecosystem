@@ -86,6 +86,21 @@ export async function listYouTubeVideos(organizationId: string) {
   }
 }
 
+export async function getYouTubeChannelId(organizationId: string) {
+  const youtube = await getYouTubeClient(organizationId);
+
+  try {
+    const res = await youtube.channels.list({
+      part: ['id'],
+      mine: true,
+    });
+    return res.data;
+  } catch (error) {
+    console.error('YouTube API error:', error);
+    throw error;
+  }
+}
+
 export const getOAuth2Client = (): OAuth2Client => {
   const auth = new google.auth.OAuth2(
     process.env.YOUTUBE_CLIENT_ID,

@@ -1,4 +1,4 @@
-import AssistantClientWrapper from "./client-wrapper";
+import AssistantClientWrapper from './client-wrapper';
 
 export const dynamic = 'force-dynamic';
 

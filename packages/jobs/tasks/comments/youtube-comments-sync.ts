@@ -16,6 +16,7 @@ import { z } from 'zod';
 
 export const syncYoutubeComments = schemaTask({
   id: 'sync-youtube-comments',
+  machine: 'small-2x',
   schema: z.object({
     organizationId: z.string(),
     syncFrequency: z

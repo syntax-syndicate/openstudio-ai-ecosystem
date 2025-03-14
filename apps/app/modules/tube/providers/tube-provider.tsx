@@ -1,10 +1,10 @@
 'use client';
-import initHotjar from '@/lib/utils/hotjar';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { isPremium } from '@/lib/utils/premium';
 import { env } from '@/env';
-import { redirect } from 'next/navigation';
+import initHotjar from '@/lib/utils/hotjar';
+import { isPremium } from '@/lib/utils/premium';
 import { trpc } from '@/trpc/client';
+import { redirect } from 'next/navigation';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 export type TubeContextType = {
   isSidebarOpen: boolean;

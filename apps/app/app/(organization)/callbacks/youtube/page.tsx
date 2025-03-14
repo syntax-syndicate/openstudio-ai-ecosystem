@@ -2,11 +2,12 @@ import { currentOrganizationId, currentUser } from '@repo/backend/auth/utils';
 import { database } from '@repo/backend/database';
 import {
   integrationStates,
+  organization,
   youtubeIntegration,
   youtubeIntegrationInsertSchema,
 } from '@repo/backend/schema';
 import { createMetadata } from '@repo/seo/metadata';
-import { getOAuth2Client } from '@repo/youtube';
+import { getOAuth2Client, getYouTubeChannelId } from '@repo/youtube';
 import { and, eq, sql } from 'drizzle-orm';
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
@@ -62,21 +63,59 @@ const YoutubeCallbackPage = async (props: YoutubeCallbackPageProperties) => {
     .where(eq(integrationStates.id, state))
     .returning({ id: integrationStates.id });
 
-  const integration = await database
-    .insert(youtubeIntegration)
-    .values(
-      youtubeIntegrationInsertSchema.parse({
-        organizationId: organizationId,
-        creatorId: user.id,
-        accessToken: youtubeAuthData.tokens.access_token,
-        refreshToken: youtubeAuthData.tokens.refresh_token,
-        tokenType: youtubeAuthData.tokens.token_type,
-        scope: youtubeAuthData.tokens.scope,
-        expiryDate: new Date(youtubeAuthData.tokens.expiry_date!),
-      })
-    )
-    .returning();
+  try {
+    const result = await database.transaction(async (tx) => {
+      // Step 1: Insert YouTube integration data
+      const integrationResult = await tx
+        .insert(youtubeIntegration)
+        .values(
+          youtubeIntegrationInsertSchema.parse({
+            organizationId,
+            creatorId: user.id,
+            accessToken: youtubeAuthData.tokens.access_token,
+            refreshToken: youtubeAuthData.tokens.refresh_token,
+            tokenType: youtubeAuthData.tokens.token_type,
+            scope: youtubeAuthData.tokens.scope,
+            expiryDate: new Date(youtubeAuthData.tokens.expiry_date!),
+          })
+        )
+        .returning();
 
+      if (!integrationResult || integrationResult.length === 0) {
+        throw new Error('Failed to insert YouTube integration data');
+      }
+
+      // Step 2: Fetch YouTube channel ID
+      const channelResponse = await getYouTubeChannelId(organizationId);
+
+      if (!channelResponse?.items || channelResponse.items.length === 0) {
+        throw new Error('YouTube channel ID not found');
+      }
+
+      const channelId = channelResponse.items[0].id;
+
+      if (!channelId) {
+        throw new Error('Invalid YouTube channel ID');
+      }
+
+      // Step 3: Update organization with YouTube channel ID
+      const updateResult = await tx
+        .update(organization)
+        .set({ youtubeChannelId: channelId })
+        .where(eq(organization.id, organizationId))
+        .returning({ id: organization.id });
+
+      if (!updateResult || updateResult.length === 0) {
+        throw new Error(
+          'Failed to update organization with YouTube channel ID'
+        );
+      }
+    });
+  } catch (error) {
+    // Log the error for debugging
+    console.error('YouTube integration error:', error);
+    throw error;
+  }
   return redirect(`/settings/integrations`);
 };
 

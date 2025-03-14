@@ -1,7 +1,7 @@
 import { Readable } from 'stream';
 import { createTRPCRouter, protectedProcedure } from '@/trpc/init';
 import { database } from '@repo/backend/database';
-import { videos } from '@repo/backend/schema';
+import { organization, videos } from '@repo/backend/schema';
 import { syncYoutubeComments } from '@repo/jobs/tasks/comments/youtube-comments-sync';
 import {
   getCommentsWithReplies,
@@ -244,15 +244,22 @@ export const youtubeRouter = createTRPCRouter({
     const youtubeClient = await getYouTubeClient(
       ctx.user.user_metadata.organization_id
     );
+  
+    const organizationData = await database
+      .select()
+      .from(organization)
+      .where(eq(organization.id, ctx.user.user_metadata.organization_id));
 
-    const res = await youtubeClient.channels.list({
-      part: ['id'],
-      mine: true,
-    });
+    if (!organizationData || !organizationData[0].youtubeChannelId) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Organization not found',
+      });
+    }
 
     const comments = await youtubeClient.commentThreads.list({
       part: ['snippet', 'replies'],
-      allThreadsRelatedToChannelId: 'UCBYIP2qhqEPqiVhpEXdKXRA',
+      allThreadsRelatedToChannelId: organizationData[0].youtubeChannelId,
       maxResults: 100,
     });
 

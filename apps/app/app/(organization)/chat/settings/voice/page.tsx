@@ -1,6 +1,4 @@
-import VoiceClientWrapper from "./voice-client-wrapper";
-
-
+import VoiceClientWrapper from './voice-client-wrapper';
 
 export const dynamic = 'force-dynamic';
 

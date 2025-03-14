@@ -1,6 +1,4 @@
-import DataClientWrapper from "./data-client-wrapper";
-
-
+import DataClientWrapper from './data-client-wrapper';
 
 export const dynamic = 'force-dynamic';
 
